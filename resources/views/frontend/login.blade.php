@@ -12,7 +12,7 @@
     <meta name="description" content="" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ asset('assets/logo/logo.png') }}" />
+    <link rel="icon" type="image/png" href="{{ asset('assets/logo/favicon.png') }}" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -46,35 +46,101 @@
     <script src="{{asset('assets/admin/js/config.js')}}"></script>
 
     <style>
-        .btn-primary {
-            background-color: #e60000 !important;
-            border-color: #e60000 !important;
+        :root {
+            --brand: #52ead2;
         }
 
-        .btn-primary:hover {
-            background-color: #cc0000 !important;
-            border-color: #cc0000 !important;
-        }
-
-        .app-brand-link:hover {
-            opacity: 0.9;
+        body {
+            background: radial-gradient(circle at 50% 0%, rgba(82, 234, 210, 0.15), transparent 40rem), #050711 !important;
+            color: #f8fafc !important;
+            font-family: 'Inter', sans-serif !important;
         }
 
         .authentication-inner .card {
-            border-top: 4px solid #e60000;
+            background: rgba(11, 16, 32, 0.8) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            border-top: 4px solid var(--brand) !important;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5) !important;
+            backdrop-filter: blur(12px) !important;
+            color: #f8fafc !important;
+            border-radius: 12px !important;
+        }
+
+        .card-body, .form-label, h4 {
+            color: #f8fafc !important;
+        }
+
+        p, .form-check-label {
+            color: #a8b3c5 !important;
         }
 
         .app-brand-logo img {
-            width: 170px !important;
+            width: 150px !important;
             margin-bottom: 10px;
         }
 
+        .form-control {
+            background-color: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            color: #ffffff !important;
+            border-radius: 8px !important;
+        }
+
+        .form-control:focus {
+            border-color: var(--brand) !important;
+            box-shadow: 0 0 0 0.25rem rgba(82, 234, 210, 0.15) !important;
+            background-color: rgba(255, 255, 255, 0.08) !important;
+            color: #ffffff !important;
+        }
+
+        .input-group-text {
+            background-color: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            color: #a8b3c5 !important;
+            border-radius: 0 8px 8px 0 !important;
+        }
+
+        .input-group-merge .form-control {
+            border-radius: 8px 0 0 8px !important;
+        }
+
+        .form-check-input {
+            background-color: rgba(255, 255, 255, 0.05) !important;
+            border-color: rgba(255, 255, 255, 0.15) !important;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--brand) !important;
+            border-color: var(--brand) !important;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--brand), #ffffff) !important;
+            border: none !important;
+            color: #051013 !important;
+            font-weight: 800 !important;
+            border-radius: 8px !important;
+            padding: 10px 20px !important;
+            transition: transform 0.1s ease, box-shadow 0.2s ease !important;
+            box-shadow: 0 10px 25px rgba(82, 234, 210, 0.15) !important;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px) !important;
+            box-shadow: 0 12px 30px rgba(82, 234, 210, 0.25) !important;
+            color: #051013 !important;
+        }
+
         a {
-            color: #e60000;
+            color: var(--brand) !important;
+            font-weight: 600;
+            text-decoration: none;
+            transition: opacity 0.2s ease;
         }
 
         a:hover {
-            color: #cc0000;
+            color: #ffffff !important;
+            opacity: 0.9;
         }
     </style>
 </head>
@@ -93,13 +159,12 @@
                             <a href="{{ route('home') }}" class="app-brand-link gap-2">
                                 <span class="app-brand-logo demo">
                                     <img class="dark-mode" width="150px"
-                                        src="{{ asset('assets/logo/logo.png') }}" alt="Site Logo">
+                                        src="{{ asset('assets/logo/rydaris-logo.png') }}" alt="Site Logo">
                                 </span>
                             </a>
                         </div>
                         <!-- /Logo -->
-                        <h4 class="mb-2">Welcome to Admin Dashboard! 👋</h4>
-                        <p class="mb-4">Please sign-in to your account and start the adventure</p>
+                        <h4 class="mb-6">Sign In</h4>
 
                         <!-- Session Status -->
                         @if (session('status'))

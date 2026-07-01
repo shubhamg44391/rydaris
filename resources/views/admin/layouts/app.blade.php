@@ -16,7 +16,7 @@
   <meta name="description" content="" />
 
   <!-- Favicon -->
-  <link class="favicon" rel="icon" type="image/x-icon" href="{{ asset('assets/logo/logo.png') }}" />
+  <link class="favicon" rel="icon" type="image/png" href="{{ asset('assets/logo/favicon.png') }}" />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -34,6 +34,7 @@
   <link rel="stylesheet" href="{{ asset('assets/admin/vendor/css/theme-default.css')}}"
     class="template-customizer-theme-css" />
   <link rel="stylesheet" href="{{ asset('assets/admin/css/demo.css')}}" />
+  <link rel="stylesheet" href="{{ asset('assets/styles.css') }}" />
 
   <!-- Vendors CSS -->
   <link rel="stylesheet" href="{{ asset('assets/admin/vendor/libs/perfect-scrollbar/perfect-scrollbar.css')}}" />
@@ -62,83 +63,47 @@
   </style>
 </head>
 
-<body>
-  <!-- Layout wrapper -->
-  <div class="layout-wrapper layout-content-navbar">
-    <div class="layout-container">
-      <!-- Menu -->
+<body class="admin-body">
+  <div class="admin-shell">
+    <aside class="admin-sidebar" aria-label="Admin navigation">
+      <a class="brand" href="{{ route('home') }}" aria-label="Rydaris home" style="opacity: 0.9; transition: opacity 0.2s ease;">
+        <img src="{{ asset('assets/logo/rydaris-logo.png') }}" alt="Rydaris Logo" style="height: 32px; width: auto; display: block;">
+      </a>
 
-      <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-        <div class="app-brand demo">
-          @php
-            $brandDashboardRoute = route('vendor.dashboard');
-            if (Auth::check()) {
-                if (Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin') {
-                    $brandDashboardRoute = route('dashboard');
-                }
-            }
-          @endphp
-          <a href="{{ $brandDashboardRoute }}" class="app-brand-link">
-            <span class="app-brand-logo demo">
-              @php
-                $header_setting = null;
-                if (\Illuminate\Support\Facades\Schema::hasTable('headers')) {
-                    $header_setting = \Illuminate\Support\Facades\DB::table('headers')->first();
-                }
-                $logo_path = ($header_setting && $header_setting->website_logo_light) 
-                    ? 'storage/' . str_replace('public/', '', $header_setting->website_logo_light) 
-                    : 'assets/logo/logo.png';
-              @endphp
-              <img class="dark-mode" width="150px"
-                src="{{ asset($logo_path) }}"
-                alt="Site Logo"> </span>
-          </a>
+      @if(Auth::check() && (Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin'))
+          @include('admin.layouts.sidebar')
+      @else
+          @include('vendor.layouts.sidebar')
+      @endif
+    </aside>
 
-          <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
-            <i class="bx bx-chevron-left bx-sm align-middle"></i>
-          </a>
+    <main class="admin-main" style="display: flex; flex-direction: column; min-height: 100vh;">
+      <header class="admin-topbar">
+        <div></div>
+        <div class="admin-toolbar" style="display: flex; align-items: center; gap: 15px;">
+          <span class="user-greeting" style="font-weight: 500; color: #64748b;">Hello, {{ Auth::user()->name }}</span>
+          
+          <form method="POST" action="{{ route('logout') }}" style="margin: 0; display: inline;">
+              @csrf
+              <button type="submit" class="admin-action" style="cursor: pointer; border: none; background: transparent; font-family: inherit; font-size: inherit; display: flex; align-items: center; gap: 5px;">
+                <svg viewBox="0 0 24 24" style="width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:2;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Logout
+              </button>
+          </form>
         </div>
+      </header>
 
-        <div class="menu-inner-shadow"></div>
-
-        @if(Auth::check() && (Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin'))
-            @include('admin.layouts.sidebar')
-        @else
-            @include('vendor.layouts.sidebar')
-        @endif
-      </aside>
-      <!-- / Menu -->
-
-      <!-- Layout container -->
-      <div class="layout-page">
-        <!-- Navbar -->
-
-        @include('admin.layouts.navigation')
-
-        <!-- / Navbar -->
-
-        <!-- Content wrapper -->
-        <div class="content-wrapper">
-          <!-- Content -->
-
-          @yield('main-content')
-          <!-- / Content -->
-
-          <!-- Footer -->
-          @include('admin.layouts.footer')
-          <!-- / Footer -->
-
-          <div class="content-backdrop fade"></div>
-        </div>
-        <!-- Content wrapper -->
+      <div class="admin-content" style="flex: 1; padding: 24px;">
+        @yield('main-content')
       </div>
-      <!-- / Layout page -->
-    </div>
-
-    <!-- Overlay -->
-    <div class="layout-overlay layout-menu-toggle"></div>
+      
+      <!-- Footer -->
+      <!-- <footer class="content-footer footer" style="padding: 20px 24px; border-top: 1px solid rgba(0,0,0,0.05); color: #64748b; font-size: 0.9rem; background: #ffffff;">
+        <div>
+          © <script>document.write(new Date().getFullYear());</script>, made with ❤️ by Edion Web Technologies
+        </div>
+      </footer> -->
+    </main>
   </div>
-  <!-- / Layout wrapper -->
 
 
 

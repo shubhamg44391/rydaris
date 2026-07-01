@@ -15,24 +15,30 @@
     <section class="section light">
       <div class="wrap">
         <div class="grid cols-3">
-          <article class="card pricing-card">
-            <p class="eyebrow">Starter</p><h2>Launch</h2><p>For small operators formalizing day-to-day reservations and vehicle records.</p>
-            <div class="price"><strong>$79</strong><span>/ month</span></div>
-            <ul class="list"><li><span class="check">✓</span><span>Up to 25 vehicles</span></li><li><span class="check">✓</span><span>Reservation calendar</span></li><li><span class="check">✓</span><span>Customer and agreement records</span></li><li><span class="check">✓</span><span>Basic invoices and deposits</span></li><li><span class="check">✓</span><span>Email support</span></li></ul>
-            <div class="actions left"><a class="btn secondary" href="{{ route('contact') }}">Start Launch</a></div>
-          </article>
-          <article class="card pricing-card featured">
-            <p class="eyebrow">Most selected</p><h2>Growth</h2><p>For active rental teams managing higher booking volume and multiple staff roles.</p>
-            <div class="price"><strong>$189</strong><span>/ month</span></div>
-            <ul class="list"><li><span class="check">✓</span><span>Up to 100 vehicles</span></li><li><span class="check">✓</span><span>Multi-branch availability</span></li><li><span class="check">✓</span><span>Inspection and maintenance logs</span></li><li><span class="check">✓</span><span>Revenue and utilization dashboards</span></li><li><span class="check">✓</span><span>Priority onboarding support</span></li></ul>
-            <div class="actions left"><a class="btn primary" href="{{ route('contact') }}">Book Growth Demo</a></div>
-          </article>
-          <article class="card pricing-card">
-            <p class="eyebrow">Scale</p><h2>Enterprise</h2><p>For regional fleets needing advanced permissions, integrations, and launch support.</p>
-            <div class="price"><strong>Custom</strong><span></span></div>
-            <ul class="list"><li><span class="check">✓</span><span>Unlimited fleet bands</span></li><li><span class="check">✓</span><span>Custom approval workflows</span></li><li><span class="check">✓</span><span>Accounting and API integrations</span></li><li><span class="check">✓</span><span>Dedicated success manager</span></li><li><span class="check">✓</span><span>Custom reports and data exports</span></li></ul>
-            <div class="actions left"><a class="btn secondary" href="{{ route('contact') }}">Talk to Sales</a></div>
-          </article>
+          @forelse ($packages as $pkg)
+            <article class="card pricing-card {{ $pkg->is_featured ? 'featured' : '' }}">
+              @if($pkg->eyebrow)
+                <p class="eyebrow">{{ $pkg->eyebrow }}</p>
+              @endif
+              <h2>{{ $pkg->name }}</h2>
+              <p>{{ $pkg->description }}</p>
+              <div class="price"><strong>{{ $pkg->price }}</strong><span>{{ $pkg->billing_period }}</span></div>
+              
+              @if(is_array($pkg->features))
+                <ul class="list">
+                  @foreach($pkg->features as $feature)
+                    <li><span class="check">✓</span><span>{{ $feature }}</span></li>
+                  @endforeach
+                </ul>
+              @endif
+
+              <div class="actions left">
+                <a class="btn {{ $pkg->is_featured ? 'primary' : 'secondary' }}" href="{{ route('contact') }}">{{ $pkg->button_text }}</a>
+              </div>
+            </article>
+          @empty
+            <p style="grid-column: span 3; text-align: center; color: var(--muted-2);">No pricing plans available.</p>
+          @endforelse
         </div>
       </div>
     </section>

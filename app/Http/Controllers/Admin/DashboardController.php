@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Models\User;
+
 class DashboardController extends Controller
 {
     /**
@@ -12,6 +14,11 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('admin.dashboard');
+        $totalVendors = User::where('role', 'vendor')->count();
+        $activeVendors = User::where('role', 'vendor')->where('status', 'active')->count();
+        $inactiveVendors = User::where('role', 'vendor')->where('status', 'inactive')->count();
+        $recentVendors = User::where('role', 'vendor')->orderBy('created_at', 'desc')->take(5)->get();
+
+        return view('admin.dashboard', compact('totalVendors', 'activeVendors', 'inactiveVendors', 'recentVendors'));
     }
 }

@@ -11,10 +11,17 @@ class AdminVendorController extends Controller
     /**
      * Display a paginated listing of the vendors.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $vendors = User::where('role', 'vendor')->orderBy('created_at', 'desc')->paginate(10);
-        return view('admin.vendors.index', compact('vendors'));
+        $status = $request->query('status');
+        $query = User::where('role', 'vendor');
+
+        if ($status && in_array($status, ['active', 'inactive'])) {
+            $query->where('status', $status);
+        }
+
+        $vendors = $query->orderBy('created_at', 'desc')->paginate(10);
+        return view('admin.vendors.index', compact('vendors', 'status'));
     }
 
     /**

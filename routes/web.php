@@ -5,8 +5,13 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Vendor\VendorRegisterController;
 use App\Http\Controllers\Admin\AdminVendorController;
+use App\Http\Controllers\Vendor\GroupController as VendorGroupController;
+use App\Http\Controllers\Vendor\VehicleController as VendorVehicleController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Vendor\DashboardController as VendorDashboardController;
+use App\Http\Controllers\Admin\FaqController as AdminFaqController;
+use App\Http\Controllers\Admin\PackageController as AdminPackageController;
+use App\Http\Controllers\Admin\ContactInquiryController as AdminContactInquiryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,6 +65,7 @@ Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/pricing', [HomeController::class, 'pricing'])->name('pricing');
 Route::get('/faq', [HomeController::class, 'faq'])->name('faq');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
+Route::post('/contact', [HomeController::class, 'submitContact'])->name('contact.submit');
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login')->middleware('guest');
 Route::post('/login', [LoginController::class, 'login'])->middleware('guest');
@@ -73,11 +79,54 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/vendor/{id}/edit', [AdminVendorController::class, 'edit'])->name('admin.vendors.edit');
     Route::put('/vendor/{id}', [AdminVendorController::class, 'update'])->name('admin.vendors.update');
     Route::delete('/vendor/{id}', [AdminVendorController::class, 'destroy'])->name('admin.vendors.destroy');
+
+    Route::resource('faqs', AdminFaqController::class)->except(['show'])->names([
+        'index' => 'admin.faqs.index',
+        'create' => 'admin.faqs.create',
+        'store' => 'admin.faqs.store',
+        'edit' => 'admin.faqs.edit',
+        'update' => 'admin.faqs.update',
+        'destroy' => 'admin.faqs.destroy',
+    ]);
+
+    Route::resource('packages', AdminPackageController::class)->except(['show'])->names([
+        'index' => 'admin.packages.index',
+        'create' => 'admin.packages.create',
+        'store' => 'admin.packages.store',
+        'edit' => 'admin.packages.edit',
+        'update' => 'admin.packages.update',
+        'destroy' => 'admin.packages.destroy',
+    ]);
+
+    Route::resource('contact-inquiries', AdminContactInquiryController::class)->only(['index', 'destroy'])->names([
+        'index' => 'admin.contact-inquiries.index',
+        'destroy' => 'admin.contact-inquiries.destroy',
+    ]);
+    Route::post('contact-inquiries/{id}/toggle-status', [AdminContactInquiryController::class, 'toggleStatus'])->name('admin.contact-inquiries.toggle-status');
 });
 
 // Vendor registration
 Route::get('/vendor/register', [VendorRegisterController::class, 'showRegisterForm'])->name('vendor.register')->middleware('guest');
 Route::post('/vendor/register', [VendorRegisterController::class, 'register'])->name('vendor.register.submit')->middleware('guest');
 
-// Vendor Dashboard (Auth + Vendor Middleware)
-Route::get('/vendor/dashboard', [VendorDashboardController::class, 'index'])->name('vendor.dashboard')->middleware(['auth', 'vendor']);
+// Vendor Routes (Auth + Vendor Middleware)
+Route::middleware(['auth', 'vendor'])->prefix('vendor')->group(function () {
+    Route::get('/dashboard', [VendorDashboardController::class, 'index'])->name('vendor.dashboard');
+    Route::resource('groups', VendorGroupController::class)->except(['show'])->names([
+        'index' => 'vendor.groups.index',
+        'create' => 'vendor.groups.create',
+        'store' => 'vendor.groups.store',
+        'edit' => 'vendor.groups.edit',
+        'update' => 'vendor.groups.update',
+        'destroy' => 'vendor.groups.destroy',
+    ]);
+
+    Route::resource('vehicles', VendorVehicleController::class)->except(['show'])->names([
+        'index' => 'vendor.vehicles.index',
+        'create' => 'vendor.vehicles.create',
+        'store' => 'vendor.vehicles.store',
+        'edit' => 'vendor.vehicles.edit',
+        'update' => 'vendor.vehicles.update',
+        'destroy' => 'vendor.vehicles.destroy',
+    ]);
+});
