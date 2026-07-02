@@ -19,7 +19,7 @@
           <div class="app-window" aria-label="Rydaris product dashboard preview">
             <div class="window-bar">
               <div class="dots" aria-hidden="true"><span></span><span></span><span></span></div>
-              <strong>Rydaris Fleet Board</strong>
+              Rydaris Fleet Board
               <span>Live operations</span>
             </div>
             <div class="dashboard">
@@ -37,18 +37,18 @@
                       <p>Pickup flow, ready vehicles, late returns, and service holds in one view.</p>
                     </div>
                     <div class="stat-row">
-                      <div class="stat"><strong>86%</strong><span>utilization</span></div>
-                      <div class="stat"><strong>42</strong><span>active rentals</span></div>
-                      <div class="stat"><strong>7</strong><span>returns due</span></div>
+                      <div class="stat">86%<span>utilization</span></div>
+                      <div class="stat">42<span>active rentals</span></div>
+                      <div class="stat">7<span>returns due</span></div>
                     </div>
                   </div>
                   <div class="glass-card">
                     <h3>Today</h3>
                     <div class="rental-list">
-                      <div class="rental-item"><div><strong>Executive SUV</strong><br><span>Corporate weekly</span></div><b class="status">Out</b></div>
-                      <div class="rental-item"><div><strong>City Sedan</strong><br><span>Airport pickup</span></div><b class="status">Ready</b></div>
-                      <div class="rental-item"><div><strong>Compact Auto</strong><br><span>Walk-in hold</span></div><b class="status">Hold</b></div>
-                      <div class="rental-item"><div><strong>Premium Van</strong><br><span>Service inspection</span></div><b class="status">Queue</b></div>
+                      <div class="rental-item"><div>Executive SUV<br><span>Corporate weekly</span></div><b class="status">Out</b></div>
+                      <div class="rental-item"><div>City Sedan<br><span>Airport pickup</span></div><b class="status">Ready</b></div>
+                      <div class="rental-item"><div>Compact Auto<br><span>Walk-in hold</span></div><b class="status">Hold</b></div>
+                      <div class="rental-item"><div>Premium Van<br><span>Service inspection</span></div><b class="status">Queue</b></div>
                     </div>
                   </div>
                 </div>

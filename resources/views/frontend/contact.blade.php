@@ -62,7 +62,7 @@
           </div>
           <div class="field-grid">
             <label>Fleet size
-              <select name="fleet_size" class="@error('fleet_size') is-invalid @enderror">
+              <select name="fleet_size" class="@error('fleet_size') is-invalid @enderror form-select">
                 <option value="1-25 vehicles" {{ old('fleet_size') === '1-25 vehicles' ? 'selected' : '' }}>1-25 vehicles</option>
                 <option value="26-100 vehicles" {{ old('fleet_size') === '26-100 vehicles' ? 'selected' : '' }}>26-100 vehicles</option>
                 <option value="101-300 vehicles" {{ old('fleet_size') === '101-300 vehicles' ? 'selected' : '' }}>101-300 vehicles</option>
@@ -73,7 +73,7 @@
               @enderror
             </label>
             <label>Primary need
-              <select name="need" class="@error('need') is-invalid @enderror">
+              <select name="need" class="@error('need') is-invalid @enderror form-select">
                 <option value="Book a product demo" {{ old('need') === 'Book a product demo' ? 'selected' : '' }}>Book a product demo</option>
                 <option value="Compare pricing plans" {{ old('need') === 'Compare pricing plans' ? 'selected' : '' }}>Compare pricing plans</option>
                 <option value="Migrate from spreadsheets" {{ old('need') === 'Migrate from spreadsheets' ? 'selected' : '' }}>Migrate from spreadsheets</option>

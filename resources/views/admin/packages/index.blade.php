@@ -36,10 +36,10 @@
                                 <span style="font-size: 0.85rem; color: #64748b; text-transform: uppercase; font-weight: 700;">{{ $pkg->eyebrow ?? 'N/A' }}</span>
                             </td>
                             <td>
-                                <strong>{{ $pkg->name }}</strong>
+                                {{ $pkg->name }}
                             </td>
                             <td>
-                                <strong style="color: #0f766e;">{{ $pkg->price }}</strong>
+                                <strong style="color: #0f766e;">{{ $pkg->price }}
                                 <span style="font-size: 0.8rem; color: #64748b;">{{ $pkg->billing_period }}</span>
                             </td>
                             <td>

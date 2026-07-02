@@ -34,7 +34,7 @@
   <link rel="stylesheet" href="{{ asset('assets/admin/vendor/css/theme-default.css')}}"
     class="template-customizer-theme-css" />
   <link rel="stylesheet" href="{{ asset('assets/admin/css/demo.css')}}" />
-  <link rel="stylesheet" href="{{ asset('assets/styles.css') }}" />
+  <link rel="stylesheet" href="{{ asset('assets/styles.css') }}?v={{ time() }}" />
 
   <!-- Vendors CSS -->
   <link rel="stylesheet" href="{{ asset('assets/admin/vendor/libs/perfect-scrollbar/perfect-scrollbar.css')}}" />
@@ -60,6 +60,12 @@
       height: 80vh;
       width: 80vw;
     }
+    
+    /* Enforce Dark Theme on Sneat Layout elements */
+    body, html, .layout-wrapper, .layout-container, .layout-page, .content-wrapper {
+      background-color: var(--bg) !important;
+      color: var(--text) !important;
+    }
   </style>
 </head>
 
@@ -81,7 +87,7 @@
       <header class="admin-topbar">
         <div></div>
         <div class="admin-toolbar" style="display: flex; align-items: center; gap: 15px;">
-          <span class="user-greeting" style="font-weight: 500; color: #64748b;">Hello, {{ Auth::user()->name }}</span>
+          <span class="user-greeting" style="font-weight: 500;">Hello, {{ Auth::user()->name }}</span>
           
           <form method="POST" action="{{ route('logout') }}" style="margin: 0; display: inline;">
               @csrf

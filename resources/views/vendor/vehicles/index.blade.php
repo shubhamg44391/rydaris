@@ -5,7 +5,6 @@
         <div class="panel-head d-flex justify-content-between align-items-center" style="display: flex; justify-content: space-between; align-items: center;">
             <div>
                 <h2>Vehicle Management</h2>
-                <p class="panel-muted">All registered fleet vehicles, their codes, groups, stock, utilization, and statuses.</p>
             </div>
             <div>
                 <a href="{{ route('vendor.vehicles.create') }}" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 4px;">
@@ -46,7 +45,7 @@
                                     @else
                                         <div style="width: 45px; height: 30px; background: #e2e8f0; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; color: #64748b;">No Img</div>
                                     @endif
-                                    <strong>{{ $vehicle->name }}</strong>
+                                    {{ $vehicle->name }}
                                 </div>
                             </td>
                             <td>{{ $vehicle->model ?? 'N/A' }}</td>

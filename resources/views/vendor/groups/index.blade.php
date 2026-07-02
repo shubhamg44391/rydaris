@@ -4,8 +4,7 @@
     <div class="admin-panel">
         <div class="panel-head d-flex justify-content-between align-items-center" style="display: flex; justify-content: space-between; align-items: center;">
             <div>
-                <h2>Vehicle Group Management</h2>
-                <p class="panel-muted">Manage your vehicle groups, descriptions, and creation dates.</p>
+                <h2>Group Management</h2>
             </div>
             <div>
                 <a href="{{ route('vendor.groups.create') }}" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 4px;">
@@ -33,7 +32,7 @@
                         <tr>
                             <td>{{ $startingNumber++ }}</td>
                             <td>
-                                <strong>{{ $group->name }}</strong>
+                                {{ $group->name }}
                             </td>
                             <td>{{ Str::limit($group->description ?? 'N/A', 100) }}</td>
                             <td>{{ $group->created_at->format('Y-m-d H:i') }}</td>

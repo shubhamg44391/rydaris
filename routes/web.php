@@ -7,11 +7,13 @@ use App\Http\Controllers\Vendor\VendorRegisterController;
 use App\Http\Controllers\Admin\AdminVendorController;
 use App\Http\Controllers\Vendor\GroupController as VendorGroupController;
 use App\Http\Controllers\Vendor\VehicleController as VendorVehicleController;
+use App\Http\Controllers\Vendor\LocationController as VendorLocationController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Vendor\DashboardController as VendorDashboardController;
 use App\Http\Controllers\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\Admin\PackageController as AdminPackageController;
 use App\Http\Controllers\Admin\ContactInquiryController as AdminContactInquiryController;
+use App\Http\Controllers\Vendor\AvailabilityController as VendorAvailabilityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -129,4 +131,59 @@ Route::middleware(['auth', 'vendor'])->prefix('vendor')->group(function () {
         'update' => 'vendor.vehicles.update',
         'destroy' => 'vendor.vehicles.destroy',
     ]);
+
+    Route::resource('locations', VendorLocationController::class)->except(['show'])->names([
+        'index'   => 'vendor.locations.index',
+        'create'  => 'vendor.locations.create',
+        'store'   => 'vendor.locations.store',
+        'edit'    => 'vendor.locations.edit',
+        'update'  => 'vendor.locations.update',
+        'destroy' => 'vendor.locations.destroy',
+    ]);
+
+    // Availability / Pricing Management
+    Route::post('availability/fetch-rates',  [VendorAvailabilityController::class, 'fetchRates'])->name('vendor.availability.fetch-rates');
+    Route::post('availability/update-rate',  [VendorAvailabilityController::class, 'updateSingleRate'])->name('vendor.availability.update-rate');
+    Route::post('availability/bulk-copy-day1', [VendorAvailabilityController::class, 'bulkCopyDay1'])->name('vendor.availability.bulk-copy-day1');
+    Route::post('availability/bulk-update',  [VendorAvailabilityController::class, 'bulkUpdateRates'])->name('vendor.availability.bulk-update');
+    Route::post('availability/bulk-import',  [VendorAvailabilityController::class, 'bulkImportRates'])->name('vendor.availability.bulk-import');
+    Route::post('availability/import-csv',   [VendorAvailabilityController::class, 'importRatesCSV'])->name('vendor.availability.import-csv');
+    Route::get('availability/export',        [VendorAvailabilityController::class, 'exportRates'])->name('vendor.availability.export');
+    Route::get('availability/history',       [VendorAvailabilityController::class, 'getHistory'])->name('vendor.availability.history');
+    Route::post('availability/{id}/toggle',  [VendorAvailabilityController::class, 'toggleStatus'])->name('vendor.availability.toggle');
+    Route::get('availability/periods',       [VendorAvailabilityController::class, 'periodsIndex'])->name('vendor.availability.periods');
+    Route::post('availability/periods',      [VendorAvailabilityController::class, 'periodStore'])->name('vendor.availability.period-store');
+    Route::delete('availability/periods/{id}', [VendorAvailabilityController::class, 'periodDestroy'])->name('vendor.availability.period-destroy');
+    Route::resource('availability', VendorAvailabilityController::class)->except(['show'])->names([
+        'index'   => 'vendor.availability.index',
+        'create'  => 'vendor.availability.create',
+        'store'   => 'vendor.availability.store',
+        'edit'    => 'vendor.availability.edit',
+        'update'  => 'vendor.availability.update',
+        'destroy' => 'vendor.availability.destroy',
+    ]);
+
+    // Extras Management
+    Route::get('extras', [\App\Http\Controllers\Vendor\ExtrasController::class, 'extrasIndex'])->name('vendor.extras.index');
+    Route::get('extras/create', [\App\Http\Controllers\Vendor\ExtrasController::class, 'createExtra'])->name('vendor.extras.create');
+    Route::get('extras/{id}/edit', [\App\Http\Controllers\Vendor\ExtrasController::class, 'editExtra'])->name('vendor.extras.edit');
+    Route::get('insurance', [\App\Http\Controllers\Vendor\ExtrasController::class, 'insuranceIndex'])->name('vendor.insurance.index');
+    Route::get('insurance/create', [\App\Http\Controllers\Vendor\ExtrasController::class, 'createInsurance'])->name('vendor.insurance.create');
+    Route::get('insurance/{id}/edit', [\App\Http\Controllers\Vendor\ExtrasController::class, 'editInsurance'])->name('vendor.insurance.edit');
+
+    Route::get('features', [\App\Http\Controllers\Vendor\ExtrasController::class, 'featuresIndex'])->name('vendor.features.index');
+    Route::post('features', [\App\Http\Controllers\Vendor\ExtrasController::class, 'updateFeatures'])->name('vendor.features.update');
+    Route::post('features-mapping/toggle', [\App\Http\Controllers\Vendor\ExtrasController::class, 'toggleFeatureMapping'])->name('vendor.features.mapping.toggle');
+    Route::post('features/{id}/sort', [\App\Http\Controllers\Vendor\ExtrasController::class, 'updateFeatureSort'])->name('vendor.features.sort');
+
+    Route::get('rules', [\App\Http\Controllers\Vendor\ExtrasController::class, 'rulesIndex'])->name('vendor.rules.index');
+
+    Route::post('extras', [\App\Http\Controllers\Vendor\ExtrasController::class, 'storeExtra'])->name('vendor.extras.store');
+    Route::post('extras/{id}', [\App\Http\Controllers\Vendor\ExtrasController::class, 'updateExtra'])->name('vendor.extras.update');
+    Route::delete('extras/{id}', [\App\Http\Controllers\Vendor\ExtrasController::class, 'destroyExtra'])->name('vendor.extras.destroy');
+    Route::post('extras/{id}/toggle', [\App\Http\Controllers\Vendor\ExtrasController::class, 'toggleExtraStatus'])->name('vendor.extras.toggle');
+    
+    Route::post('rules', [\App\Http\Controllers\Vendor\ExtrasController::class, 'storeRule'])->name('vendor.rules.store');
+    Route::post('rules/{id}', [\App\Http\Controllers\Vendor\ExtrasController::class, 'updateRule'])->name('vendor.rules.update');
+    Route::delete('rules/{id}', [\App\Http\Controllers\Vendor\ExtrasController::class, 'destroyRule'])->name('vendor.rules.destroy');
 });

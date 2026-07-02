@@ -50,7 +50,7 @@
                         <tr>
                             <td>{{ $startingNumber++ }}</td>
                             <td>
-                                <strong>{{ $vendor->first_name ?? $vendor->name }}</strong>
+                                {{ $vendor->first_name ?? $vendor->name }}
                             </td>
                             <td>{{ $vendor->email }}</td>
                             <td>

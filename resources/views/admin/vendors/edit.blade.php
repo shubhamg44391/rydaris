@@ -4,7 +4,7 @@
     <div class="admin-panel">
         <div class="panel-head">
             <div>
-                <h2 style="font-size: 1.4rem; color: #111827; margin: 0;">Edit Vendor Profile</h2>
+                <h2 class="panel-title">Edit Vendor Profile</h2>
             </div>
         </div>
         <div class="panel-body" style="padding: 24px;">
@@ -14,8 +14,8 @@
 
                 <!-- First Name -->
                 <div class="mb-4">
-                    <label for="first_name" style="text-transform: uppercase; font-size: 0.75rem; color: #64748b; font-weight: 800; letter-spacing: 0.05em; margin-bottom: 8px; display: block;">First Name</label>
-                    <input type="text" class="form-control @error('first_name') is-invalid @enderror" id="first_name" name="first_name"
+                    <label for="first_name" class="form-label-custom">First Name</label>
+                    <input type="text" class="form-control form-input-custom @error('first_name') is-invalid @enderror" id="first_name" name="first_name"
                         value="{{ old('first_name', $vendor->first_name) }}" required placeholder="Enter first name" style="border: 1px solid #d7e0e8; border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%;" />
                     @error('first_name')
                         <div class="invalid-feedback">{{ $message }}</div>
@@ -24,8 +24,8 @@
 
                 <!-- Email -->
                 <div class="mb-4">
-                    <label for="email" style="text-transform: uppercase; font-size: 0.75rem; color: #64748b; font-weight: 800; letter-spacing: 0.05em; margin-bottom: 8px; display: block;">Email Address</label>
-                    <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email"
+                    <label for="email" class="form-label-custom">Email Address</label>
+                    <input type="email" class="form-control form-input-custom @error('email') is-invalid @enderror" id="email" name="email"
                         value="{{ old('email', $vendor->email) }}" required placeholder="name@company.com" style="border: 1px solid #d7e0e8; border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%;" />
                     @error('email')
                         <div class="invalid-feedback">{{ $message }}</div>
@@ -34,9 +34,9 @@
 
                 <!-- Contact Details -->
                 <div class="mb-4">
-                    <label style="text-transform: uppercase; font-size: 0.75rem; color: #64748b; font-weight: 800; letter-spacing: 0.05em; margin-bottom: 8px; display: block;">Contact Details</label>
+                    <label class="form-label-custom">Contact Details</label>
                     <div class="input-group" style="display: flex; gap: 8px;">
-                        <select name="country_code" class="form-select @error('country_code') is-invalid @enderror" style="max-width: 130px; border: 1px solid #d7e0e8; border-radius: var(--radius); padding: 12px; font-size: 0.95rem; background-color: #ffffff;" required>
+                        <select name="country_code" class="form-select @error('country_code') is-invalid @enderror" style="max-width: 130px;  border-radius: var(--radius); padding: 12px; font-size: 0.95rem; background-color: #ffffff;" required>
                             <option value="+93" {{ old('country_code', $vendor->country_code) === '+93' ? 'selected' : '' }}>+93 (AF)</option>
                             <option value="+355" {{ old('country_code', $vendor->country_code) === '+355' ? 'selected' : '' }}>+355 (AL)</option>
                             <option value="+213" {{ old('country_code', $vendor->country_code) === '+213' ? 'selected' : '' }}>+213 (DZ)</option>
@@ -157,7 +157,7 @@
                             <option value="+967" {{ old('country_code', $vendor->country_code) === '+967' ? 'selected' : '' }}>+967 (YE)</option>
                             <option value="+263" {{ old('country_code', $vendor->country_code) === '+263' ? 'selected' : '' }}>+263 (ZW)</option>
                         </select>
-                        <input type="tel" id="contact_number" name="contact_number" class="form-control @error('contact_number') is-invalid @enderror"
+                        <input type="tel" id="contact_number" name="contact_number" class="form-control form-input-custom @error('contact_number') is-invalid @enderror"
                             placeholder="Phone number" value="{{ old('contact_number', $vendor->contact_number) }}" style="border: 1px solid #d7e0e8; border-radius: var(--radius); padding: 12px; font-size: 0.95rem; flex: 1;" required />
                     </div>
                     @error('country_code')
@@ -170,8 +170,8 @@
 
                 <!-- Status -->
                 <div class="mb-4">
-                    <label for="status" style="text-transform: uppercase; font-size: 0.75rem; color: #64748b; font-weight: 800; letter-spacing: 0.05em; margin-bottom: 8px; display: block;">Vendor Status</label>
-                    <select class="form-select @error('status') is-invalid @enderror" id="status" name="status" style="border: 1px solid #d7e0e8; border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%; background-color: #ffffff;" required>
+                    <label for="status" class="form-label-custom">Vendor Status</label>
+                    <select class="form-select @error('status') is-invalid @enderror" id="status" name="status" style=" border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%; background-color: #ffffff;" required>
                         <option value="active" {{ old('status', $vendor->status) === 'active' ? 'selected' : '' }}>Active</option>
                         <option value="inactive" {{ old('status', $vendor->status) === 'inactive' ? 'selected' : '' }}>Inactive</option>
                     </select>
@@ -183,7 +183,7 @@
                 <!-- Actions -->
                 <div class="d-flex align-items-center gap-3" style="display: flex; gap: 16px; align-items: center; margin-top: 24px;">
                     <button type="submit" class="btn btn-primary rounded-pill px-4" style="min-height: 40px; font-weight: 800; font-size: 0.9rem; background: var(--brand, #52ead2); border: none; color: #061218; cursor: pointer;">Save Changes</button>
-                    <a href="{{ route('admin.vendors.index') }}" class="btn btn-link text-muted" style="text-decoration: none; font-weight: 800; font-size: 0.9rem;">Cancel</a>
+                    <a href="{{ route('admin.vendors.index') }}" class="btn btn-link text-muted cancel-link">Cancel</a>
                 </div>
             </form>
         </div>

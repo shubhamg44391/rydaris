@@ -49,7 +49,7 @@
                         <tr>
                             <td>{{ $startingNumber++ }}</td>
                             <td>
-                                <strong>{{ $inquiry->name }}</strong>
+                                {{ $inquiry->name }}
                                 <span style="font-size: 0.8rem; color: #64748b; display: block;">{{ $inquiry->company }}</span>
                             </td>
                             <td>

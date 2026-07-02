@@ -4,7 +4,6 @@
         <section id="overview" class="admin-hero">
           <div>
             <h1>Welcome, {{ Auth::user()->first_name ?? Auth::user()->name }}! 🎉</h1>
-            <p>Manage your fleet operations, track bookings, view rental earnings, and monitor customer activity in real time.</p>
           </div>
           <div class="admin-date-card">
             <strong>{{ now()->format('F Y') }} close</strong>

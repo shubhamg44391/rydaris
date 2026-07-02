@@ -4,7 +4,7 @@
     <div class="admin-panel">
         <div class="panel-head" style="display: flex; justify-content: space-between; align-items: center;">
             <div>
-                <h2 style="font-size: 1.4rem; color: #111827; margin: 0;">Inquiry Details</h2>
+                <h2 class="panel-title">Inquiry Details</h2>
             </div>
             <div>
                 <a href="{{ route('admin.contact-inquiries.index') }}" class="admin-action" style="text-decoration: none;">
