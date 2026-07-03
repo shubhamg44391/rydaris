@@ -16,7 +16,7 @@
                 <div class="mb-4">
                     <label for="first_name" class="form-label-custom">First Name</label>
                     <input type="text" class="form-control form-input-custom @error('first_name') is-invalid @enderror" id="first_name" name="first_name"
-                        value="{{ old('first_name', $vendor->first_name) }}" required placeholder="Enter first name" style="border: 1px solid #d7e0e8; border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%;" />
+                        value="{{ old('first_name', $vendor->first_name) }}" required placeholder="Enter first name" style="border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%; background: var(--bg-2); color: var(--text);" />
                     @error('first_name')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -26,7 +26,7 @@
                 <div class="mb-4">
                     <label for="email" class="form-label-custom">Email Address</label>
                     <input type="email" class="form-control form-input-custom @error('email') is-invalid @enderror" id="email" name="email"
-                        value="{{ old('email', $vendor->email) }}" required placeholder="name@company.com" style="border: 1px solid #d7e0e8; border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%;" />
+                        value="{{ old('email', $vendor->email) }}" required placeholder="name@company.com" style="border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%; background: var(--bg-2); color: var(--text);" />
                     @error('email')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -36,7 +36,7 @@
                 <div class="mb-4">
                     <label class="form-label-custom">Contact Details</label>
                     <div class="input-group" style="display: flex; gap: 8px;">
-                        <select name="country_code" class="form-select @error('country_code') is-invalid @enderror" style="max-width: 130px;  border-radius: var(--radius); padding: 12px; font-size: 0.95rem; background-color: #ffffff;" required>
+                        <select name="country_code" class="form-select @error('country_code') is-invalid @enderror" style="max-width: 130px; border-radius: var(--radius); padding: 12px; font-size: 0.95rem; background-color: var(--bg-2); color: var(--text); border: 1px solid var(--line);" required>
                             <option value="+93" {{ old('country_code', $vendor->country_code) === '+93' ? 'selected' : '' }}>+93 (AF)</option>
                             <option value="+355" {{ old('country_code', $vendor->country_code) === '+355' ? 'selected' : '' }}>+355 (AL)</option>
                             <option value="+213" {{ old('country_code', $vendor->country_code) === '+213' ? 'selected' : '' }}>+213 (DZ)</option>
@@ -158,7 +158,7 @@
                             <option value="+263" {{ old('country_code', $vendor->country_code) === '+263' ? 'selected' : '' }}>+263 (ZW)</option>
                         </select>
                         <input type="tel" id="contact_number" name="contact_number" class="form-control form-input-custom @error('contact_number') is-invalid @enderror"
-                            placeholder="Phone number" value="{{ old('contact_number', $vendor->contact_number) }}" style="border: 1px solid #d7e0e8; border-radius: var(--radius); padding: 12px; font-size: 0.95rem; flex: 1;" required />
+                            placeholder="Phone number" value="{{ old('contact_number', $vendor->contact_number) }}" style="border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; font-size: 0.95rem; flex: 1; background: var(--bg-2); color: var(--text);" required />
                     </div>
                     @error('country_code')
                         <div class="text-danger mt-1 small">{{ $message }}</div>
@@ -171,7 +171,7 @@
                 <!-- Status -->
                 <div class="mb-4">
                     <label for="status" class="form-label-custom">Vendor Status</label>
-                    <select class="form-select @error('status') is-invalid @enderror" id="status" name="status" style=" border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%; background-color: #ffffff;" required>
+                    <select class="form-select @error('status') is-invalid @enderror" id="status" name="status" style="border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%; background-color: var(--bg-2); color: var(--text); border: 1px solid var(--line);" required>
                         <option value="active" {{ old('status', $vendor->status) === 'active' ? 'selected' : '' }}>Active</option>
                         <option value="inactive" {{ old('status', $vendor->status) === 'inactive' ? 'selected' : '' }}>Inactive</option>
                     </select>
@@ -182,7 +182,7 @@
 
                 <!-- Actions -->
                 <div class="d-flex align-items-center gap-3" style="display: flex; gap: 16px; align-items: center; margin-top: 24px;">
-                    <button type="submit" class="btn btn-primary rounded-pill px-4" style="min-height: 40px; font-weight: 800; font-size: 0.9rem; background: var(--brand, #52ead2); border: none; color: #061218; cursor: pointer;">Save Changes</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4" style="min-height: 40px; font-weight: 800; font-size: 0.9rem; background: linear-gradient(135deg, var(--brand), var(--brand-2)) !important; border: none !important; color: #051013 !important; cursor: pointer; box-shadow: 0 4px 12px rgba(82, 234, 210, 0.15) !important;">Save Changes</button>
                     <a href="{{ route('admin.vendors.index') }}" class="btn btn-link text-muted cancel-link">Cancel</a>
                 </div>
             </form>

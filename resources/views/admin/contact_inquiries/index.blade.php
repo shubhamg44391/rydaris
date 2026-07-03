@@ -9,21 +9,18 @@
         </div>
 
         {{-- Filter Tabs --}}
-        <div style="display: flex; gap: 8px; padding: 14px 20px; border-bottom: 1px solid #d7e0e8; background: #f8fafc; flex-wrap: wrap;">
-            <a href="{{ route('admin.contact-inquiries.index') }}"
-               style="min-height: 34px; display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 9999px; font-size: 0.85rem; font-weight: 800; text-decoration: none; border: 1px solid {{ !$status ? '#0f766e' : '#d7e0e8' }}; background: {{ !$status ? '#e2fbf6' : '#ffffff' }}; color: {{ !$status ? '#0f766e' : '#475569' }};">
+        <div class="panel-filter-bar">
+            <a href="{{ route('admin.contact-inquiries.index') }}" class="btn btn-sm {{ !$status ? 'active' : '' }}">
                 All
-                <span style="background: #e2e8f0; color: #475569; padding: 1px 7px; border-radius: 99px; font-size: 0.75rem;">{{ $totalCount }}</span>
+                <span>{{ $totalCount }}</span>
             </a>
-            <a href="{{ route('admin.contact-inquiries.index', ['status' => 'unread']) }}"
-               style="min-height: 34px; display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 9999px; font-size: 0.85rem; font-weight: 800; text-decoration: none; border: 1px solid {{ $status === 'unread' ? '#0f766e' : '#d7e0e8' }}; background: {{ $status === 'unread' ? '#e2fbf6' : '#ffffff' }}; color: {{ $status === 'unread' ? '#0f766e' : '#475569' }};">
+            <a href="{{ route('admin.contact-inquiries.index', ['status' => 'unread']) }}" class="btn btn-sm {{ $status === 'unread' ? 'active' : '' }}">
                 Unread
-                <span style="background: #e2fbf6; color: #0f766e; padding: 1px 7px; border-radius: 99px; font-size: 0.75rem;">{{ $unreadCount }}</span>
+                <span>{{ $unreadCount }}</span>
             </a>
-            <a href="{{ route('admin.contact-inquiries.index', ['status' => 'read']) }}"
-               style="min-height: 34px; display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 9999px; font-size: 0.85rem; font-weight: 800; text-decoration: none; border: 1px solid {{ $status === 'read' ? '#0f766e' : '#d7e0e8' }}; background: {{ $status === 'read' ? '#e2fbf6' : '#ffffff' }}; color: {{ $status === 'read' ? '#0f766e' : '#475569' }};">
+            <a href="{{ route('admin.contact-inquiries.index', ['status' => 'read']) }}" class="btn btn-sm {{ $status === 'read' ? 'active' : '' }}">
                 Read
-                <span style="background: #f1f5f9; color: #64748b; padding: 1px 7px; border-radius: 99px; font-size: 0.75rem;">{{ $readCount }}</span>
+                <span>{{ $readCount }}</span>
             </a>
         </div>
 
@@ -68,24 +65,24 @@
                                 {{-- Clickable status badge toggles read/unread --}}
                                 <form action="{{ route('admin.contact-inquiries.toggle-status', $inquiry->id) }}" method="POST" style="display: inline;">
                                     @csrf
-                                    @if($inquiry->status === 'unread')
-                                        <button type="submit" title="Mark as Read" style="background: #e2fbf6; color: #0f766e; padding: 4px 10px; border-radius: 12px; font-weight: bold; font-size: 0.75rem; border: none; cursor: pointer;">Unread</button>
+                                     @if($inquiry->status === 'unread')
+                                        <button type="submit" title="Mark as Read" class="status-badge-active">Unread</button>
                                     @else
-                                        <button type="submit" title="Mark as Unread" style="background: #f1f5f9; color: #64748b; padding: 4px 10px; border-radius: 12px; font-weight: bold; font-size: 0.75rem; border: none; cursor: pointer;">Read</button>
+                                        <button type="submit" title="Mark as Unread" class="status-badge-inactive">Read</button>
                                     @endif
                                 </form>
                             </td>
                             <td>
                                 <div class="table-actions" style="display: flex; gap: 8px;">
                                     {{-- Reply button --}}
-                                    <a href="mailto:{{ $inquiry->email }}?subject=Re: Rydaris Inquiry" title="Reply via Email" style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: 1px solid #d7e0e8; border-radius: var(--radius); color: #0f766e; background: #ffffff;">
+                                    <a href="mailto:{{ $inquiry->email }}?subject=Re: Rydaris Inquiry" title="Reply via Email" class="icon-button">
                                         <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;"><polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>
                                     </a>
                                     {{-- Delete button --}}
                                     <form action="{{ route('admin.contact-inquiries.destroy', $inquiry->id) }}" method="POST" style="display: inline;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="button" class="icon-button delete-btn" title="Delete" style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: 1px solid #fee2e2; border-radius: var(--radius); color: #ef4444; background: #ffffff; cursor: pointer; padding: 0;">
+                                        <button type="button" class="icon-button delete-btn" title="Delete">
                                             <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2;"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
                                         </button>
                                     </form>
@@ -102,7 +99,7 @@
         </div>
 
         @if($inquiries->hasPages())
-            <div class="d-flex justify-content-between align-items-center px-4 py-3" style="border-top: 1px solid #d7e0e8; background: #ffffff;">
+            <div class="d-flex justify-content-between align-items-center px-4 py-3" style="border-top: 1px solid var(--line);">
                 <div class="text-muted small">
                     Showing {{ $inquiries->firstItem() ?? 0 }} to {{ $inquiries->lastItem() ?? 0 }} of {{ $inquiries->total() }} results
                 </div>

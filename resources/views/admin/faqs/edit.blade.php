@@ -15,7 +15,7 @@
                 <!-- Category -->
                 <div class="mb-4">
                     <label for="category" class="form-label-custom">Category</label>
-                    <select name="category" id="category" class="form-select form-input-custom @error('category') is-invalid @enderror" required style=" border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%; background-color: #ffffff;">
+                    <select name="category" id="category" class="form-select form-input-custom @error('category') is-invalid @enderror" required style="border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%; background-color: var(--bg-2); color: var(--text); border: 1px solid var(--line);">
                         <option value="" disabled>Select Category</option>
                         <option value="product_basics" {{ old('category', $faq->category) === 'product_basics' ? 'selected' : '' }}>Product Basics</option>
                         <option value="onboarding" {{ old('category', $faq->category) === 'onboarding' ? 'selected' : '' }}>Onboarding</option>
@@ -30,7 +30,7 @@
                 <div class="mb-4">
                     <label for="title" class="form-label-custom">Question / Title</label>
                     <input type="text" class="form-control form-input-custom @error('title') is-invalid @enderror" id="title" name="title"
-                        value="{{ old('title', $faq->title) }}" required placeholder="e.g., Can Rydaris handle multiple rental branches?" style="border: 1px solid #d7e0e8; border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%;" />
+                        value="{{ old('title', $faq->title) }}" required placeholder="e.g., Can Rydaris handle multiple rental branches?" style="border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%; background: var(--bg-2); color: var(--text);" />
                     @error('title')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -40,7 +40,7 @@
                 <div class="mb-4">
                     <label for="description" class="form-label-custom">Answer / Description</label>
                     <textarea class="form-control form-input-custom @error('description') is-invalid @enderror" id="description" name="description"
-                        rows="6" required placeholder="Enter the FAQ answer here..." style="border: 1px solid #d7e0e8; border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%;">{{ old('description', $faq->description) }}</textarea>
+                        rows="6" required placeholder="Enter the FAQ answer here..." style="border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%; background: var(--bg-2); color: var(--text);">{{ old('description', $faq->description) }}</textarea>
                     @error('description')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -48,7 +48,7 @@
 
                 <!-- Actions -->
                 <div class="d-flex align-items-center gap-3" style="display: flex; gap: 16px; align-items: center; margin-top: 24px;">
-                    <button type="submit" class="btn btn-primary rounded-pill px-4" style="min-height: 40px; font-weight: 800; font-size: 0.9rem; background: var(--brand, #52ead2); border: none; color: #061218; cursor: pointer;">Update FAQ</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4" style="min-height: 40px; font-weight: 800; font-size: 0.9rem; background: linear-gradient(135deg, var(--brand), var(--brand-2)) !important; border: none !important; color: #051013 !important; cursor: pointer; box-shadow: 0 4px 12px rgba(82, 234, 210, 0.15) !important;">Update FAQ</button>
                     <a href="{{ route('admin.faqs.index', ['category' => $faq->category]) }}" class="btn btn-link text-muted cancel-link">Cancel</a>
                 </div>
             </form>

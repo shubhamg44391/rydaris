@@ -16,14 +16,14 @@
         </div>
 
         <!-- Filter Tab Buttons -->
-        <div class="px-4 py-2" style="border-bottom: 1px solid #d7e0e8; display: flex; gap: 10px; background: #f8fafc;">
-            <a href="{{ route('admin.vendors.index') }}" class="btn btn-sm" style="border-radius: var(--radius); padding: 6px 12px; font-weight: bold; border: 1px solid #d7e0e8; {{ !($status ?? null) ? 'background: #061218; color: #ffffff;' : 'background: #ffffff; color: #64748b;' }}">
+        <div class="panel-filter-bar">
+            <a href="{{ route('admin.vendors.index') }}" class="btn btn-sm {{ !($status ?? null) ? 'active' : '' }}">
                 All Vendors
             </a>
-            <a href="{{ route('admin.vendors.index', ['status' => 'active']) }}" class="btn btn-sm" style="border-radius: var(--radius); padding: 6px 12px; font-weight: bold; border: 1px solid #d7e0e8; {{ ($status ?? null) === 'active' ? 'background: #061218; color: #ffffff;' : 'background: #ffffff; color: #64748b;' }}">
+            <a href="{{ route('admin.vendors.index', ['status' => 'active']) }}" class="btn btn-sm {{ ($status ?? null) === 'active' ? 'active' : '' }}">
                 Active
             </a>
-            <a href="{{ route('admin.vendors.index', ['status' => 'inactive']) }}" class="btn btn-sm" style="border-radius: var(--radius); padding: 6px 12px; font-weight: bold; border: 1px solid #d7e0e8; {{ ($status ?? null) === 'inactive' ? 'background: #061218; color: #ffffff;' : 'background: #ffffff; color: #64748b;' }}">
+            <a href="{{ route('admin.vendors.index', ['status' => 'inactive']) }}" class="btn btn-sm {{ ($status ?? null) === 'inactive' ? 'active' : '' }}">
                 Inactive
             </a>
         </div>
@@ -63,24 +63,24 @@
                                     @csrf
                                     @if($vendor->status === 'active')
                                         <button type="button" class="btn btn-xs border-0 bg-transparent p-0 status-toggle-btn" title="Click to Deactivate" style="border: none; background: transparent; padding: 0;">
-                                            <span class="badge" style="background: #dcfce7; color: #067647; cursor: pointer; padding: 4px 8px; border-radius: 12px; font-weight: bold; font-size: 0.8rem;">Active</span>
+                                            <span class="status-badge-active">Active</span>
                                         </button>
                                     @else
                                         <button type="button" class="btn btn-xs border-0 bg-transparent p-0 status-toggle-btn" title="Click to Activate" style="border: none; background: transparent; padding: 0;">
-                                            <span class="badge" style="background: #f1f5f9; color: #64748b; cursor: pointer; padding: 4px 8px; border-radius: 12px; font-weight: bold; font-size: 0.8rem;">Inactive</span>
+                                            <span class="status-badge-inactive">Inactive</span>
                                         </button>
                                     @endif
                                 </form>
                             </td>
                             <td>
                                 <div class="table-actions" style="display: flex; gap: 8px;">
-                                    <a href="{{ route('admin.vendors.edit', $vendor->id) }}" class="icon-button" title="Edit" style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: 1px solid #d7e0e8; border-radius: var(--radius); color: #0f766e; background: #ffffff;">
+                                    <a href="{{ route('admin.vendors.edit', $vendor->id) }}" class="icon-button" title="Edit">
                                         <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2;"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
                                     </a>
                                     <form action="{{ route('admin.vendors.destroy', $vendor->id) }}" method="POST" style="display: inline;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="button" class="icon-button delete-btn" title="Delete" style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: 1px solid #fee2e2; border-radius: var(--radius); color: #ef4444; background: #ffffff; cursor: pointer; padding: 0;">
+                                        <button type="button" class="icon-button delete-btn" title="Delete">
                                             <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2;"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
                                         </button>
                                     </form>
@@ -97,7 +97,7 @@
         </div>
         
         <!-- Pagination Controls -->
-        <div class="d-flex justify-content-between align-items-center px-4 py-3" style="border-top: 1px solid #d7e0e8;">
+        <div class="d-flex justify-content-between align-items-center px-4 py-3" style="border-top: 1px solid var(--line);">
             <div class="text-muted small">
                 Showing {{ $vendors->firstItem() ?? 0 }} to {{ $vendors->lastItem() ?? 0 }} of {{ $vendors->total() }} results
             </div>

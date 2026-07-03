@@ -38,13 +38,13 @@
                             <td>{{ $Variant->created_at->format('Y-m-d H:i') }}</td>
                             <td>
                                 <div class="table-actions" style="display: flex; gap: 8px;">
-                                    <a href="{{ route('admin.variants.edit', $Variant->id) }}" class="icon-button" title="Edit" style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: 1px solid #d7e0e8; border-radius: var(--radius); color: #0f766e; background: #ffffff;">
+                                    <a href="{{ route('admin.variants.edit', $Variant->id) }}" class="icon-button" title="Edit">
                                         <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2;"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
                                     </a>
                                     <form action="{{ route('admin.variants.destroy', $Variant->id) }}" method="POST" style="display: inline;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="button" class="icon-button delete-btn" title="Delete" style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: 1px solid #fee2e2; border-radius: var(--radius); color: #ef4444; background: #ffffff; cursor: pointer; padding: 0;">
+                                        <button type="button" class="icon-button delete-btn" title="Delete">
                                             <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2;"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
                                         </button>
                                     </form>
@@ -61,7 +61,7 @@
         </div>
         
         <!-- Pagination Controls -->
-        <div class="d-flex justify-content-between align-items-center px-4 py-3" style="border-top: 1px solid #d7e0e8; display: flex; justify-content: space-between; align-items: center; padding: 16px 24px;">
+        <div class="d-flex justify-content-between align-items-center px-4 py-3" style="border-top: 1px solid var(--line);">
             <div class="text-muted small">
                 Showing {{ $Variants->firstItem() ?? 0 }} to {{ $Variants->lastItem() ?? 0 }} of {{ $Variants->total() }} results
             </div>
