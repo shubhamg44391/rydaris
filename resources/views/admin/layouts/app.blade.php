@@ -34,14 +34,25 @@
   <link rel="stylesheet" href="{{ asset('assets/admin/vendor/css/theme-default.css')}}"
     class="template-customizer-theme-css" />
   <link rel="stylesheet" href="{{ asset('assets/admin/css/demo.css')}}" />
-  <link rel="stylesheet" href="{{ asset('assets/styles.css') }}?v={{ time() }}" />
-
-  <!-- Vendors CSS -->
   <link rel="stylesheet" href="{{ asset('assets/admin/vendor/libs/perfect-scrollbar/perfect-scrollbar.css')}}" />
-
   <link rel="stylesheet" href="{{ asset('assets/admin/vendor/libs/apex-charts/apex-charts.css')}}" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.3.1/dist/sweetalert2.min.css">
-  <!-- Page CSS -->
+  <link rel="stylesheet" href="{{ asset('assets/styles.css') }}?v={{ time() }}" />
+
+  <style>
+    /* Force Premium Glassmorphism SweetAlert2 Redesign */
+    body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) { background-color: rgba(5, 7, 17, 0.4) !important; backdrop-filter: blur(8px) !important; }
+    div.swal2-container.swal2-backdrop-show { background: transparent !important; }
+    div.swal2-popup { background: rgba(11, 16, 32, 0.95) !important; backdrop-filter: blur(16px) !important; border: 1px solid rgba(82, 234, 210, 0.25) !important; border-radius: 16px !important; color: #f8fafc !important; box-shadow: 0 0 40px rgba(82, 234, 210, 0.1), 0 24px 80px rgba(0, 0, 0, 0.5) !important; padding: 2.5em 2em !important; }
+    div.swal2-title { color: #f8fafc !important; font-size: 1.5rem !important; font-weight: 700 !important; letter-spacing: -0.02em !important; margin-bottom: 0.5em !important; }
+    div.swal2-html-container { color: #a8b3c5 !important; font-size: 1.05rem !important; line-height: 1.6 !important; }
+    .swal2-icon.swal2-success { border-color: rgba(82, 234, 210, 0.5) !important; color: #52ead2 !important; box-shadow: 0 0 20px rgba(82, 234, 210, 0.1) !important; }
+    .swal2-icon.swal2-success .swal2-success-ring { border-color: rgba(82, 234, 210, 0.4) !important; }
+    .swal2-icon.swal2-success [class^=swal2-success-line] { background-color: #52ead2 !important; }
+    .swal2-actions { margin-top: 2em !important; gap: 12px !important; }
+    .swal2-confirm, .swal2-styled.swal2-confirm { background: linear-gradient(135deg, #52ead2, #2bc2a8) !important; color: #050711 !important; font-weight: 600 !important; border-radius: 8px !important; padding: 12px 28px !important; border: none !important; box-shadow: 0 8px 16px rgba(82, 234, 210, 0.2) !important; transition: all 0.3s ease !important; }
+  </style>
+
 
   <!-- Helpers -->
   <script src="{{ asset('assets/admin/vendor/js/helpers.js')}}"></script>
@@ -88,6 +99,12 @@
         <div></div>
         <div class="admin-toolbar" style="display: flex; align-items: center; gap: 15px;">
           <span class="user-greeting" style="font-weight: 500;">Hello, {{ Auth::user()->name }}</span>
+          
+          @if(Auth::check() && Auth::user()->role === 'vendor')
+          <a href="{{ route('vendor.profile.index') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 5px; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">
+            <svg viewBox="0 0 24 24" style="width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:2;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </a>
+          @endif
           
           <form method="POST" action="{{ route('logout') }}" style="margin: 0; display: inline;">
               @csrf
@@ -136,6 +153,28 @@
   <!-- Place this tag in your head or just before your close body tag. -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   @yield('js')
+
+  @if(session('success'))
+  <script>
+      Swal.fire({
+          icon: 'success',
+          title: 'Success!',
+          text: '{{ session('success') }}',
+          confirmButtonText: 'OK'
+      });
+  </script>
+  @endif
+
+  @if(session('error'))
+  <script>
+      Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: '{{ session('error') }}',
+          confirmButtonText: 'OK'
+      });
+  </script>
+  @endif
 </body>
 
 </html>

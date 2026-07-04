@@ -66,14 +66,49 @@
                     @enderror
                 </div>
 
-                <!-- Features (one per line) -->
-                <div class="mb-4">
-                    <label for="features" class="form-label-custom">Plan Features (One per line)</label>
-                    <textarea class="form-control form-input-custom @error('features') is-invalid @enderror" id="features" name="features"
-                        rows="6" required placeholder="Up to 25 vehicles&#10;Reservation calendar&#10;Customer records" style="border: 1px solid #d7e0e8; border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%; line-height: 1.5;">{{ old('features', $featuresText) }}</textarea>
-                    @error('features')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
+                <!-- Plan Limitations (Used as Features) -->
+                <div class="row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                    <!-- Number of Users -->
+                    <div>
+                        <label for="no_of_users" class="form-label-custom">Number of Users</label>
+                        <input type="number" class="form-control form-input-custom @error('no_of_users') is-invalid @enderror" id="no_of_users" name="no_of_users"
+                            value="{{ old('no_of_users', $package->no_of_users) }}" min="0" placeholder="Empty for unlimited" style="border: 1px solid #d7e0e8; border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%;" />
+                        @error('no_of_users')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Number of Vehicles -->
+                    <div>
+                        <label for="no_of_vehicles" class="form-label-custom">Number of Vehicles</label>
+                        <input type="number" class="form-control form-input-custom @error('no_of_vehicles') is-invalid @enderror" id="no_of_vehicles" name="no_of_vehicles"
+                            value="{{ old('no_of_vehicles', $package->no_of_vehicles) }}" min="0" placeholder="Empty for unlimited" style="border: 1px solid #d7e0e8; border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%;" />
+                        @error('no_of_vehicles')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                    <!-- Number of Groups -->
+                    <div>
+                        <label for="no_of_groups" class="form-label-custom">Number of Groups</label>
+                        <input type="number" class="form-control form-input-custom @error('no_of_groups') is-invalid @enderror" id="no_of_groups" name="no_of_groups"
+                            value="{{ old('no_of_groups', $package->no_of_groups) }}" min="0" placeholder="Empty for unlimited" style="border: 1px solid #d7e0e8; border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%;" />
+                        @error('no_of_groups')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Number of Coupons -->
+                    <div>
+                        <label for="no_of_coupons" class="form-label-custom">Number of Coupons</label>
+                        <input type="number" class="form-control form-input-custom @error('no_of_coupons') is-invalid @enderror" id="no_of_coupons" name="no_of_coupons"
+                            value="{{ old('no_of_coupons', $package->no_of_coupons) }}" min="0" placeholder="Empty for unlimited" style="border: 1px solid #d7e0e8; border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%;" />
+                        @error('no_of_coupons')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
                 </div>
 
                 <div class="row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
@@ -99,11 +134,14 @@
                 </div>
 
                 <!-- Featured Toggle -->
-                <div class="mb-4" style="display: flex; align-items: center; gap: 10px;">
-                    <input type="checkbox" id="is_featured" name="is_featured" value="1" {{ old('is_featured', $package->is_featured) ? 'checked' : '' }} style="width: 18px; height: 18px; cursor: pointer;" />
-                    <label for="is_featured" style="font-size: 0.95rem; color: #111827; font-weight: 600; cursor: pointer; user-select: none;">Mark this plan as "Most Selected" (Featured)</label>
+                <div class="mb-4">
+                    <label class="form-label-custom d-block">Status</label>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <input type="checkbox" id="is_featured" name="is_featured" value="1" {{ old('is_featured', $package->is_featured) ? 'checked' : '' }} style="width: 18px; height: 18px; cursor: pointer;" />
+                        <label for="is_featured" style="font-size: 0.95rem; color: #111827; font-weight: 600; cursor: pointer; user-select: none; margin: 0;">Mark this plan as "Most Selected" (Featured)</label>
+                    </div>
                     @error('is_featured')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback d-block">{{ $message }}</div>
                     @enderror
                 </div>
 

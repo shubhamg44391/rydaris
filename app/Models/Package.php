@@ -19,6 +19,10 @@ class Package extends Model
         'is_featured',
         'button_text',
         'order',
+        'no_of_users',
+        'no_of_vehicles',
+        'no_of_groups',
+        'no_of_coupons',
     ];
 
     protected $casts = [

@@ -222,7 +222,7 @@
                         <p class="text-center mt-3 mb-0">
                             <span>New to Rydaris?</span>
                             <a href="{{ route('vendor.register') }}">
-                                <span>Register as Vendor</span>
+                                <span>Create an account</span>
                             </a>
                         </p>
 

@@ -495,6 +495,7 @@ class AvailabilityController extends Controller
         $operation = trim($request->operation);
         $groupIds  = $request->group_ids;
         $days      = array_map('intval', $request->days);
+        $vehicleId = $request->input('vehicle_id');
 
         $period = CarbonPeriod::create($fromDate, $toDate);
         $dateStrings = [];
@@ -503,23 +504,41 @@ class AvailabilityController extends Controller
         }
 
         // 1. Fetch existing records BEFORE deleting so we can calculate overrides
-        $existingRecords = Availability::where('vendor_id', $vid)
-            ->whereIn('group_id', $groupIds)
-            ->whereNull('vehicle_id')
-            ->where('pickup_date', '<=', $toDate->toDateString())
-            ->where('dropup_date', '>=', $fromDate->toDateString())
-            ->get();
+        if ($vehicleId) {
+            $existingRecords = VehicleAvailability::where('vendor_id', $vid)
+                ->where('vehicle_id', $vehicleId)
+                ->where('pickup_date', '<=', $toDate->toDateString())
+                ->where('dropup_date', '>=', $fromDate->toDateString())
+                ->get();
 
-        // 2. Delete previous exact single-day overrides for the selected combination
-        Availability::where('vendor_id', $vid)
-            ->whereIn('group_id', $groupIds)
-            ->whereNull('vehicle_id')
-            ->whereIn('pickup_date', $dateStrings)
-            ->whereIn('dropup_date', $dateStrings)
-            ->whereRaw('pickup_date = dropup_date')
-            ->whereIn('min_day', $days)
-            ->whereRaw('min_day = max_day')
-            ->delete();
+            // 2. Delete previous exact single-day overrides for the selected combination
+            VehicleAvailability::where('vendor_id', $vid)
+                ->where('vehicle_id', $vehicleId)
+                ->whereIn('pickup_date', $dateStrings)
+                ->whereIn('dropup_date', $dateStrings)
+                ->whereRaw('pickup_date = dropup_date')
+                ->whereIn('min_day', $days)
+                ->whereRaw('min_day = max_day')
+                ->delete();
+        } else {
+            $existingRecords = Availability::where('vendor_id', $vid)
+                ->whereIn('group_id', $groupIds)
+                ->whereNull('vehicle_id')
+                ->where('pickup_date', '<=', $toDate->toDateString())
+                ->where('dropup_date', '>=', $fromDate->toDateString())
+                ->get();
+
+            // 2. Delete previous exact single-day overrides for the selected combination
+            Availability::where('vendor_id', $vid)
+                ->whereIn('group_id', $groupIds)
+                ->whereNull('vehicle_id')
+                ->whereIn('pickup_date', $dateStrings)
+                ->whereIn('dropup_date', $dateStrings)
+                ->whereRaw('pickup_date = dropup_date')
+                ->whereIn('min_day', $days)
+                ->whereRaw('min_day = max_day')
+                ->delete();
+        }
 
         // Pre-build index for O(1) lookup
         $lookup = [];
@@ -527,9 +546,12 @@ class AvailabilityController extends Controller
             $pStr = is_object($rec->pickup_date) ? $rec->pickup_date->toDateString() : $rec->pickup_date;
             $dStr = is_object($rec->dropup_date) ? $rec->dropup_date->toDateString() : $rec->dropup_date;
             $subPeriod = CarbonPeriod::create($pStr, $dStr);
+            
+            $key = $vehicleId ? $rec->vehicle_id : $rec->group_id;
+
             foreach ($subPeriod as $d) {
                 $ds = $d->toDateString();
-                $lookup[$rec->group_id][$ds][] = $rec;
+                $lookup[$key][$ds][] = $rec;
             }
         }
 
@@ -537,9 +559,10 @@ class AvailabilityController extends Controller
         $now = now();
 
         foreach ($dateStrings as $dateStr) {
-            foreach ($groupIds as $gid) {
+            $keys = $vehicleId ? [$vehicleId] : $groupIds;
+            foreach ($keys as $keyVal) {
                 // Find records covering this specific date in O(1) time
-                $matching = $lookup[$gid][$dateStr] ?? [];
+                $matching = $lookup[$keyVal][$dateStr] ?? [];
                 
                 foreach ($days as $day) {
                     $found = false;
@@ -547,10 +570,9 @@ class AvailabilityController extends Controller
                         if ($day >= $rec->min_day && $day <= $rec->max_day) {
                             $found = true;
                             $newPrice = $this->applyOperation((float)$rec->price, $operation);
-                            $insertData[] = [
+                            
+                            $row = [
                                 'vendor_id'   => $vid,
-                                'group_id'    => $gid,
-                                'vehicle_id'  => null,
                                 'pickup_date' => $dateStr,
                                 'dropup_date' => $dateStr,
                                 'min_day'     => $day,
@@ -560,16 +582,24 @@ class AvailabilityController extends Controller
                                 'created_at'  => $now,
                                 'updated_at'  => $now,
                             ];
+                            
+                            if ($vehicleId) {
+                                $row['vehicle_id'] = $keyVal;
+                            } else {
+                                $row['group_id'] = $keyVal;
+                                $row['vehicle_id'] = null;
+                            }
+                            
+                            $insertData[] = $row;
                             break;
                         }
                     }
                     
                     if (!$found) {
                         $newPrice = $this->applyOperation(0.0, $operation);
-                        $insertData[] = [
+                        
+                        $row = [
                             'vendor_id'   => $vid,
-                            'group_id'    => $gid,
-                            'vehicle_id'  => null,
                             'pickup_date' => $dateStr,
                             'dropup_date' => $dateStr,
                             'min_day'     => $day,
@@ -579,6 +609,15 @@ class AvailabilityController extends Controller
                             'created_at'  => $now,
                             'updated_at'  => $now,
                         ];
+                        
+                        if ($vehicleId) {
+                            $row['vehicle_id'] = $keyVal;
+                        } else {
+                            $row['group_id'] = $keyVal;
+                            $row['vehicle_id'] = null;
+                        }
+                        
+                        $insertData[] = $row;
                     }
                 }
             }
@@ -586,7 +625,11 @@ class AvailabilityController extends Controller
 
         // Bulk insert in chunks for massive speed improvement
         foreach (array_chunk($insertData, 500) as $chunk) {
-            Availability::insert($chunk);
+            if ($vehicleId) {
+                VehicleAvailability::insert($chunk);
+            } else {
+                Availability::insert($chunk);
+            }
         }
 
         \App\Models\VendorRateHistory::create([

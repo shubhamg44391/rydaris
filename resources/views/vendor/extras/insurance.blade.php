@@ -16,12 +16,6 @@
             </div>
         </div>
         
-        @if(session('success'))
-            <div class="alert alert-success" style="margin: 0 24px 16px;">
-                {{ session('success') }}
-            </div>
-        @endif
-
         <div class="panel-body admin-table-wrap">
             <table class="admin-table">
                 <thead>

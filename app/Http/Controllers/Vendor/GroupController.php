@@ -32,6 +32,10 @@ class GroupController extends Controller
      */
     public function store(Request $request)
     {
+        if (!auth()->user()->canAddGroup()) {
+            return redirect()->back()->withInput()->with('error', 'Your package limit for vehicle groups has been reached. Please upgrade your package.');
+        }
+
         $request->validate([
             'name' => [
                 'required',

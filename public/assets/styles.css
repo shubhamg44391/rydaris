@@ -10,7 +10,7 @@
   --muted-2: #64748b;
   --paper: #ffffff;
   --paper-soft: #f6f8fb;
-  --ink: var(--text, #f8fafc);
+  --ink: #0f172a;
   --brand: #52ead2;
   --brand-2: #80a7ff;
   --accent: #f5b85c;
@@ -656,12 +656,14 @@ h3 {
   border-radius: var(--radius);
   background: #ffffff;
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+  color: var(--ink);
 }
 
 .dark .card {
   border-color: rgba(255, 255, 255, 0.12);
   background: rgba(255, 255, 255, 0.065);
   box-shadow: none;
+  color: var(--text);
 }
 
 .feature-card,
@@ -2173,4 +2175,110 @@ input[type="file"]::-webkit-file-upload-button:hover {
     /* dark blue for selected like screenshot */
     color: var(--brand, #52ead2) !important;
     font-weight: 600 !important;
-  }
+}
+
+/* Premium Glassmorphism SweetAlert2 Redesign */
+body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
+    background-color: rgba(5, 7, 17, 0.4) !important;
+    backdrop-filter: blur(8px) !important;
+}
+
+div.swal2-container.swal2-backdrop-show {
+    background: transparent !important;
+}
+
+div.swal2-popup {
+    background: rgba(11, 16, 32, 0.75) !important;
+    backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(82, 234, 210, 0.25) !important;
+    border-radius: 16px !important;
+    color: var(--text) !important;
+    box-shadow: 0 0 40px rgba(82, 234, 210, 0.1), 0 24px 80px rgba(0, 0, 0, 0.5) !important;
+    padding: 2.5em 2em !important;
+}
+
+div.swal2-title {
+    color: var(--text) !important;
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.02em !important;
+    margin-bottom: 0.5em !important;
+}
+
+div.swal2-html-container {
+    color: var(--muted) !important;
+    font-size: 1.05rem !important;
+    line-height: 1.6 !important;
+}
+
+/* Icons */
+.swal2-icon.swal2-success {
+    border-color: rgba(82, 234, 210, 0.5) !important;
+    color: var(--brand) !important;
+    box-shadow: 0 0 20px rgba(82, 234, 210, 0.1) !important;
+}
+.swal2-icon.swal2-success .swal2-success-ring {
+    border-color: rgba(82, 234, 210, 0.4) !important;
+}
+.swal2-icon.swal2-success [class^=swal2-success-line] {
+    background-color: var(--brand) !important;
+}
+.swal2-icon.swal2-error {
+    border-color: rgba(239, 68, 68, 0.5) !important;
+    color: #ef4444 !important;
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.1) !important;
+}
+.swal2-icon.swal2-error [class^=swal2-x-mark-line] {
+    background-color: #ef4444 !important;
+}
+.swal2-icon.swal2-warning {
+    border-color: rgba(245, 184, 92, 0.5) !important;
+    color: var(--accent) !important;
+}
+
+/* Buttons */
+.swal2-actions {
+    margin-top: 2em !important;
+    gap: 12px !important;
+}
+.swal2-confirm, .swal2-styled.swal2-confirm {
+    background: linear-gradient(135deg, var(--brand), #2bc2a8) !important;
+    color: #050711 !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    padding: 12px 28px !important;
+    border: none !important;
+    box-shadow: 0 8px 16px rgba(82, 234, 210, 0.2) !important;
+    transition: all 0.3s ease !important;
+}
+.swal2-confirm:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 12px 20px rgba(82, 234, 210, 0.3) !important;
+}
+.swal2-cancel, .swal2-styled.swal2-cancel {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    color: var(--text) !important;
+    font-weight: 500 !important;
+    border-radius: 8px !important;
+    padding: 12px 28px !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: none !important;
+    transition: all 0.3s ease !important;
+}
+.swal2-cancel:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Toast Mode */
+div.swal2-popup.swal2-toast {
+    background: rgba(11, 16, 32, 0.9) !important;
+    backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(82, 234, 210, 0.15) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+    padding: 12px 20px !important;
+}
+div.swal2-popup.swal2-toast .swal2-title {
+    font-size: 1rem !important;
+    margin: 0 !important;
+}

@@ -24,16 +24,25 @@
               <p>{{ $pkg->description }}</p>
               <div class="price"><strong>{{ $pkg->price }}</strong><span>{{ $pkg->billing_period }}</span></div>
               
-              @if(is_array($pkg->features))
+              @if(!is_null($pkg->no_of_users) || !is_null($pkg->no_of_coupons) || !is_null($pkg->no_of_vehicles) || !is_null($pkg->no_of_groups))
                 <ul class="list">
-                  @foreach($pkg->features as $feature)
-                    <li><span class="check">✓</span><span>{{ $feature }}</span></li>
-                  @endforeach
+                  @if(!is_null($pkg->no_of_users))
+                    <li><span class="check">✓</span><span>{{ $pkg->no_of_users > 0 ? $pkg->no_of_users . ' Users Included' : 'Unlimited Users' }}</span></li>
+                  @endif
+                  @if(!is_null($pkg->no_of_groups))
+                    <li><span class="check">✓</span><span>{{ $pkg->no_of_groups > 0 ? $pkg->no_of_groups . ' Groups Included' : 'Unlimited Groups' }}</span></li>
+                  @endif
+                  @if(!is_null($pkg->no_of_vehicles))
+                    <li><span class="check">✓</span><span>{{ $pkg->no_of_vehicles > 0 ? $pkg->no_of_vehicles . ' Vehicles Included' : 'Unlimited Vehicles' }}</span></li>
+                  @endif
+                  @if(!is_null($pkg->no_of_coupons))
+                    <li><span class="check">✓</span><span>{{ $pkg->no_of_coupons > 0 ? $pkg->no_of_coupons . ' Coupons Included' : 'Unlimited Coupons' }}</span></li>
+                  @endif
                 </ul>
               @endif
 
               <div class="actions left">
-                <a class="btn {{ $pkg->is_featured ? 'primary' : 'secondary' }}" href="{{ route('contact') }}">{{ $pkg->button_text }}</a>
+                <a class="btn {{ $pkg->is_featured ? 'primary' : 'secondary' }}" href="{{ strtolower($pkg->price) === 'custom' ? route('contact') : route('login') }}">{{ $pkg->button_text }}</a>
               </div>
             </article>
           @empty

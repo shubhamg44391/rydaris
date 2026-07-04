@@ -187,10 +187,37 @@
                             </a>
                         </div>
                         <!-- /Logo -->
-                        <h4 class="mb-6">Get Started as a Vendor! 👋</h4>
+                        <h4 class="mb-6" id="form-title">Get Started! 👋</h4>
 
                         <form method="POST" action="{{ route('vendor.register.submit') }}">
                             @csrf
+                            
+                            <!-- Registration Type -->
+                            <div class="form-group mb-4">
+                                <label class="form-label d-block">{{ __('Register As') }}</label>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="role" id="role_user" value="user" {{ old('role') === 'user' ? 'checked' : 'checked' }}>
+                                    <label class="form-check-label" for="role_user">User</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="role" id="role_vendor" value="vendor" {{ old('role') === 'vendor' ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="role_vendor">Vendor</label>
+                                </div>
+                                @error('role')
+                                    <div class="mt-2 text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <!-- Company Name (For Vendors Only) -->
+                            <div class="form-group mb-3" id="company_name_container" style="display: {{ old('role') === 'vendor' ? 'block' : 'none' }};">
+                                <label for="company_name" class="form-label">{{ __('Company Name') }}</label>
+                                <input id="company_name" class="form-control" type="text" name="company_name"
+                                    value="{{ old('company_name') }}" placeholder="Enter your company name" />
+                                @error('company_name')
+                                    <div class="mt-2 text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+
                             <!-- First Name -->
                             <div class="form-group mb-3">
                                 <label for="first_name" class="form-label">{{ __('First Name') }}</label>
@@ -216,125 +243,7 @@
                                 <label class="form-label">{{ __('Contact Details') }}</label>
                                 <div class="input-group">
                                     <select name="country_code" class="form-select" style="max-width: 130px;" required>
-                                        <option value="+93">+93 (AF)</option>
-                                        <option value="+355">+355 (AL)</option>
-                                        <option value="+213">+213 (DZ)</option>
-                                        <option value="+376">+376 (AD)</option>
-                                        <option value="+244">+244 (AO)</option>
-                                        <option value="+54">+54 (AR)</option>
-                                        <option value="+374">+374 (AM)</option>
-                                        <option value="+61">+61 (AU)</option>
-                                        <option value="+43">+43 (AT)</option>
-                                        <option value="+994">+994 (AZ)</option>
-                                        <option value="+1">+1 (BS)</option>
-                                        <option value="+973">+973 (BH)</option>
-                                        <option value="+880">+880 (BD)</option>
-                                        <option value="+375">+375 (BY)</option>
-                                        <option value="+32">+32 (BE)</option>
-                                        <option value="+591">+591 (BO)</option>
-                                        <option value="+387">+387 (BA)</option>
-                                        <option value="+55">+55 (BR)</option>
-                                        <option value="+673">+673 (BN)</option>
-                                        <option value="+359">+359 (BG)</option>
-                                        <option value="+855">+855 (KH)</option>
-                                        <option value="+237">+237 (CM)</option>
-                                        <option value="+1">+1 (CA)</option>
-                                        <option value="+56">+56 (CL)</option>
-                                        <option value="+86">+86 (CN)</option>
-                                        <option value="+57">+57 (CO)</option>
-                                        <option value="+506">+506 (CR)</option>
-                                        <option value="+385">+385 (HR)</option>
-                                        <option value="+53">+53 (CU)</option>
-                                        <option value="+357">+357 (CY)</option>
-                                        <option value="+420">+420 (CZ)</option>
-                                        <option value="+45">+45 (DK)</option>
-                                        <option value="+593">+593 (EC)</option>
-                                        <option value="+20">+20 (EG)</option>
-                                        <option value="+503">+503 (SV)</option>
-                                        <option value="+372">+372 (EE)</option>
-                                        <option value="+251">+251 (ET)</option>
-                                        <option value="+358">+358 (FI)</option>
-                                        <option value="+33">+33 (FR)</option>
-                                        <option value="+995">+995 (GE)</option>
-                                        <option value="+49">+49 (DE)</option>
-                                        <option value="+233">+233 (GH)</option>
-                                        <option value="+30">+30 (GR)</option>
-                                        <option value="+502">+502 (GT)</option>
-                                        <option value="+504">+504 (HN)</option>
-                                        <option value="+852">+852 (HK)</option>
-                                        <option value="+36">+36 (HU)</option>
-                                        <option value="+354">+354 (IS)</option>
-                                        <option value="+91" selected>+91 (IN)</option>
-                                        <option value="+62">+62 (ID)</option>
-                                        <option value="+98">+98 (IR)</option>
-                                        <option value="+964">+964 (IQ)</option>
-                                        <option value="+353">+353 (IE)</option>
-                                        <option value="+972">+972 (IL)</option>
-                                        <option value="+39">+39 (IT)</option>
-                                        <option value="+1">+1 (JM)</option>
-                                        <option value="+81">+81 (JP)</option>
-                                        <option value="+962">+962 (JO)</option>
-                                        <option value="+7">+7 (KZ)</option>
-                                        <option value="+254">+254 (KE)</option>
-                                        <option value="+965">+965 (KW)</option>
-                                        <option value="+371">+371 (LV)</option>
-                                        <option value="+961">+961 (LB)</option>
-                                        <option value="+218">+218 (LY)</option>
-                                        <option value="+370">+370 (LT)</option>
-                                        <option value="+352">+352 (LU)</option>
-                                        <option value="+853">+853 (MO)</option>
-                                        <option value="+389">+389 (MK)</option>
-                                        <option value="+60">+60 (MY)</option>
-                                        <option value="+960">+960 (MV)</option>
-                                        <option value="+356">+356 (MT)</option>
-                                        <option value="+52">+52 (MX)</option>
-                                        <option value="+373">+373 (MD)</option>
-                                        <option value="+377">+377 (MC)</option>
-                                        <option value="+382">+382 (ME)</option>
-                                        <option value="+212">+212 (MA)</option>
-                                        <option value="+95">+95 (MM)</option>
-                                        <option value="+977">+977 (NP)</option>
-                                        <option value="+31">+31 (NL)</option>
-                                        <option value="+64">+64 (NZ)</option>
-                                        <option value="+234">+234 (NG)</option>
-                                        <option value="+47">+47 (NO)</option>
-                                        <option value="+968">+968 (OM)</option>
-                                        <option value="+92">+92 (PK)</option>
-                                        <option value="+507">+507 (PA)</option>
-                                        <option value="+595">+595 (PY)</option>
-                                        <option value="+51">+51 (PE)</option>
-                                        <option value="+63">+63 (PH)</option>
-                                        <option value="+48">+48 (PL)</option>
-                                        <option value="+351">+351 (PT)</option>
-                                        <option value="+974">+974 (QA)</option>
-                                        <option value="+40">+40 (RO)</option>
-                                        <option value="+7">+7 (RU)</option>
-                                        <option value="+966">+966 (SA)</option>
-                                        <option value="+221">+221 (SN)</option>
-                                        <option value="+381">+381 (RS)</option>
-                                        <option value="+65">+65 (SG)</option>
-                                        <option value="+421">+421 (SK)</option>
-                                        <option value="+386">+386 (SI)</option>
-                                        <option value="+27">+27 (ZA)</option>
-                                        <option value="+82">+82 (KR)</option>
-                                        <option value="+34">+34 (ES)</option>
-                                        <option value="+94">+94 (LK)</option>
-                                        <option value="+46">+46 (SE)</option>
-                                        <option value="+41">+41 (CH)</option>
-                                        <option value="+886">+886 (TW)</option>
-                                        <option value="+66">+66 (TH)</option>
-                                        <option value="+216">+216 (TN)</option>
-                                        <option value="+90">+90 (TR)</option>
-                                        <option value="+380">+380 (UA)</option>
-                                        <option value="+971">+971 (AE)</option>
-                                        <option value="+44">+44 (GB)</option>
-                                        <option value="+1">+1 (US)</option>
-                                        <option value="+598">+598 (UY)</option>
-                                        <option value="+998">+998 (UZ)</option>
-                                        <option value="+58">+58 (VE)</option>
-                                        <option value="+84">+84 (VN)</option>
-                                        <option value="+967">+967 (YE)</option>
-                                        <option value="+263">+263 (ZW)</option>
+                                        @include('partials.country-options')
                                     </select>
                                     <input type="tel" name="contact_number" class="form-control"
                                         placeholder="Phone number" value="{{ old('contact_number') }}" required />
@@ -410,6 +319,35 @@
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const roleRadios = document.querySelectorAll('input[name="role"]');
+            const companyContainer = document.getElementById('company_name_container');
+            const companyInput = document.getElementById('company_name');
+            const formTitle = document.getElementById('form-title');
+
+            function toggleFields() {
+                const checkedRadio = document.querySelector('input[name="role"]:checked');
+                if (!checkedRadio) return;
+                
+                if (checkedRadio.value === 'vendor') {
+                    companyContainer.style.display = 'block';
+                    companyInput.required = true;
+                    formTitle.textContent = 'Get Started as a Vendor! 👋';
+                } else {
+                    companyContainer.style.display = 'none';
+                    companyInput.required = false;
+                    formTitle.textContent = 'Get Started as a User! 👋';
+                }
+            }
+
+            roleRadios.forEach(radio => radio.addEventListener('change', toggleFields));
+            
+            // Initial run on page load
+            toggleFields();
+        });
+    </script>
 </body>
 
 </html>

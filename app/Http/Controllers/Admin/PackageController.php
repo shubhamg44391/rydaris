@@ -36,14 +36,14 @@ class PackageController extends Controller
             'description' => ['nullable', 'string'],
             'price' => ['required', 'string', 'max:255'],
             'billing_period' => ['nullable', 'string', 'max:255'],
-            'features' => ['required', 'string'],
             'is_featured' => ['nullable', 'boolean'],
             'button_text' => ['required', 'string', 'max:255'],
             'order' => ['required', 'integer'],
+            'no_of_users' => ['nullable', 'integer'],
+            'no_of_coupons' => ['nullable', 'integer'],
+            'no_of_vehicles' => ['nullable', 'integer'],
+            'no_of_groups' => ['nullable', 'integer'],
         ]);
-
-        // Parse features textarea (one feature per line) into an array
-        $features = array_filter(array_map('trim', explode("\n", $request->input('features'))));
 
         Package::create([
             'name' => $request->name,
@@ -51,10 +51,14 @@ class PackageController extends Controller
             'description' => $request->description,
             'price' => $request->price,
             'billing_period' => $request->billing_period,
-            'features' => array_values($features), // reset array keys
+            'features' => [], // no longer used from input
             'is_featured' => $request->has('is_featured'),
             'button_text' => $request->button_text,
             'order' => $request->order,
+            'no_of_users' => $request->no_of_users,
+            'no_of_coupons' => $request->no_of_coupons,
+            'no_of_vehicles' => $request->no_of_vehicles,
+            'no_of_groups' => $request->no_of_groups,
         ]);
 
         return redirect()->route('admin.packages.index')->with('success', 'Package created successfully.');
@@ -67,10 +71,7 @@ class PackageController extends Controller
     {
         $package = Package::findOrFail($id);
         
-        // Convert features array back to newline-separated string for textarea
-        $featuresText = is_array($package->features) ? implode("\n", $package->features) : '';
-
-        return view('admin.packages.edit', compact('package', 'featuresText'));
+        return view('admin.packages.edit', compact('package'));
     }
 
     /**
@@ -86,14 +87,14 @@ class PackageController extends Controller
             'description' => ['nullable', 'string'],
             'price' => ['required', 'string', 'max:255'],
             'billing_period' => ['nullable', 'string', 'max:255'],
-            'features' => ['required', 'string'],
             'is_featured' => ['nullable', 'boolean'],
             'button_text' => ['required', 'string', 'max:255'],
             'order' => ['required', 'integer'],
+            'no_of_users' => ['nullable', 'integer'],
+            'no_of_coupons' => ['nullable', 'integer'],
+            'no_of_vehicles' => ['nullable', 'integer'],
+            'no_of_groups' => ['nullable', 'integer'],
         ]);
-
-        // Parse features textarea (one feature per line) into an array
-        $features = array_filter(array_map('trim', explode("\n", $request->input('features'))));
 
         $package->update([
             'name' => $request->name,
@@ -101,10 +102,14 @@ class PackageController extends Controller
             'description' => $request->description,
             'price' => $request->price,
             'billing_period' => $request->billing_period,
-            'features' => array_values($features),
+            'features' => [], // no longer used from input
             'is_featured' => $request->has('is_featured'),
             'button_text' => $request->button_text,
             'order' => $request->order,
+            'no_of_users' => $request->no_of_users,
+            'no_of_coupons' => $request->no_of_coupons,
+            'no_of_vehicles' => $request->no_of_vehicles,
+            'no_of_groups' => $request->no_of_groups,
         ]);
 
         return redirect()->route('admin.packages.index')->with('success', 'Package updated successfully.');

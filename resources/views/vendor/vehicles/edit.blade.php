@@ -103,15 +103,13 @@
                     </div>
                     <div class="col-md-3 mb-4">
                         <label for="image" class="form-label-custom">Vehicle Image</label>
-                        <input type="file" class="form-control form-input-custom @error('image') is-invalid @enderror" name="image" id="image" accept="image/*"  />
+                        <input type="file" class="form-control form-input-custom @error('image') is-invalid @enderror" name="image" id="image" accept="image/*" onchange="previewImage(event)" />
                         @error('image')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                        @if ($vehicle->image)
-                            <div class="mt-2">
-                                <img src="{{ asset('storage/' . $vehicle->image) }}" alt="Preview" style="max-width: 150px; height: auto; border-radius: 4px;">
-                            </div>
-                        @endif
+                        <div class="mt-2" id="imagePreviewContainer" style="{{ $vehicle->image ? 'display:block;' : 'display:none;' }}">
+                            <img id="imagePreview" src="{{ $vehicle->image ? asset('storage/' . $vehicle->image) : '#' }}" alt="Preview" style="max-width: 150px; height: auto; border-radius: 4px; border: 1px solid rgba(82,234,210,0.3);">
+                        </div>
                     </div>
                 </div>
 
@@ -217,16 +215,26 @@
             </form>
         </div>
     </div>
+    
+    <!-- Include Pricing Management Module -->
+    <div class="mt-5 pt-4" style="border-top: 1px solid var(--line); width: 100%; max-width: 100%; overflow-x: hidden; box-sizing: border-box;">
+        @include('vendor.availability.partial', ['singleVehicleMode' => true])
+    </div>
 @endsection
 
 @section('js')
-<script src="https://cdn.ckeditor.com/4.25.1-lts/standard/ckeditor.js"></script>
+<script src="https://cdn.ckeditor.com/4.22.1/full/ckeditor.js"></script>
 <script>
     (function() {
-        // Initialize CKEditor safely
+        // Initialize CKEditor 4 Full safely
         try {
             if (typeof CKEDITOR !== 'undefined') {
-                CKEDITOR.replace('terms');
+                CKEDITOR.replace('terms', {
+                    height: 300,
+                    versionCheck: false,
+                    uiColor: '#2a3248',
+                    contentsCss: 'body { background-color: #050711; color: #f8fafc; font-family: Inter, sans-serif; } a { color: #52ead2; }'
+                });
             } else {
                 console.warn('CKEDITOR is not defined, skipping initialization.');
             }
@@ -274,5 +282,25 @@
             }
         });
     })();
+
+    function previewImage(event) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            const output = document.getElementById('imagePreview');
+            output.src = reader.result;
+            document.getElementById('imagePreviewContainer').style.display = 'block';
+        };
+        if(event.target.files[0]) {
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    }
 </script>
+
+<!-- Pricing Management Script logic -->
+<script>
+    const singleVehicleMode = true;
+    const filterVehicleId = {{ $vehicle->id }};
+    const filterGroupId = {{ $vehicle->group_id }};
+</script>
+@include('vendor.availability.partial-js')
 @endsection

@@ -49,7 +49,7 @@
                                 </div>
                             </td>
                             <td>{{ $vehicle->model ?? 'N/A' }}</td>
-                            <td>{{ $vehicle->group->name ?? 'N/A' }}</td>
+                            <td>{{ $vehicle->group?->name ?? 'N/A' }}</td>
                             <td>{{ $vehicle->stock }}</td>
                             <td>
                                 <span>0%</span>

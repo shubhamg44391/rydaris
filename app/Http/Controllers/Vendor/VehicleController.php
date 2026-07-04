@@ -39,6 +39,10 @@ class VehicleController extends Controller
      */
     public function store(Request $request)
     {
+        if (!auth()->user()->canAddVehicle()) {
+            return redirect()->back()->withInput()->with('error', 'Your package limit for vehicles has been reached. Please upgrade your package.');
+        }
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'model' => ['required', 'string', 'max:255'],

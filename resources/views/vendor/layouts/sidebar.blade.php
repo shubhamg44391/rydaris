@@ -2,7 +2,14 @@
     <a class="{{ Request::is('vendor/dashboard*') ? 'active' : '' }}" href="{{ route('vendor.dashboard') }}">
         <svg viewBox="0 0 24 24"><path d="M3 3h7v7H3Z"/><path d="M14 3h7v7h-7Z"/><path d="M14 14h7v7h-7Z"/><path d="M3 14h7v7H3Z"/></svg>Vendor Dashboard
     </a>
+    
+    <a class="{{ Request::is('vendor/pricing*') ? 'active' : '' }}" href="{{ route('vendor.pricing') }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="6" width="20" height="12" rx="2"/><path d="M12 12h.01"/><path d="M17 12h.01"/><path d="M7 12h.01"/>
+        </svg>Pricing
+    </a>
 
+    @if(auth()->user()->activeSubscription)
     <!-- Vehicles Parent Menu with Custom JavaScript Toggle -->
     <div class="admin-nav-group">
         <a href="javascript:void(0);" class="nav-toggle" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ (Request::is('vendor/groups*') || Request::is('vendor/vehicles*')) ? 'color: #f8fafc; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb;' }} font-size: 0.92rem; font-weight: 780; transition: background 0.2s;">
@@ -115,6 +122,7 @@
             </a>
         </div>
     </div>
+    @endif
 </nav>
 
 <style>

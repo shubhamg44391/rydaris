@@ -60,6 +60,14 @@ class AdminVendorController extends Controller
             'status' => ['required', 'string', 'in:active,inactive'],
         ]);
 
+        $baseName = $vendor->company_name ? $vendor->company_name : $request->first_name;
+        $baseUsername = \Illuminate\Support\Str::slug($baseName, '');
+        $username = $baseUsername;
+        
+        while (User::where('username', $username)->where('id', '!=', $vendor->id)->exists()) {
+            $username = $baseUsername . random_int(100, 9999);
+        }
+
         $vendor->update([
             'name' => $request->first_name,
             'first_name' => $request->first_name,
@@ -67,6 +75,7 @@ class AdminVendorController extends Controller
             'contact_number' => $request->contact_number,
             'country_code' => $request->country_code,
             'status' => $request->status,
+            'username' => $username,
         ]);
 
         return redirect(route('admin.vendors.index'))->with('success', 'Vendor updated successfully.');
