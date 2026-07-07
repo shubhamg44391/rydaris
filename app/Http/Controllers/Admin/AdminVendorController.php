@@ -20,7 +20,7 @@ class AdminVendorController extends Controller
             $query->where('status', $status);
         }
 
-        $vendors = $query->orderBy('created_at', 'desc')->paginate(10);
+        $vendors = $query->with(['activeSubscription.package', 'subscriptions.package'])->orderBy('created_at', 'desc')->paginate(10);
         return view('admin.vendors.index', compact('vendors', 'status'));
     }
 

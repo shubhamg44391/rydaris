@@ -16,12 +16,29 @@
         <!-- Profile Details -->
         <article class="kpi-card" style="padding: 30px;">
             <h2 style="font-size: 1.25rem; font-weight: 600; color: #ffffff; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.05);">Profile Information</h2>
-            <form action="{{ route('vendor.profile.update') }}" method="POST">
+            <form action="{{ route('vendor.profile.update') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 
+                <!-- Company Logo Upload -->
+                <div style="margin-bottom: 25px; display: flex; align-items: center; gap: 20px;">
+                    <div style="width: 80px; height: 80px; border-radius: 50%; background: rgba(82, 234, 210, 0.1); border: 2px dashed rgba(82, 234, 210, 0.3); display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;">
+                        @if($user->company_logo)
+                            <img src="{{ asset('storage/' . $user->company_logo) }}" alt="Company Logo" style="width: 100%; height: 100%; object-fit: cover;">
+                        @else
+                            <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="var(--brand)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                        @endif
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 8px; color: var(--muted-2); font-size: 0.875rem;">Company Logo</label>
+                        <input type="file" name="company_logo" accept="image/*" class="form-control-custom" style="padding: 10px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius); color: #ffffff; width: 100%;">
+                        @error('company_logo')<div style="color: #ff6b6b; font-size: 0.875rem; margin-top: 5px;">{{ $message }}</div>@enderror
+                    </div>
+                </div>
+
                 <div style="margin-bottom: 20px;">
                     <label style="display: block; margin-bottom: 8px; color: var(--muted-2); font-size: 0.875rem;">Username</label>
-                    <input type="text" value="{{ $user->username }}" disabled style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: var(--radius); color: var(--muted); cursor: not-allowed;">
+                    <input type="text" name="username" value="{{ old('username', $user->username) }}" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius); color: #ffffff;">
+                    @error('username')<div style="color: #ff6b6b; font-size: 0.875rem; margin-top: 5px;">{{ $message }}</div>@enderror
                 </div>
 
                 <div style="margin-bottom: 20px;">

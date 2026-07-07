@@ -17,6 +17,11 @@ class LoginController extends Controller
         return view('frontend.login');
     }
 
+    public function showAdminLoginForm()
+    {
+        return view('frontend.admin-login');
+    }
+
     /**
      * Handle authentication attempt.
      */
@@ -32,8 +37,14 @@ class LoginController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
+            if ($request->filled('redirect_to')) {
+                return redirect($request->input('redirect_to'));
+            }
+
             if (Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin') {
                 return redirect(route('dashboard'));
+            } elseif (Auth::user()->role === 'user') {
+                return redirect(route('user.dashboard'));
             }
             return redirect(route('vendor.dashboard'));
         }

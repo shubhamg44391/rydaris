@@ -7,7 +7,7 @@
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>Rydaris Admin Login</title>
+    <title>Rydaris Login</title>
 
     <meta name="description" content="" />
 
@@ -175,6 +175,7 @@
 
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
+                            <input type="hidden" name="redirect_to" value="{{ request('redirect_to') }}">
                             <!-- Email Address -->
                             <div class="form-group mb-3">
                                 <label for="email" class="form-label">{{ __('Email') }}</label>

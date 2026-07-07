@@ -40,7 +40,7 @@
         <div class="nav-actions desktop-nav">
           @auth
             <span class="user-greeting" style="margin-right: 15px; font-weight: 500;">Hello, {{ Auth::user()->name }}</span>
-            <a class="btn primary" href="{{ (Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin') ? route('dashboard') : route('vendor.dashboard') }}" style="margin-right: 10px; text-decoration: none;">Dashboard</a>
+            <a class="btn primary" href="{{ (Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin') ? route('dashboard') : (Auth::user()->role === 'user' ? route('user.dashboard') : route('vendor.dashboard')) }}" style="margin-right: 10px; text-decoration: none;">Dashboard</a>
             <form action="{{ route('logout') }}" method="POST" style="display: inline;">
               @csrf
               <button type="submit" class="btn secondary" style="cursor: pointer; border: none; font-family: inherit; font-size: inherit;">Logout</button>
@@ -65,7 +65,7 @@
         <div class="mobile-nav-actions">
           @auth
             <span class="user-greeting" style="font-weight: 500; color: var(--muted);">Hello, {{ Auth::user()->name }}</span>
-            <a class="btn primary" href="{{ (Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin') ? route('dashboard') : route('vendor.dashboard') }}" style="text-decoration: none; width: 100%; text-align: center;">Dashboard</a>
+            <a class="btn primary" href="{{ (Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin') ? route('dashboard') : (Auth::user()->role === 'user' ? route('user.dashboard') : route('vendor.dashboard')) }}" style="text-decoration: none; width: 100%; text-align: center;">Dashboard</a>
             <form action="{{ route('logout') }}" method="POST" style="width: 100%;">
               @csrf
               <button type="submit" class="btn secondary" style="cursor: pointer; border: none; font-family: inherit; font-size: inherit; width: 100%;">Logout</button>

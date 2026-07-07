@@ -69,8 +69,10 @@ Route::get('/pricing', [HomeController::class, 'pricing'])->name('pricing');
 Route::get('/faq', [HomeController::class, 'faq'])->name('faq');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 Route::post('/contact', [HomeController::class, 'submitContact'])->name('contact.submit');
+Route::post('/custom-package-request', [\App\Http\Controllers\CustomPackageRequestController::class, 'store'])->name('custom-package.submit');
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login')->middleware('guest');
+Route::get('/admin/login', [LoginController::class, 'showAdminLoginForm'])->name('admin.login')->middleware('guest');
 Route::post('/login', [LoginController::class, 'login'])->middleware('guest');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
@@ -106,25 +108,74 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
         'destroy' => 'admin.contact-inquiries.destroy',
     ]);
     Route::post('contact-inquiries/{id}/toggle-status', [AdminContactInquiryController::class, 'toggleStatus'])->name('admin.contact-inquiries.toggle-status');
+
+    Route::resource('custom-package-requests', \App\Http\Controllers\Admin\AdminCustomPackageRequestController::class)->only(['index', 'destroy'])->names([
+        'index' => 'admin.custom-package-requests.index',
+        'destroy' => 'admin.custom-package-requests.destroy',
+    ]);
+    Route::post('custom-package-requests/{id}/toggle-status', [\App\Http\Controllers\Admin\AdminCustomPackageRequestController::class, 'toggleStatus'])->name('admin.custom-package-requests.toggle-status');
+
+    // Site Settings
+    Route::get('/settings/payment', [\App\Http\Controllers\Admin\AdminSettingController::class, 'paymentSettings'])->name('admin.settings.payment');
+    Route::post('/settings/payment', [\App\Http\Controllers\Admin\AdminSettingController::class, 'updatePaymentSettings'])->name('admin.settings.payment.update');
+
+    // Subscriptions
+    Route::get('/subscriptions', [\App\Http\Controllers\Admin\AdminSubscriptionController::class, 'index'])->name('admin.subscriptions.index');
 });
 
 // Vendor registration
 Route::get('/vendor/register', [VendorRegisterController::class, 'showRegisterForm'])->name('vendor.register')->middleware('guest');
 Route::post('/vendor/register', [VendorRegisterController::class, 'register'])->name('vendor.register.submit')->middleware('guest');
 
+// User Registration
+Route::get('/register', [\App\Http\Controllers\User\UserRegisterController::class, 'showRegistrationForm'])->name('register')->middleware('guest');
+Route::post('/register', [\App\Http\Controllers\User\UserRegisterController::class, 'register'])->name('register.submit')->middleware('guest');
+
+// User Routes (Auth + User Middleware)
+Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\User\UserDashboardController::class, 'index'])->name('user.dashboard');
+    
+    // Profile
+    Route::get('/profile', [\App\Http\Controllers\User\UserProfileController::class, 'index'])->name('user.profile.index');
+    Route::post('/profile', [\App\Http\Controllers\User\UserProfileController::class, 'update'])->name('user.profile.update');
+    Route::post('/profile/password', [\App\Http\Controllers\User\UserProfileController::class, 'updatePassword'])->name('user.profile.password');
+
+    Route::get('/search', [\App\Http\Controllers\User\UserDashboardController::class, 'search'])->name('user.vendors.search');
+    Route::get('/vendors/{id}', [\App\Http\Controllers\User\UserDashboardController::class, 'showVendor'])->name('user.vendors.show');
+    Route::get('/book/{vehicle}/coverage', [\App\Http\Controllers\User\UserBookingController::class, 'coverage'])->name('user.book.coverage');
+    Route::get('/book/{vehicle}/information', [\App\Http\Controllers\User\UserBookingController::class, 'information'])->name('user.book.information');
+    Route::get('/book/{vehicle}/payment', [\App\Http\Controllers\User\UserBookingController::class, 'payment'])->name('user.book.payment');
+    Route::post('/book/{vehicle}/store', [\App\Http\Controllers\User\UserBookingController::class, 'store'])->name('user.book.store');
+    Route::get('/book/{vehicle}/bookingsucces', [\App\Http\Controllers\User\UserBookingController::class, 'bookingsucces'])->name('user.book.bookingsucces');
+});
+
+// Subscription Payment Routes — Vendor only
+Route::middleware(['auth', 'vendor'])->group(function () {
+    Route::post('/subscribe/create-order/{packageId}', [\App\Http\Controllers\Vendor\DashboardController::class, 'createOrder'])->name('vendor.subscribe.create-order');
+    Route::post('/subscribe/verify-payment', [\App\Http\Controllers\Vendor\DashboardController::class, 'verifyPayment'])->name('vendor.subscribe.verify');
+});
+
 // Vendor Routes (Auth + Vendor Middleware)
 Route::middleware(['auth', 'vendor'])->prefix('vendor')->group(function () {
     Route::get('/dashboard', [VendorDashboardController::class, 'index'])->name('vendor.dashboard');
+    Route::get('/bookings', [\App\Http\Controllers\Vendor\BookingController::class, 'index'])->name('vendor.bookings.index');
+    Route::get('/bookings/payment', [\App\Http\Controllers\Vendor\BookingController::class, 'payment'])->name('vendor.bookings.payment');
     Route::get('/pricing', [VendorDashboardController::class, 'pricing'])->name('vendor.pricing');
+    Route::get('/subscription/history', [VendorDashboardController::class, 'subscriptionHistory'])->name('vendor.subscription.history');
     Route::post('/subscribe/{packageId}', [VendorDashboardController::class, 'subscribe'])->name('vendor.subscribe');
     
-    // Profile
+    // Profile & Settings
     Route::get('/profile', [VendorProfileController::class, 'index'])->name('vendor.profile.index');
     Route::post('/profile', [VendorProfileController::class, 'update'])->name('vendor.profile.update');
     Route::post('/profile/password', [VendorProfileController::class, 'updatePassword'])->name('vendor.profile.password');
 
+    Route::get('/payment-settings', [\App\Http\Controllers\Vendor\PaymentSettingController::class, 'index'])->name('vendor.payment_settings.index');
+    Route::post('/payment-settings', [\App\Http\Controllers\Vendor\PaymentSettingController::class, 'update'])->name('vendor.payment_settings.update');
+
     // Routes that require a subscription
     Route::middleware(['vendor.subscription'])->group(function () {
+        Route::get('/customers', [\App\Http\Controllers\Vendor\VendorCustomerController::class, 'index'])->name('vendor.customers.index');
+
         Route::resource('groups', VendorGroupController::class)->except(['show'])->names([
             'index' => 'vendor.groups.index',
             'create' => 'vendor.groups.create',
@@ -197,5 +248,15 @@ Route::middleware(['auth', 'vendor'])->prefix('vendor')->group(function () {
         Route::post('rules', [\App\Http\Controllers\Vendor\ExtrasController::class, 'storeRule'])->name('vendor.rules.store');
         Route::post('rules/{id}', [\App\Http\Controllers\Vendor\ExtrasController::class, 'updateRule'])->name('vendor.rules.update');
         Route::delete('rules/{id}', [\App\Http\Controllers\Vendor\ExtrasController::class, 'destroyRule'])->name('vendor.rules.destroy');
+
+        // Coupons Management
+        Route::resource('coupons', \App\Http\Controllers\Vendor\CouponController::class)->except(['show'])->names([
+            'index'   => 'vendor.coupons.index',
+            'create'  => 'vendor.coupons.create',
+            'store'   => 'vendor.coupons.store',
+            'edit'    => 'vendor.coupons.edit',
+            'update'  => 'vendor.coupons.update',
+            'destroy' => 'vendor.coupons.destroy',
+        ]);
     });
 });

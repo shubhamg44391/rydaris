@@ -218,6 +218,24 @@
                                 @enderror
                             </div>
 
+                            <!-- Select Vendor (For Users Only) -->
+                            <div class="form-group mb-3" id="vendor_select_container" style="display: {{ old('role', 'user') === 'user' ? 'block' : 'none' }};">
+                                <label for="vendor_id" class="form-label">{{ __('Select Vendor') }}</label>
+                                <select id="vendor_id" name="vendor_id" class="form-select" style="background-color: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.12); padding: 12px; border-radius: 8px;">
+                                    <option value="" style="background: #0f172a;">-- Select a Vendor --</option>
+                                    @if(isset($vendors) && count($vendors) > 0)
+                                        @foreach($vendors as $vendor)
+                                            <option value="{{ $vendor->id }}" style="background: #0f172a;" {{ old('vendor_id') == $vendor->id ? 'selected' : '' }}>
+                                                {{ $vendor->company_name ?? $vendor->name }}
+                                            </option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                                @error('vendor_id')
+                                    <div class="mt-2 text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+
                             <!-- First Name -->
                             <div class="form-group mb-3">
                                 <label for="first_name" class="form-label">{{ __('First Name') }}</label>
@@ -325,6 +343,8 @@
             const roleRadios = document.querySelectorAll('input[name="role"]');
             const companyContainer = document.getElementById('company_name_container');
             const companyInput = document.getElementById('company_name');
+            const vendorContainer = document.getElementById('vendor_select_container');
+            const vendorInput = document.getElementById('vendor_id');
             const formTitle = document.getElementById('form-title');
 
             function toggleFields() {
@@ -334,10 +354,14 @@
                 if (checkedRadio.value === 'vendor') {
                     companyContainer.style.display = 'block';
                     companyInput.required = true;
+                    vendorContainer.style.display = 'none';
+                    vendorInput.required = false;
                     formTitle.textContent = 'Get Started as a Vendor! 👋';
                 } else {
                     companyContainer.style.display = 'none';
                     companyInput.required = false;
+                    vendorContainer.style.display = 'block';
+                    vendorInput.required = true;
                     formTitle.textContent = 'Get Started as a User! 👋';
                 }
             }

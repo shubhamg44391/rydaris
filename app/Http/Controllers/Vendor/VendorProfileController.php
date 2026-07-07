@@ -31,24 +31,32 @@ class VendorProfileController extends Controller
             'company_name' => ['nullable', 'string', 'max:255'],
             'contact_number' => ['required', 'string', 'max:20'],
             'country_code' => ['required', 'string', 'max:10'],
+            'username' => ['required', 'string', 'max:255'],
+            'company_logo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
         ]);
 
-        $baseName = !empty($request->company_name) ? $request->company_name : $request->first_name;
-        $baseUsername = \Illuminate\Support\Str::slug($baseName, '');
+        $baseUsername = \Illuminate\Support\Str::slug($request->username, '');
         $username = $baseUsername;
         
         while (\App\Models\User::where('username', $username)->where('id', '!=', $user->id)->exists()) {
             $username = $baseUsername . random_int(100, 9999);
         }
 
-        $user->update([
+        $data = [
             'first_name' => $request->first_name,
             'name' => $request->first_name,
             'company_name' => $request->company_name,
             'contact_number' => $request->contact_number,
             'country_code' => $request->country_code,
             'username' => $username,
-        ]);
+        ];
+
+        if ($request->hasFile('company_logo')) {
+            $logoPath = $request->file('company_logo')->store('company_logos', 'public');
+            $data['company_logo'] = $logoPath;
+        }
+
+        $user->update($data);
 
         return redirect()->back()->with('success', 'Profile updated successfully.');
     }

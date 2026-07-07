@@ -28,6 +28,8 @@ class User extends Authenticatable
         'status',
         'username',
         'company_name',
+        'company_logo',
+        'vendor_id',
     ];
 
     /**
@@ -49,18 +51,40 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * Get the vendor that this user belongs to.
+     */
+    public function vendor()
+    {
+        return $this->belongsTo(User::class, 'vendor_id');
+    }
+
+    /**
+     * Get the users/customers under this vendor.
+     */
+    public function customers()
+    {
+        return $this->hasMany(User::class, 'vendor_id');
+    }
+
     public function subscription()
     {
         return $this->hasOne(VendorSubscription::class, 'vendor_id')->latest();
     }
 
+    public function subscriptions()
+    {
+        return $this->hasMany(VendorSubscription::class, 'vendor_id')->latest();
+    }
+
     public function activeSubscription()
     {
         return $this->hasOne(VendorSubscription::class, 'vendor_id')
-                    ->where('status', 'active')
-                    ->where('starts_at', '<=', now())
-                    ->where('ends_at', '>=', now())
-                    ->latest();
+                    ->ofMany([], function ($query) {
+                        $query->where('status', 'active')
+                              ->where('starts_at', '<=', now())
+                              ->where('ends_at', '>=', now());
+                    });
     }
 
     public function groups()
@@ -80,13 +104,8 @@ class User extends Authenticatable
             return false;
         }
 
-        $limit = $subscription->package->no_of_groups;
-        // Assuming null or -1 means unlimited
-        if (is_null($limit) || $limit == -1) {
-            return true;
-        }
-
-        return $this->groups()->count() < (int) $limit;
+        $limit = (int) $subscription->package->no_of_groups;
+        return $this->groups()->count() < $limit;
     }
 
     public function canAddVehicle()
@@ -96,11 +115,39 @@ class User extends Authenticatable
             return false;
         }
 
-        $limit = $subscription->package->no_of_vehicles;
-        if (is_null($limit) || $limit == -1) {
-            return true;
+        $limit = (int) $subscription->package->no_of_vehicles;
+        return $this->vehicles()->count() < $limit;
+    }
+
+    public function paymentSetting()
+    {
+        return $this->hasOne(VendorPaymentSetting::class, 'vendor_id');
+    }
+
+    public function hasCouponFeature()
+    {
+        $subscription = $this->activeSubscription;
+        if (!$subscription) {
+            return false;
         }
 
-        return $this->vehicles()->count() < (int) $limit;
+        $limit = (int) $subscription->package->no_of_coupons;
+        return $limit > 0;
+    }
+
+    public function coupons()
+    {
+        return $this->hasMany(Coupon::class, 'vendor_id');
+    }
+
+    public function canAddCoupon()
+    {
+        $subscription = $this->activeSubscription;
+        if (!$subscription) {
+            return false;
+        }
+
+        $limit = (int) $subscription->package->no_of_coupons;
+        return $this->coupons()->count() < $limit;
     }
 }

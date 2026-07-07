@@ -71,7 +71,7 @@
                     <div>
                         <label for="no_of_users" class="form-label-custom">Number of Users</label>
                         <input type="number" class="form-control form-input-custom @error('no_of_users') is-invalid @enderror" id="no_of_users" name="no_of_users"
-                            value="{{ old('no_of_users') }}" min="0" placeholder="Empty for unlimited" style="border: 1px solid #d7e0e8; border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%;" />
+                            value="{{ old('no_of_users') }}" min="0" placeholder="0" style="border: 1px solid #d7e0e8; border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%;" />
                         @error('no_of_users')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -81,7 +81,7 @@
                     <div>
                         <label for="no_of_vehicles" class="form-label-custom">Number of Vehicles</label>
                         <input type="number" class="form-control form-input-custom @error('no_of_vehicles') is-invalid @enderror" id="no_of_vehicles" name="no_of_vehicles"
-                            value="{{ old('no_of_vehicles') }}" min="0" placeholder="Empty for unlimited" style="border: 1px solid #d7e0e8; border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%;" />
+                            value="{{ old('no_of_vehicles') }}" min="0" placeholder="0" style="border: 1px solid #d7e0e8; border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%;" />
                         @error('no_of_vehicles')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -93,7 +93,7 @@
                     <div>
                         <label for="no_of_groups" class="form-label-custom">Number of Groups</label>
                         <input type="number" class="form-control form-input-custom @error('no_of_groups') is-invalid @enderror" id="no_of_groups" name="no_of_groups"
-                            value="{{ old('no_of_groups') }}" min="0" placeholder="Empty for unlimited" style="border: 1px solid #d7e0e8; border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%;" />
+                            value="{{ old('no_of_groups') }}" min="0" placeholder="0" style="border: 1px solid #d7e0e8; border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%;" />
                         @error('no_of_groups')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -103,7 +103,7 @@
                     <div>
                         <label for="no_of_coupons" class="form-label-custom">Number of Coupons</label>
                         <input type="number" class="form-control form-input-custom @error('no_of_coupons') is-invalid @enderror" id="no_of_coupons" name="no_of_coupons"
-                            value="{{ old('no_of_coupons') }}" min="0" placeholder="Empty for unlimited" style="border: 1px solid #d7e0e8; border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%;" />
+                            value="{{ old('no_of_coupons', 0) }}" min="0" placeholder="0" style="border: 1px solid #d7e0e8; border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%;" />
                         @error('no_of_coupons')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror

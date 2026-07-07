@@ -16,7 +16,8 @@ class VendorRegisterController extends Controller
      */
     public function showRegisterForm()
     {
-        return view('frontend.vendor-register');
+        $vendors = User::where('role', 'vendor')->where('status', 'active')->get();
+        return view('frontend.vendor-register', compact('vendors'));
     }
 
     /**
@@ -31,8 +32,34 @@ class VendorRegisterController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'contact_number' => ['required', 'string', 'max:20'],
             'country_code' => ['required', 'string', 'max:10'],
+            'vendor_id' => ['required_if:role,user', 'nullable', 'exists:users,id'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
+
+        if ($request->role === 'user' && $request->vendor_id) {
+            $vendorId = $request->vendor_id;
+            
+            // Get the vendor's active subscription
+            $vendor = User::with(['subscription' => function($q) {
+                $q->where('status', 'active')
+                  ->where('starts_at', '<=', now())
+                  ->where('ends_at', '>=', now());
+            }, 'subscription.package'])->find($vendorId);
+
+            if ($vendor && $vendor->subscription && $vendor->subscription->package) {
+                $maxUsers = $vendor->subscription->package->no_of_users;
+                
+                // If maxUsers is not null/empty, check the limit
+                if (!empty($maxUsers) && $maxUsers != 'Unlimited') {
+                    $maxUsers = (int) $maxUsers;
+                    $currentUsers = User::where('vendor_id', $vendorId)->where('role', 'user')->count();
+                    
+                    if ($currentUsers >= $maxUsers) {
+                        return back()->withInput()->withErrors(['vendor_id' => 'This vendor has reached their maximum user capacity based on their current plan.']);
+                    }
+                }
+            }
+        }
 
         $baseName = $request->role === 'vendor' ? $request->company_name : $request->first_name;
         $baseUsername = Str::slug($baseName, '');
@@ -53,6 +80,7 @@ class VendorRegisterController extends Controller
             'country_code' => $request->country_code,
             'password' => Hash::make($request->password),
             'role' => $request->role,
+            'vendor_id' => $request->role === 'user' ? $request->vendor_id : null,
         ]);
 
         Auth::login($user);
@@ -60,7 +88,7 @@ class VendorRegisterController extends Controller
         if ($request->role === 'vendor') {
             return redirect(route('vendor.dashboard'));
         } else {
-            return redirect('/');
+            return redirect(route('user.dashboard'));
         }
     }
 }

@@ -15,6 +15,10 @@ class VendorSubscription extends Model
         'starts_at',
         'ends_at',
         'status',
+        'razorpay_order_id',
+        'razorpay_payment_id',
+        'razorpay_signature',
+        'amount_paid',
     ];
 
     protected $casts = [

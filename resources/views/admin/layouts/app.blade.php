@@ -99,12 +99,7 @@
         <div></div>
         <div class="admin-toolbar" style="display: flex; align-items: center; gap: 15px;">
           <span class="user-greeting" style="font-weight: 500;">Hello, {{ Auth::user()->name }}</span>
-          
-          @if(Auth::check() && Auth::user()->role === 'vendor')
-          <a href="{{ route('vendor.profile.index') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 5px; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">
-            <svg viewBox="0 0 24 24" style="width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:2;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          </a>
-          @endif
+
           
           <form method="POST" action="{{ route('logout') }}" style="margin: 0; display: inline;">
               @csrf
