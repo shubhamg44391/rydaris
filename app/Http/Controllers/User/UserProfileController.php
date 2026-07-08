@@ -20,13 +20,28 @@ class UserProfileController extends Controller
     {
         $user = Auth::user();
 
-        $request->validate([
+        $rules = [
+            'first_name' => 'required|string|max:255',
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-        ]);
+            'country_code' => 'required|string|max:10',
+            'contact_number' => 'required|string|max:255',
+        ];
 
+        if ($user->role === 'vendor') {
+            $rules['company_name'] = 'required|string|max:255';
+        }
+
+        $request->validate($rules);
+
+        $user->first_name = $request->first_name;
         $user->name = $request->name;
-        $user->email = $request->email;
+        $user->country_code = $request->country_code;
+        $user->contact_number = $request->contact_number;
+
+        if ($user->role === 'vendor') {
+            $user->company_name = $request->company_name;
+        }
+
         $user->save();
 
         return redirect()->back()->with('success', 'Profile updated successfully.');

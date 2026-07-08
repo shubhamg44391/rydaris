@@ -147,6 +147,26 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     Route::get('/book/{vehicle}/payment', [\App\Http\Controllers\User\UserBookingController::class, 'payment'])->name('user.book.payment');
     Route::post('/book/{vehicle}/store', [\App\Http\Controllers\User\UserBookingController::class, 'store'])->name('user.book.store');
     Route::get('/book/{vehicle}/bookingsucces', [\App\Http\Controllers\User\UserBookingController::class, 'bookingsucces'])->name('user.book.bookingsucces');
+    
+    // Manage Bookings
+    Route::get('/bookings/{id}/edit', [\App\Http\Controllers\User\UserBookingController::class, 'edit'])->name('user.bookings.edit');
+    Route::put('/bookings/{id}', [\App\Http\Controllers\User\UserBookingController::class, 'update'])->name('user.bookings.update');
+
+    // Check-in flow
+    Route::get('/checkin', [\App\Http\Controllers\User\UserBookingController::class, 'checkinRedirect'])->name('user.checkin.redirect');
+    Route::get('/bookings/{id}/checkin', [\App\Http\Controllers\User\UserBookingController::class, 'checkinForm'])->name('user.bookings.checkin');
+    Route::post('/bookings/{id}/checkin', [\App\Http\Controllers\User\UserBookingController::class, 'submitCheckin'])->name('user.bookings.checkin.submit');
+
+    // Payment flow
+    Route::get('/payment', [\App\Http\Controllers\User\UserBookingController::class, 'paymentRedirect'])->name('user.payment.redirect');
+    Route::get('/bookings/{id}/payment-page', [\App\Http\Controllers\User\UserBookingController::class, 'paymentPage'])->name('user.bookings.payment-page');
+    Route::post('/bookings/{id}/payment-page', [\App\Http\Controllers\User\UserBookingController::class, 'processPaymentPage'])->name('user.bookings.payment-page.submit');
+    // Support Ticket System (User Side)
+    Route::get('/support-tickets', [\App\Http\Controllers\User\SupportTicketController::class, 'index'])->name('user.support-tickets.index');
+    Route::get('/support-tickets/create', [\App\Http\Controllers\User\SupportTicketController::class, 'create'])->name('user.support-tickets.create');
+    Route::post('/support-tickets', [\App\Http\Controllers\User\SupportTicketController::class, 'store'])->name('user.support-tickets.store');
+    Route::get('/support-tickets/{id}', [\App\Http\Controllers\User\SupportTicketController::class, 'show'])->name('user.support-tickets.show');
+    Route::post('/support-tickets/{id}/reply', [\App\Http\Controllers\User\SupportTicketController::class, 'reply'])->name('user.support-tickets.reply');
 });
 
 // Subscription Payment Routes — Vendor only
@@ -159,7 +179,10 @@ Route::middleware(['auth', 'vendor'])->group(function () {
 Route::middleware(['auth', 'vendor'])->prefix('vendor')->group(function () {
     Route::get('/dashboard', [VendorDashboardController::class, 'index'])->name('vendor.dashboard');
     Route::get('/bookings', [\App\Http\Controllers\Vendor\BookingController::class, 'index'])->name('vendor.bookings.index');
+    Route::post('/bookings/update-status', [\App\Http\Controllers\Vendor\BookingController::class, 'updateStatus'])->name('vendor.bookings.update_status');
     Route::get('/bookings/payment', [\App\Http\Controllers\Vendor\BookingController::class, 'payment'])->name('vendor.bookings.payment');
+    Route::get('/bookings/{id}', [\App\Http\Controllers\Vendor\BookingController::class, 'show'])->name('vendor.bookings.show');
+    Route::put('/bookings/{id}', [\App\Http\Controllers\Vendor\BookingController::class, 'update'])->name('vendor.bookings.update');
     Route::get('/pricing', [VendorDashboardController::class, 'pricing'])->name('vendor.pricing');
     Route::get('/subscription/history', [VendorDashboardController::class, 'subscriptionHistory'])->name('vendor.subscription.history');
     Route::post('/subscribe/{packageId}', [VendorDashboardController::class, 'subscribe'])->name('vendor.subscribe');
@@ -171,6 +194,9 @@ Route::middleware(['auth', 'vendor'])->prefix('vendor')->group(function () {
 
     Route::get('/payment-settings', [\App\Http\Controllers\Vendor\PaymentSettingController::class, 'index'])->name('vendor.payment_settings.index');
     Route::post('/payment-settings', [\App\Http\Controllers\Vendor\PaymentSettingController::class, 'update'])->name('vendor.payment_settings.update');
+
+    Route::get('/smtp-settings', [\App\Http\Controllers\Vendor\SmtpSettingController::class, 'index'])->name('vendor.smtp_settings.index');
+    Route::post('/smtp-settings', [\App\Http\Controllers\Vendor\SmtpSettingController::class, 'update'])->name('vendor.smtp_settings.update');
 
     // Routes that require a subscription
     Route::middleware(['vendor.subscription'])->group(function () {
@@ -258,5 +284,16 @@ Route::middleware(['auth', 'vendor'])->prefix('vendor')->group(function () {
             'update'  => 'vendor.coupons.update',
             'destroy' => 'vendor.coupons.destroy',
         ]);
+
+        // Support Ticket System (Vendor Side)
+        Route::get('/support-tickets', [\App\Http\Controllers\Vendor\SupportTicketController::class, 'index'])->name('vendor.support-tickets.index');
+        Route::get('/support-tickets/{id}', [\App\Http\Controllers\Vendor\SupportTicketController::class, 'show'])->name('vendor.support-tickets.show');
+        Route::post('/support-tickets/{id}/reply', [\App\Http\Controllers\Vendor\SupportTicketController::class, 'reply'])->name('vendor.support-tickets.reply');
+        Route::post('/support-tickets/{id}/close', [\App\Http\Controllers\Vendor\SupportTicketController::class, 'close'])->name('vendor.support-tickets.close');
     });
+});
+
+Route::get('/dev-login', function() {
+    Auth::loginUsingId(49);
+    return redirect('/user/dashboard');
 });

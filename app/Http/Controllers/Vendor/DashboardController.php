@@ -12,7 +12,68 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('vendor.dashboard');
+        $vendorId = auth()->id();
+
+        // 1. KPI Metrics
+        $totalVehicles = \App\Models\Vehicle::where('vendor_id', $vendorId)->count();
+        $totalBookings = \App\Models\Booking::where('vendor_id', $vendorId)->count();
+        
+        $monthlyEarnings = \App\Models\Booking::where('vendor_id', $vendorId)
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->sum('paid_amount');
+
+        $totalEarnings = \App\Models\Booking::where('vendor_id', $vendorId)->sum('paid_amount');
+
+        // 2. Monthly Revenue Chart (Last 12 Months)
+        $monthlyRevenue = [];
+        for ($i = 11; $i >= 0; $i--) {
+            $month = now()->subMonths($i);
+            $revenue = \App\Models\Booking::where('vendor_id', $vendorId)
+                ->whereMonth('created_at', $month->month)
+                ->whereYear('created_at', $month->year)
+                ->sum('paid_amount');
+            $count = \App\Models\Booking::where('vendor_id', $vendorId)
+                ->whereMonth('created_at', $month->month)
+                ->whereYear('created_at', $month->year)
+                ->count();
+            $monthlyRevenue[] = [
+                'month' => $month->format('M'),
+                'revenue' => (float)$revenue,
+                'count' => $count
+            ];
+        }
+
+        $maxRevenue = collect($monthlyRevenue)->max('revenue') ?: 1;
+
+        // 3. Recent Bookings / Activities
+        $recentBookings = \App\Models\Booking::with('vehicle')
+            ->where('vendor_id', $vendorId)
+            ->orderBy('id', 'desc')
+            ->take(5)
+            ->get();
+
+        // 4. Fleet transmission distribution
+        $automaticCount = \App\Models\Vehicle::where('vendor_id', $vendorId)->where('gear_system', 'Automatic')->count();
+        $manualCount = \App\Models\Vehicle::where('vendor_id', $vendorId)->where('gear_system', 'Manual')->count();
+        $totalGear = $automaticCount + $manualCount;
+        
+        $autoPercent = $totalGear > 0 ? round(($automaticCount / $totalGear) * 100) : 50;
+        $manualPercent = $totalGear > 0 ? round(($manualCount / $totalGear) * 100) : 50;
+
+        return view('vendor.dashboard', compact(
+            'totalVehicles',
+            'totalBookings',
+            'monthlyEarnings',
+            'totalEarnings',
+            'monthlyRevenue',
+            'maxRevenue',
+            'recentBookings',
+            'automaticCount',
+            'manualCount',
+            'autoPercent',
+            'manualPercent'
+        ));
     }
 
     public function pricing()

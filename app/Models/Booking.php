@@ -14,7 +14,8 @@ class Booking extends Model
         'customer_fname', 'customer_lname', 'customer_email', 'customer_phone', 'customer_dob',
         'pickup_location_id', 'return_location_id', 'pickup_date', 'pickup_time', 'return_date', 'return_time',
         'total_amount', 'paid_amount', 'pending_amount',
-        'payment_method', 'payment_reference', 'booking_status', 'payment_status'
+        'payment_method', 'payment_reference', 'booking_status', 'payment_status',
+        'license_number', 'license_issue_date', 'license_expiry_date', 'license_image', 'passport_image', 'pass_number', 'flight_number', 'checkin_status'
     ];
 
     public function vendor()
@@ -40,5 +41,10 @@ class Booking extends Model
     public function returnLocation()
     {
         return $this->belongsTo(PickupLocation::class, 'return_location_id');
+    }
+
+    public function extras()
+    {
+        return $this->hasMany(BookingExtra::class);
     }
 }

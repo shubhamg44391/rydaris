@@ -14,7 +14,7 @@ class UserDashboardController extends Controller
         if (auth()->check()) {
             $bookings = \App\Models\Booking::with('vehicle')
                 ->where('user_id', auth()->id())
-                ->orderBy('created_at', 'desc')
+                ->orderBy('id', 'desc')
                 ->get();
         }
         return view('user.dashboard', compact('bookings'));

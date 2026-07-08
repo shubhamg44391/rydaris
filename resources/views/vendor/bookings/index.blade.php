@@ -103,9 +103,12 @@
                                     {{ $booking->payment_reference ?? 'N/A' }}
                                 </td>
                                 <td style="padding: 15px 20px; white-space: nowrap;">
-                                    <span class="badge" style="{{ $booking->booking_status == 'confirmed' ? 'background: rgba(74,222,128,0.1); color: #4ade80; border: 1px solid rgba(74,222,128,0.2);' : 'background: rgba(250,204,21,0.1); color: #facc15; border: 1px solid rgba(250,204,21,0.2);' }} padding: 5px 10px;">
-                                        {{ ucfirst($booking->booking_status) }}
-                                    </span>
+                                    <select class="form-select status-dropdown" data-id="{{ $booking->id }}" style="background: rgba(255, 255, 255, 0.05); color: #fff; border: 1px solid rgba(255, 255, 255, 0.2); padding: 5px 10px; border-radius: 4px; width: 140px; {{ $booking->booking_status == 'confirmed' ? 'color: #4ade80;' : ($booking->booking_status == 'pending' ? 'color: #facc15;' : '') }}">
+                                        <option value="pending" style="background: #1e293b; color: #f8fafc;" {{ $booking->booking_status == 'pending' ? 'selected' : '' }}>Pending</option>
+                                        <option value="confirmed" style="background: #1e293b; color: #f8fafc;" {{ $booking->booking_status == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
+                                        <option value="cancelled" style="background: #1e293b; color: #f8fafc;" {{ $booking->booking_status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                                        <option value="confirm_request" style="background: #1e293b; color: #f8fafc;" {{ $booking->booking_status == 'confirm_request' ? 'selected' : '' }}>Confirm Request</option>
+                                    </select>
                                 </td>
                                 <td style="padding: 15px 20px; white-space: nowrap;">
                                     <span class="badge" style="{{ $booking->payment_status == 'paid' ? 'background: rgba(74,222,128,0.1); color: #4ade80; border: 1px solid rgba(74,222,128,0.2);' : 'background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.2);' }} padding: 5px 10px;">
@@ -113,9 +116,12 @@
                                     </span>
                                 </td>
                                 <td style="padding: 15px 20px; text-align: right;">
-                                    <button class="btn btn-sm" style="background: rgba(255,255,255,0.05); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1);">
-                                        View
-                                    </button>
+                                    <a href="{{ route('vendor.bookings.show', $booking->id) }}" class="btn btn-sm" title="Edit" style="background: rgba(255,255,255,0.05); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); text-decoration: none; display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0; border-radius: 4px;">
+                                        <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2;">
+                                            <path d="M12 20h9"/>
+                                            <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>
+                                        </svg>
+                                    </a>
                                 </td>
                             </tr>
                         @empty
@@ -145,4 +151,94 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('js')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const statusDropdowns = document.querySelectorAll('.status-dropdown');
+        statusDropdowns.forEach(dropdown => {
+            dropdown.addEventListener('change', function() {
+                const bookingId = this.getAttribute('data-id');
+                const newStatus = this.value;
+                const selectElement = this;
+
+                // Ask for confirmation
+                Swal.fire({
+                    title: 'Change Booking Status?',
+                    text: `Are you sure you want to change the status to ${newStatus}?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#4ade80',
+                    cancelButtonColor: '#ef4444',
+                    confirmButtonText: 'Yes, change it!',
+                    background: 'rgba(11, 16, 32, 0.95)',
+                    color: '#fff'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Update styling immediately
+                        if(newStatus === 'confirmed') {
+                            selectElement.style.color = '#4ade80';
+                        } else if(newStatus === 'pending') {
+                            selectElement.style.color = '#facc15';
+                        } else if(newStatus === 'cancelled') {
+                            selectElement.style.color = '#ef4444';
+                        } else {
+                            selectElement.style.color = '#fff';
+                        }
+
+                        // Make AJAX request
+                        fetch('{{ route("vendor.bookings.update_status") }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({
+                                booking_id: bookingId,
+                                status: newStatus
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if(data.success) {
+                                Swal.fire({
+                                    toast: true,
+                                    position: 'top-end',
+                                    icon: 'success',
+                                    title: 'Status updated successfully',
+                                    showConfirmButton: false,
+                                    timer: 3000,
+                                    background: 'rgba(11, 16, 32, 0.95)'
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Failed to update status',
+                                    background: 'rgba(11, 16, 32, 0.95)'
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'An error occurred while updating status',
+                                background: 'rgba(11, 16, 32, 0.95)'
+                            });
+                        });
+                    } else {
+                        // Revert selection
+                        selectElement.value = selectElement.getAttribute('data-current-status') || 'pending';
+                    }
+                });
+            });
+
+            // Store original value
+            dropdown.setAttribute('data-current-status', dropdown.value);
+        });
+    });
+</script>
 @endsection

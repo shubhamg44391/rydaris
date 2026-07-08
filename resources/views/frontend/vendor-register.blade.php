@@ -44,10 +44,16 @@
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{{asset('assets/admin/js/config.js')}}"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/19.2.16/css/intlTelInput.css"/>
 
     <style>
         :root {
             --brand: #52ead2;
+        }
+
+        .authentication-inner {
+            max-width: 520px !important;
+            width: 100% !important;
         }
 
         body {
@@ -165,6 +171,23 @@
             color: #ffffff !important;
             opacity: 0.9;
         }
+
+        /* intl-tel-input dark theme overrides */
+        .iti { width: 100%; display: block; }
+        .iti__country-list { background: rgba(11, 16, 32, 0.98); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 8px; z-index: 9999; }
+        .iti__country-list .iti__country:hover, .iti__country-list .iti__country.iti__highlight { background: rgba(59, 130, 246, 0.2); }
+        .iti__selected-flag { background: transparent !important; padding: 0 12px; border-right: 1px solid rgba(255, 255, 255, 0.12); display: flex !important; flex-direction: row !important; align-items: center !important; flex-wrap: nowrap !important; gap: 6px !important; }
+        .iti__flag { order: 1 !important; }
+        .iti__selected-dial-code { color: #fff !important; margin-left: 6px; display: inline-block !important; white-space: nowrap !important; order: 2 !important; }
+        .iti__arrow { border-top-color: #fff !important; order: 3 !important; }
+        .iti__arrow--up { border-bottom-color: #fff !important; }
+        #reg_phone { padding-left: 115px !important; }
+        .iti__search-input { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); color: #fff; margin-bottom: 8px; padding: 8px; border-radius: 4px; width: calc(100% - 16px); display: block; margin-left: auto; margin-right: auto; }
+        
+        /* Hide country name - show only flag and country dial code */
+        .iti__country-name { display: none !important; }
+        .iti__dial-code { margin-left: 8px; font-weight: 600; color: #fff; }
+        .iti__country { display: flex; align-items: center; padding: 8px 12px; gap: 4px; }
     </style>
 </head>
 
@@ -189,7 +212,7 @@
                         <!-- /Logo -->
                         <h4 class="mb-6" id="form-title">Get Started! 👋</h4>
 
-                        <form method="POST" action="{{ route('vendor.register.submit') }}">
+                        <form method="POST" action="{{ route('vendor.register.submit') }}" id="vendorRegisterForm">
                             @csrf
                             
                             <!-- Registration Type -->
@@ -259,13 +282,9 @@
                             <!-- Phone and Country Code -->
                             <div class="mb-3">
                                 <label class="form-label">{{ __('Contact Details') }}</label>
-                                <div class="input-group">
-                                    <select name="country_code" class="form-select" style="max-width: 130px;" required>
-                                        @include('partials.country-options')
-                                    </select>
-                                    <input type="tel" name="contact_number" class="form-control"
-                                        placeholder="Phone number" value="{{ old('contact_number') }}" required />
-                                </div>
+                                <input type="tel" id="reg_phone" class="form-control" placeholder="Phone number" value="{{ old('country_code') }}{{ old('contact_number') }}" required style="width: 100%;">
+                                <input type="hidden" name="country_code" id="hidden_country_code" value="{{ old('country_code') }}">
+                                <input type="hidden" name="contact_number" id="hidden_contact_number" value="{{ old('contact_number') }}">
                                 @error('country_code')
                                     <div class="mt-2 text-danger">{{ $message }}</div>
                                 @enderror
@@ -338,6 +357,7 @@
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/19.2.16/js/intlTelInput.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const roleRadios = document.querySelectorAll('input[name="role"]');
@@ -370,6 +390,57 @@
             
             // Initial run on page load
             toggleFields();
+
+            // Init Phone Input
+            const phoneInputField = document.getElementById('reg_phone');
+            if (phoneInputField) {
+                const storedPhone = phoneInputField.value || '';
+                const options = {
+                    preferredCountries: ["ae", "sa", "in", "us", "gb", "au"],
+                    initialCountry: "ae", // Instantly show UAE (no grey box!)
+                    utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/19.2.16/js/utils.js",
+                    showSelectedDialCode: true,
+                    formatOnDisplay: true,
+                    countrySearch: true
+                };
+
+                // Only allow numbers to be entered
+                phoneInputField.addEventListener('input', function(e) {
+                    this.value = this.value.replace(/[^0-9]/g, '');
+                });
+
+                const iti = window.intlTelInput(phoneInputField, options);
+
+                // Fetch IP country in the background if number has no prefix
+                if (!storedPhone.startsWith('+')) {
+                    fetch('https://ipapi.co/json/')
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data && data.country_code) {
+                                iti.setCountry(data.country_code.toLowerCase());
+                            }
+                        })
+                        .catch(() => console.log('IP lookup failed, using fallback UAE.'));
+                }
+
+                // Before submit, split country code and phone number
+                const form = document.getElementById('vendorRegisterForm');
+                if (form) {
+                    form.addEventListener('submit', function(e) {
+                        const countryData = iti.getSelectedCountryData();
+                        const fullNumber = iti.getNumber();
+                        const dialCode = '+' + countryData.dialCode;
+                        
+                        let nationalNumber = fullNumber.replace(dialCode, '').trim();
+                        if (!nationalNumber && phoneInputField.value) {
+                            nationalNumber = phoneInputField.value;
+                        }
+
+                        document.getElementById('hidden_country_code').value = dialCode;
+                        document.getElementById('hidden_contact_number').value = nationalNumber;
+                    });
+                }
+            }
         });
     </script>
 </body>

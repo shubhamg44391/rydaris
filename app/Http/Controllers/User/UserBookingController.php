@@ -8,7 +8,10 @@ use App\Models\Vehicle;
 use App\Models\VendorExtra;
 use App\Models\PickupLocation;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Config;
+use App\Models\VendorSmtpSetting;
+use App\Models\User;
 class UserBookingController extends Controller
 {
     public function coverage(Request $request, $vehicle_id)
@@ -307,9 +310,73 @@ class UserBookingController extends Controller
             'pending_amount' => $pendingAmount,
             'payment_method' => $paymentMethod,
             'payment_reference' => $paymentReference,
-            'booking_status' => 'confirmed',
+            'booking_status' => 'pending',
             'payment_status' => $paymentStatus,
         ]);
+
+        // Save Selected Insurance
+        if ($request->filled('insurance_id')) {
+            $selectedInsurance = \App\Models\VendorExtra::find($request->input('insurance_id'));
+            if ($selectedInsurance) {
+                \App\Models\BookingExtra::create([
+                    'booking_id' => $booking->id,
+                    'vendor_extra_id' => $selectedInsurance->id,
+                    'qty' => 1,
+                    'price' => $selectedInsurance->price
+                ]);
+            }
+        }
+
+        // Save Selected Extras
+        if ($request->filled('extras')) {
+            // Format: id:qty,id:qty
+            $extrasArr = explode(',', $request->input('extras'));
+            foreach ($extrasArr as $ex) {
+                $parts = explode(':', $ex);
+                if (count($parts) == 2) {
+                    $extra = \App\Models\VendorExtra::find($parts[0]);
+                    if ($extra) {
+                        \App\Models\BookingExtra::create([
+                            'booking_id' => $booking->id,
+                            'vendor_extra_id' => $extra->id,
+                            'qty' => (int)$parts[1],
+                            'price' => $extra->price
+                        ]);
+                    }
+                }
+            }
+        }
+
+        // Send Emails
+        try {
+            // Backup default config
+            $defaultConfig = config('mail');
+
+            // Apply vendor specific SMTP config if available
+            VendorSmtpSetting::setMailConfig($vehicle->vendor_id);
+
+            // Send to Customer
+            Mail::send('email_templates.user-booking', ['booking' => $booking, 'vehicle' => $vehicle], function ($message) use ($booking) {
+                $message->to($booking->customer_email)
+                        ->subject('Your Booking Under Review - Rydaris');
+            });
+
+            // Send to Vendor
+            $vendor = User::find($vehicle->vendor_id);
+            if ($vendor) {
+                Mail::send('email_templates.vendor-booking', ['booking' => $booking, 'vehicle' => $vehicle], function ($message) use ($vendor, $booking) {
+                    $message->to($vendor->email)
+                            ->subject('New Booking Received: ' . $booking->reservation_number);
+                });
+            }
+
+            // Restore default config
+            Config::set('mail', $defaultConfig);
+            \Illuminate\Support\Facades\Mail::purge('smtp');
+
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Error sending booking emails: ' . $e->getMessage());
+        }
 
         // Redirect to success page with reservation number
         $urlParams = $request->except(['_token']);
@@ -400,5 +467,290 @@ class UserBookingController extends Controller
             'pickupLocation', 'returnLocation', 'selectedInsurance', 'selectedExtras',
             'insuranceTotal', 'extrasTotal', 'grandTotal'
         ));
+    }
+
+    public function edit($id)
+    {
+        $booking = \App\Models\Booking::with(['vehicle', 'pickupLocation', 'returnLocation', 'vendor', 'extras.vendorExtra'])
+            ->where('user_id', auth()->id())
+            ->where('id', $id)
+            ->firstOrFail();
+            
+        $locations = \App\Models\PickupLocation::where('vendor_id', $booking->vendor_id)->get();
+        $vehicles = \App\Models\Vehicle::where('vendor_id', $booking->vendor_id)->where('status', 1)->get();
+        
+        $availableExtras = \App\Models\VendorExtra::where('vendor_id', $booking->vendor_id)
+            ->where('type', 'extra')
+            ->where('status', 1)
+            ->get();
+        
+        $selectedExtras = $booking->extras->pluck('qty', 'vendor_extra_id')->toArray();
+
+        return view('user.booking.edit', compact('booking', 'locations', 'vehicles', 'availableExtras', 'selectedExtras'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $booking = \App\Models\Booking::where('user_id', auth()->id())
+            ->where('id', $id)
+            ->firstOrFail();
+
+        $request->validate([
+            'customer_fname' => 'required|string|max:255',
+            'customer_lname' => 'required|string|max:255',
+            'customer_email' => 'required|email|max:255|same:customer_email_confirm',
+            'customer_email_confirm' => 'required|email|max:255',
+            'customer_phone' => 'required|string|max:255',
+            'customer_dob' => 'nullable|date',
+            'pickup_date' => 'required|date',
+            'pickup_time' => 'required|string',
+            'return_date' => 'required|date',
+            'return_time' => 'required|string',
+            'pickup_location' => 'required|exists:pickup_locations,id',
+            'return_location' => 'required|exists:pickup_locations,id',
+            'vehicle_id' => 'required|exists:vehicles,id',
+            'extras' => 'nullable|array',
+            'special_comments' => 'nullable|string'
+        ]);
+
+        // Calculate Days
+        $pDate = \Carbon\Carbon::createFromFormat('Y-m-d', $request->input('pickup_date'));
+        $rDate = \Carbon\Carbon::createFromFormat('Y-m-d', $request->input('return_date'));
+        $diff = $pDate->diffInDays($rDate);
+        $rentalDays = $diff > 0 ? $diff : 1;
+
+        // Calculate Vehicle Price
+        $vehicle = \App\Models\Vehicle::findOrFail($request->input('vehicle_id'));
+        $carTotal = ($vehicle->price_per_day ?? 50) * $rentalDays;
+
+        // Calculate Extras Total and Prepare Sync Data
+        $extrasTotal = 0;
+        $syncExtras = [];
+        if ($request->has('extras')) {
+            foreach ($request->input('extras') as $extraId => $qty) {
+                $qty = (int)$qty;
+                if ($qty > 0) {
+                    $extra = \App\Models\VendorExtra::find($extraId);
+                    if ($extra) {
+                        $price = $extra->price;
+                        if ($extra->price_type == 1) { // Per Day
+                            $extrasTotal += ($price * $rentalDays * $qty);
+                        } else { // Total
+                            $extrasTotal += ($price * $qty);
+                        }
+                        $syncExtras[] = [
+                            'vendor_extra_id' => $extra->id,
+                            'qty' => $qty,
+                            'price' => $price
+                        ];
+                    }
+                }
+            }
+        }
+
+        $grandTotal = $carTotal + $extrasTotal;
+        $paidAmount = $booking->paid_amount ?? 0;
+        $pendingAmount = $grandTotal - $paidAmount;
+        if ($pendingAmount < 0) {
+            $pendingAmount = 0;
+        }
+
+        // Update Booking
+        $booking->update([
+            'customer_fname' => $request->input('customer_fname'),
+            'customer_lname' => $request->input('customer_lname'),
+            'customer_email' => $request->input('customer_email'),
+            'customer_phone' => $request->input('customer_phone'),
+            'customer_dob' => $request->input('customer_dob'),
+            'pickup_date' => $request->input('pickup_date'),
+            'pickup_time' => $request->input('pickup_time'),
+            'return_date' => $request->input('return_date'),
+            'return_time' => $request->input('return_time'),
+            'pickup_location_id' => $request->input('pickup_location'),
+            'return_location_id' => $request->input('return_location'),
+            'vehicle_id' => $request->input('vehicle_id'),
+            'special_comments' => $request->input('special_comments'),
+            'total_amount' => $grandTotal,
+            'pending_amount' => $pendingAmount,
+        ]);
+
+        // Sync Extras
+        $booking->extras()->delete();
+        foreach ($syncExtras as $se) {
+            $booking->extras()->create($se);
+        }
+
+        // Reload booking with fresh relations for email
+        $booking->load(['vehicle', 'pickupLocation', 'returnLocation', 'vendor', 'extras.vendorExtra']);
+
+        // Send Emails
+        try {
+            $defaultConfig = config('mail');
+            VendorSmtpSetting::setMailConfig($booking->vendor_id);
+
+            // Mail to Customer
+            Mail::send('email_templates.modify-booking', ['booking' => $booking], function ($message) use ($booking) {
+                $message->to($booking->customer_email)
+                        ->subject('Your Booking Has Been Modified - ' . $booking->reservation_number);
+            });
+
+            // Mail to Vendor
+            $vendor = User::find($booking->vendor_id);
+            if ($vendor) {
+                Mail::send('email_templates.modify-booking', ['booking' => $booking], function ($message) use ($vendor, $booking) {
+                    $message->to($vendor->email)
+                            ->subject('Booking Modified by Customer: ' . $booking->reservation_number);
+                });
+            }
+
+            Config::set('mail', $defaultConfig);
+            \Illuminate\Support\Facades\Mail::purge('smtp');
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Error sending modify-booking emails: ' . $e->getMessage());
+        }
+
+        return redirect()->back()->with('success', 'Booking details updated successfully.');
+    }
+
+    public function checkinRedirect()
+    {
+        $booking = \App\Models\Booking::where('user_id', auth()->id())
+            ->orderBy('id', 'desc')
+            ->first();
+
+        if (!$booking) {
+            return redirect()->route('user.dashboard')->with('error', 'You do not have any bookings to check in.');
+        }
+
+        return redirect()->route('user.bookings.checkin', $booking->id);
+    }
+
+    public function checkinForm($id)
+    {
+        $booking = \App\Models\Booking::with(['vehicle', 'pickupLocation', 'returnLocation', 'vendor', 'extras.vendorExtra'])
+            ->where('user_id', auth()->id())
+            ->findOrFail($id);
+
+        return view('user.booking.checkin', compact('booking'));
+    }
+
+    public function submitCheckin(Request $request, $id)
+    {
+        $booking = \App\Models\Booking::where('user_id', auth()->id())->findOrFail($id);
+
+        $request->validate([
+            'license_number' => 'required|string|max:255',
+            'license_issue_date' => 'required|date',
+            'license_expiry_date' => 'required|date|after:license_issue_date',
+            'license_image' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
+            'passport_image' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
+            'pass_number' => 'required|string|max:255',
+            'flight_number' => 'nullable|string|max:255',
+            'terms_agreed' => 'accepted'
+        ]);
+
+        $data = [
+            'license_number' => $request->input('license_number'),
+            'license_issue_date' => $request->input('license_issue_date'),
+            'license_expiry_date' => $request->input('license_expiry_date'),
+            'pass_number' => $request->input('pass_number'),
+            'flight_number' => $request->input('flight_number'),
+            'checkin_status' => true
+        ];
+
+        if ($request->hasFile('license_image')) {
+            if ($booking->license_image && \Storage::disk('public')->exists($booking->license_image)) {
+                \Storage::disk('public')->delete($booking->license_image);
+            }
+            $data['license_image'] = $request->file('license_image')->store('documents', 'public');
+        }
+
+        if ($request->hasFile('passport_image')) {
+            if ($booking->passport_image && \Storage::disk('public')->exists($booking->passport_image)) {
+                \Storage::disk('public')->delete($booking->passport_image);
+            }
+            $data['passport_image'] = $request->file('passport_image')->store('documents', 'public');
+        }
+
+        $booking->update($data);
+
+        return redirect()->route('user.bookings.payment-page', $booking->id)->with('success', 'Your check-in has been completed successfully! Please proceed with the payment.');
+    }
+
+    public function paymentRedirect()
+    {
+        $booking = \App\Models\Booking::where('user_id', auth()->id())
+            ->orderBy('id', 'desc')
+            ->first();
+
+        if (!$booking) {
+            return redirect()->route('user.dashboard')->with('error', 'You do not have any bookings to pay.');
+        }
+
+        return redirect()->route('user.bookings.payment-page', $booking->id);
+    }
+
+    public function paymentPage($id)
+    {
+        $booking = \App\Models\Booking::with(['vehicle', 'pickupLocation', 'returnLocation', 'vendor', 'extras.vendorExtra'])
+            ->where('user_id', auth()->id())
+            ->findOrFail($id);
+
+        $paymentSettings = \App\Models\VendorPaymentSetting::where('vendor_id', $booking->vendor_id)->first();
+
+        return view('user.booking.payment-page', compact('booking', 'paymentSettings'));
+    }
+
+    public function processPaymentPage(\Illuminate\Http\Request $request, $id)
+    {
+        $booking = \App\Models\Booking::where('user_id', auth()->id())->findOrFail($id);
+
+        $request->validate([
+            'payment_choice' => 'required|in:deposit,full'
+        ]);
+
+        $choice = $request->input('payment_choice');
+        $totalAmount = (float)$booking->total_amount;
+
+        $paymentSettings = \App\Models\VendorPaymentSetting::where('vendor_id', $booking->vendor_id)->first();
+        $discountPercent = $paymentSettings ? (float)($paymentSettings->full_payment_discount ?? 5) : 5;
+        $depositPercent = $paymentSettings ? (float)($paymentSettings->deposit_percentage ?? 5) : 5;
+
+        $paymentReference = $request->input('razorpay_payment_id') ?: 'SIMULATED_' . strtoupper(\Illuminate\Support\Str::random(10));
+
+        if ($choice === 'deposit') {
+            $depositAmount = $totalAmount * ($depositPercent / 100);
+            $booking->update([
+                'paid_amount' => $depositAmount,
+                'pending_amount' => $totalAmount - $depositAmount,
+                'payment_status' => 'partial_paid',
+                'payment_method' => 'deposit',
+                'payment_reference' => $paymentReference
+            ]);
+            $msg = '5% Deposit payment completed successfully!';
+        } else {
+            if ($booking->payment_status === 'unpaid' || $booking->payment_status === 'pending') {
+                $discount = $totalAmount * ($discountPercent / 100);
+                $finalAmount = $totalAmount - $discount;
+                $booking->update([
+                    'paid_amount' => $finalAmount,
+                    'pending_amount' => 0,
+                    'payment_status' => 'paid',
+                    'payment_method' => 'full',
+                    'payment_reference' => $paymentReference
+                ]);
+            } else {
+                $booking->update([
+                    'paid_amount' => $totalAmount,
+                    'pending_amount' => 0,
+                    'payment_status' => 'paid',
+                    'payment_method' => 'full',
+                    'payment_reference' => $paymentReference
+                ]);
+            }
+            $msg = 'Full payment completed successfully!';
+        }
+
+        return redirect()->route('user.bookings.payment-page', $booking->id)->with('success', $msg);
     }
 }

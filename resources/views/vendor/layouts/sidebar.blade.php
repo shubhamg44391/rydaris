@@ -27,16 +27,16 @@
 
     <!-- Settings Menu -->
     <div class="admin-nav-group">
-        <a href="javascript:void(0);" class="nav-toggle" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ (Request::is('vendor/profile*') || Request::is('vendor/payment-settings*')) ? 'color: #f8fafc; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb;' }} font-size: 0.92rem; font-weight: 780; transition: background 0.2s;">
+        <a href="javascript:void(0);" class="nav-toggle" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ (Request::is('vendor/profile*') || Request::is('vendor/payment-settings*') || Request::is('vendor/smtp-settings*')) ? 'color: #f8fafc; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb;' }} font-size: 0.92rem; font-weight: 780; transition: background 0.2s;">
             <span style="display: flex; align-items: center; gap: 10px;">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;">
                     <circle cx="12" cy="12" r="3"></circle>
                     <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
                 </svg>Settings
             </span>
-            <svg class="chevron" viewBox="0 0 24 24" style="width: 14px; height: 14px; transition: transform 0.2s ease; {{ (Request::is('vendor/profile*') || Request::is('vendor/payment-settings*')) ? 'transform: rotate(180deg);' : '' }}"><path d="m6 9 6 6 6-6"/></svg>
+            <svg class="chevron" viewBox="0 0 24 24" style="width: 14px; height: 14px; transition: transform 0.2s ease; {{ (Request::is('vendor/profile*') || Request::is('vendor/payment-settings*') || Request::is('vendor/smtp-settings*')) ? 'transform: rotate(180deg);' : '' }}"><path d="m6 9 6 6 6-6"/></svg>
         </a>
-        <div class="admin-submenu" style="{{ (Request::is('vendor/profile*') || Request::is('vendor/payment-settings*')) ? 'display: flex;' : 'display: none;' }} padding-left: 20px; margin-top: 4px; flex-direction: column; gap: 4px;">
+        <div class="admin-submenu" style="{{ (Request::is('vendor/profile*') || Request::is('vendor/payment-settings*') || Request::is('vendor/smtp-settings*')) ? 'display: flex;' : 'display: none;' }} padding-left: 20px; margin-top: 4px; flex-direction: column; gap: 4px;">
             <a href="{{ route('vendor.profile.index') }}" class="submenu-item {{ Request::is('vendor/profile*') ? 'active' : '' }}" style="{{ Request::is('vendor/profile*') ? 'color: var(--brand, #52ead2) !important; font-weight: bold; background: rgba(255, 255, 255, 0.04) !important;' : '' }}">
                 <span class="dot" style="{{ Request::is('vendor/profile*') ? 'background: var(--brand, #52ead2) !important;' : '' }}"></span>
                 Profile Management
@@ -44,6 +44,10 @@
             <a href="{{ route('vendor.payment_settings.index') }}" class="submenu-item {{ Request::is('vendor/payment-settings*') ? 'active' : '' }}" style="{{ Request::is('vendor/payment-settings*') ? 'color: var(--brand, #52ead2) !important; font-weight: bold; background: rgba(255, 255, 255, 0.04) !important;' : '' }}">
                 <span class="dot" style="{{ Request::is('vendor/payment-settings*') ? 'background: var(--brand, #52ead2) !important;' : '' }}"></span>
                 Payment Gateway Setting
+            </a>
+            <a href="{{ route('vendor.smtp_settings.index') }}" class="submenu-item {{ Request::is('vendor/smtp-settings*') ? 'active' : '' }}" style="{{ Request::is('vendor/smtp-settings*') ? 'color: var(--brand, #52ead2) !important; font-weight: bold; background: rgba(255, 255, 255, 0.04) !important;' : '' }}">
+                <span class="dot" style="{{ Request::is('vendor/smtp-settings*') ? 'background: var(--brand, #52ead2) !important;' : '' }}"></span>
+                SMTP Settings
             </a>
         </div>
     </div>
@@ -228,8 +232,18 @@
     </div>
     @endif
 
-  
-
+    <!-- Support Ticket -->
+    <div class="admin-nav-group">
+        <a href="{{ route('vendor.support-tickets.index') }}" class="nav-toggle {{ Request::is('vendor/support-tickets*') ? 'active' : '' }}"
+           style="justify-content: flex-start; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ Request::is('vendor/support-tickets*') ? 'color: var(--brand, #52ead2); font-weight: bold; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb; font-weight: 780;' }} font-size: 0.92rem; transition: background 0.2s;">
+            <span style="display: flex; align-items: center; gap: 10px;">
+                <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                Support Ticket
+            </span>
+        </a>
+    </div>
 </nav>
 
 <style>
