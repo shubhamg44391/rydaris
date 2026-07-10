@@ -58,20 +58,13 @@
                     @error('company_name')<div style="color: #ff6b6b; font-size: 0.875rem; margin-top: 5px;">{{ $message }}</div>@enderror
                 </div>
 
-                <div style="display: flex; gap: 15px; margin-bottom: 20px;">
-                    <div style="flex: 1;">
-                        <label style="display: block; margin-bottom: 8px; color: var(--muted-2); font-size: 0.875rem;">Country Code</label>
-                        <select name="country_code" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius); color: #ffffff;">
-                            @include('partials.country-options', ['selected' => $user->country_code])
-                        </select>
-                        @error('country_code')<div style="color: #ff6b6b; font-size: 0.875rem; margin-top: 5px;">{{ $message }}</div>@enderror
-                    </div>
-
-                    <div style="flex: 2;">
-                        <label style="display: block; margin-bottom: 8px; color: var(--muted-2); font-size: 0.875rem;">Contact Number</label>
-                        <input type="text" name="contact_number" value="{{ old('contact_number', $user->contact_number) }}" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius); color: #ffffff;">
-                        @error('contact_number')<div style="color: #ff6b6b; font-size: 0.875rem; margin-top: 5px;">{{ $message }}</div>@enderror
-                    </div>
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; color: var(--muted-2); font-size: 0.875rem;">Contact Details <span style="color: #ff4d4d;">*</span></label>
+                    <input type="tel" id="reg_phone" class="form-control-custom" placeholder="Phone number" value="{{ old('country_code', $user->country_code) }}{{ old('contact_number', $user->contact_number) }}" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius); color: #ffffff;">
+                    <input type="hidden" name="country_code" id="hidden_country_code" value="{{ old('country_code', $user->country_code) }}">
+                    <input type="hidden" name="contact_number" id="hidden_contact_number" value="{{ old('contact_number', $user->contact_number) }}">
+                    @error('country_code')<div style="color: #ff6b6b; font-size: 0.875rem; margin-top: 5px;">{{ $message }}</div>@enderror
+                    @error('contact_number')<div style="color: #ff6b6b; font-size: 0.875rem; margin-top: 5px;">{{ $message }}</div>@enderror
                 </div>
 
                 <button type="submit" class="btn btn-primary" style="margin-top: 15px;">Save Changes</button>
@@ -106,4 +99,13 @@
         </article>
     </div>
 </section>
+@endsection
+
+@section('js')
+    @include('partials.phone-input')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            initializeIntlTelInput('reg_phone', 'hidden_country_code', 'hidden_contact_number');
+        });
+    </script>
 @endsection

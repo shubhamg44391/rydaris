@@ -51,6 +51,41 @@
     .swal2-icon.swal2-success [class^=swal2-success-line] { background-color: #52ead2 !important; }
     .swal2-actions { margin-top: 2em !important; gap: 12px !important; }
     .swal2-confirm, .swal2-styled.swal2-confirm { background: linear-gradient(135deg, #52ead2, #2bc2a8) !important; color: #050711 !important; font-weight: 600 !important; border-radius: 8px !important; padding: 12px 28px !important; border: none !important; box-shadow: 0 8px 16px rgba(82, 234, 210, 0.2) !important; transition: all 0.3s ease !important; }
+    
+    /* Premium Global Scrollbar Customization */
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #0b1020 !important;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: rgba(82, 234, 210, 0.15) !important;
+        border-radius: 10px !important;
+        border: 2px solid #0b1020 !important;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: rgba(82, 234, 210, 0.35) !important;
+    }
+    
+    /* Make Sidebar Scrollable & Elegant */
+    .admin-sidebar {
+        overflow-y: auto !important;
+    }
+    .admin-sidebar::-webkit-scrollbar {
+        width: 4px;
+    }
+    .admin-sidebar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .admin-sidebar::-webkit-scrollbar-thumb {
+        background: rgba(82, 234, 210, 0.2) !important;
+        border-radius: 10px;
+    }
+    .admin-sidebar::-webkit-scrollbar-thumb:hover {
+        background: rgba(82, 234, 210, 0.4) !important;
+    }
   </style>
 
 

@@ -22,6 +22,10 @@ return new class extends Migration
             $table->boolean('is_featured')->default(false);
             $table->string('button_text')->default('Book Demo');
             $table->integer('order')->default(0);
+            $table->integer('no_of_users')->nullable();
+            $table->integer('no_of_vehicles')->nullable();
+            $table->integer('no_of_groups')->nullable();
+            $table->integer('no_of_coupons')->nullable();
             $table->timestamps();
         });
     }

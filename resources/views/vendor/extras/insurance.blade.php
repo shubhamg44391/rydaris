@@ -3,8 +3,9 @@
 @section('title', 'Insurance Management')
 
 @section('main-content')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <div class="admin-panel">
-        <div class="panel-head d-flex justify-content-between align-items-center" style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="panel-head d-flex justify-content-between align-items-center" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
             <div>
                 <h2>Insurance Management</h2>
             </div>
@@ -36,7 +37,7 @@
                         <tr>
                             <td>{{ $startingNumber++ }}</td>
                             <td>
-                                <div style="width: 40px; height: 40px; background: #e2e8f0; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: #475569;">
+                                <div style="width: 40px; height: 40px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: var(--brand, #52ead2);">
                                     <i class="{{ $ins->icon_class ?: 'fas fa-shield-alt' }}"></i>
                                 </div>
                             </td>

@@ -1,45 +1,72 @@
 @extends('admin.layouts.app')
-
-
-
 @section('main-content')
         <section id="overview" class="admin-hero">
          
           <div>
-            <h1>Welcome back, {{ auth()->user()->name ?? 'Admin' }} 👋</h1>
+            <h1>Welcome back, {{ auth()->user()->name ?? 'Admin' }}</h1>
           
           </div>
         </section>
 
         <!-- KPI Metrics Section -->
         <section class="admin-kpis" aria-label="Business KPIs" style="margin-top: 22px; margin-bottom: 22px;">
+          <!-- Estimated Recurring Revenue -->
           <article class="kpi-card">
             <div class="kpi-top">
-              <span class="admin-icon"><svg viewBox="0 0 24 24"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+              <span class="admin-icon" style="background: rgba(82,234,210,0.12); border-radius: 10px; display: flex; align-items: center; justify-content: center; width: 42px; height: 42px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#52ead2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;">
+                  <line x1="12" y1="1" x2="12" y2="23"/>
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"/>
+                </svg>
+              </span>
               <span class="delta">+14.8%</span>
             </div>
-            <strong>${{ number_format($totalVendors * 1840, 0) }}</strong>
+            <strong>₹{{ number_format($totalVendors * 1840, 0) }}</strong>
             <span>estimated recurring revenue</span>
           </article>
+
+          <!-- Registered Vendor Accounts -->
           <a class="kpi-card" href="{{ route('admin.vendors.index') }}" style="text-decoration: none; color: inherit; display: block;">
             <div class="kpi-top">
-              <span class="admin-icon"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
-              <span class="delta" style="background: #e2fbf6; color: #0f766e;">+{{ $activeVendors }} active</span>
+              <span class="admin-icon" style="background: rgba(129,140,248,0.12); border-radius: 10px; display: flex; align-items: center; justify-content: center; width: 42px; height: 42px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+              </span>
+              <span class="delta" style="background: rgba(82,234,210,0.15); color: #52ead2;">+{{ $activeVendors }} active</span>
             </div>
             <strong>{{ $totalVendors }}</strong>
             <span>registered vendor accounts</span>
           </a>
+
+          <!-- Gross Monthly Churn -->
           <article class="kpi-card">
             <div class="kpi-top">
-              <span class="admin-icon"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg></span>
+              <span class="admin-icon" style="background: rgba(251,191,36,0.12); border-radius: 10px; display: flex; align-items: center; justify-content: center; width: 42px; height: 42px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;">
+                  <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/>
+                  <polyline points="17 18 23 18 23 12"/>
+                </svg>
+              </span>
               <span class="delta warn">-0.4%</span>
             </div>
             <strong>4.2%</strong>
             <span>gross monthly churn</span>
           </article>
+
+          <!-- Inactive Vendor Accounts -->
           <a class="kpi-card" href="{{ route('admin.vendors.index', ['status' => 'inactive']) }}" style="text-decoration: none; color: inherit; display: block;">
             <div class="kpi-top">
-              <span class="admin-icon"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></span>
+              <span class="admin-icon" style="background: rgba(251,113,133,0.12); border-radius: 10px; display: flex; align-items: center; justify-content: center; width: 42px; height: 42px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#fb7185" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                  <line x1="12" y1="9" x2="12" y2="13"/>
+                  <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+              </span>
               <span class="delta bad">{{ $inactiveVendors }} pending</span>
             </div>
             <strong>{{ $inactiveVendors }}</strong>

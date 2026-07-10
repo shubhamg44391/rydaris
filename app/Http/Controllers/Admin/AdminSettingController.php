@@ -25,6 +25,7 @@ class AdminSettingController extends Controller
         $request->validate([
             'razorpay_key_id' => $request->has('razorpay_active') ? 'required|string|max:255' : 'nullable|string|max:255',
             'razorpay_key_secret' => $request->has('razorpay_active') ? 'required|string|max:255' : 'nullable|string|max:255',
+            'tax_percentage' => 'required|numeric|min:0|max:100',
         ]);
 
         $settings = SiteSetting::firstOrCreate();
@@ -32,6 +33,7 @@ class AdminSettingController extends Controller
             'razorpay_key_id' => $request->input('razorpay_key_id'),
             'razorpay_key_secret' => $request->input('razorpay_key_secret'),
             'razorpay_active' => $request->has('razorpay_active'),
+            'tax_percentage' => $request->input('tax_percentage', 18),
         ]);
 
         return back()->with('success', 'Razorpay settings updated successfully.');

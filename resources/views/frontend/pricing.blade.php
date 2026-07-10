@@ -107,34 +107,45 @@
         
         <form method="POST" action="{{ route('custom-package.submit') }}">
           @csrf
-          <div class="form-group">
-            <label>Name</label>
-            <input type="text" name="name" required placeholder="Your full name" class="modal-input">
-          </div>
-          <div class="form-group">
-            <label>Company Name</label>
-            <input type="text" name="company_name" required placeholder="Your company name" class="modal-input">
-          </div>
-          <div class="form-group">
-            <label>Company Email</label>
-            <input type="email" name="email" required placeholder="name@company.com" class="modal-input">
-          </div>
-          <div class="form-group">
-            <label>Contact Details</label>
-            <div style="display: flex; gap: 10px;">
-              <select name="country_code" class="modal-input" style="width: 35%;" required>
-                @include('partials.country-options')
-              </select>
-              <input type="text" name="contact_details" required placeholder="Phone number" class="modal-input" style="width: 65%;">
+          <div style="grid-column: span 2; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+            <div class="form-group">
+              <label>First Name <span style="color: #ff4d4d;">*</span></label>
+              <input type="text" name="first_name" required placeholder="First name" class="modal-input">
+            </div>
+            <div class="form-group">
+              <label>Middle Name <span style="color: #ff4d4d;">*</span></label>
+              <input type="text" name="middle_name" required placeholder="Middle name" class="modal-input">
+            </div>
+            <div class="form-group">
+              <label>Last Name <span style="color: #ff4d4d;">*</span></label>
+              <input type="text" name="last_name" required placeholder="Last name" class="modal-input">
             </div>
           </div>
           <div class="form-group">
-            <label>Estimated Budget ($)</label>
-            <input type="number" name="budget" placeholder="e.g. 5000" class="modal-input">
+            <label>Company Name <span style="color: #ff4d4d;">*</span></label>
+            <input type="text" name="company_name" required placeholder="Your company name" class="modal-input">
+          </div>
+          <div class="form-group">
+            <label>Employee Size <span style="color: #ff4d4d;">*</span></label>
+            <input type="text" name="employee_size" required placeholder="e.g. 10-50, 100+" class="modal-input">
           </div>
           <div class="form-group" style="grid-column: span 2;">
-            <label>Description & Requirements</label>
-            <textarea name="description" rows="4" placeholder="Tell us about your fleet size and specific needs..." class="modal-input"></textarea>
+            <label>Company Email <span style="color: #ff4d4d;">*</span></label>
+            <input type="email" name="email" required placeholder="name@company.com" class="modal-input">
+          </div>
+          <div class="form-group">
+            <label>Contact Details <span style="color: #ff4d4d;">*</span></label>
+            <input type="tel" id="custom_pkg_phone" class="modal-input" placeholder="Phone number" value="{{ old('country_code') }}{{ old('contact_details') }}" required style="width: 100%;">
+            <input type="hidden" name="country_code" id="hidden_country_code" value="{{ old('country_code') }}">
+            <input type="hidden" name="contact_details" id="hidden_contact_details" value="{{ old('contact_details') }}">
+          </div>
+          <div class="form-group">
+            <label>Estimated Budget ($) <span style="color: #ff4d4d;">*</span></label>
+            <input type="number" name="budget" min="0" required placeholder="e.g. 5000" class="modal-input">
+          </div>
+          <div class="form-group" style="grid-column: span 2;">
+            <label>Description & Requirements <span style="color: #ff4d4d;">*</span></label>
+            <textarea name="description" required rows="4" placeholder="Tell us about your fleet size and specific needs..." class="modal-input"></textarea>
           </div>
           <div style="grid-column: span 2; text-align: right; margin-top: 15px;">
             <button type="submit" class="btn primary">Submit Request</button>
@@ -243,7 +254,7 @@
             <div style="background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 255, 255, 0.12); border-radius: 12px; padding: 15px 20px; margin-bottom: 20px; font-size: 0.95rem; line-height: 1.6;">
                 <div><span style="color: #a0aec0;">Selected Package:</span> <strong id="modalPackageName" style="color: #ffffff;">Standard</strong></div>
                 <div><span style="color: #a0aec0;">Billing Cycle:</span> <strong id="modalBillingCycle" style="color: #ffffff;">Monthly</strong></div>
-                <div style="margin-top: 4px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.05);"><span style="color: #a0aec0;">Total Price (incl. 18% tax):</span> <strong id="modalTotalPrice" style="color: #ff5429;">₹74,282.82 / Monthly</strong></div>
+                <div style="margin-top: 4px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.05);"><span style="color: #a0aec0;">Total Price (incl. {{ \App\Models\SiteSetting::first()?->tax_percentage ?? 18 }}% tax):</span> <strong id="modalTotalPrice" style="color: #ff5429;">₹74,282.82 / Monthly</strong></div>
             </div>
 
             <!-- Form fields -->
@@ -297,8 +308,9 @@
     function openDetailsModal(packageId, packageName, packagePrice, billingPeriod) {
         currentPackageId = packageId;
         
+        const taxRate = {{ \App\Models\SiteSetting::first()?->tax_percentage ?? 18 }};
         let numericPrice = parseFloat(packagePrice.replace(/[^0-9.]/g, '')) || 0;
-        let taxAmount = numericPrice * 0.18;
+        let taxAmount = numericPrice * (taxRate / 100);
         let totalPrice = numericPrice + taxAmount;
         
         let currencySymbol = packagePrice.match(/[^0-9.]/)?.[0] || '₹';
@@ -425,6 +437,12 @@
         btnLoader.style.display = 'none';
         proceedBtn.disabled = false;
     }
+    </script>
+    @include('partials.phone-input')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            initializeIntlTelInput('custom_pkg_phone', 'hidden_country_code', 'hidden_contact_details');
+        });
     </script>
   </main>
 @endsection

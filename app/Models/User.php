@@ -30,6 +30,7 @@ class User extends Authenticatable
         'company_name',
         'company_logo',
         'vendor_id',
+        'last_checked_bookings_at',
     ];
 
     /**

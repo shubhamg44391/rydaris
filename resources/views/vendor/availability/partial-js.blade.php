@@ -20,7 +20,7 @@
             document.querySelectorAll('#monthFilters .chip').forEach(c => c.classList.remove('active-blue'));
             let janChip = document.querySelector('#monthFilters .chip[data-month="1"]');
             if(janChip) janChip.classList.add('active-blue');
-            document.getElementById('viewingText').innerText = 'Jan';
+            document.getElementById('viewingText').innerText = 'January';
         }
 
         fetchRates();
@@ -130,9 +130,19 @@
         const thead = document.getElementById('tableHeader');
         const tbody = document.getElementById('tableBody');
         
+        let daysCount = 31;
+        let year = currentYear;
+        let month = currentMonth;
+        if (month === 'next30') {
+            let today = new Date();
+            daysCount = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+        } else {
+            daysCount = new Date(year, parseInt(month), 0).getDate();
+        }
+        
         // Build Header
         let hHtml = '<th>Pickup Date</th><th>ACRISS / VEHICLE</th>';
-        for(let i=1; i<=31; i++) {
+        for(let i=1; i<=daysCount; i++) {
             hHtml += `<th>Day ${i}</th>`;
         }
         thead.innerHTML = hHtml;
@@ -142,7 +152,7 @@
         const groupIds = Object.keys(matrix);
         
         if (groupIds.length === 0 || dates.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="33" style="padding:20px; text-align:center; color: var(--muted-2, #a1a1aa);">No data found.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="${daysCount + 2}" style="padding:20px; text-align:center; color: var(--muted-2, #a1a1aa);">No data found.</td></tr>`;
             return;
         }
 
@@ -175,7 +185,7 @@
                     
                     bHtml += `<td class="sticky-group">[G] ${group.name}</td>`;
                     
-                    for(let i=1; i<=31; i++) {
+                    for(let i=1; i<=daysCount; i++) {
                         const price = gRates[i] ? gRates[i].price.toFixed(2) : '0.00';
                         const cls = 'cell-price';
                         bHtml += `<td class="${cls}" data-date="${date}" data-day="${i}" data-gid="${gid}">${price}</td>`;
@@ -198,7 +208,7 @@
 
                     bHtml += `<td class="sticky-group">&bull; ${vehicle.name}</td>`;
                     
-                    for(let i=1; i<=31; i++) {
+                    for(let i=1; i<=daysCount; i++) {
                         const price = vRates[i] ? vRates[i].price.toFixed(2) : (gRates[i] ? gRates[i].price.toFixed(2) : '0.00');
                         const cls = 'cell-price';
                         bHtml += `<td class="${cls}" data-date="${date}" data-day="${i}" data-gid="${gid}" data-vid="${vid}">${price}</td>`;
@@ -424,8 +434,35 @@
         document.getElementById('historyModal').style.display = 'none';
     }
 
+    function renderBulkDaysCheckboxes() {
+        const bulkDaysContainer = document.getElementById('bulkDays');
+        if (!bulkDaysContainer) return;
+        
+        let daysCount = 31;
+        let year = currentYear;
+        let month = currentMonth;
+        if (month === 'next30') {
+            let today = new Date();
+            daysCount = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+        } else {
+            daysCount = new Date(year, parseInt(month), 0).getDate();
+        }
+        
+        let html = '';
+        for (let i = 1; i <= daysCount; i++) {
+            html += `
+                <label style="border: 1px solid var(--line); background: var(--bg-2); border-radius:4px; padding:6px 10px; display:flex; align-items:center; gap:8px; font-size:0.8rem; cursor:pointer; font-weight:600; color: var(--text); white-space:nowrap;">
+                    <input type="checkbox" value="${i}" class="bulk-day-cb" checked onchange="updateBulkPreview()" style="margin:0; width:16px; height:16px; flex-shrink:0;">
+                    Day ${i}
+                </label>
+            `;
+        }
+        bulkDaysContainer.innerHTML = html;
+    }
+
     // Modal Logic
     function openBulkModal() { 
+        renderBulkDaysCheckboxes();
         document.getElementById('bulkModal').style.display = 'flex'; 
         setBulkRange('7'); // default selection
     }
@@ -552,8 +589,7 @@
                     renderTable(res.data, res.dates);
                     Swal.fire({
                         icon: 'success',
-                        title: 'Updated!',
-                        text: 'Rates updated successfully.',
+                        title: 'Rates updated successfully.',
                         toast: true,
                         position: 'top-end',
                         showConfirmButton: false,

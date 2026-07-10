@@ -97,34 +97,45 @@
             </div>
             <form method="POST" action="{{ route('custom-package.submit') }}" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                 @csrf
-                <div>
-                    <label style="display:block; margin-bottom:5px; color:#a8b3c5; font-size:0.85rem;">Name</label>
-                    <input type="text" name="name" value="{{ auth()->user()->first_name ?? auth()->user()->name }}" required style="width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:11px 14px; border-radius:8px; color:#fff; font-family:inherit;">
-                </div>
-                <div>
-                    <label style="display:block; margin-bottom:5px; color:#a8b3c5; font-size:0.85rem;">Company Name</label>
-                    <input type="text" name="company_name" value="{{ auth()->user()->company_name ?? '' }}" required style="width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:11px 14px; border-radius:8px; color:#fff; font-family:inherit;">
-                </div>
-                <div>
-                    <label style="display:block; margin-bottom:5px; color:#a8b3c5; font-size:0.85rem;">Email</label>
-                    <input type="email" name="email" value="{{ auth()->user()->email }}" required style="width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:11px 14px; border-radius:8px; color:#fff; font-family:inherit;">
-                </div>
-                <div>
-                    <label style="display:block; margin-bottom:5px; color:#a8b3c5; font-size:0.85rem;">Contact Details</label>
-                    <div style="display:flex; gap:8px;">
-                        <select name="country_code" required style="width:38%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:11px 8px; border-radius:8px; color:#fff; font-family:inherit;">
-                            @include('partials.country-options')
-                        </select>
-                        <input type="text" name="contact_details" value="{{ auth()->user()->contact_number ?? '' }}" required placeholder="Phone number" style="width:62%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:11px 14px; border-radius:8px; color:#fff; font-family:inherit;">
+                <div style="grid-column: span 2; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+                    <div>
+                        <label style="display:block; margin-bottom:5px; color:#a8b3c5; font-size:0.85rem;">First Name <span style="color: #ff4d4d;">*</span></label>
+                        <input type="text" name="first_name" value="{{ auth()->user()->first_name ?? '' }}" required style="width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:11px 14px; border-radius:8px; color:#fff; font-family:inherit;">
+                    </div>
+                    <div>
+                        <label style="display:block; margin-bottom:5px; color:#a8b3c5; font-size:0.85rem;">Middle Name <span style="color: #ff4d4d;">*</span></label>
+                        <input type="text" name="middle_name" value="" required placeholder="Middle name" style="width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:11px 14px; border-radius:8px; color:#fff; font-family:inherit;">
+                    </div>
+                    <div>
+                        <label style="display:block; margin-bottom:5px; color:#a8b3c5; font-size:0.85rem;">Last Name <span style="color: #ff4d4d;">*</span></label>
+                        <input type="text" name="last_name" value="{{ auth()->user()->name ?? '' }}" required style="width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:11px 14px; border-radius:8px; color:#fff; font-family:inherit;">
                     </div>
                 </div>
                 <div>
-                    <label style="display:block; margin-bottom:5px; color:#a8b3c5; font-size:0.85rem;">Estimated Budget (&#8377;)</label>
-                    <input type="number" name="budget" placeholder="e.g. 5000" style="width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:11px 14px; border-radius:8px; color:#fff; font-family:inherit;">
+                    <label style="display:block; margin-bottom:5px; color:#a8b3c5; font-size:0.85rem;">Company Name <span style="color: #ff4d4d;">*</span></label>
+                    <input type="text" name="company_name" value="{{ auth()->user()->company_name ?? '' }}" required style="width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:11px 14px; border-radius:8px; color:#fff; font-family:inherit;">
+                </div>
+                <div>
+                    <label style="display:block; margin-bottom:5px; color:#a8b3c5; font-size:0.85rem;">Employee Size <span style="color: #ff4d4d;">*</span></label>
+                    <input type="text" name="employee_size" required placeholder="e.g. 10-50, 100+" style="width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:11px 14px; border-radius:8px; color:#fff; font-family:inherit;">
                 </div>
                 <div style="grid-column: span 2;">
-                    <label style="display:block; margin-bottom:5px; color:#a8b3c5; font-size:0.85rem;">Description &amp; Requirements</label>
-                    <textarea name="description" rows="4" placeholder="Tell us about your fleet size and specific needs..." style="width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:11px 14px; border-radius:8px; color:#fff; font-family:inherit; resize:vertical;"></textarea>
+                    <label style="display:block; margin-bottom:5px; color:#a8b3c5; font-size:0.85rem;">Company Email <span style="color: #ff4d4d;">*</span></label>
+                    <input type="email" name="email" value="{{ auth()->user()->email }}" required style="width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:11px 14px; border-radius:8px; color:#fff; font-family:inherit;">
+                </div>
+                <div>
+                    <label style="display:block; margin-bottom:5px; color:#a8b3c5; font-size:0.85rem;">Contact Details <span style="color: #ff4d4d;">*</span></label>
+                    <input type="tel" id="custom_pkg_phone" placeholder="Phone number" value="{{ auth()->user()->country_code ?? '' }}{{ auth()->user()->contact_number ?? '' }}" required style="width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:11px 14px; border-radius:8px; color:#fff; font-family:inherit;">
+                    <input type="hidden" name="country_code" id="hidden_country_code" value="{{ auth()->user()->country_code ?? '' }}">
+                    <input type="hidden" name="contact_details" id="hidden_contact_details" value="{{ auth()->user()->contact_number ?? '' }}">
+                </div>
+                <div>
+                    <label style="display:block; margin-bottom:5px; color:#a8b3c5; font-size:0.85rem;">Estimated Budget (&#8377;) <span style="color: #ff4d4d;">*</span></label>
+                    <input type="number" name="budget" min="0" required placeholder="e.g. 5000" style="width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:11px 14px; border-radius:8px; color:#fff; font-family:inherit;">
+                </div>
+                <div style="grid-column: span 2;">
+                    <label style="display:block; margin-bottom:5px; color:#a8b3c5; font-size:0.85rem;">Description &amp; Requirements <span style="color: #ff4d4d;">*</span></label>
+                    <textarea name="description" required rows="4" placeholder="Tell us about your fleet size and specific needs..." style="width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:11px 14px; border-radius:8px; color:#fff; font-family:inherit; resize:vertical;"></textarea>
                 </div>
                 <div style="grid-column: span 2; text-align: right; margin-top: 5px;">
                     <button type="button" onclick="document.getElementById('customPackageModal').style.display='none'" style="padding:10px 20px; border-radius:8px; background:transparent; border:1px solid rgba(255,255,255,0.15); color:#94a3b8; font-weight:600; cursor:pointer; margin-right:10px;">Cancel</button>
@@ -139,7 +150,7 @@
 
     <!-- Confirm Details Modal (Styled after Razorpay Mockup) -->
     <div id="confirmDetailsModal" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.85); align-items: center; justify-content: center; backdrop-filter: blur(8px);">
-        <div style="background: #111620; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; width: 100%; max-width: 500px; padding: 25px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); position: relative; font-family: 'Inter', sans-serif; color: #f8fafc; text-align: left; box-sizing: border-box;">
+        <div style="background: #111620; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; padding: 25px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); position: relative; font-family: 'Inter', sans-serif; color: #f8fafc; text-align: left; box-sizing: border-box;">
             
             <!-- Header -->
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
@@ -151,33 +162,59 @@
             <div style="background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 255, 255, 0.12); border-radius: 12px; padding: 15px 20px; margin-bottom: 20px; font-size: 0.95rem; line-height: 1.6;">
                 <div><span style="color: #a0aec0;">Selected Package:</span> <strong id="modalPackageName" style="color: #ffffff;">Standard</strong></div>
                 <div><span style="color: #a0aec0;">Billing Cycle:</span> <strong id="modalBillingCycle" style="color: #ffffff;">Monthly</strong></div>
-                <div style="margin-top: 4px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.05);"><span style="color: #a0aec0;">Total Price (incl. 18% tax):</span> <strong id="modalTotalPrice" style="color: #ff5429;">₹74,282.82 / Monthly</strong></div>
+                <div style="margin-top: 4px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.05);"><span style="color: #a0aec0;">Total Price (incl. {{ \App\Models\SiteSetting::first()?->tax_percentage ?? 18 }}% tax):</span> <strong id="modalTotalPrice" style="color: #ff5429;">₹74,282.82 / Monthly</strong></div>
             </div>
 
             <!-- Form fields -->
             <div style="display: flex; flex-direction: column; gap: 15px;">
                 <div>
-                    <label style="display: block; margin-bottom: 6px; color: #a0aec0; font-size: 0.85rem; font-weight: 500;">Full Name *</label>
+                    <label style="display: block; margin-bottom: 6px; color: #a0aec0; font-size: 0.85rem; font-weight: 500;">Full Name <span style="color: #ff4d4d;">*</span></label>
                     <input type="text" id="custName" value="{{ auth()->check() ? (auth()->user()->first_name . ' ' . auth()->user()->name) : '' }}" readonly style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: #ffffff; font-size: 0.95rem; outline: none; border-color: rgba(255, 255, 255, 0.12);" />
                 </div>
 
                 <div>
-                    <label style="display: block; margin-bottom: 6px; color: #a0aec0; font-size: 0.85rem; font-weight: 500;">Email Address *</label>
+                    <label style="display: block; margin-bottom: 6px; color: #a0aec0; font-size: 0.85rem; font-weight: 500;">Email Address <span style="color: #ff4d4d;">*</span></label>
                     <input type="email" id="custEmail" value="{{ auth()->check() ? auth()->user()->email : '' }}" readonly style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: #ffffff; font-size: 0.95rem; outline: none; border-color: rgba(255, 255, 255, 0.12);" />
                 </div>
 
                 <div>
-                    <label style="display: block; margin-bottom: 6px; color: #a0aec0; font-size: 0.85rem; font-weight: 500;">Confirm Email Address *</label>
+                    <label style="display: block; margin-bottom: 6px; color: #a0aec0; font-size: 0.85rem; font-weight: 500;">Confirm Email Address <span style="color: #ff4d4d;">*</span></label>
                     <input type="email" id="custConfirmEmail" value="{{ auth()->check() ? auth()->user()->email : '' }}" readonly style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: #ffffff; font-size: 0.95rem; outline: none; border-color: rgba(255, 255, 255, 0.12);" />
                 </div>
 
                 <div>
-                    <label style="display: block; margin-bottom: 6px; color: #a0aec0; font-size: 0.85rem; font-weight: 500;">WhatsApp Contact Number *</label>
+                    <label style="display: block; margin-bottom: 6px; color: #a0aec0; font-size: 0.85rem; font-weight: 500;">WhatsApp Contact Number <span style="color: #ff4d4d;">*</span></label>
                     <div style="display: flex; gap: 10px;">
                         <select id="custCountryCode" disabled style="padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: #ffffff; font-size: 0.95rem; outline: none; width: 110px; cursor: not-allowed; appearance: none; border-color: rgba(255, 255, 255, 0.12);">
                             <option value="{{ auth()->check() ? auth()->user()->country_code : 'IN' }}">{{ auth()->check() ? (auth()->user()->country_code ?? 'IN') : 'IN' }}</option>
                         </select>
                         <input type="text" id="custPhone" value="{{ auth()->check() ? auth()->user()->contact_number : '' }}" readonly style="flex: 1; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: #ffffff; font-size: 0.95rem; outline: none; border-color: rgba(255, 255, 255, 0.12);" />
+                    </div>
+                </div>
+
+                <div style="position: relative;">
+                    <label style="display: block; margin-bottom: 6px; color: #a0aec0; font-size: 0.85rem; font-weight: 500;">Street Address <span style="color: #ff4d4d;">*</span></label>
+                    <input type="text" id="custStreetAddress" value="{{ auth()->check() && auth()->user()->subscription ? auth()->user()->subscription->street_address : '' }}" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: #ffffff; font-size: 0.95rem; outline: none; border-color: rgba(255, 255, 255, 0.12);" placeholder="Start typing your street address..." autocomplete="off" />
+                    <div id="addrSuggestions" style="display: none; position: absolute; left: 0; right: 0; top: 100%; background: #111620; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 8px; margin-top: 4px; max-height: 200px; overflow-y: auto; z-index: 10000; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);"></div>
+                </div>
+
+                <div>
+                    <label style="display: block; margin-bottom: 6px; color: #a0aec0; font-size: 0.85rem; font-weight: 500;">Landmark <span style="color: #ff4d4d;">*</span></label>
+                    <input type="text" id="custLandmark" value="{{ auth()->check() && auth()->user()->subscription ? auth()->user()->subscription->landmark : '' }}" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: #ffffff; font-size: 0.95rem; outline: none; border-color: rgba(255, 255, 255, 0.12);" placeholder="Landmark (e.g. near metro station)" />
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                    <div>
+                        <label style="display: block; margin-bottom: 6px; color: #a0aec0; font-size: 0.85rem; font-weight: 500;">Pincode <span style="color: #ff4d4d;">*</span></label>
+                        <input type="text" id="custPincode" value="{{ auth()->check() && auth()->user()->subscription ? auth()->user()->subscription->pincode : '' }}" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: #ffffff; font-size: 0.95rem; outline: none; border-color: rgba(255, 255, 255, 0.12);" placeholder="Pincode" />
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 6px; color: #a0aec0; font-size: 0.85rem; font-weight: 500;">City <span style="color: #ff4d4d;">*</span></label>
+                        <input type="text" id="custCity" value="{{ auth()->check() && auth()->user()->subscription ? auth()->user()->subscription->city : '' }}" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: #ffffff; font-size: 0.95rem; outline: none; border-color: rgba(255, 255, 255, 0.12);" placeholder="City" />
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 6px; color: #a0aec0; font-size: 0.85rem; font-weight: 500;">Country <span style="color: #ff4d4d;">*</span></label>
+                        <input type="text" id="custCountry" value="{{ auth()->check() && auth()->user()->subscription ? auth()->user()->subscription->country : '' }}" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: #ffffff; font-size: 0.95rem; outline: none; border-color: rgba(255, 255, 255, 0.12);" placeholder="Country" />
                     </div>
                 </div>
 
@@ -205,8 +242,9 @@
     function openDetailsModal(packageId, packageName, packagePrice, billingPeriod) {
         currentPackageId = packageId;
         
+        const taxRate = {{ \App\Models\SiteSetting::first()?->tax_percentage ?? 18 }};
         let numericPrice = parseFloat(packagePrice.replace(/[^0-9.]/g, '')) || 0;
-        let taxAmount = numericPrice * 0.18;
+        let taxAmount = numericPrice * (taxRate / 100);
         let totalPrice = numericPrice + taxAmount;
         
         let currencySymbol = packagePrice.match(/[^0-9.]/)?.[0] || '₹';
@@ -228,6 +266,17 @@
         const btnLoader = document.getElementById('btnLoader');
         const proceedBtn = document.getElementById('proceedPayBtn');
         
+        const street_address = document.getElementById('custStreetAddress').value.trim();
+        const landmark = document.getElementById('custLandmark').value.trim();
+        const pincode = document.getElementById('custPincode').value.trim();
+        const city = document.getElementById('custCity').value.trim();
+        const country = document.getElementById('custCountry').value.trim();
+
+        if (!street_address || !landmark || !pincode || !city || !country) {
+            alert('Please fill out all address fields.');
+            return;
+        }
+
         btnText.innerText = 'Processing...';
         btnLoader.style.display = 'inline-block';
         proceedBtn.disabled = true;
@@ -237,7 +286,14 @@
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            }
+            },
+            body: JSON.stringify({
+                street_address: street_address,
+                landmark: landmark,
+                pincode: pincode,
+                city: city,
+                country: country
+            })
         })
         .then(response => response.json())
         .then(data => {
@@ -341,6 +397,104 @@
             confirmModal.style.display = "none";
         }
     }
+    </script>
+    @include('partials.phone-input')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            initializeIntlTelInput('custom_pkg_phone', 'hidden_country_code', 'hidden_contact_details');
+            
+            // Address Autocomplete Suggestions
+            const addressInput = document.getElementById('custStreetAddress');
+            const suggestionsBox = document.getElementById('addrSuggestions');
+            
+            if (addressInput && suggestionsBox) {
+                let debounceTimeout;
+                
+                addressInput.addEventListener('input', function () {
+                    clearTimeout(debounceTimeout);
+                    const query = this.value.trim();
+                    
+                    if (query.length < 3) {
+                        suggestionsBox.style.display = 'none';
+                        return;
+                    }
+                    
+                    debounceTimeout = setTimeout(() => {
+                        fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=5`)
+                            .then(response => response.json())
+                            .then(data => {
+                                suggestionsBox.innerHTML = '';
+                                if (data.features && data.features.length > 0) {
+                                    data.features.forEach(feature => {
+                                        const props = feature.properties;
+                                        
+                                        // Build full display address
+                                        const parts = [];
+                                        if (props.name) parts.push(props.name);
+                                        if (props.street) parts.push(props.street);
+                                        if (props.city) parts.push(props.city);
+                                        if (props.state) parts.push(props.state);
+                                        if (props.country) parts.push(props.country);
+                                        
+                                        const fullText = parts.join(', ');
+                                        
+                                        const item = document.createElement('div');
+                                        item.style.padding = '10px 15px';
+                                        item.style.cursor = 'pointer';
+                                        item.style.color = '#fff';
+                                        item.style.borderBottom = '1px solid rgba(255, 255, 255, 0.05)';
+                                        item.style.fontSize = '0.9rem';
+                                        item.innerText = fullText;
+                                        
+                                        // Hover effect
+                                        item.addEventListener('mouseenter', function() {
+                                            this.style.background = 'rgba(82, 234, 210, 0.15)';
+                                        });
+                                        item.addEventListener('mouseleave', function() {
+                                            this.style.background = 'transparent';
+                                        });
+                                        
+                                        // Select suggestion click handler
+                                        item.addEventListener('click', function () {
+                                            addressInput.value = props.name || props.street || query;
+                                            
+                                            if (props.city) {
+                                                document.getElementById('custCity').value = props.city;
+                                            }
+                                            if (props.country) {
+                                                document.getElementById('custCountry').value = props.country;
+                                            }
+                                            if (props.postcode) {
+                                                document.getElementById('custPincode').value = props.postcode;
+                                            }
+                                            if (props.district || props.county || props.state) {
+                                                document.getElementById('custLandmark').value = props.district || props.county || props.state || '';
+                                            }
+                                            
+                                            suggestionsBox.style.display = 'none';
+                                        });
+                                        
+                                        suggestionsBox.appendChild(item);
+                                    });
+                                    suggestionsBox.style.display = 'block';
+                                } else {
+                                    suggestionsBox.style.display = 'none';
+                                }
+                            })
+                            .catch(() => {
+                                suggestionsBox.style.display = 'none';
+                            });
+                    }, 300);
+                });
+                
+                // Close suggestions when clicking outside
+                document.addEventListener('click', function (e) {
+                    if (e.target !== addressInput && e.target !== suggestionsBox) {
+                        suggestionsBox.style.display = 'none';
+                    }
+                });
+            }
+        });
     </script>
 </div>
 @endsection

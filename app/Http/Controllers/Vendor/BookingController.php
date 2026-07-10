@@ -9,6 +9,9 @@ class BookingController extends Controller
 {
     public function index()
     {
+        // Mark bookings list as seen/checked
+        auth()->user()->update(['last_checked_bookings_at' => now()]);
+
         $bookings = \App\Models\Booking::with(['vehicle', 'pickupLocation', 'returnLocation', 'user'])
             ->where('vendor_id', auth()->id())
             ->orderBy('created_at', 'desc')

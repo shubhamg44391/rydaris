@@ -2,19 +2,16 @@
 
 @section('main-content')
     <div class="admin-panel">
-        <div class="panel-head">
+        <div class="panel-head d-flex justify-content-between align-items-center" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
             <div>
-                <h2>
-                    My Customers
-                </h2>
+                <h2>My Customers</h2>
             </div>
-        </div>
-
-        <!-- Filter Tab Buttons -->
-        <div class="panel-filter-bar">
-            <a href="#" class="btn btn-sm active">
-                All Customers
-            </a>
+            <div>
+                <a href="{{ route('vendor.customers.create') }}" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 4px;">
+                    <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    Add Customer
+                </a>
+            </div>
         </div>
 
         <div class="panel-body admin-table-wrap">
@@ -47,10 +44,24 @@
                             <td>{{ $customer->contact_number ?? 'N/A' }}</td>
                             <td>{{ $customer->created_at->format('Y-m-d H:i') }}</td>
                             <td>
-                                <div class="table-actions" style="display: flex; gap: 8px;">
-                                    <button type="button" class="icon-button view-btn" title="View Details" data-customer="{{ json_encode($customer) }}" onclick="openViewModal(this)">
-                                        <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                <div class="table-actions" style="display: flex; gap: 8px; align-items: center;">
+                                    <button type="button" class="icon-button view-btn" title="View Details" data-customer="{{ json_encode($customer) }}" onclick="openViewModal(this)" style="color: #cbd5e1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 6px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                                        <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                                     </button>
+
+                                    <!-- Edit Button -->
+                                    <a href="{{ route('vendor.customers.edit', $customer->id) }}" class="icon-button edit-btn" title="Edit Customer" style="color: var(--brand, #52ead2); background: rgba(82, 234, 210, 0.1); border: 1px solid rgba(82, 234, 210, 0.2); padding: 6px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; text-decoration: none;">
+                                        <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                    </a>
+
+                                    <!-- Delete Button -->
+                                    <form action="{{ route('vendor.customers.destroy', $customer->id) }}" method="POST" class="delete-form" style="margin: 0;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="icon-button delete-btn" title="Delete Customer" style="color: #ef4444; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); padding: 6px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(239, 68, 68, 0.2);">
+                                            <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                        </button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>
@@ -182,7 +193,7 @@
 
                 Swal.fire({
                     title: 'Are you sure?',
-                    text: "This will delete the vendor account. You won't be able to revert this!",
+                    text: "This will delete the customer account. You won't be able to revert this!",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#ff3e1d',

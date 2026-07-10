@@ -85,6 +85,14 @@
     color: var(--brand, #52ead2) !important;
     font-weight: 600 !important;
 }
+/* Checkbox Theme Accent Redesign */
+input[type="checkbox"] {
+    accent-color: var(--brand, #52ead2) !important;
+}
+.form-check-input:checked {
+    background-color: var(--brand, #52ead2) !important;
+    border-color: var(--brand, #52ead2) !important;
+}
 </style>
     <div class="admin-panel">
         <div class="panel-head">
@@ -164,9 +172,9 @@
                                     <option value="fas fa-tools"            {{ old('icon_class', $item->icon_class)=='fas fa-tools' ? 'selected':'' }}>Breakdown Coverage</option>
                                 @endif
                             </select>
-                            <div id="fc_prev" style="width: 48px; height: 48px; border: 1px solid #d7e0e8; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: #475569; background: #f8fafc; flex-shrink: 0;">
-                                <i class="{{ old('icon_class', $item->icon_class ?: ($type === 'extra' ? 'fas fa-box' : 'fas fa-shield-alt')) }}"></i>
-                            </div>
+                             <div id="fc_prev" style="width: 48px; height: 48px; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: var(--brand, #52ead2); background: rgba(255, 255, 255, 0.03); flex-shrink: 0;">
+                                 <i class="{{ old('icon_class', $item->icon_class ?: ($type === 'extra' ? 'fas fa-box' : 'fas fa-shield-alt')) }}"></i>
+                             </div>
                         </div>
                         <small style="display:block; margin-top:5px; font-size:0.77rem; color:#94a3b8;">Font Awesome icon classes (e.g., fas fa-user-plus)</small>
                         @error('icon_class')

@@ -13,6 +13,7 @@ class SiteSetting extends Model
         'razorpay_key_id',
         'razorpay_key_secret',
         'razorpay_active',
+        'tax_percentage',
     ];
 
     protected $casts = [

@@ -3,107 +3,109 @@
 @section('title', 'Bookings List')
 
 @section('main-content')
-<div class="container-fluid p-4" style="min-width: 0; max-width: 100%; overflow-x: hidden;">
+<div class="admin-panel">
     <style>
-        .custom-scrollbar::-webkit-scrollbar {
-            height: 10px;
-            width: 10px;
+        .custom-table-scrollbar::-webkit-scrollbar {
+            height: 7px;
+            width: 7px;
         }
-        .custom-scrollbar::-webkit-scrollbar-track {
+        .custom-table-scrollbar::-webkit-scrollbar-track {
             background: rgba(255, 255, 255, 0.02);
-            border-radius: 8px;
+            border-radius: 10px;
         }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
+        .custom-table-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(82, 234, 210, 0.2);
+            border-radius: 10px;
+            transition: background 0.2s ease;
         }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.2);
+        .custom-table-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(82, 234, 210, 0.4);
         }
     </style>
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="mb-0 text-white" style="font-weight: 800;">Bookings</h3>
+    <div class="panel-head d-flex justify-content-between align-items-center" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+        <div>
+            <h2>Bookings</h2>
+        </div>
     </div>
 
     @if(session('success'))
-        <div class="alert alert-success" style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.2); color: #4ade80;">
+        <div class="alert alert-success" style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.2); color: #4ade80; padding: 15px; border-radius: 8px; margin-bottom: 24px;">
             {{ session('success') }}
         </div>
     @endif
     @if(session('error'))
-        <div class="alert alert-danger" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: #f87171;">
+        <div class="alert alert-danger" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: #f87171; padding: 15px; border-radius: 8px; margin-bottom: 24px;">
             {{ session('error') }}
         </div>
     @endif
 
-    <div class="card" style="background: rgba(11, 16, 32, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px;">
-        <div class="card-body p-0">
-            <div class="table-responsive custom-scrollbar" style="overflow-x: auto; overflow-y: auto; max-height: 65vh;">
-                <table class="table table-borderless mb-0" style="color: #94a3b8;">
-                    <thead style="background: rgba(11, 16, 32, 0.95); border-bottom: 1px solid rgba(255, 255, 255, 0.05); position: sticky; top: 0; z-index: 10;">
+    <div class="panel-body admin-table-wrap">
+        <div class="custom-table-scrollbar" style="overflow-x: auto; max-width: 100%;">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th style="white-space: nowrap;">S.No</th>
+                        <th style="white-space: nowrap;">Date & time of booking</th>
+                        <th style="white-space: nowrap;">Reservation #</th>
+                        <th style="white-space: nowrap;">Customer's name</th>
+                        <th style="white-space: nowrap;">Vehicle type</th>
+                        <th style="white-space: nowrap;">Pickup location</th>
+                        <th style="white-space: nowrap;">Date & time of pickup</th>
+                        <th style="white-space: nowrap;">Return location</th>
+                        <th style="white-space: nowrap;">Date & time of return</th>
+                        <th style="white-space: nowrap;">Paid amount</th>
+                        <th style="white-space: nowrap;">Pending amount</th>
+                        <th style="white-space: nowrap;">Total amount</th>
+                        <th style="white-space: nowrap;">Payment Reference</th>
+                        <th style="white-space: nowrap;">Booking Status</th>
+                        <th style="white-space: nowrap;">Payment Status</th>
+                        <th style="white-space: nowrap;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($bookings as $index => $booking)
                         <tr>
-                            <th style="color: #f8fafc; font-weight: 600; padding: 15px 20px; white-space: nowrap;">S.No</th>
-                            <th style="color: #f8fafc; font-weight: 600; padding: 15px 20px; white-space: nowrap;">Date & time of booking</th>
-                            <th style="color: #f8fafc; font-weight: 600; padding: 15px 20px; white-space: nowrap;">Reservation #</th>
-                            <th style="color: #f8fafc; font-weight: 600; padding: 15px 20px; white-space: nowrap;">Customer's name</th>
-                            <th style="color: #f8fafc; font-weight: 600; padding: 15px 20px; white-space: nowrap;">Vehicle type</th>
-                            <th style="color: #f8fafc; font-weight: 600; padding: 15px 20px; white-space: nowrap;">Pickup location</th>
-                            <th style="color: #f8fafc; font-weight: 600; padding: 15px 20px; white-space: nowrap;">Date & time of pickup</th>
-                            <th style="color: #f8fafc; font-weight: 600; padding: 15px 20px; white-space: nowrap;">Return location</th>
-                            <th style="color: #f8fafc; font-weight: 600; padding: 15px 20px; white-space: nowrap;">Date & time of return</th>
-                            <th style="color: #f8fafc; font-weight: 600; padding: 15px 20px; white-space: nowrap;">Paid amount</th>
-                            <th style="color: #f8fafc; font-weight: 600; padding: 15px 20px; white-space: nowrap;">Pending amount</th>
-                            <th style="color: #f8fafc; font-weight: 600; padding: 15px 20px; white-space: nowrap;">Total amount</th>
-                            <th style="color: #f8fafc; font-weight: 600; padding: 15px 20px; white-space: nowrap;">Payment Reference</th>
-                            <th style="color: #f8fafc; font-weight: 600; padding: 15px 20px; white-space: nowrap;">Booking Status</th>
-                            <th style="color: #f8fafc; font-weight: 600; padding: 15px 20px; white-space: nowrap;">Payment Status</th>
-                            <th style="color: #f8fafc; font-weight: 600; padding: 15px 20px; white-space: nowrap;">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($bookings as $index => $booking)
-                            <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.02);">
-                                <td style="padding: 15px 20px;">
-                                    {{ ($bookings->currentPage() - 1) * $bookings->perPage() + $loop->iteration }}
-                                </td>
-                                <td style="padding: 15px 20px; white-space: nowrap;">
-                                    {{ $booking->created_at->format('M d, Y h:i A') }}
-                                </td>
-                                <td style="padding: 15px 20px; color: #fff; font-weight: 700;">
-                                    {{ $booking->reservation_number }}
-                                </td>
-                                <td style="padding: 15px 20px; white-space: nowrap;">
-                                    {{ $booking->customer_fname }} {{ $booking->customer_lname }}
-                                </td>
-                                <td style="padding: 15px 20px; white-space: nowrap;">
-                                    {{ $booking->vehicle->name ?? 'N/A' }}
-                                </td>
-                                <td style="padding: 15px 20px; white-space: nowrap;">
-                                    {{ $booking->pickupLocation->name ?? 'N/A' }}
-                                </td>
-                                <td style="padding: 15px 20px; white-space: nowrap;">
-                                    {{ $booking->pickup_date }} {{ $booking->pickup_time }}
-                                </td>
-                                <td style="padding: 15px 20px; white-space: nowrap;">
-                                    {{ $booking->returnLocation->name ?? 'N/A' }}
-                                </td>
-                                <td style="padding: 15px 20px; white-space: nowrap;">
-                                    {{ $booking->return_date }} {{ $booking->return_time }}
-                                </td>
-                                <td style="padding: 15px 20px; white-space: nowrap;">
-                                    ${{ number_format($booking->paid_amount, 2) }}
-                                </td>
-                                <td style="padding: 15px 20px; white-space: nowrap;">
-                                    ${{ number_format($booking->pending_amount, 2) }}
-                                </td>
-                                <td style="padding: 15px 20px; white-space: nowrap; font-weight: bold; color: #52ead2;">
-                                    ${{ number_format($booking->total_amount, 2) }}
-                                </td>
+                            <td>
+                                {{ ($bookings->currentPage() - 1) * $bookings->perPage() + $loop->iteration }}
+                            </td>
+                            <td style="white-space: nowrap;">
+                                {{ $booking->created_at->format('M d, Y h:i A') }}
+                            </td>
+                            <td style="color: #f8fafc; font-weight: 700;">
+                                {{ $booking->reservation_number }}
+                            </td>
+                            <td style="white-space: nowrap;">
+                                {{ $booking->customer_fname }} {{ $booking->customer_lname }}
+                            </td>
+                            <td style="white-space: nowrap;">
+                                {{ $booking->vehicle->name ?? 'N/A' }}
+                            </td>
+                            <td style="white-space: nowrap;">
+                                {{ $booking->pickupLocation->name ?? 'N/A' }}
+                            </td>
+                            <td style="white-space: nowrap;">
+                                {{ $booking->pickup_date }} {{ $booking->pickup_time }}
+                            </td>
+                            <td style="white-space: nowrap;">
+                                {{ $booking->returnLocation->name ?? 'N/A' }}
+                            </td>
+                            <td style="white-space: nowrap;">
+                                {{ $booking->return_date }} {{ $booking->return_time }}
+                            </td>
+                            <td style="white-space: nowrap;">
+                                ₹{{ number_format($booking->paid_amount, 2) }}
+                            </td>
+                            <td style="white-space: nowrap;">
+                                ₹{{ number_format($booking->pending_amount, 2) }}
+                            </td>
+                            <td style="white-space: nowrap; font-weight: bold; color: #52ead2;">
+                                ₹{{ number_format($booking->total_amount, 2) }}
+                            </td>
                                 <td style="padding: 15px 20px; white-space: nowrap;">
                                     {{ $booking->payment_reference ?? 'N/A' }}
                                 </td>
                                 <td style="padding: 15px 20px; white-space: nowrap;">
-                                    <select class="form-select status-dropdown" data-id="{{ $booking->id }}" style="background: rgba(255, 255, 255, 0.05); color: #fff; border: 1px solid rgba(255, 255, 255, 0.2); padding: 5px 10px; border-radius: 4px; width: 140px; {{ $booking->booking_status == 'confirmed' ? 'color: #4ade80;' : ($booking->booking_status == 'pending' ? 'color: #facc15;' : '') }}">
+                                    <select class="form-select status-dropdown" data-id="{{ $booking->id }}" style="background: rgba(255, 255, 255, 0.05); color: #f8fafc; border: 1px solid rgba(255, 255, 255, 0.2); padding: 5px 10px; border-radius: 4px; width: 140px; {{ $booking->booking_status == 'confirmed' ? 'color: #4ade80;' : ($booking->booking_status == 'pending' ? 'color: #facc15;' : '') }}">
                                         <option value="pending" style="background: #1e293b; color: #f8fafc;" {{ $booking->booking_status == 'pending' ? 'selected' : '' }}>Pending</option>
                                         <option value="confirmed" style="background: #1e293b; color: #f8fafc;" {{ $booking->booking_status == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
                                         <option value="cancelled" style="background: #1e293b; color: #f8fafc;" {{ $booking->booking_status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>

@@ -17,7 +17,19 @@ class VendorRegisterController extends Controller
     public function showRegisterForm()
     {
         $vendors = User::where('role', 'vendor')->where('status', 'active')->get();
-        return view('frontend.vendor-register', compact('vendors'));
+        $invitation = null;
+
+        if (request()->has('invite_token')) {
+            $invitation = \App\Models\UserInvitation::where('token', request('invite_token'))
+                ->where('status', 'pending')
+                ->first();
+                
+            if (!$invitation) {
+                return redirect()->route('vendor.register')->withErrors(['invite_token' => 'The invitation token is invalid or has already been used.']);
+            }
+        }
+
+        return view('frontend.vendor-register', compact('vendors', 'invitation'));
     }
 
     /**
@@ -25,6 +37,24 @@ class VendorRegisterController extends Controller
      */
     public function register(Request $request)
     {
+        $invitation = null;
+        if ($request->filled('invite_token')) {
+            $invitation = \App\Models\UserInvitation::where('token', $request->invite_token)
+                ->where('status', 'pending')
+                ->first();
+                
+            if (!$invitation) {
+                return back()->withInput()->withErrors(['invite_token' => 'The invitation token is invalid or has already been used.']);
+            }
+            
+            // Force values from invitation
+            $request->merge([
+                'role' => 'user',
+                'vendor_id' => $invitation->vendor_id,
+                'email' => $invitation->email,
+            ]);
+        }
+
         $request->validate([
             'role' => ['required', 'string', 'in:user,vendor'],
             'first_name' => ['required', 'string', 'max:255'],
@@ -82,6 +112,10 @@ class VendorRegisterController extends Controller
             'role' => $request->role,
             'vendor_id' => $request->role === 'user' ? $request->vendor_id : null,
         ]);
+
+        if (isset($invitation)) {
+            $invitation->update(['status' => 'accepted']);
+        }
 
         Auth::login($user);
 

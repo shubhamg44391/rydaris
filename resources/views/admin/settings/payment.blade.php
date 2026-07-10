@@ -71,6 +71,31 @@
                     </div>
                 </div>
 
+                {{-- Tax Percentage Section --}}
+                <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(82, 234, 210, 0.1); border-radius: var(--radius); padding: 24px; margin-bottom: 24px;">
+                    <h4 style="margin: 0 0 16px; color: #f8fafc; font-weight: 600; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 14px;">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--brand, #52ead2);">
+                            <line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/>
+                        </svg>
+                        Tax / GST Rate
+                    </h4>
+                    <div style="max-width: 300px;">
+                        <label for="tax_percentage" class="form-label-custom">Tax Percentage (%)</label>
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <input type="number"
+                                   id="tax_percentage"
+                                   name="tax_percentage"
+                                   min="0" max="100" step="0.01"
+                                   value="{{ old('tax_percentage', $settings->tax_percentage ?? 18) }}"
+                                   placeholder="18"
+                                   style="border: 1px solid #d7e0e8; border-radius: var(--radius); padding: 12px 40px 12px 12px; font-size: 0.95rem; width: 100%; background: rgba(255,255,255,0.05); color: #fff;" />
+                            <span style="position: absolute; right: 14px; color: #a0aec0; font-weight: 600; font-size: 1rem;">%</span>
+                        </div>
+                        <p style="margin: 8px 0 0; font-size: 0.8rem; color: #7a8a9a;">This tax rate will be applied on all subscription plan purchases (e.g. 18 = 18% GST).</p>
+                        @error('tax_percentage')<div style="color: #f87171; font-size: 0.85rem; margin-top: 5px;">{{ $message }}</div>@enderror
+                    </div>
+                </div>
+
                 <div style="display: flex; gap: 12px;">
                     <button type="submit" class="admin-action primary" style="border: none; padding: 12px 28px; cursor: pointer; font-size: 0.95rem; font-weight: 600; display: inline-flex; align-items: center; justify-content: center;">
                         Save Settings

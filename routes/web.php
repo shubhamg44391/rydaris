@@ -200,7 +200,25 @@ Route::middleware(['auth', 'vendor'])->prefix('vendor')->group(function () {
 
     // Routes that require a subscription
     Route::middleware(['vendor.subscription'])->group(function () {
-        Route::get('/customers', [\App\Http\Controllers\Vendor\VendorCustomerController::class, 'index'])->name('vendor.customers.index');
+        Route::resource('customers', \App\Http\Controllers\Vendor\VendorCustomerController::class)->except(['show'])->names([
+            'index'   => 'vendor.customers.index',
+            'create'  => 'vendor.customers.create',
+            'store'   => 'vendor.customers.store',
+            'edit'    => 'vendor.customers.edit',
+            'update'  => 'vendor.customers.update',
+            'destroy' => 'vendor.customers.destroy',
+        ]);
+
+        // User Invitation routes
+        Route::resource('invitations', \App\Http\Controllers\Vendor\VendorInvitationController::class)->except(['show'])->names([
+            'index'   => 'vendor.invitations.index',
+            'create'  => 'vendor.invitations.create',
+            'store'   => 'vendor.invitations.store',
+            'edit'    => 'vendor.invitations.edit',
+            'update'  => 'vendor.invitations.update',
+            'destroy' => 'vendor.invitations.destroy',
+        ]);
+        Route::post('invitations/{id}/resend', [\App\Http\Controllers\Vendor\VendorInvitationController::class, 'resend'])->name('vendor.invitations.resend');
 
         Route::resource('groups', VendorGroupController::class)->except(['show'])->names([
             'index' => 'vendor.groups.index',

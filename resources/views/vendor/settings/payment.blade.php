@@ -5,7 +5,6 @@
     <div class="panel-head mb-4 d-flex justify-content-between align-items-center">
         <div>
             <h2>Payment Gateway Settings</h2>
-            <p class="text-muted">Manage your available payment options and discounts.</p>
         </div>
         <div class="text-muted" style="font-size: 0.9rem;">
             Home / Payment Gateway Settings

@@ -16,6 +16,10 @@
     .flatpickr-calendar {
         z-index: 9999 !important;
     }
+    /* Checkbox Theme Accent Redesign */
+    input[type="checkbox"] {
+        accent-color: var(--brand, #52ead2) !important;
+    }
     .flatpickr-months .flatpickr-month {
         height: 45px !important;
         overflow: visible !important;
@@ -457,18 +461,18 @@
             <div class="filter-title" style="margin-bottom: 6px; color: var(--muted-2, #a1a1aa); font-size: 0.7rem;">MONTH</div>
             <div id="monthFilters" style="display: flex; flex-wrap: wrap; gap: 6px;">
                 <span class="chip active-blue" data-month="next30" onclick="setMonth(this, 'next30')" style="margin:0;">Next 30 Days</span>
-                <span class="chip" data-month="1" onclick="setMonth(this, 1)" style="margin:0;">Jan</span>
-                <span class="chip" data-month="2" onclick="setMonth(this, 2)" style="margin:0;">Feb</span>
-                <span class="chip" data-month="3" onclick="setMonth(this, 3)" style="margin:0;">Mar</span>
-                <span class="chip" data-month="4" onclick="setMonth(this, 4)" style="margin:0;">Apr</span>
+                <span class="chip" data-month="1" onclick="setMonth(this, 1)" style="margin:0;">January</span>
+                <span class="chip" data-month="2" onclick="setMonth(this, 2)" style="margin:0;">February</span>
+                <span class="chip" data-month="3" onclick="setMonth(this, 3)" style="margin:0;">March</span>
+                <span class="chip" data-month="4" onclick="setMonth(this, 4)" style="margin:0;">April</span>
                 <span class="chip" data-month="5" onclick="setMonth(this, 5)" style="margin:0;">May</span>
-                <span class="chip" data-month="6" onclick="setMonth(this, 6)" style="margin:0;">Jun</span>
-                <span class="chip" data-month="7" onclick="setMonth(this, 7)" style="margin:0;">Jul</span>
-                <span class="chip" data-month="8" onclick="setMonth(this, 8)" style="margin:0;">Aug</span>
-                <span class="chip" data-month="9" onclick="setMonth(this, 9)" style="margin:0;">Sep</span>
-                <span class="chip" data-month="10" onclick="setMonth(this, 10)" style="margin:0;">Oct</span>
-                <span class="chip" data-month="11" onclick="setMonth(this, 11)" style="margin:0;">Nov</span>
-                <span class="chip" data-month="12" onclick="setMonth(this, 12)" style="margin:0;">Dec</span>
+                <span class="chip" data-month="6" onclick="setMonth(this, 6)" style="margin:0;">June</span>
+                <span class="chip" data-month="7" onclick="setMonth(this, 7)" style="margin:0;">July</span>
+                <span class="chip" data-month="8" onclick="setMonth(this, 8)" style="margin:0;">August</span>
+                <span class="chip" data-month="9" onclick="setMonth(this, 9)" style="margin:0;">September</span>
+                <span class="chip" data-month="10" onclick="setMonth(this, 10)" style="margin:0;">October</span>
+                <span class="chip" data-month="11" onclick="setMonth(this, 11)" style="margin:0;">November</span>
+                <span class="chip" data-month="12" onclick="setMonth(this, 12)" style="margin:0;">December</span>
             </div>
         </div>
 
@@ -549,7 +553,7 @@
         </div>
         
         <!-- Body -->
-        <div style="padding: 20px;">
+        <div class="custom-table-scrollbar" style="padding: 20px; max-height: calc(100vh - 200px); overflow-y: auto;">
             <div class="row" style="margin-bottom: 24px;">
                 <!-- Date Range -->
                 <div class="col-md-6">
@@ -991,8 +995,7 @@
                     renderTable(res.data, res.dates);
                     Swal.fire({
                         icon: 'success',
-                        title: 'Updated!',
-                        text: 'Rates updated successfully.',
+                        title: 'Rates updated successfully.',
                         toast: true,
                         position: 'top-end',
                         showConfirmButton: false,

@@ -118,14 +118,24 @@ class DashboardController extends Controller
      */
     public function createOrder(Request $request, $packageId)
     {
+        $request->validate([
+            'street_address' => 'required|string|max:255',
+            'landmark' => 'required|string|max:255',
+            'pincode' => 'required|string|max:20',
+            'city' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+        ]);
+
         $package = \App\Models\Package::findOrFail($packageId);
         
         // Extract numeric price
         $priceStr = $package->price;
         $price = (float) filter_var($priceStr, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
         
-        // Add 18% tax
-        $totalPrice = $price * 1.18;
+        // Read tax percentage from site settings (default 18%)
+        $siteSettings = \App\Models\SiteSetting::first();
+        $taxRate = $siteSettings ? (float) $siteSettings->tax_percentage : 18.0;
+        $totalPrice = $price * (1 + $taxRate / 100);
 
         // ── FREE PACKAGE ── Skip Razorpay entirely
         if ($price <= 0) {
@@ -194,6 +204,14 @@ class DashboardController extends Controller
      */
     public function verifyPayment(Request $request)
     {
+        $request->validate([
+            'street_address' => 'required|string|max:255',
+            'landmark' => 'required|string|max:255',
+            'pincode' => 'required|string|max:20',
+            'city' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+        ]);
+
         $mode = $request->input('mode');
         $packageId = $request->input('package_id');
         $package = \App\Models\Package::findOrFail($packageId);
@@ -202,7 +220,11 @@ class DashboardController extends Controller
         // Extract numeric price
         $priceStr = $package->price;
         $price = (float) filter_var($priceStr, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-        $totalPrice = $price * 1.18;
+
+        // Read tax percentage from site settings (default 18%)
+        $siteSettings = \App\Models\SiteSetting::first();
+        $taxRate = $siteSettings ? (float) $siteSettings->tax_percentage : 18.0;
+        $totalPrice = $price * (1 + $taxRate / 100);
 
         if ($mode === 'razorpay') {
             $razorpayOrderId = $request->input('razorpay_order_id');
@@ -238,6 +260,11 @@ class DashboardController extends Controller
                 'razorpay_payment_id' => $razorpayPaymentId,
                 'razorpay_signature' => $razorpaySignature,
                 'amount_paid' => $totalPrice,
+                'street_address' => $request->input('street_address'),
+                'landmark' => $request->input('landmark'),
+                'pincode' => $request->input('pincode'),
+                'city' => $request->input('city'),
+                'country' => $request->input('country'),
             ]);
             
             session()->flash('success', 'Payment successful! Successfully subscribed to ' . $package->name . ' package.');
@@ -260,6 +287,11 @@ class DashboardController extends Controller
                 'ends_at'    => now()->addMonth(),
                 'status'     => 'active',
                 'amount_paid' => 0,
+                'street_address' => $request->input('street_address'),
+                'landmark' => $request->input('landmark'),
+                'pincode' => $request->input('pincode'),
+                'city' => $request->input('city'),
+                'country' => $request->input('country'),
             ]);
 
             session()->flash('success', 'Successfully subscribed to ' . $package->name . ' (Free Plan).');
@@ -284,6 +316,11 @@ class DashboardController extends Controller
                 'ends_at' => now()->addMonth(),
                 'status' => 'active',
                 'amount_paid' => $totalPrice,
+                'street_address' => $request->input('street_address'),
+                'landmark' => $request->input('landmark'),
+                'pincode' => $request->input('pincode'),
+                'city' => $request->input('city'),
+                'country' => $request->input('country'),
             ]);
             
             session()->flash('success', 'Successfully subscribed to ' . $package->name . ' package in test mode.');

@@ -11,7 +11,11 @@ class CustomPackageRequest extends Model
 
     protected $fillable = [
         'name',
+        'first_name',
+        'middle_name',
+        'last_name',
         'company_name',
+        'employee_size',
         'email',
         'country_code',
         'contact_details',
