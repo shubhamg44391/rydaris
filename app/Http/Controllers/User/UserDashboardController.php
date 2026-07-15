@@ -71,7 +71,15 @@ class UserDashboardController extends Controller
             abort(403, 'You are not authorized to view other vendors.');
         }
 
-        $locations = \App\Models\PickupLocation::where('vendor_id', $id)->get();
+        // Fetch active branches
+        $branches = \App\Models\Branch::where('vendor_id', $id)->where('status', true)->orderBy('name')->get();
+        $selectedBranchId = $request->input('branch_id');
+
+        $locationsQuery = \App\Models\PickupLocation::where('vendor_id', $id);
+        if ($selectedBranchId) {
+            $locationsQuery->where('branch_id', $selectedBranchId);
+        }
+        $locations = $locationsQuery->get();
 
         // Calculate Days
         $pickupDate = $request->input('pickup_date'); // Format: d/m/Y
@@ -91,6 +99,10 @@ class UserDashboardController extends Controller
 
         // Fetch Vehicles
         $vehiclesQuery = \App\Models\Vehicle::where('vendor_id', $id)->where('status', 'active');
+        
+        if ($selectedBranchId) {
+            $vehiclesQuery->where('branch_id', $selectedBranchId);
+        }
         
         if ($request->input('transmission') && $request->input('transmission') !== 'All') {
             $vehiclesQuery->where('gear_system', $request->input('transmission'));
@@ -118,6 +130,6 @@ class UserDashboardController extends Controller
             $vehicles = $vehicles->sortBy('total_price')->values();
         }
 
-        return view('user.vendors.show', compact('vendor', 'locations', 'vehicles', 'rentalDays'));
+        return view('user.vendors.show', compact('vendor', 'locations', 'vehicles', 'rentalDays', 'branches', 'selectedBranchId'));
     }
 }

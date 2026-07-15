@@ -19,9 +19,9 @@
           <h2>Make every vehicle, booking, and payment easier to trust.</h2>
           <p class="lead">Rental work depends on tiny details being right: dates, deposits, customer documents, service windows, fuel, mileage, damage records, and rate changes. Rydaris connects those details into one reliable operating layer.</p>
           <div class="grid cols-3">
-            <article class="card info-card"><h3>Less confusion</h3><p>Everyone sees the same live status instead of relying on calls and chat messages.</p></article>
-            <article class="card info-card"><h3>More control</h3><p>Managers can review pricing, utilization, late returns, and outstanding balances daily.</p></article>
-            <article class="card info-card"><h3>Better service</h3><p>Customers move through quote, pickup, extension, and return flows with fewer delays.</p></article>
+            <article class="info-card"><h3>Less confusion</h3><p>Everyone sees the same live status instead of relying on calls and chat messages.</p></article>
+            <article class="info-card"><h3>More control</h3><p>Managers can review pricing, utilization, late returns, and outstanding balances daily.</p></article>
+            <article class="info-card"><h3>Better service</h3><p>Customers move through quote, pickup, extension, and return flows with fewer delays.</p></article>
           </div>
         </div>
         <div class="app-window">

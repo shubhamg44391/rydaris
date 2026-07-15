@@ -51,13 +51,38 @@
         </svg>Packages
     </a>
 
-    <!-- Inquiries Link -->
-    <a class="{{ Request::is('admin/contact-inquiries*') ? 'active' : '' }}" href="{{ route('admin.contact-inquiries.index') }}" style="text-decoration: none;">
+    <!-- Terms & Conditions -->
+    <a class="{{ Request::is('admin/terms-conditions*') ? 'active' : '' }}" href="{{ route('admin.terms.index') }}" style="text-decoration: none;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-            <polyline points="22,6 12,13 2,6"/>
-        </svg>Inquiries
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+        </svg>Terms & Conditions
     </a>
+
+    <!-- Inquiries Parent Menu -->
+    <div class="admin-nav-group">
+        <a href="javascript:void(0);" class="nav-toggle" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ Request::is('admin/contact-inquiries*') || Request::is('admin/demo-inquiries*') ? 'color: #f8fafc; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb;' }} font-size: 0.92rem; font-weight: 780; transition: background 0.2s; text-decoration: none;">
+            <span style="display: flex; align-items: center; gap: 10px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                    <polyline points="22,6 12,13 2,6"/>
+                </svg>Inquiries
+            </span>
+            <svg class="chevron" viewBox="0 0 24 24" style="width: 14px; height: 14px; transition: transform 0.2s ease; {{ Request::is('admin/contact-inquiries*') || Request::is('admin/demo-inquiries*') ? 'transform: rotate(180deg);' : '' }}"><path d="m6 9 6 6 6-6"/></svg>
+        </a>
+        <div class="admin-submenu" style="{{ Request::is('admin/contact-inquiries*') || Request::is('admin/demo-inquiries*') ? 'display: flex;' : 'display: none;' }} padding-left: 20px; margin-top: 4px; flex-direction: column; gap: 4px;">
+            <a href="{{ route('admin.contact-inquiries.index') }}" class="submenu-item {{ Request::is('admin/contact-inquiries*') ? 'active' : '' }}" style="{{ Request::is('admin/contact-inquiries*') ? 'color: var(--brand, #52ead2) !important; font-weight: bold; background: rgba(255, 255, 255, 0.04) !important;' : '' }} text-decoration: none;">
+                <span class="dot" style="{{ Request::is('admin/contact-inquiries*') ? 'background: var(--brand, #52ead2) !important;' : '' }}"></span>
+              General Inquiry
+            </a>
+            <a href="{{ route('admin.demo-inquiries.index') }}" class="submenu-item {{ Request::is('admin/demo-inquiries*') ? 'active' : '' }}" style="{{ Request::is('admin/demo-inquiries*') ? 'color: var(--brand, #52ead2) !important; font-weight: bold; background: rgba(255, 255, 255, 0.04) !important;' : '' }} text-decoration: none;">
+                <span class="dot" style="{{ Request::is('admin/demo-inquiries*') ? 'background: var(--brand, #52ead2) !important;' : '' }}"></span>
+                Demo Inquiry
+            </a>
+        </div>
+    </div>
 
     <!-- Custom Package Requests Link -->
     <a class="{{ Request::is('admin/custom-package-requests*') ? 'active' : '' }}" href="{{ route('admin.custom-package-requests.index') }}" style="text-decoration: none;">
@@ -82,13 +107,14 @@
                 <span class="dot" style="{{ Request::is('admin/settings/payment*') ? 'background: var(--brand, #52ead2) !important;' : '' }}"></span>
                 Payment Gateway
             </a>
+            <a href="{{ route('admin.settings.mail') }}" class="submenu-item {{ Request::is('admin/settings/mail*') ? 'active' : '' }}" style="{{ Request::is('admin/settings/mail*') ? 'color: var(--brand, #52ead2) !important; font-weight: bold; background: rgba(255, 255, 255, 0.04) !important;' : '' }} text-decoration: none;">
+                <span class="dot" style="{{ Request::is('admin/settings/mail*') ? 'background: var(--brand, #52ead2) !important;' : '' }}"></span>
+                Mail Settings
+            </a>
         </div>
     </div>
 
-    <!-- Website Link -->
-    <a href="{{ route('home') }}" style="text-decoration: none;">
-        <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6" /></svg>Website
-    </a>
+   
 </nav>
 
 <style>

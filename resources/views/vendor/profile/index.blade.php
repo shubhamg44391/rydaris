@@ -53,6 +53,18 @@
                 </div>
 
                 <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; color: var(--muted-2); font-size: 0.875rem;">Middle Name</label>
+                    <input type="text" name="middle_name" value="{{ old('middle_name', $user->middle_name) }}" style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius); color: #ffffff;">
+                    @error('middle_name')<div style="color: #ff6b6b; font-size: 0.875rem; margin-top: 5px;">{{ $message }}</div>@enderror
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; color: var(--muted-2); font-size: 0.875rem;">Last Name</label>
+                    <input type="text" name="last_name" value="{{ old('last_name', $user->last_name) }}" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius); color: #ffffff;">
+                    @error('last_name')<div style="color: #ff6b6b; font-size: 0.875rem; margin-top: 5px;">{{ $message }}</div>@enderror
+                </div>
+
+                <div style="margin-bottom: 20px;">
                     <label style="display: block; margin-bottom: 8px; color: var(--muted-2); font-size: 0.875rem;">Company Name</label>
                     <input type="text" name="company_name" value="{{ old('company_name', $user->company_name) }}" style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius); color: #ffffff;">
                     @error('company_name')<div style="color: #ff6b6b; font-size: 0.875rem; margin-top: 5px;">{{ $message }}</div>@enderror
@@ -65,6 +77,50 @@
                     <input type="hidden" name="contact_number" id="hidden_contact_number" value="{{ old('contact_number', $user->contact_number) }}">
                     @error('country_code')<div style="color: #ff6b6b; font-size: 0.875rem; margin-top: 5px;">{{ $message }}</div>@enderror
                     @error('contact_number')<div style="color: #ff6b6b; font-size: 0.875rem; margin-top: 5px;">{{ $message }}</div>@enderror
+                </div>
+
+                <h3 style="font-size: 1.1rem; font-weight: 600; color: var(--brand); margin-top: 30px; margin-bottom: 15px;">Address Information</h3>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; color: var(--muted-2); font-size: 0.875rem;">Street Address</label>
+                    <input type="text" name="street_address" value="{{ old('street_address', $user->street_address) }}" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius); color: #ffffff;">
+                    @error('street_address')<div style="color: #ff6b6b; font-size: 0.875rem; margin-top: 5px;">{{ $message }}</div>@enderror
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; color: var(--muted-2); font-size: 0.875rem;">Landmark</label>
+                    <input type="text" name="landmark" value="{{ old('landmark', $user->landmark) }}" style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius); color: #ffffff;">
+                    @error('landmark')<div style="color: #ff6b6b; font-size: 0.875rem; margin-top: 5px;">{{ $message }}</div>@enderror
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                    <div>
+                        <label style="display: block; margin-bottom: 8px; color: var(--muted-2); font-size: 0.875rem;">City</label>
+                        <input type="text" name="city" value="{{ old('city', $user->city) }}" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius); color: #ffffff;">
+                        @error('city')<div style="color: #ff6b6b; font-size: 0.875rem; margin-top: 5px;">{{ $message }}</div>@enderror
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 8px; color: var(--muted-2); font-size: 0.875rem;">Pincode</label>
+                        <input type="text" name="pincode" value="{{ old('pincode', $user->pincode) }}" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius); color: #ffffff;">
+                        @error('pincode')<div style="color: #ff6b6b; font-size: 0.875rem; margin-top: 5px;">{{ $message }}</div>@enderror
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; color: var(--muted-2); font-size: 0.875rem;">Country</label>
+                    <input type="text" name="country" value="{{ old('country', $user->country) }}" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius); color: #ffffff;">
+                    @error('country')<div style="color: #ff6b6b; font-size: 0.875rem; margin-top: 5px;">{{ $message }}</div>@enderror
+                </div>
+
+                 <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; color: var(--muted-2); font-size: 0.875rem;">Default Active Branch</label>
+                    <select name="current_branch_id" style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius); color: #ffffff; outline: none; cursor: pointer;">
+                        <option value="" style="background-color: #0b1020; color: #f8fafc;" {{ is_null($user->current_branch_id) ? 'selected' : '' }}>All Branches</option>
+                        @foreach($branches as $b)
+                            <option value="{{ $b->id }}" style="background-color: #0b1020; color: #f8fafc;" {{ $user->current_branch_id == $b->id ? 'selected' : '' }}>{{ $b->name }}</option>
+                        @endforeach
+                    </select>
+                    @error('current_branch_id')<div style="color: #ff6b6b; font-size: 0.875rem; margin-top: 5px;">{{ $message }}</div>@enderror
                 </div>
 
                 <button type="submit" class="btn btn-primary" style="margin-top: 15px;">Save Changes</button>

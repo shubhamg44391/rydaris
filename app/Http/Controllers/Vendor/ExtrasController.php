@@ -19,12 +19,22 @@ class ExtrasController extends Controller
 
     public function extrasIndex()
     {
-        $extras = VendorExtra::where('vendor_id', $this->vendorId())->where('type', 'extra')->get();
+        $query = VendorExtra::where('vendor_id', $this->vendorId())->where('type', 'extra');
+        
+        $branchId = auth()->user()->current_branch_id;
+        if ($branchId) {
+            $query->where('branch_id', $branchId);
+        }
+        
+        $extras = $query->get();
         return view('vendor.extras.extras', compact('extras'));
     }
 
     public function createExtra()
     {
+        if (!Auth::user()->canAddExtra()) {
+            return redirect()->route('vendor.extras.index')->with('error', 'You have reached your maximum extras capacity based on your current plan. Upgrade your plan to add more extras.');
+        }
         $groups = Group::where('vendor_id', $this->vendorId())->orderBy('name')->get();
         $vendor_features = \App\Models\VendorFeature::where('vendor_id', $this->vendorId())->orderBy('index_no')->get();
         $insurances = VendorExtra::where('vendor_id', $this->vendorId())->where('type', 'insurance')->get();
@@ -59,6 +69,9 @@ class ExtrasController extends Controller
 
     public function createInsurance()
     {
+        if (!Auth::user()->canAddInsurance()) {
+            return redirect()->route('vendor.insurance.index')->with('error', 'You have reached your maximum insurance capacity based on your current plan. Upgrade your plan to add more insurances.');
+        }
         $groups = Group::where('vendor_id', $this->vendorId())->orderBy('name')->get();
         $vendor_features = \App\Models\VendorFeature::where('vendor_id', $this->vendorId())->orderBy('index_no')->get();
         $insurances = VendorExtra::where('vendor_id', $this->vendorId())->where('type', 'insurance')->get();
@@ -93,7 +106,14 @@ class ExtrasController extends Controller
 
     public function insuranceIndex()
     {
-        $insurances = VendorExtra::where('vendor_id', $this->vendorId())->where('type', 'insurance')->get();
+        $query = VendorExtra::where('vendor_id', $this->vendorId())->where('type', 'insurance');
+        
+        $branchId = auth()->user()->current_branch_id;
+        if ($branchId) {
+            $query->where('branch_id', $branchId);
+        }
+        
+        $insurances = $query->get();
         return view('vendor.extras.insurance', compact('insurances'));
     }
 
@@ -108,6 +128,14 @@ class ExtrasController extends Controller
     // --- Extras & Insurance ---
     public function storeExtra(Request $request)
     {
+        $type = $request->input('type');
+        if ($type === 'extra' && !Auth::user()->canAddExtra()) {
+            return back()->withInput()->withErrors(['name' => 'You have reached your maximum extra item capacity based on your current plan. Upgrade your plan to add more extras.']);
+        }
+        if ($type === 'insurance' && !Auth::user()->canAddInsurance()) {
+            return back()->withInput()->withErrors(['name' => 'You have reached your maximum insurance item capacity based on your current plan. Upgrade your plan to add more insurances.']);
+        }
+
         $request->validate([
             'type' => 'required|in:extra,insurance',
             'name' => 'required|string|max:255',
@@ -124,7 +152,10 @@ class ExtrasController extends Controller
             'features.*' => 'nullable|string'
         ]);
 
-        $extra = VendorExtra::create(array_merge($request->except('features'), ['vendor_id' => $this->vendorId()]));
+        $extra = VendorExtra::create(array_merge($request->except('features'), [
+            'vendor_id' => $this->vendorId(),
+            'branch_id' => auth()->user()->current_branch_id,
+        ]));
 
         if ($request->has('features')) {
             foreach ($request->features as $idx => $feature_title) {
@@ -207,6 +238,19 @@ class ExtrasController extends Controller
     {
         $vendor_id = $this->vendorId();
         
+        $featuresCount = 0;
+        if ($request->has('features') && is_array($request->features)) {
+            foreach ($request->features as $featureRow) {
+                if (!empty(trim($featureRow['title'] ?? ''))) {
+                    $featuresCount++;
+                }
+            }
+        }
+        
+        if (!Auth::user()->canAddFeature($featuresCount)) {
+            return back()->withErrors(['features' => 'You have reached your maximum features capacity based on your current plan. Upgrade your plan to add more features.']);
+        }
+
         \App\Models\VendorFeature::where('vendor_id', $vendor_id)->delete();
 
         if ($request->has('features') && is_array($request->features)) {
@@ -231,6 +275,10 @@ class ExtrasController extends Controller
     // --- Rules ---
     public function storeRule(Request $request)
     {
+        if (!Auth::user()->canAddRule()) {
+            return response()->json(['status' => 'error', 'message' => 'You have reached your maximum rules capacity based on your current plan.'], 422);
+        }
+
         $request->validate(['min_age' => 'required|integer', 'max_age' => 'required|integer', 'underage_charge' => 'required|numeric']);
         VendorRule::create(array_merge($request->all(), ['vendor_id' => $this->vendorId()]));
         return response()->json(['status' => 'success']);

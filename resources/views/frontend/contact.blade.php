@@ -34,13 +34,13 @@
           @csrf
           <div class="field-grid">
             <label>Full name
-              <input type="text" name="name" class="@error('name') is-invalid @enderror" placeholder="Your name" value="{{ old('name') }}">
+              <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" placeholder="Your name" value="{{ old('name') }}">
               @error('name')
                 <span class="backend-error" style="color: #ef4444; font-size: 0.8rem; display: block; margin-top: 4px;">{{ $message }}</span>
               @enderror
             </label>
             <label>Work email
-              <input type="email" name="email" class="@error('email') is-invalid @enderror" placeholder="name@company.com" value="{{ old('email') }}">
+              <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" placeholder="name@company.com" value="{{ old('email') }}">
               @error('email')
                 <span class="backend-error" style="color: #ef4444; font-size: 0.8rem; display: block; margin-top: 4px;">{{ $message }}</span>
               @enderror
@@ -48,13 +48,13 @@
           </div>
           <div class="field-grid">
             <label>Company
-              <input type="text" name="company" class="@error('company') is-invalid @enderror" placeholder="Rental company name" value="{{ old('company') }}">
+              <input type="text" name="company" class="form-control @error('company') is-invalid @enderror" placeholder="Rental company name" value="{{ old('company') }}">
               @error('company')
                 <span class="backend-error" style="color: #ef4444; font-size: 0.8rem; display: block; margin-top: 4px;">{{ $message }}</span>
               @enderror
             </label>
             <label>Phone
-              <input type="tel" name="phone" class="@error('phone') is-invalid @enderror" placeholder="+1 555 012 3456" value="{{ old('phone') }}">
+              <input type="tel" name="phone" class="form-control @error('phone') is-invalid @enderror" placeholder="+1 555 012 3456" value="{{ old('phone') }}">
               @error('phone')
                 <span class="backend-error" style="color: #ef4444; font-size: 0.8rem; display: block; margin-top: 4px;">{{ $message }}</span>
               @enderror
@@ -62,7 +62,7 @@
           </div>
           <div class="field-grid">
             <label>Fleet size
-              <select name="fleet_size" class="@error('fleet_size') is-invalid @enderror form-select">
+              <select name="fleet_size" class="form-select @error('fleet_size') is-invalid @enderror">
                 <option value="1-25 vehicles" {{ old('fleet_size') === '1-25 vehicles' ? 'selected' : '' }}>1-25 vehicles</option>
                 <option value="26-100 vehicles" {{ old('fleet_size') === '26-100 vehicles' ? 'selected' : '' }}>26-100 vehicles</option>
                 <option value="101-300 vehicles" {{ old('fleet_size') === '101-300 vehicles' ? 'selected' : '' }}>101-300 vehicles</option>
@@ -73,7 +73,7 @@
               @enderror
             </label>
             <label>Primary need
-              <select name="need" class="@error('need') is-invalid @enderror form-select">
+              <select name="need" class="form-select @error('need') is-invalid @enderror">
                 <option value="Book a product demo" {{ old('need') === 'Book a product demo' ? 'selected' : '' }}>Book a product demo</option>
                 <option value="Compare pricing plans" {{ old('need') === 'Compare pricing plans' ? 'selected' : '' }}>Compare pricing plans</option>
                 <option value="Migrate from spreadsheets" {{ old('need') === 'Migrate from spreadsheets' ? 'selected' : '' }}>Migrate from spreadsheets</option>
@@ -85,7 +85,7 @@
             </label>
           </div>
           <label>What should we help with?
-            <textarea name="message" class="@error('message') is-invalid @enderror" placeholder="Tell us about your branches, fleet, current tools, booking process, and biggest operational bottleneck.">{{ old('message') }}</textarea>
+            <textarea name="message" class="form-control @error('message') is-invalid @enderror" placeholder="Tell us about your branches, fleet, current tools, booking process, and biggest operational bottleneck.">{{ old('message') }}</textarea>
             @error('message')
               <span class="backend-error" style="color: #ef4444; font-size: 0.8rem; display: block; margin-top: 4px;">{{ $message }}</span>
             @enderror

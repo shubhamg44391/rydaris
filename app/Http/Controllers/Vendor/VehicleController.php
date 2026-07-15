@@ -17,9 +17,14 @@ class VehicleController extends Controller
      */
     public function index()
     {
-        $vehicles = Vehicle::where('vendor_id', Auth::id())
-            ->with('group')
-            ->orderBy('created_at', 'desc')
+        $query = Vehicle::where('vendor_id', Auth::id())->with('group');
+        
+        $branchId = auth()->user()->current_branch_id;
+        if ($branchId) {
+            $query->where('branch_id', $branchId);
+        }
+
+        $vehicles = $query->orderBy('created_at', 'desc')
             ->paginate(10);
 
         return view('vendor.vehicles.index', compact('vehicles'));
@@ -30,6 +35,9 @@ class VehicleController extends Controller
      */
     public function create()
     {
+        if (!auth()->user()->canAddVehicle()) {
+            return redirect()->route('vendor.vehicles.index')->with('error', 'Your package limit for vehicles has been reached. Please upgrade your package.');
+        }
         $groups = Group::where('vendor_id', Auth::id())->orderBy('name')->get();
         return view('vendor.vehicles.create', compact('groups'));
     }
@@ -74,6 +82,7 @@ class VehicleController extends Controller
 
         Vehicle::create([
             'vendor_id' => Auth::id(),
+            'branch_id' => auth()->user()->current_branch_id,
             'group_id' => $request->group_id,
             'name' => $request->name,
             'model' => $request->model,

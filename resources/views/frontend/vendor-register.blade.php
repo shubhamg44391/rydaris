@@ -49,8 +49,65 @@
             --brand: #52ead2;
         }
 
+        /* Fallback Preloader Spinner Styling */
+        .site-preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #050711;
+            z-index: 999999;
+            overflow: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .site-preloader video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center center;
+            display: block;
+            z-index: 2;
+        }
+        .preloader-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .preloader-spinner .spinner-circle {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.08);
+            border-top: 3px solid var(--brand, #52ead2);
+            border-radius: 50%;
+            animation: preloader-spin 1s linear infinite;
+        }
+        .preloader-spinner span {
+            margin-top: 16px;
+            font-size: 13px;
+            color: #f8fafc;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 500;
+            opacity: 0.8;
+        }
+        @keyframes preloader-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         .authentication-inner {
-            max-width: 520px !important;
+            max-width: 700px !important;
             width: 100% !important;
         }
 
@@ -169,6 +226,92 @@
             color: #ffffff !important;
             opacity: 0.9;
         }
+
+        /* Stepper Styles */
+        .stepper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        .stepper::before {
+            content: '';
+            position: absolute;
+            top: 18px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.08);
+            z-index: 1;
+        }
+        .stepper-progress {
+            position: absolute;
+            top: 18px;
+            left: 0;
+            height: 2px;
+            background: var(--brand);
+            z-index: 1;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+        .step-item {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+        .step-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #0b1020;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a8b3c5;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        .step-item.active .step-circle {
+            border-color: var(--brand);
+            color: #051013;
+            background: var(--brand);
+            box-shadow: 0 0 15px rgba(82, 234, 210, 0.4);
+        }
+        .step-item.completed .step-circle {
+            border-color: var(--brand);
+            color: #051013;
+            background: var(--brand);
+        }
+        .step-title {
+            font-size: 0.75rem;
+            color: #a8b3c5;
+            margin-top: 0.5rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .step-item.active .step-title, .step-item.completed .step-title {
+            color: var(--brand);
+            font-weight: 600;
+        }
+        .btn-secondary-wizard {
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            color: #ffffff !important;
+            border-radius: 8px !important;
+            padding: 10px 20px !important;
+            font-weight: 600 !important;
+            transition: background 0.2s ease !important;
+        }
+        .btn-secondary-wizard:hover {
+            background: rgba(255, 255, 255, 0.1) !important;
+            color: #ffffff !important;
+        }
     </style>
     @include('partials.phone-input')
 </head>
@@ -198,85 +341,204 @@
                             <h4 class="mb-6" id="form-title">Get Started as a Vendor!</h4>
                         @endif
 
+                        <!-- Stepper -->
+                        <!--
+                        <div class="stepper">
+                            <div class="stepper-progress"></div>
+                            <div class="step-item active">
+                                <div class="step-circle">1</div>
+                                <div class="step-title">Account</div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-circle">2</div>
+                                <div class="step-title">Address</div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-circle">3</div>
+                                <div class="step-title">Security</div>
+                            </div>
+                        </div>
+                        -->
+
                         <form method="POST" action="{{ route('vendor.register.submit') }}" id="vendorRegisterForm">
                             @csrf
-                            @if(isset($invitation))
-                                <input type="hidden" name="invite_token" value="{{ $invitation->token }}" />
-                                <input type="hidden" name="role" value="user" />
-                                <input type="hidden" name="vendor_id" value="{{ $invitation->vendor_id }}" />
-                            @else
-                                <input type="hidden" name="role" value="vendor" />
-                                
-                                <!-- Company Name (Required for direct Vendor signup) -->
-                                <div class="form-group mb-3" id="company_name_container">
-                                    <label for="company_name" class="form-label">{{ __('Company Name') }} <span style="color: #ff4d4d;">*</span></label>
-                                    <input id="company_name" class="form-control" type="text" name="company_name"
-                                        value="{{ old('company_name') }}" required placeholder="Enter your company name" />
-                                    @error('company_name')
+                            @if(request()->has('package_id'))
+                                <input type="hidden" name="package_id" value="{{ request('package_id') }}" />
+                            @elseif(old('package_id'))
+                                <input type="hidden" name="package_id" value="{{ old('package_id') }}" />
+                            @endif
+                            
+                            <!-- Step 1: Account Information -->
+                            <div class="form-step">
+                                <h5 class="mb-4" style="color: var(--brand); font-weight: 700; letter-spacing: 0.5px;">Account Information</h5>
+                                <!-- Name Fields Row -->
+                                <div class="row">
+                                    <!-- First Name -->
+                                    <div class="col-md-4 form-group mb-3">
+                                        <label for="first_name" class="form-label">{{ __('First Name') }} <span style="color: #ff4d4d;">*</span></label>
+                                        <input id="first_name" class="form-control" type="text" name="first_name"
+                                            value="{{ old('first_name', isset($invitation) ? $invitation->name : '') }}" required autofocus placeholder="First name" />
+                                        @error('first_name')
+                                            <div class="mt-2 text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <!-- Middle Name -->
+                                    <div class="col-md-4 form-group mb-3">
+                                        <label for="middle_name" class="form-label">{{ __('Middle Name') }}</label>
+                                        <input id="middle_name" class="form-control" type="text" name="middle_name"
+                                            value="{{ old('middle_name') }}" placeholder="Middle name (optional)" />
+                                        @error('middle_name')
+                                            <div class="mt-2 text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <!-- Last Name -->
+                                    <div class="col-md-4 form-group mb-3">
+                                        <label for="last_name" class="form-label">{{ __('Last Name') }} <span style="color: #ff4d4d;">*</span></label>
+                                        <input id="last_name" class="form-control" type="text" name="last_name"
+                                            value="{{ old('last_name') }}" required placeholder="Last name" />
+                                        @error('last_name')
+                                            <div class="mt-2 text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                @if(isset($invitation))
+                                    <input type="hidden" name="invite_token" value="{{ $invitation->token }}" />
+                                    <input type="hidden" name="role" value="user" />
+                                    <input type="hidden" name="vendor_id" value="{{ $invitation->vendor_id }}" />
+                                @else
+                                    <input type="hidden" name="role" value="vendor" />
+                                    
+                                    <!-- Company Name (Required for direct Vendor signup) -->
+                                    <div class="form-group mb-3" id="company_name_container">
+                                        <label for="company_name" class="form-label">{{ __('Company Name') }} <span style="color: #ff4d4d;">*</span></label>
+                                        <input id="company_name" class="form-control" type="text" name="company_name"
+                                            value="{{ old('company_name') }}" required placeholder="Enter your company name" />
+                                        @error('company_name')
+                                            <div class="mt-2 text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                @endif
+
+                                <!-- Email Address -->
+                                <div class="form-group mb-3">
+                                    <label for="email" class="form-label">{{ __('Email') }} <span style="color: #ff4d4d;">*</span></label>
+                                    <input id="email" class="form-control" type="email" name="email"
+                                        value="{{ old('email', isset($invitation) ? $invitation->email : '') }}" required placeholder="name@company.com" {{ isset($invitation) ? 'readonly' : '' }} />
+                                    @error('email')
                                         <div class="mt-2 text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
-                            @endif
 
-                            <!-- First Name -->
-                            <div class="form-group mb-3">
-                                <label for="first_name" class="form-label">{{ __('First Name') }} <span style="color: #ff4d4d;">*</span></label>
-                                <input id="first_name" class="form-control" type="text" name="first_name"
-                                    value="{{ old('first_name', isset($invitation) ? $invitation->name : '') }}" required autofocus placeholder="Enter your first name" />
-                                @error('first_name')
-                                    <div class="mt-2 text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <!-- Email Address -->
-                            <div class="form-group mb-3">
-                                <label for="email" class="form-label">{{ __('Email') }} <span style="color: #ff4d4d;">*</span></label>
-                                <input id="email" class="form-control" type="email" name="email"
-                                    value="{{ old('email', isset($invitation) ? $invitation->email : '') }}" required placeholder="name@company.com" {{ isset($invitation) ? 'readonly' : '' }} />
-                                @error('email')
-                                    <div class="mt-2 text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <!-- Phone and Country Code -->
-                            <div class="mb-3">
-                                <label class="form-label">{{ __('Contact Details') }} <span style="color: #ff4d4d;">*</span></label>
-                                <input type="tel" id="reg_phone" class="form-control" placeholder="Phone number" value="{{ old('country_code') }}{{ old('contact_number') }}" required style="width: 100%;">
-                                <input type="hidden" name="country_code" id="hidden_country_code" value="{{ old('country_code') }}">
-                                <input type="hidden" name="contact_number" id="hidden_contact_number" value="{{ old('contact_number') }}">
-                                @error('country_code')
-                                    <div class="mt-2 text-danger">{{ $message }}</div>
-                                @enderror
-                                @error('contact_number')
-                                    <div class="mt-2 text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <!-- Password -->
-                            <div class="mb-3 form-password-toggle">
-                                <label class="form-label" for="password">{{ __('Password') }} <span style="color: #ff4d4d;">*</span></label>
-                                <div class="input-group input-group-merge">
-                                    <input id="password" class="form-control" type="password" name="password" required
-                                        autocomplete="new-password" placeholder="Min 8 characters" />
-                                    <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
-                                </div>
-                                @error('password')
-                                    <div class="mt-2 text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <!-- Confirm Password -->
-                            <div class="mb-3 form-password-toggle">
-                                <label class="form-label" for="password_confirmation">{{ __('Confirm Password') }} <span style="color: #ff4d4d;">*</span></label>
-                                <div class="input-group input-group-merge">
-                                    <input id="password_confirmation" class="form-control" type="password"
-                                        name="password_confirmation" required placeholder="Repeat password" />
-                                    <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                                <!-- Phone and Country Code -->
+                                <div class="mb-3">
+                                    <label class="form-label">{{ __('Contact Details') }} <span style="color: #ff4d4d;">*</span></label>
+                                    <input type="tel" id="reg_phone" class="form-control" placeholder="Phone number" value="{{ old('country_code', isset($invitation) ? $invitation->vendor->country_code : '') }}{{ old('contact_number') }}" required style="width: 100%;">
+                                    <input type="hidden" name="country_code" id="hidden_country_code" value="{{ old('country_code', isset($invitation) ? $invitation->vendor->country_code : '') }}">
+                                    <input type="hidden" name="contact_number" id="hidden_contact_number" value="{{ old('contact_number') }}">
+                                    @error('country_code')
+                                        <div class="mt-2 text-danger">{{ $message }}</div>
+                                    @enderror
+                                    @error('contact_number')
+                                        <div class="mt-2 text-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
 
-                            <div class="mb-3 mt-4">
-                                <button type="submit" class="btn btn-primary d-grid w-100">
+                            <!-- Step 2: Address Details -->
+                            <div class="form-step d-none">
+                                <h5 class="mb-4" style="color: var(--brand); font-weight: 700; letter-spacing: 0.5px;">Address Details</h5>
+                                <!-- Street Address -->
+                                <div class="form-group mb-3">
+                                    <label for="street_address" class="form-label">{{ __('Street Address') }} @if(!isset($invitation))<span style="color: #ff4d4d;">*</span>@endif</label>
+                                    <input id="street_address" class="form-control" type="text" name="street_address"
+                                        value="{{ old('street_address') }}" @if(!isset($invitation)) required @endif placeholder="Enter street address" />
+                                    @error('street_address')
+                                        <div class="mt-2 text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <!-- Landmark -->
+                                <div class="form-group mb-3">
+                                    <label for="landmark" class="form-label">{{ __('Landmark') }}</label>
+                                    <input id="landmark" class="form-control" type="text" name="landmark"
+                                        value="{{ old('landmark') }}" placeholder="Enter landmark (optional)" />
+                                    @error('landmark')
+                                        <div class="mt-2 text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="row">
+                                    <!-- City -->
+                                    <div class="col-md-6 form-group mb-3">
+                                        <label for="city" class="form-label">{{ __('City') }} @if(!isset($invitation))<span style="color: #ff4d4d;">*</span>@endif</label>
+                                        <input id="city" class="form-control" type="text" name="city"
+                                            value="{{ old('city') }}" @if(!isset($invitation)) required @endif placeholder="City" />
+                                        @error('city')
+                                            <div class="mt-2 text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <!-- Pincode -->
+                                    <div class="col-md-6 form-group mb-3">
+                                        <label for="pincode" class="form-label">{{ __('Pincode') }} @if(!isset($invitation))<span style="color: #ff4d4d;">*</span>@endif</label>
+                                        <input id="pincode" class="form-control" type="text" name="pincode"
+                                            value="{{ old('pincode') }}" @if(!isset($invitation)) required @endif placeholder="Pincode" />
+                                        @error('pincode')
+                                            <div class="mt-2 text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <!-- Country -->
+                                <div class="form-group mb-3">
+                                    <label for="country" class="form-label">{{ __('Country') }} @if(!isset($invitation))<span style="color: #ff4d4d;">*</span>@endif</label>
+                                    <input id="country" class="form-control" type="text" name="country"
+                                        value="{{ old('country') }}" @if(!isset($invitation)) required @endif placeholder="Country" />
+                                    @error('country')
+                                        <div class="mt-2 text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Step 3: Security Details -->
+                            <div class="form-step d-none">
+                                <h5 class="mb-4" style="color: var(--brand); font-weight: 700; letter-spacing: 0.5px;">Security Settings</h5>
+                                <!-- Password -->
+                                <div class="mb-3 form-password-toggle">
+                                    <label class="form-label" for="password">{{ __('Password') }} <span style="color: #ff4d4d;">*</span></label>
+                                    <div class="input-group input-group-merge">
+                                        <input id="password" class="form-control" type="password" name="password" required
+                                            autocomplete="new-password" placeholder="Min 8 characters" />
+                                        <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                                    </div>
+                                    @error('password')
+                                        <div class="mt-2 text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <!-- Confirm Password -->
+                                <div class="mb-3 form-password-toggle">
+                                    <label class="form-label" for="password_confirmation">{{ __('Confirm Password') }} <span style="color: #ff4d4d;">*</span></label>
+                                    <div class="input-group input-group-merge">
+                                        <input id="password_confirmation" class="form-control" type="password"
+                                            name="password_confirmation" required placeholder="Repeat password" />
+                                        <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Navigation Buttons -->
+                            <div class="d-flex justify-content-between mt-4 gap-2">
+                                <button type="button" id="btnPrev" class="btn btn-secondary-wizard d-none w-100">
+                                    {{ __('Back') }}
+                                </button>
+                                <button type="button" id="btnNext" class="btn btn-primary w-100">
+                                    {{ __('Next') }}
+                                </button>
+                                <button type="submit" id="btnSubmit" class="btn btn-primary d-none w-100">
                                     {{ __('Register') }}
                                 </button>
                             </div>
@@ -316,13 +578,195 @@
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/19.2.16/js/intlTelInput.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            const steps = document.querySelectorAll('.form-step');
+            const stepItems = document.querySelectorAll('.step-item');
+            const progressBar = document.querySelector('.stepper-progress');
+            const btnPrev = document.getElementById('btnPrev');
+            const btnNext = document.getElementById('btnNext');
+            const btnSubmit = document.getElementById('btnSubmit');
+            const form = document.getElementById('vendorRegisterForm');
+            
+            let currentStep = 0;
+
+            function updateStep() {
+                steps.forEach((step, idx) => {
+                    if (idx === currentStep) {
+                        step.classList.remove('d-none');
+                    } else {
+                        step.classList.add('d-none');
+                    }
+                });
+
+                stepItems.forEach((item, idx) => {
+                    if (idx < currentStep) {
+                        item.classList.add('completed');
+                        item.classList.remove('active');
+                    } else if (idx === currentStep) {
+                        item.classList.add('active');
+                        item.classList.remove('completed');
+                    } else {
+                        item.classList.remove('active', 'completed');
+                    }
+                });
+
+                const progressPercent = (currentStep / (steps.length - 1)) * 100;
+                if (progressBar) {
+                    progressBar.style.width = `${progressPercent}%`;
+                }
+
+                // Buttons visibility
+                if (currentStep === 0) {
+                    btnPrev.classList.add('d-none');
+                    btnNext.classList.remove('d-none');
+                    btnSubmit.classList.add('d-none');
+                } else if (currentStep === steps.length - 1) {
+                    btnPrev.classList.remove('d-none');
+                    btnNext.classList.add('d-none');
+                    btnSubmit.classList.remove('d-none');
+                } else {
+                    btnPrev.classList.remove('d-none');
+                    btnNext.classList.remove('d-none');
+                    btnSubmit.classList.add('d-none');
+                }
+            }
+
+            btnNext.addEventListener('click', function () {
+                // Validate inputs in current step
+                const currentFields = steps[currentStep].querySelectorAll('input, select, textarea');
+                let isValid = true;
+                currentFields.forEach(field => {
+                    if (!field.checkValidity()) {
+                        field.reportValidity();
+                        isValid = false;
+                    }
+                });
+
+                if (isValid) {
+                    currentStep++;
+                    updateStep();
+                }
+            });
+
+            btnPrev.addEventListener('click', function () {
+                currentStep--;
+                updateStep();
+            });
+
+            // Redirect back with validation errors
+            const hasErrors = {!! $errors->any() ? 'true' : 'false' !!};
+            if (hasErrors) {
+                const step2Errors = {!! $errors->hasAny(['street_address', 'landmark', 'pincode', 'city', 'country']) ? 'true' : 'false' !!};
+                const step3Errors = {!! $errors->hasAny(['password', 'password_confirmation']) ? 'true' : 'false' !!};
+
+                if (step3Errors) {
+                    currentStep = 2;
+                } else if (step2Errors) {
+                    currentStep = 1;
+                } else {
+                    currentStep = 0;
+                }
+            }
+
             // Init Phone Input
             initializeIntlTelInput('reg_phone', 'hidden_country_code', 'hidden_contact_number');
+
+            updateStep();
         });
     </script>
+
+
+    <!-- ===== FULLSCREEN VIDEO LOADER (shows on register submit) ===== -->
+    <div id="registerPreloader" class="site-preloader" style="display:none; opacity:0; position:fixed; top:0; left:0; width:100vw; height:100vh; background:#050711; z-index:999999; overflow:hidden; transition:opacity 0.3s ease;">
+        <!-- Fallback Spinner -->
+        <div class="preloader-spinner">
+            <div class="spinner-circle"></div>
+            <span>Submitting</span>
+        </div>
+        <video id="registerPreloaderVideo" src="{{ asset('assets/loader/loader.mp4') }}" playsinline webkit-playsinline preload="auto" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:contain; object-position:center; display:block; z-index: 2;"></video>
+    </div>
+
+    <script>
+        (function() {
+            var regForm = null;
+            var loaderShown = false;
+
+            function showAndSubmit(form) {
+                if (loaderShown) return;
+                loaderShown = true;
+
+                var loader = document.getElementById('registerPreloader');
+                var video  = document.getElementById('registerPreloaderVideo');
+                if (!loader || !video) { form.submit(); return; }
+
+                // Show loader fullscreen
+                loader.style.display = 'block';
+                requestAnimationFrame(function () {
+                    requestAnimationFrame(function () {
+                        loader.style.opacity = '1';
+                    });
+                });
+
+                var submitted = false;
+                function submitNow() {
+                    if (submitted) return;
+                    submitted = true;
+                    form.submit();
+                }
+
+                // Play full video with sound
+                video.muted = false;
+                video.currentTime = 0;
+                var playPromise = video.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(function (error) {
+                        console.warn("Video register preloader unmuted play blocked. Trying muted.", error);
+                        video.muted = true;
+                        video.play().catch(function (err) {
+                            console.error("Muted video register preloader play failed. Submitting.", err);
+                            submitNow();
+                        });
+                    });
+                }
+
+                // Submit AFTER video ends
+                video.addEventListener('ended', submitNow);
+
+                // Safety fallback — max 10 seconds
+                setTimeout(submitNow, 10000);
+            }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                regForm = document.querySelector('form');
+                if (!regForm) return;
+
+                // Intercept final "Register" button click
+                var btnSubmit = document.getElementById('btnSubmit');
+                if (btnSubmit) {
+                    btnSubmit.addEventListener('click', function (e) {
+                        // Let HTML5 validation run first (50ms)
+                        setTimeout(function () {
+                            if (regForm.checkValidity()) {
+                                e.preventDefault();
+                                showAndSubmit(regForm);
+                            }
+                        }, 50);
+                    });
+                }
+
+                // Also intercept direct form submit event
+                regForm.addEventListener('submit', function (e) {
+                    if (!loaderShown) {
+                        e.preventDefault();
+                        showAndSubmit(regForm);
+                    }
+                });
+            });
+        })();
+    </script>
+    <!-- ===== END LOADER ===== -->
+
 </body>
 
 </html>

@@ -172,16 +172,16 @@
         box-shadow: 4px 0px 8px -2px rgba(0,0,0,0.5);
     }
     
-    /* Day Column Colors (Alternating) */
+    /* Day Column Colors (Solid) */
     .rate-table th:nth-child(odd):not(:nth-child(1)) {
-        background: rgba(37, 99, 235, 0.15) !important;
-        color: #60a5fa !important;
-        border-bottom-color: #3b82f6;
+        background: #0b1020 !important;
+        color: #fff !important;
+        border-bottom-color: var(--line-dark);
     }
     .rate-table th:nth-child(even):not(:nth-child(2)) {
-        background: rgba(16, 185, 129, 0.15) !important;
-        color: #34d399 !important;
-        border-bottom-color: #10b981;
+        background: #0b1020 !important;
+        color: #fff !important;
+        border-bottom-color: var(--line-dark);
     }
 
     .rate-table td {

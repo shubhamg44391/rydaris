@@ -40,6 +40,11 @@ class SupportTicketController extends Controller
             'attachment' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:5120'
         ]);
 
+        $vendor = User::find($request->input('vendor_id'));
+        if ($vendor && !$vendor->canAcceptSupportTickets()) {
+            return back()->withInput()->withErrors(['subject' => 'This vendor cannot receive new support tickets at this time due to package limits.']);
+        }
+
         $ticketNumber = 'STK-' . date('Ymd') . '-' . mt_rand(100, 999) . '-' . mt_rand(100, 999);
 
         $attachmentPath = null;

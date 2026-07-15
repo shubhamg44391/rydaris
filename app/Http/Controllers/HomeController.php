@@ -10,6 +10,24 @@ class HomeController extends Controller
 {
     public function index()
     {
+        if (auth()->check()) {
+            $user = auth()->user();
+           
+               
+            if ($user->role === 'user') {
+                return redirect()->route('user.dashboard');
+            }
+         
+        }
+        return view('frontend.index');
+    }
+
+    /**
+     * Show frontend homepage directly without auth redirect.
+     * Used by the "Visit Website" button in the admin/vendor panel.
+     */
+    public function frontend()
+    {
         return view('frontend.index');
     }
 
@@ -20,7 +38,20 @@ class HomeController extends Controller
 
     public function pricing()
     {
-        $packages = \App\Models\Package::orderBy('order', 'asc')->get();
+        $packages = \App\Models\Package::where('is_active', true)->get()->sortBy(function ($package) {
+            $priceStr = strtolower($package->price);
+            if ($priceStr === 'free' || $priceStr === '0' || $priceStr === '$0') {
+                return 0;
+            }
+            if ($priceStr === 'custom' || $priceStr === 'enterprise') {
+                return 999999;
+            }
+            preg_match_all('!\d+!', $package->price, $matches);
+            if (!empty($matches[0])) {
+                return (float) implode('', $matches[0]);
+            }
+            return 999999;
+        })->values();
         return view('frontend.pricing', compact('packages'));
     }
 
@@ -31,6 +62,13 @@ class HomeController extends Controller
         $reporting = \App\Models\Faq::where('category', 'reporting')->orderBy('created_at', 'asc')->get();
 
         return view('frontend.faq', compact('productBasics', 'onboarding', 'reporting'));
+    }
+
+    public function terms()
+    {
+        $page = \App\Models\AdminTermsCondition::first();
+
+        return view('frontend.terms', compact('page'));
     }
 
     public function contact()

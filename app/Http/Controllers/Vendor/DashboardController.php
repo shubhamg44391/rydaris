@@ -10,43 +10,80 @@ class DashboardController extends Controller
     /**
      * Display the Vendor Dashboard.
      */
-    public function index()
+    public function index(Request $request)
     {
+        if (!auth()->user()->activeSubscription) {
+            return redirect()->route('vendor.pricing')->with('error', 'Please subscribe to a package to access the dashboard.');
+        }
+
         $vendorId = auth()->id();
 
-        // 1. KPI Metrics
+        // Retrieve date range filter options
+        $range = $request->query('range', '12');
+        $startMonthStr = $request->query('start_month');
+        $endMonthStr = $request->query('end_month');
+
+        $startDate = null;
+        $endDate = null;
+
+        if ($range === 'custom' && $startMonthStr && $endMonthStr) {
+            $startDate = \Carbon\Carbon::parse($startMonthStr . '-01')->startOfMonth();
+            $endDate = \Carbon\Carbon::parse($endMonthStr . '-01')->endOfMonth();
+            
+            // Limit to max 12 months for chart display layout protection
+            $diffInMonths = $startDate->diffInMonths($endDate);
+            if ($diffInMonths > 12) {
+                $startDate = (clone $endDate)->subMonths(11)->startOfMonth();
+            }
+        } else {
+            $monthsLimit = in_array($range, ['3', '6', '12']) ? (int)$range : 12;
+            $startDate = now()->subMonths($monthsLimit - 1)->startOfMonth();
+            $endDate = now()->endOfDay();
+        }
+
+        // 1. KPI Metrics (filtered by selected range)
         $totalVehicles = \App\Models\Vehicle::where('vendor_id', $vendorId)->count();
-        $totalBookings = \App\Models\Booking::where('vendor_id', $vendorId)->count();
+        
+        $bookingsQuery = \App\Models\Booking::where('vendor_id', $vendorId);
+        if ($startDate && $endDate) {
+            $bookingsQuery->whereBetween('created_at', [$startDate, $endDate]);
+        }
+        
+        $totalBookings = $bookingsQuery->count();
+        $totalEarnings = (float)$bookingsQuery->sum('paid_amount');
         
         $monthlyEarnings = \App\Models\Booking::where('vendor_id', $vendorId)
             ->whereMonth('created_at', now()->month)
             ->whereYear('created_at', now()->year)
             ->sum('paid_amount');
 
-        $totalEarnings = \App\Models\Booking::where('vendor_id', $vendorId)->sum('paid_amount');
-
-        // 2. Monthly Revenue Chart (Last 12 Months)
+        // 2. Monthly Revenue Chart (Dynamic Range based on filter selection)
         $monthlyRevenue = [];
-        for ($i = 11; $i >= 0; $i--) {
-            $month = now()->subMonths($i);
-            $revenue = \App\Models\Booking::where('vendor_id', $vendorId)
-                ->whereMonth('created_at', $month->month)
-                ->whereYear('created_at', $month->year)
-                ->sum('paid_amount');
-            $count = \App\Models\Booking::where('vendor_id', $vendorId)
-                ->whereMonth('created_at', $month->month)
-                ->whereYear('created_at', $month->year)
-                ->count();
-            $monthlyRevenue[] = [
-                'month' => $month->format('M'),
-                'revenue' => (float)$revenue,
-                'count' => $count
-            ];
+        if ($startDate && $endDate) {
+            $tempDate = (clone $startDate)->startOfMonth();
+            while ($tempDate->lte($endDate)) {
+                $revenue = \App\Models\Booking::where('vendor_id', $vendorId)
+                    ->whereMonth('created_at', $tempDate->month)
+                    ->whereYear('created_at', $tempDate->year)
+                    ->sum('paid_amount');
+                $count = \App\Models\Booking::where('vendor_id', $vendorId)
+                    ->whereMonth('created_at', $tempDate->month)
+                    ->whereYear('created_at', $tempDate->year)
+                    ->count();
+                
+                $monthlyRevenue[] = [
+                    'month' => $tempDate->format('M'),
+                    'revenue' => (float)$revenue,
+                    'count' => $count
+                ];
+                
+                $tempDate->addMonth();
+            }
         }
 
         $maxRevenue = collect($monthlyRevenue)->max('revenue') ?: 1;
 
-        // 3. Recent Bookings / Activities
+        // 3. Recent Bookings / Activities (not limited by filter to show latest actions)
         $recentBookings = \App\Models\Booking::with('vehicle')
             ->where('vendor_id', $vendorId)
             ->orderBy('id', 'desc')
@@ -78,7 +115,20 @@ class DashboardController extends Controller
 
     public function pricing()
     {
-        $packages = \App\Models\Package::orderBy('order', 'asc')->get();
+        $packages = \App\Models\Package::where('is_active', true)->get()->sortBy(function ($package) {
+            $priceStr = strtolower($package->price);
+            if ($priceStr === 'free' || $priceStr === '0' || $priceStr === '$0') {
+                return 0;
+            }
+            if ($priceStr === 'custom' || $priceStr === 'enterprise') {
+                return 999999;
+            }
+            preg_match_all('!\d+!', $package->price, $matches);
+            if (!empty($matches[0])) {
+                return (float) implode('', $matches[0]);
+            }
+            return 999999;
+        })->values();
         return view('vendor.pricing.index', compact('packages'));
     }
 
@@ -91,6 +141,15 @@ class DashboardController extends Controller
         return view('vendor.pricing.history', compact('subscriptions'));
     }
 
+    public function subscriptionInvoice($id)
+    {
+        $subscription = \App\Models\VendorSubscription::where('vendor_id', auth()->id())
+            ->with(['vendor', 'package'])
+            ->findOrFail($id);
+
+        return view('partials.subscription-invoice', compact('subscription'));
+    }
+
     public function subscribe(Request $request, $packageId)
     {
         $package = \App\Models\Package::findOrFail($packageId);
@@ -101,12 +160,21 @@ class DashboardController extends Controller
             ->where('status', 'active')
             ->update(['status' => 'expired']);
 
-        // Create new subscription for 1 month
+        $billingPeriod = strtolower(trim($package->billing_period));
+        if ($billingPeriod === '/ year') {
+            $endsAt = now()->addYear();
+        } elseif ($billingPeriod === '/ quarter') {
+            $endsAt = now()->addMonths(3);
+        } else {
+            $endsAt = now()->addMonth();
+        }
+
+        // Create new subscription
         \App\Models\VendorSubscription::create([
             'vendor_id' => $user->id,
             'package_id' => $package->id,
             'starts_at' => now(),
-            'ends_at' => now()->addMonth(),
+            'ends_at' => $endsAt,
             'status' => 'active',
         ]);
 
@@ -226,6 +294,15 @@ class DashboardController extends Controller
         $taxRate = $siteSettings ? (float) $siteSettings->tax_percentage : 18.0;
         $totalPrice = $price * (1 + $taxRate / 100);
 
+        $billingPeriod = strtolower(trim($package->billing_period));
+        if ($billingPeriod === '/ year') {
+            $endsAt = now()->addYear();
+        } elseif ($billingPeriod === '/ quarter') {
+            $endsAt = now()->addMonths(3);
+        } else {
+            $endsAt = now()->addMonth();
+        }
+
         if ($mode === 'razorpay') {
             $razorpayOrderId = $request->input('razorpay_order_id');
             $razorpayPaymentId = $request->input('razorpay_payment_id');
@@ -254,7 +331,7 @@ class DashboardController extends Controller
                 'vendor_id' => $user->id,
                 'package_id' => $package->id,
                 'starts_at' => now(),
-                'ends_at' => now()->addMonth(),
+                'ends_at' => $endsAt,
                 'status' => 'active',
                 'razorpay_order_id' => $razorpayOrderId,
                 'razorpay_payment_id' => $razorpayPaymentId,
@@ -284,7 +361,7 @@ class DashboardController extends Controller
                 'vendor_id'  => $user->id,
                 'package_id' => $package->id,
                 'starts_at'  => now(),
-                'ends_at'    => now()->addMonth(),
+                'ends_at'    => $endsAt,
                 'status'     => 'active',
                 'amount_paid' => 0,
                 'street_address' => $request->input('street_address'),
@@ -313,7 +390,7 @@ class DashboardController extends Controller
                 'vendor_id' => $user->id,
                 'package_id' => $package->id,
                 'starts_at' => now(),
-                'ends_at' => now()->addMonth(),
+                'ends_at' => $endsAt,
                 'status' => 'active',
                 'amount_paid' => $totalPrice,
                 'street_address' => $request->input('street_address'),

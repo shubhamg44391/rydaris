@@ -1,8 +1,26 @@
 <nav class="admin-nav">
-    <a class="{{ Request::is('user/dashboard*') && !request()->has('search') && !Request::is('user/bookings/*') ? 'active' : '' }}" href="{{ route('user.dashboard') }}">
+    <!-- <a class="{{ Request::is('user/dashboard*') && !request()->has('search') && !Request::is('user/bookings/*') ? 'active' : '' }}" href="{{ route('user.dashboard') }}">
         <svg viewBox="0 0 24 24"><path d="M3 3h7v7H3Z"/><path d="M14 3h7v7h-7Z"/><path d="M14 14h7v7h-7Z"/><path d="M3 14h7v7H3Z"/></svg> Dashboard
     </a>
-    
+     -->
+     @if(auth()->user()->hasMenuAccess('vehicles'))
+        @if(auth()->check() && auth()->user()->vendor_id)
+            <a class="{{ Request::is('user/vendor/*') ? 'active' : '' }}" href="{{ route('user.vendors.show', auth()->user()->vendor_id) }}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg> Search Vehicle
+            </a>
+        @else
+            <a class="{{ request()->has('search') ? 'active' : '' }}" href="{{ route('user.dashboard') }}?search=" onclick="document.querySelector('input[name=search]').focus(); return false;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg> Search Vehicle
+            </a>
+        @endif
+    @endif
+    @if(auth()->user()->hasMenuAccess('booking'))
     <a class="{{ Request::is('user/bookings*') && !Request::is('user/bookings/*/edit') && !Request::is('user/bookings/*/checkin') ? 'active' : '' }}" href="{{ route('user.dashboard') }}">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
@@ -27,15 +45,18 @@
             <line x1="1" y1="10" x2="23" y2="10"></line>
         </svg> Payments
     </a>
+    @endif
 
     <!-- Support Ticket -->
+    @if(auth()->user()->hasMenuAccess('support_ticket'))
     <a class="{{ Request::is('user/support-tickets*') ? 'active' : '' }}" href="{{ route('user.support-tickets.index') }}">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
         </svg> Support Ticket
     </a>
+    @endif
 
-    @if(Request::is('user/bookings/*/edit'))
+    @if(Request::is('user/bookings/*/edit') && auth()->user()->hasMenuAccess('booking'))
     <a class="active" href="javascript:void(0)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
@@ -44,20 +65,5 @@
     </a>
     @endif
 
-    
-    @if(auth()->check() && auth()->user()->vendor_id)
-        <a class="{{ Request::is('user/vendor/*') ? 'active' : '' }}" href="{{ route('user.vendors.show', auth()->user()->vendor_id) }}">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg> Search Vehicle
-        </a>
-    @else
-        <a class="{{ request()->has('search') ? 'active' : '' }}" href="{{ route('user.dashboard') }}?search=" onclick="document.querySelector('input[name=search]').focus(); return false;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg> Search Vehicle
-        </a>
-    @endif
+   
 </nav>

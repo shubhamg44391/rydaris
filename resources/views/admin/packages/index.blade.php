@@ -21,8 +21,7 @@
                         <th>Eyebrow</th>
                         <th>Name</th>
                         <th>Price</th>
-                        <th>Features</th>
-                        <th>Featured</th>
+                        <th>Status</th>
                         <th style="width: 120px;">Actions</th>
                     </tr>
                 </thead>
@@ -42,14 +41,12 @@
                                 <strong style="color: #0f766e;">{{ $pkg->price }}
                                 <span style="font-size: 0.8rem; color: #64748b;">{{ $pkg->billing_period }}</span>
                             </td>
+                           
                             <td>
-                                <span style="font-size: 0.9rem; color: #475569;">{{ is_array($pkg->features) ? count($pkg->features) : 0 }} features</span>
-                            </td>
-                            <td>
-                                @if($pkg->is_featured)
-                                    <span class="status-badge-active">Yes</span>
+                                @if($pkg->is_active)
+                                    <span class="status-badge-active">Active</span>
                                 @else
-                                    <span class="status-badge-inactive">No</span>
+                                    <span class="status-badge-inactive">Inactive</span>
                                 @endif
                             </td>
                             <td>

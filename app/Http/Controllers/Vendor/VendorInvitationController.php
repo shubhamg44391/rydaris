@@ -36,6 +36,9 @@ class VendorInvitationController extends Controller
      */
     public function create()
     {
+        if (!auth()->user()->canAddInvitation()) {
+            return redirect()->route('vendor.invitations.index')->with('error', 'You have reached your maximum invitation capacity based on your current plan. Upgrade your plan to send more invitations.');
+        }
         return view('vendor.invitations.create');
     }
 
@@ -63,6 +66,10 @@ class VendorInvitationController extends Controller
 
         // Check if vendor has reached user capacity
         $vendor = auth()->user();
+        if (!$vendor->canAddInvitation()) {
+            return back()->withInput()->withErrors(['email' => 'You have reached your maximum invitation capacity based on your current plan. Upgrade your plan to send more invitations.']);
+        }
+
         $vendor->load(['subscription' => function($q) {
             $q->where('status', 'active')
               ->where('starts_at', '<=', now())

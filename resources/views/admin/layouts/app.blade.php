@@ -86,6 +86,11 @@
     .admin-sidebar::-webkit-scrollbar-thumb:hover {
         background: rgba(82, 234, 210, 0.4) !important;
     }
+    
+    select#headerBranchSelect option {
+        background-color: #0b1020 !important;
+        color: #f8fafc !important;
+    }
   </style>
 
 
@@ -116,11 +121,20 @@
 </head>
 
 <body class="admin-body">
+  @include('partials.preloader')
+  <!-- Mobile sidebar overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
   <div class="admin-shell">
-    <aside class="admin-sidebar" aria-label="Admin navigation">
-      <a class="brand" href="{{ route('home') }}" aria-label="Rydaris home" style="opacity: 0.9; transition: opacity 0.2s ease;">
-        <img src="{{ asset('assets/logo/rydaris-logo.png') }}" alt="Rydaris Logo" style="height: 32px; width: auto; display: block;">
-      </a>
+    <aside class="admin-sidebar" id="adminSidebar" aria-label="Admin navigation">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-bottom: 10px;">
+        <a class="brand" href="{{ Auth::check() && (Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin') ? route('dashboard') : (Auth::user()->role === 'user' ? route('user.dashboard') : route('vendor.dashboard')) }}" aria-label="Rydaris home" style="opacity: 0.9; transition: opacity 0.2s ease; display: flex; align-items: center; justify-content: center;">
+          <img class="brand-full" src="{{ asset('assets/logo/rydaris-logo.png') }}" alt="Rydaris Logo" style="height: 32px; width: auto; display: block;">
+          <img class="brand-mini" src="{{ asset('assets/logo/favicon.svg') }}" alt="Rydaris Logo" style="height: 32px; width: auto; display: none;">
+        </a>
+        <button class="sidebar-close-btn" onclick="closeSidebar()" aria-label="Close menu">
+          <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
 
       @if(Auth::check() && (Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin'))
           @include('admin.layouts.sidebar')
@@ -131,11 +145,50 @@
 
     <main class="admin-main" style="display: flex; flex-direction: column; min-height: 100vh;">
       <header class="admin-topbar">
-        <div></div>
+        <div style="display: flex; align-items: center; gap: 15px;">
+          <button class="hamburger-btn" id="hamburgerBtn" onclick="openSidebar()" aria-label="Open menu">
+            <svg viewBox="0 0 24 24" style="width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <button class="desktop-collapse-btn" onclick="toggleSidebarCollapse()" aria-label="Collapse sidebar">
+            <svg class="chevron-left-icon" viewBox="0 0 24 24" style="width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;"><polyline points="15 18 9 12 15 6"/></svg>
+            <svg class="chevron-right-icon" viewBox="0 0 24 24" style="width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;display:none;"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+
+          {{-- Visit Website Button --}}
+          <a href="{{ route('home') }}" target="_blank"
+             style="display: inline-flex; align-items: center; gap: 7px; padding: 7px 14px; background: rgba(82,234,210,0.08); border: 1px solid rgba(82,234,210,0.2); border-radius: 8px; color: #52ead2; font-size: 0.82rem; font-weight: 600; text-decoration: none; transition: all 0.2s ease; white-space: nowrap;"
+             onmouseover="this.style.background='rgba(82,234,210,0.15)'; this.style.borderColor='rgba(82,234,210,0.4)';"
+             onmouseout="this.style.background='rgba(82,234,210,0.08)'; this.style.borderColor='rgba(82,234,210,0.2)';">
+            <svg viewBox="0 0 24 24" style="width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;flex-shrink:0;">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="2" y1="12" x2="22" y2="12"/>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+            Visit Website
+          </a>
+        </div>
         <div class="admin-toolbar" style="display: flex; align-items: center; gap: 15px;">
+          @if(Auth::check() && Auth::user()->role === 'vendor')
+              @php
+                  $currentBranch = Auth::user()->currentBranch;
+              @endphp
+              <div class="branch-display-wrap" style="display: inline-flex; align-items: center; gap: 8px; margin-right: 15px; background: rgba(82, 234, 210, 0.08); border: 1px solid rgba(82, 234, 210, 0.2); border-radius: 8px; padding: 6px 12px; font-size: 0.85rem; font-weight: 600; color: #f8fafc;">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 14px; height: 14px; color: var(--brand, #52ead2);">
+                      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                      <polyline points="9 22 9 12 15 12 15 22" />
+                  </svg>
+                  <span>Branch: {{ $currentBranch ? $currentBranch->name : 'All Branches' }}</span>
+              </div>
+          @endif
+
           <span class="user-greeting" style="font-weight: 500;">Hello, {{ Auth::user()->name }}</span>
 
-          
+             @if(Auth::check() && Auth::user()->role === 'vendor')
+         
+          <a href="{{ route('vendor.profile.index') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 5px; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'" title="Vendor Profile">
+            <svg viewBox="0 0 24 24" style="width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:2;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </a>
+          @endif
           <form method="POST" action="{{ route('logout') }}" style="margin: 0; display: inline;">
               @csrf
               <button type="submit" class="admin-action" style="cursor: pointer; border: none; background: transparent; font-family: inherit; font-size: inherit; display: flex; align-items: center; gap: 5px;">
@@ -205,6 +258,35 @@
       });
   </script>
   @endif
+
+  <script>
+    function openSidebar() {
+      const sidebar = document.getElementById('adminSidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      if (sidebar) sidebar.classList.add('open');
+      if (overlay) { overlay.style.display = 'block'; setTimeout(() => overlay.classList.add('visible'), 10); }
+    }
+    function closeSidebar() {
+      const sidebar = document.getElementById('adminSidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      if (sidebar) sidebar.classList.remove('open');
+      if (overlay) { overlay.classList.remove('visible'); setTimeout(() => overlay.style.display = 'none', 300); }
+    }
+    function toggleSidebarCollapse() {
+      const body = document.body;
+      body.classList.toggle('sidebar-collapsed');
+      const isCollapsed = body.classList.contains('sidebar-collapsed');
+      localStorage.setItem('sidebar-collapsed', isCollapsed);
+    }
+    // Close sidebar on nav link click (mobile)
+    document.querySelectorAll('#adminSidebar .admin-nav a').forEach(function(link) {
+      link.addEventListener('click', function() { if (window.innerWidth <= 1180) closeSidebar(); });
+    });
+    // Restore collapse state on load
+    if (localStorage.getItem('sidebar-collapsed') === 'true') {
+      document.body.classList.add('sidebar-collapsed');
+    }
+  </script>
 </body>
 
 </html>

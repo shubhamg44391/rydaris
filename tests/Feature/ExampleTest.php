@@ -82,6 +82,8 @@ class ExampleTest extends TestCase
         \App\Models\User::where('email', 'john.vendor@example.com')->delete();
 
         $response = $this->post('/vendor/register', [
+            'role' => 'vendor',
+            'company_name' => 'John Company',
             'first_name' => 'John',
             'email' => 'john.vendor@example.com',
             'contact_number' => '1234567890',

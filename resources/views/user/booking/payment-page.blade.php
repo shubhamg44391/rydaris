@@ -206,7 +206,7 @@
                 </div>
 
                 @php
-                    $diff = \Carbon\Carbon::parse($booking->pickup_date)->diffInDays(\Carbon\Carbon::parse($booking->return_date));
+                    $diff = $booking->pickup_date_parsed->diffInDays($booking->return_date_parsed);
                     $rentalDays = $diff > 0 ? $diff : 1;
                     $carAmount = ($booking->vehicle->price_per_day ?? 0) * $rentalDays;
                     

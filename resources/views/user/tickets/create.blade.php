@@ -70,29 +70,45 @@
             </style>
 
             <div class="row">
-                <!-- Vendor -->
-                <div class="col-md-6 form-group">
-                    <label class="glass-label">Select Vendor *</label>
-                    <select name="vendor_id" class="glass-input" required>
-                        <option value="" disabled selected>Select a vendor to message</option>
-                        @foreach($vendors as $vendor)
-                            <option value="{{ $vendor->id }}" {{ old('vendor_id') == $vendor->id ? 'selected' : '' }}>{{ $vendor->company_name ?: $vendor->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
+                @if(auth()->user()->vendor_id)
+                    <input type="hidden" name="vendor_id" value="{{ auth()->user()->vendor_id }}">
+                    <!-- Category / Department -->
+                    <div class="col-md-12 form-group">
+                        <label class="glass-label">Department / Category *</label>
+                        <select name="category" class="glass-input" required>
+                            <option value="" disabled selected>Select Department</option>
+                            <option value="Business" {{ old('category') == 'Business' ? 'selected' : '' }}>Business</option>
+                            <option value="Technical" {{ old('category') == 'Technical' ? 'selected' : '' }}>Technical</option>
+                            <option value="Booking" {{ old('category') == 'Booking' ? 'selected' : '' }}>Booking</option>
+                            <option value="Payment" {{ old('category') == 'Payment' ? 'selected' : '' }}>Payment</option>
+                            <option value="General Support" {{ old('category') == 'General Support' ? 'selected' : '' }}>General Support</option>
+                        </select>
+                    </div>
+                @else
+                    <!-- Vendor -->
+                    <div class="col-md-6 form-group">
+                        <label class="glass-label">Select Vendor *</label>
+                        <select name="vendor_id" class="glass-input" required>
+                            <option value="" disabled selected>Select a vendor to message</option>
+                            @foreach($vendors as $vendor)
+                                <option value="{{ $vendor->id }}" {{ old('vendor_id') == $vendor->id ? 'selected' : '' }}>{{ $vendor->company_name ?: $vendor->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
-                <!-- Category / Department -->
-                <div class="col-md-6 form-group">
-                    <label class="glass-label">Department / Category *</label>
-                    <select name="category" class="glass-input" required>
-                        <option value="" disabled selected>Select Department</option>
-                        <option value="Business" {{ old('category') == 'Business' ? 'selected' : '' }}>Business</option>
-                        <option value="Technical" {{ old('category') == 'Technical' ? 'selected' : '' }}>Technical</option>
-                        <option value="Booking" {{ old('category') == 'Booking' ? 'selected' : '' }}>Booking</option>
-                        <option value="Payment" {{ old('category') == 'Payment' ? 'selected' : '' }}>Payment</option>
-                        <option value="General Support" {{ old('category') == 'General Support' ? 'selected' : '' }}>General Support</option>
-                    </select>
-                </div>
+                    <!-- Category / Department -->
+                    <div class="col-md-6 form-group">
+                        <label class="glass-label">Department / Category *</label>
+                        <select name="category" class="glass-input" required>
+                            <option value="" disabled selected>Select Department</option>
+                            <option value="Business" {{ old('category') == 'Business' ? 'selected' : '' }}>Business</option>
+                            <option value="Technical" {{ old('category') == 'Technical' ? 'selected' : '' }}>Technical</option>
+                            <option value="Booking" {{ old('category') == 'Booking' ? 'selected' : '' }}>Booking</option>
+                            <option value="Payment" {{ old('category') == 'Payment' ? 'selected' : '' }}>Payment</option>
+                            <option value="General Support" {{ old('category') == 'General Support' ? 'selected' : '' }}>General Support</option>
+                        </select>
+                    </div>
+                @endif
             </div>
 
             <!-- Subject -->

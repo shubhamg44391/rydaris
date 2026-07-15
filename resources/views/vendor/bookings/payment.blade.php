@@ -69,8 +69,8 @@
                             <td style="white-space: nowrap;">
                                 {{ $booking->vehicle->name ?? 'N/A' }}
                             </td>
-                            <td style="white-space: nowrap;">
-                                {{ $booking->payment_method ?? 'N/A' }}
+                            <td style="white-space: nowrap; text-transform: capitalize;">
+                                {{ $booking->payment_method_label }}
                             </td>
                             <td style="white-space: nowrap; font-weight: bold; color: #52ead2;">
                                 ₹{{ number_format($booking->total_amount, 2) }}

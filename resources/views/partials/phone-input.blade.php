@@ -21,7 +21,7 @@
     .iti__country-name { display: none !important; }
     .iti__dial-code { margin-left: 8px !important; font-weight: 600 !important; color: #fff !important; }
     .iti__country { display: flex !important; align-items: center !important; padding: 8px 12px !important; gap: 4px !important; }
-    #custom_pkg_phone, #reg_phone { padding-left: 115px !important; }
+    #custom_pkg_phone, #reg_phone, #demo_inquiry_phone { padding-left: 115px !important; }
 
     /* Dark Scrollbar overrides */
     .iti__country-list::-webkit-scrollbar {
@@ -71,7 +71,16 @@
                             iti.setCountry(data.country_code.toLowerCase());
                         }
                     })
-                    .catch(() => {});
+                    .catch(() => {
+                        fetch('https://ip-api.com/json')
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data && data.countryCode) {
+                                    iti.setCountry(data.countryCode.toLowerCase());
+                                }
+                            })
+                            .catch(() => {});
+                    });
             }
 
             const form = phoneInputField.closest('form');

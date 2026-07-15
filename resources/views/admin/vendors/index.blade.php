@@ -33,7 +33,7 @@
                 <thead>
                     <tr>
                         <th>S.No</th>
-                        <th>First Name</th>
+                        <th>Full Name</th>
                         <th>Email</th>
                         <th>Country Codes</th>
                         <th>Contact Number</th>
@@ -56,7 +56,10 @@
                         <tr>
                             <td>{{ $startingNumber++ }}</td>
                             <td>
-                                {{ $vendor->first_name ?? $vendor->name }}
+                                <div style="display: flex; flex-direction: column;">
+                                    <span style="font-weight: 600; color: #ffffff;">{{ $vendor->name }}</span>
+                                    <span style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">{{ '@' . ($vendor->username ?? 'N/A') }}</span>
+                                </div>
                             </td>
                             <td>{{ $vendor->email }}</td>
                             <td>
@@ -82,14 +85,14 @@
                                 @php $sub = $vendor->activeSubscription; @endphp
                                 @if($sub && $sub->package)
                                     <div style="display:flex; flex-direction:column; gap:3px;">
-                                        <span style="display:inline-flex; align-items:center; gap:5px; background: rgba(82,234,210,0.12); color: var(--brand,#52ead2); border: 1px solid rgba(82,234,210,0.3); border-radius: 20px; padding: 3px 10px; font-size:0.78rem; font-weight:700; width:fit-content;">
+                                        <span style="display:inline-flex; align-items:center; gap:5px; background: rgba(82,234,210,0.12); color: var(--brand,#52ead2); border: 1px solid rgba(82,234,210,0.3); border-radius: 20px; padding: 3px 10px; font-size:0.78rem; font-weight:700; width:fit-content; white-space: nowrap;">
                                             <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
                                             {{ $sub->package->name }}
                                         </span>
-                                        <span style="font-size:0.72rem; color:#64748b;">Expires: {{ $sub->ends_at->format('d M Y') }}</span>
+                                        <span style="font-size:0.72rem; color:#64748b; white-space: nowrap;">Expires: {{ $sub->ends_at->format('d M Y') }}</span>
                                     </div>
                                 @else
-                                    <span style="background: rgba(100,116,139,0.15); color: #64748b; border: 1px solid rgba(100,116,139,0.25); border-radius: 20px; padding: 3px 10px; font-size:0.78rem; font-weight:600;">No Active Plan</span>
+                                    <span style="background: rgba(100,116,139,0.15); color: #64748b; border: 1px solid rgba(100,116,139,0.25); border-radius: 20px; padding: 3px 10px; font-size:0.78rem; font-weight:600; white-space: nowrap;">No Active Plan</span>
                                 @endif
                             </td>
                             <td>
@@ -108,12 +111,18 @@
                                     @endphp
                                     <button type="button" class="icon-button view-vendor-btn" title="View Details"
                                         data-id="{{ $vendor->id }}"
-                                        data-name="{{ ($vendor->first_name ?? $vendor->name) . ' ' . $vendor->name }}"
+                                        data-name="{{ $vendor->name }}"
+                                        data-username="{{ $vendor->username ?? 'N/A' }}"
                                         data-email="{{ $vendor->email }}"
                                         data-phone="{{ ($vendor->country_code ?? '') . ' ' . ($vendor->contact_number ?? 'N/A') }}"
                                         data-status="{{ $vendor->status }}"
                                         data-company="{{ $vendor->company_name ?? 'N/A' }}"
                                         data-joined="{{ $vendor->created_at->format('d M Y') }}"
+                                        data-address="{{ $vendor->street_address ?? 'N/A' }}"
+                                        data-landmark="{{ $vendor->landmark ?? 'N/A' }}"
+                                        data-city="{{ $vendor->city ?? 'N/A' }}"
+                                        data-pincode="{{ $vendor->pincode ?? 'N/A' }}"
+                                        data-country="{{ $vendor->country ?? 'N/A' }}"
                                         data-subs='{{ json_encode($vendorSubsData) }}'>
                                         <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                                     </button>
@@ -167,7 +176,8 @@
                 <div style="width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg, var(--brand,#52ead2), #2bc2a8); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1rem; color:#050711;" id="panelAvatar">V</div>
                 <div>
                     <div id="panelName" style="font-weight:700; font-size:1rem; color:#f8fafc;">Vendor Name</div>
-                    <div id="panelStatus" style="font-size:0.75rem;"></div>
+                    <div id="panelHeaderUsername" style="font-size:0.78rem; color:#64748b; margin-top:2px;"></div>
+                    <div id="panelStatus" style="font-size:0.75rem; margin-top:4px;"></div>
                 </div>
             </div>
             <button onclick="closeVendorPanel()" style="background:none; border:none; color:#94a3b8; font-size:1.4rem; cursor:pointer; line-height:1;">&times;</button>
@@ -190,8 +200,42 @@
                     <span id="panelCompany" style="color:#f1f5f9; font-size:0.83rem; font-weight:600;"></span>
                 </div>
                 <div style="display:flex; justify-content:space-between; padding:10px 14px; background:rgba(255,255,255,0.03); border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
+                    <span style="color:#94a3b8; font-size:0.83rem;">Username</span>
+                    <span id="panelUsername" style="color:#f1f5f9; font-size:0.83rem; font-weight:600;"></span>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding:10px 14px; background:rgba(255,255,255,0.03); border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
                     <span style="color:#94a3b8; font-size:0.83rem;">Joined</span>
                     <span id="panelJoined" style="color:#f1f5f9; font-size:0.83rem; font-weight:600;"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Divider -->
+        <div style="margin:0 24px; height:1px; background:rgba(255,255,255,0.07);"></div>
+
+        <!-- Address Section -->
+        <div style="padding:20px 24px;">
+            <p style="font-size:0.7rem; font-weight:700; color:#52ead2; text-transform:uppercase; letter-spacing:1px; margin-bottom:12px;">Address Details</p>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <div style="display:flex; justify-content:space-between; padding:10px 14px; background:rgba(255,255,255,0.03); border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
+                    <span style="color:#94a3b8; font-size:0.83rem;">Street Address</span>
+                    <span id="panelAddress" style="color:#f1f5f9; font-size:0.83rem; font-weight:600;"></span>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding:10px 14px; background:rgba(255,255,255,0.03); border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
+                    <span style="color:#94a3b8; font-size:0.83rem;">Landmark</span>
+                    <span id="panelLandmark" style="color:#f1f5f9; font-size:0.83rem; font-weight:600;"></span>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding:10px 14px; background:rgba(255,255,255,0.03); border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
+                    <span style="color:#94a3b8; font-size:0.83rem;">City</span>
+                    <span id="panelCity" style="color:#f1f5f9; font-size:0.83rem; font-weight:600;"></span>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding:10px 14px; background:rgba(255,255,255,0.03); border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
+                    <span style="color:#94a3b8; font-size:0.83rem;">Pincode</span>
+                    <span id="panelPincode" style="color:#f1f5f9; font-size:0.83rem; font-weight:600;"></span>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding:10px 14px; background:rgba(255,255,255,0.03); border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
+                    <span style="color:#94a3b8; font-size:0.83rem;">Country</span>
+                    <span id="panelCountry" style="color:#f1f5f9; font-size:0.83rem; font-weight:600;"></span>
                 </div>
             </div>
         </div>
@@ -271,6 +315,7 @@
                 // Populate header
                 document.getElementById('panelAvatar').innerText = (d.name || 'V').charAt(0).toUpperCase();
                 document.getElementById('panelName').innerText = d.name;
+                document.getElementById('panelHeaderUsername').innerText = d.username ? '@' + d.username : '';
                 const statusEl = document.getElementById('panelStatus');
                 if (d.status === 'active') {
                     statusEl.innerHTML = '<span style="color:#22c55e; font-weight:600;">● Active</span>';
@@ -282,7 +327,13 @@
                 document.getElementById('panelEmail').innerText   = d.email   || 'N/A';
                 document.getElementById('panelPhone').innerText   = d.phone   || 'N/A';
                 document.getElementById('panelCompany').innerText = d.company || 'N/A';
+                document.getElementById('panelUsername').innerText= d.username ? '@' + d.username : 'N/A';
                 document.getElementById('panelJoined').innerText  = d.joined  || 'N/A';
+                document.getElementById('panelAddress').innerText = d.address || 'N/A';
+                document.getElementById('panelLandmark').innerText= d.landmark|| 'N/A';
+                document.getElementById('panelCity').innerText    = d.city    || 'N/A';
+                document.getElementById('panelPincode').innerText = d.pincode || 'N/A';
+                document.getElementById('panelCountry').innerText = d.country || 'N/A';
 
                 // Populate package history
                 const pkgContainer = document.getElementById('panelPackages');

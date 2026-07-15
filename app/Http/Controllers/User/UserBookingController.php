@@ -164,10 +164,13 @@ class UserBookingController extends Controller
         // Fetch vendor's payment gateway settings
         $paymentSettings = \App\Models\VendorPaymentSetting::where('vendor_id', $vehicle->vendor_id)->first();
 
+        // Fetch vendor's Terms & Conditions
+        $vendorTC = \App\Models\VendorPage::where('vendor_id', $vehicle->vendor_id)->first();
+
         return view('user.booking.payment', compact(
             'vehicle', 'rentalDays', 'pickupDate', 'returnDate', 'pickupTime', 'returnTime',
             'pickupLocation', 'returnLocation', 'selectedInsurance', 'selectedExtras',
-            'insuranceTotal', 'extrasTotal', 'grandTotal', 'paymentSettings'
+            'insuranceTotal', 'extrasTotal', 'grandTotal', 'paymentSettings', 'vendorTC'
         ));
     }
 
@@ -256,7 +259,12 @@ class UserBookingController extends Controller
 
     public function store(Request $request, $vehicle_id)
     {
-        $vehicle = Vehicle::findOrFail($vehicle_id);
+        $vehicle = Vehicle::with(['vendor'])->findOrFail($vehicle_id);
+
+        $vendor = $vehicle->vendor;
+        if ($vendor && !$vendor->canAcceptBookings()) {
+            return back()->with('error', 'This vehicle cannot be booked at this moment because the vendor has reached their subscription booking limit.');
+        }
 
         $reservationNumber = 'DCR' . mt_rand(10000, 99999);
 
@@ -514,8 +522,36 @@ class UserBookingController extends Controller
         ]);
 
         // Calculate Days
-        $pDate = \Carbon\Carbon::createFromFormat('Y-m-d', $request->input('pickup_date'));
-        $rDate = \Carbon\Carbon::createFromFormat('Y-m-d', $request->input('return_date'));
+        $pickupDate = $request->input('pickup_date');
+        $returnDate = $request->input('return_date');
+        
+        $pDate = null;
+        $rDate = null;
+        
+        foreach (['Y-m-d', 'd/m/Y', 'd-m-Y'] as $format) {
+            try {
+                if (!$pDate) $pDate = \Carbon\Carbon::createFromFormat($format, $pickupDate);
+            } catch (\Exception $e) {}
+            try {
+                if (!$rDate) $rDate = \Carbon\Carbon::createFromFormat($format, $returnDate);
+            } catch (\Exception $e) {}
+        }
+        
+        if (!$pDate) {
+            try {
+                $pDate = \Carbon\Carbon::parse($pickupDate);
+            } catch (\Exception $e) {
+                $pDate = \Carbon\Carbon::now();
+            }
+        }
+        if (!$rDate) {
+            try {
+                $rDate = \Carbon\Carbon::parse($returnDate);
+            } catch (\Exception $e) {
+                $rDate = \Carbon\Carbon::now()->addDays(2);
+            }
+        }
+        
         $diff = $pDate->diffInDays($rDate);
         $rentalDays = $diff > 0 ? $diff : 1;
 
@@ -752,5 +788,14 @@ class UserBookingController extends Controller
         }
 
         return redirect()->route('user.bookings.payment-page', $booking->id)->with('success', $msg);
+    }
+
+    public function invoice($id)
+    {
+        $booking = \App\Models\Booking::with(['vehicle.vendor', 'pickupLocation', 'returnLocation', 'extras.vendorExtra'])
+            ->where('user_id', auth()->id())
+            ->findOrFail($id);
+
+        return view('partials.booking-invoice', compact('booking'));
     }
 }

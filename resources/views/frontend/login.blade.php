@@ -173,7 +173,7 @@
                             </div>
                         @endif
 
-                        <form method="POST" action="{{ route('login') }}">
+                        <form method="POST" action="{{ route('user.login') }}">
                             @csrf
                             <input type="hidden" name="redirect_to" value="{{ request('redirect_to') }}">
                             <!-- Email Address -->
@@ -191,6 +191,7 @@
                             <div class="mb-3 form-password-toggle">
                                 <div class="d-flex justify-content-between align-items-baseline">
                                     <label class="form-label" for="password">Password</label>
+                                    <a href="#" onclick="showForgotPasswordAlert(event)" style="font-size: 0.8rem; font-weight: 500;">Forgot Password?</a>
                                 </div>
                                 <div class="input-group input-group-merge">
                                     <input id="password" class="form-control" type="password" name="password" required
@@ -220,22 +221,32 @@
                             </div>
                         </form>
 
-                        <p class="text-center mt-3 mb-0">
-                            <span>New to Rydaris?</span>
-                            <a href="{{ route('vendor.register') }}">
-                                <span>Create an account</span>
-                            </a>
-                        </p>
-
+                        <!-- No switcher links -->
 
                     </div>
                 </div>
-                <!-- /Register -->
             </div>
         </div>
     </div>
 
     <!-- / Content -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function showForgotPasswordAlert(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Forgot Password?',
+                html: '<p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.5; margin: 0;">To reset your customer account password, please contact our support team at <a href="mailto:sales@rydaris.com" style="color: #52ead2; font-weight: 600;">sales@rydaris.com</a> or speak with your rental manager.</p>',
+                background: '#0b1020',
+                color: '#f8fafc',
+                confirmButtonColor: '#52ead2',
+                confirmButtonText: 'Got it',
+                customClass: {
+                    popup: 'swal2-popup'
+                }
+            });
+        }
+    </script>
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
     <script src="{{asset('assets/admin/vendor/libs/jquery/jquery.js')}}"></script>

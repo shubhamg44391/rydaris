@@ -1,9 +1,12 @@
 <nav class="admin-nav">
+    @if(auth()->user()->activeSubscription)
     <a class="{{ Request::is('vendor/dashboard*') ? 'active' : '' }}" href="{{ route('vendor.dashboard') }}">
         <svg viewBox="0 0 24 24"><path d="M3 3h7v7H3Z"/><path d="M14 3h7v7h-7Z"/><path d="M14 14h7v7h-7Z"/><path d="M3 14h7v7H3Z"/></svg> Dashboard
     </a>
+    @endif
     
     <!-- Bookings Menu -->
+    @if(auth()->user()->hasMenuAccess('booking'))
     <div class="admin-nav-group">
         <button type="button" class="nav-toggle {{ Request::is('vendor/bookings*') ? 'active' : '' }}" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; width: 100%; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); background: transparent; border: none; cursor: pointer; {{ Request::is('vendor/bookings*') ? 'color: #f8fafc; font-weight: bold;' : 'color: #aab7cb; font-weight: 780;' }} font-size: 0.92rem; transition: background 0.2s;">
             <span style="display: flex; align-items: center; gap: 10px;">
@@ -46,9 +49,10 @@
             </a>
         </div>
     </div>
-
-    @if(auth()->user()->activeSubscription)
+    @endif
+ 
     <!-- Vehicles Parent Menu with Custom JavaScript Toggle -->
+    @if(auth()->user()->hasMenuAccess('vehicles'))
     <div class="admin-nav-group">
         <a href="javascript:void(0);" class="nav-toggle" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ (Request::is('vendor/groups*') || Request::is('vendor/vehicles*')) ? 'color: #f8fafc; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb;' }} font-size: 0.92rem; font-weight: 780; transition: background 0.2s;">
             <span style="display: flex; align-items: center; gap: 10px;">
@@ -64,7 +68,7 @@
         <div class="admin-submenu" style="{{ (Request::is('vendor/groups*') || Request::is('vendor/vehicles*')) ? 'display: flex;' : 'display: none;' }} padding-left: 20px; margin-top: 4px; flex-direction: column; gap: 4px;">
             <a href="{{ route('vendor.groups.index') }}" class="submenu-item {{ Request::is('vendor/groups*') ? 'active' : '' }}" style="{{ Request::is('vendor/groups*') ? 'color: var(--brand, #52ead2) !important; font-weight: bold; background: rgba(255, 255, 255, 0.04) !important;' : '' }}">
                 <span class="dot" style="{{ Request::is('vendor/groups*') ? 'background: var(--brand, #52ead2) !important;' : '' }}"></span>
-                Vehicle Group
+                Vehicle Group / Acriss Code
             </a>
             <a href="{{ route('vendor.vehicles.index') }}" class="submenu-item {{ (Request::is('vendor/vehicles*') && !Request::is('vendor/vehicles/create')) ? 'active' : '' }}" style="{{ (Request::is('vendor/vehicles*') && !Request::is('vendor/vehicles/create')) ? 'color: var(--brand, #52ead2) !important; font-weight: bold; background: rgba(255, 255, 255, 0.04) !important;' : '' }}">
                 <span class="dot" style="{{ (Request::is('vendor/vehicles*') && !Request::is('vendor/vehicles/create')) ? 'background: var(--brand, #52ead2) !important;' : '' }}"></span>
@@ -76,20 +80,22 @@
             </a>
         </div>
     </div>
-
+    @endif
+ 
     <!-- Locations Menu -->
+    @if(auth()->user()->hasMenuAccess('locations'))
     <div class="admin-nav-group">
         <a href="javascript:void(0);" class="nav-toggle" onclick="toggleSubmenu(this)"
-           style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ Request::is('vendor/locations*') ? 'color: #f8fafc; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb;' }} font-size: 0.92rem; font-weight: 780; transition: background 0.2s;">
+           style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ Request::is('vendor/locations*') || Request::is('vendor/branches*') ? 'color: #f8fafc; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb;' }} font-size: 0.92rem; font-weight: 780; transition: background 0.2s;">
             <span style="display: flex; align-items: center; gap: 10px;">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
                 </svg>Locations
             </span>
-            <svg class="chevron" viewBox="0 0 24 24" style="width: 14px; height: 14px; transition: transform 0.2s ease; {{ Request::is('vendor/locations*') ? 'transform: rotate(180deg);' : '' }}"><path d="m6 9 6 6 6-6"/></svg>
+            <svg class="chevron" viewBox="0 0 24 24" style="width: 14px; height: 14px; transition: transform 0.2s ease; {{ Request::is('vendor/locations*') || Request::is('vendor/branches*') ? 'transform: rotate(180deg);' : '' }}"><path d="m6 9 6 6 6-6"/></svg>
         </a>
         <div class="admin-submenu"
-             style="{{ Request::is('vendor/locations*') ? 'display: flex;' : 'display: none;' }} padding-left: 20px; margin-top: 4px; flex-direction: column; gap: 4px;">
+             style="{{ Request::is('vendor/locations*') || Request::is('vendor/branches*') ? 'display: flex;' : 'display: none;' }} padding-left: 20px; margin-top: 4px; flex-direction: column; gap: 4px;">
             <a href="{{ route('vendor.locations.index') }}"
                class="submenu-item {{ (Request::is('vendor/locations*') && !Request::is('vendor/locations/create')) ? 'active' : '' }}"
                style="{{ (Request::is('vendor/locations*') && !Request::is('vendor/locations/create')) ? 'color: var(--brand, #52ead2) !important; font-weight: bold; background: rgba(255, 255, 255, 0.04) !important;' : '' }}">
@@ -102,10 +108,18 @@
                 <span class="dot" style="{{ Request::is('vendor/locations/create') ? 'background: var(--brand, #52ead2) !important;' : '' }}"></span>
                 Add Location
             </a>
+            <a href="{{ route('vendor.branches.index') }}"
+               class="submenu-item {{ Request::is('vendor/branches*') ? 'active' : '' }}"
+               style="{{ Request::is('vendor/branches*') ? 'color: var(--brand, #52ead2) !important; font-weight: bold; background: rgba(255, 255, 255, 0.04) !important;' : '' }}">
+                <span class="dot" style="{{ Request::is('vendor/branches*') ? 'background: var(--brand, #52ead2) !important;' : '' }}"></span>
+                Branch List
+            </a>
         </div>
     </div>
-
+    @endif
+ 
     <!-- Customers Dropdown -->
+    @if(auth()->user()->hasMenuAccess('customers'))
     <div class="admin-nav-group">
         <a href="javascript:void(0);" class="nav-toggle" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ (Request::is('vendor/customers*') || Request::is('vendor/invitations*')) ? 'color: #f8fafc; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb;' }} font-size: 0.92rem; font-weight: 780; transition: background 0.2s;">
             <span style="display: flex; align-items: center; gap: 10px;">
@@ -129,8 +143,10 @@
             </a>
         </div>
     </div>
-
+    @endif
+ 
     <!-- Fleet Management Menu -->
+    @if(auth()->user()->hasMenuAccess('fleet_management'))
     <div class="admin-nav-group">
         <a href="{{ route('vendor.availability.index') }}" class="nav-toggle {{ Request::is('vendor/availability*') ? 'active' : '' }}"
            style="justify-content: flex-start; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ Request::is('vendor/availability*') ? 'color: var(--brand, #52ead2); font-weight: bold; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb; font-weight: 780;' }} font-size: 0.92rem; transition: background 0.2s;">
@@ -143,8 +159,10 @@
             </span>
         </a>
     </div>
-
+    @endif
+ 
     <!-- Extras Menu -->
+    @if(auth()->user()->hasMenuAccess('extras'))
     <div class="admin-nav-group">
         <a href="javascript:void(0);" class="nav-toggle" onclick="toggleSubmenu(this)"
            style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ (Request::is('vendor/extras*') || Request::is('vendor/insurance*') || Request::is('vendor/features*') || Request::is('vendor/rules*')) ? 'color: #f8fafc; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb;' }} font-size: 0.92rem; font-weight: 780; transition: background 0.2s;">
@@ -184,9 +202,9 @@
         </div>
     </div>
     @endif
-
-    @if(Auth::user()->hasCouponFeature())
+ 
     <!-- Coupons Menu -->
+    @if(auth()->user()->hasMenuAccess('coupons'))
     <div class="admin-nav-group">
         <a href="{{ route('vendor.coupons.index') }}" class="nav-toggle {{ Request::is('vendor/coupons*') ? 'active' : '' }}"
            style="justify-content: flex-start; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ Request::is('vendor/coupons*') ? 'color: var(--brand, #52ead2); font-weight: bold; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb; font-weight: 780;' }} font-size: 0.92rem; transition: background 0.2s;">
@@ -200,8 +218,9 @@
         </a>
     </div>
     @endif
-
+ 
     <!-- Support Ticket -->
+    @if(auth()->user()->hasMenuAccess('support_ticket'))
     <div class="admin-nav-group">
         <a href="{{ route('vendor.support-tickets.index') }}" class="nav-toggle {{ Request::is('vendor/support-tickets*') ? 'active' : '' }}"
            style="justify-content: flex-start; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ Request::is('vendor/support-tickets*') ? 'color: var(--brand, #52ead2); font-weight: bold; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb; font-weight: 780;' }} font-size: 0.92rem; transition: background 0.2s;">
@@ -213,7 +232,8 @@
             </span>
         </a>
     </div>
-
+    @endif
+ 
     {{-- Subscription / Pricing Menu --}}
     <div class="admin-nav-group">
         <a href="javascript:void(0);" class="nav-toggle" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ (Request::is('vendor/pricing*') || Request::is('vendor/subscription*')) ? 'color: #f8fafc; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb;' }} font-size: 0.92rem; font-weight: 780; transition: background 0.2s;">
@@ -235,8 +255,29 @@
             </a>
         </div>
     </div>
+ 
+    <!-- Terms & Conditions Menu -->
+    @if(auth()->user()->activeSubscription)
+    <div class="admin-nav-group">
+        <a href="{{ route('vendor.pages.index') }}" class="nav-toggle {{ Request::is('vendor/terms-conditions*') ? 'active' : '' }}"
+           style="justify-content: flex-start; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ Request::is('vendor/terms-conditions*') ? 'color: var(--brand, #52ead2); font-weight: bold; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb; font-weight: 780;' }} font-size: 0.92rem; transition: background 0.2s;">
+            <span style="display: flex; align-items: center; gap: 10px;">
+                <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                    <polyline points="10 9 9 9 8 9"/>
+                </svg>
+                Terms & Conditions
+            </span>
+        </a>
+    </div>
+    @endif
 
     <!-- Settings Menu -->
+
+    @if(auth()->user()->hasMenuAccess('settings'))
     <div class="admin-nav-group">
         <a href="javascript:void(0);" class="nav-toggle" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ (Request::is('vendor/profile*') || Request::is('vendor/payment-settings*') || Request::is('vendor/smtp-settings*')) ? 'color: #f8fafc; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb;' }} font-size: 0.92rem; font-weight: 780; transition: background 0.2s;">
             <span style="display: flex; align-items: center; gap: 10px;">
@@ -262,6 +303,7 @@
             </a>
         </div>
     </div>
+    @endif
 </nav>
 
 <style>

@@ -4,10 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>@yield('title', 'Rydaris | Car Rental Management System')</title>
+  @yield('meta_description')
   <link rel="shortcut icon" type="image/png" href="{{ asset('assets/logo/favicon.png') }}">
-  <link rel="stylesheet" href="{{ asset('assets/styles.css') }}">
+  <link rel="stylesheet" href="{{ asset('assets/styles.css') }}?v={{ time() }}">
 </head>
 <body>
+  @include('partials.preloader')
   <div class="site-shell">
     <header class="site-header">
       <nav class="nav" aria-label="Main navigation">
@@ -38,6 +40,7 @@
         </div>
 
         <div class="nav-actions desktop-nav">
+          <button type="button" class="btn primary" onclick="openDemoInquiryModal()" style="margin-right: 10px; border: none; cursor: pointer; font-family: inherit;">Site Demo</button>
           @auth
             {{-- User Avatar Dropdown --}}
             <div class="user-avatar-wrap" id="userAvatarWrap" style="position: relative; display: flex; align-items: center; cursor: pointer; user-select: none;" onclick="toggleUserDropdown()">
@@ -109,6 +112,7 @@
           <a class="{{ request()->is('contact') ? 'active' : '' }}" href="{{ route('contact') }}">Contact Us</a>
         </div>
         <div class="mobile-nav-actions">
+          <button type="button" class="btn primary" onclick="openDemoInquiryModal()" style="width: 100%; text-align: center; margin-bottom: 10px; border: none; cursor: pointer; font-family: inherit;">Site Demo</button>
           @auth
             <div style="display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 10px;">
               <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #52ead2, #3bb8a0); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; color: #0b1020; flex-shrink: 0;">

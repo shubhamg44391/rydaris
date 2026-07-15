@@ -11,6 +11,7 @@ class PickupLocation extends Model
 
     protected $fillable = [
         'vendor_id',
+        'branch_id',
         'type',
         'location',
         'price',
@@ -32,6 +33,14 @@ class PickupLocation extends Model
     public function vendor()
     {
         return $this->belongsTo(User::class, 'vendor_id');
+    }
+
+    /**
+     * The branch associated with this location.
+     */
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
     }
 
     /**

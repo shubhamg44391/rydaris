@@ -17,6 +17,9 @@ class CouponController extends Controller
 
     public function create()
     {
+        if (!Auth::user()->canAddCoupon()) {
+            return redirect()->route('vendor.coupons.index')->with('error', 'You have reached your coupon limit for your current subscription package.');
+        }
         return view('vendor.coupons.create');
     }
 

@@ -141,8 +141,9 @@
         }
         
         // Build Header
-        let hHtml = '<th>Pickup Date</th><th>ACRISS / VEHICLE</th>';
+        let hHtml = '<th style="background-color: #0b1020 !important;">Pickup Date</th><th style="background-color: #0b1020 !important;">ACRISS / VEHICLE</th>';
         for(let i=1; i<=daysCount; i++) {
+
             hHtml += `<th>Day ${i}</th>`;
         }
         thead.innerHTML = hHtml;
@@ -179,11 +180,12 @@
                     bHtml += `<tr class="row-group ${altRow ? 'alt' : ''}">`;
                     
                     if (isFirstRowForDate) {
-                        bHtml += `<td class="sticky-date" rowspan="${totalRowsForDate}" style="vertical-align: top; padding-top: 20px;">${date}</td>`;
+                        bHtml += `<td class="sticky-date" rowspan="${totalRowsForDate}" style="vertical-align: top; padding-top: 20px; background-color: #0b1020 !important;">${date}</td>`;
                         isFirstRowForDate = false;
                     }
                     
-                    bHtml += `<td class="sticky-group">[G] ${group.name}</td>`;
+                    const groupBg = altRow ? '#141b2b' : '#27141f';
+                    bHtml += `<td class="sticky-group" style="background-color: ${groupBg} !important;">[G] ${group.name}</td>`;
                     
                     for(let i=1; i<=daysCount; i++) {
                         const price = gRates[i] ? gRates[i].price.toFixed(2) : '0.00';
@@ -202,11 +204,11 @@
                     bHtml += `<tr class="row-vehicle">`;
                     
                     if (isFirstRowForDate && (typeof filterVehicleId !== 'undefined' && filterVehicleId)) {
-                        bHtml += `<td class="sticky-date" rowspan="${totalRowsForDate}" style="vertical-align: top; padding-top: 20px;">${date}</td>`;
+                        bHtml += `<td class="sticky-date" rowspan="${totalRowsForDate}" style="vertical-align: top; padding-top: 20px; background-color: #0b1020 !important;">${date}</td>`;
                         isFirstRowForDate = false;
                     }
 
-                    bHtml += `<td class="sticky-group">&bull; ${vehicle.name}</td>`;
+                    bHtml += `<td class="sticky-group" style="background-color: #251e12 !important;">&bull; ${vehicle.name}</td>`;
                     
                     for(let i=1; i<=daysCount; i++) {
                         const price = vRates[i] ? vRates[i].price.toFixed(2) : (gRates[i] ? gRates[i].price.toFixed(2) : '0.00');
@@ -215,6 +217,7 @@
                     }
                     bHtml += '</tr>';
                 });
+
                 
                 altRow = !altRow;
             });

@@ -70,6 +70,46 @@
                 color: #ffffff !important;
                 font-weight: 600 !important;
             }
+            
+            /* Chart dynamic column adjustments */
+            .chart-bars {
+                grid-template-columns: repeat({{ count($monthlyRevenue) }}, minmax(20px, 1fr)) !important;
+                margin-bottom: 24px !important;
+            }
+            .bar::after {
+                content: attr(data-month) !important;
+                white-space: nowrap !important;
+                bottom: -28px !important;
+                font-size: 0.72rem !important;
+                color: #a8b3c5 !important;
+            }
+            
+            /* Theme cohesive dropdown and date pickers */
+            #rangeSelect {
+                background: #0b1020 !important;
+                border: 1px solid rgba(82, 234, 210, 0.25) !important;
+                color: #ffffff !important;
+                padding: 8px 16px !important;
+                border-radius: 8px !important;
+                font-size: 0.85rem !important;
+                cursor: pointer;
+                outline: none;
+                font-family: inherit;
+            }
+            #rangeSelect option {
+                background: #050711 !important;
+                color: #ffffff !important;
+            }
+            .filter-controls input[type="month"] {
+                background: #0b1020 !important;
+                border: 1px solid rgba(82, 234, 210, 0.25) !important;
+                color: #ffffff !important;
+                padding: 6px 12px !important;
+                border-radius: 8px !important;
+                font-size: 0.82rem !important;
+                outline: none;
+                color-scheme: dark;
+            }
         </style>
 
         <section id="overview" class="admin-hero">
@@ -147,9 +187,28 @@
         <!-- Charts Grid Section for Vendor -->
         <section id="analytics" class="admin-grid" style="margin-bottom: 22px;">
           <article class="admin-panel">
-            <div class="panel-head">
-              <div><h2>Rental volume</h2><p class="panel-muted">Total booking requests and active vehicle utilization by month.</p></div>
-              <div class="section-tabs" aria-label="Chart range"><button class="active">12M</button></div>
+            <div class="panel-head" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+              <div>
+                <h2>Rental volume</h2>
+                <p class="panel-muted">Total booking requests and active vehicle utilization by month.</p>
+              </div>
+              <div class="filter-controls" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <form method="GET" action="{{ route('vendor.dashboard') }}" id="filterForm" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 0;">
+                  <select name="range" id="rangeSelect" onchange="handleRangeChange(this.value)" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; outline: none; cursor: pointer; font-family: inherit;">
+                    <option value="3" {{ request('range') == '3' ? 'selected' : '' }}>3 Months</option>
+                    <option value="6" {{ request('range') == '6' ? 'selected' : '' }}>6 Months</option>
+                    <option value="12" {{ request('range') == '12' || !request('range') ? 'selected' : '' }}>12 Months</option>
+                    <option value="custom" {{ request('range') == 'custom' ? 'selected' : '' }}>Custom Range</option>
+                  </select>
+
+                  <div id="customDatesWrapper" style="display: {{ request('range') == 'custom' ? 'flex' : 'none' }}; align-items: center; gap: 6px;">
+                    <input type="month" name="start_month" value="{{ request('start_month') }}" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 5px 8px; border-radius: 6px; font-size: 0.8rem; outline: none;" required>
+                    <span style="color: #64748b; font-size: 0.8rem;">to</span>
+                    <input type="month" name="end_month" value="{{ request('end_month') }}" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 5px 8px; border-radius: 6px; font-size: 0.8rem; outline: none;" required>
+                    <button type="submit" style="background: var(--brand, #52ead2); border: none; color: #050711; padding: 6px 12px; border-radius: 6px; font-weight: 600; font-size: 0.8rem; cursor: pointer; transition: opacity 0.2s;">Apply</button>
+                  </div>
+                </form>
+              </div>
             </div>
             <div class="panel-body">
               <div class="chart-bars" aria-label="Monthly booking volume chart">
@@ -221,4 +280,17 @@
             </div>
           </article>
         </section>
+
+        <script>
+            function handleRangeChange(val) {
+                var wrapper = document.getElementById('customDatesWrapper');
+                var form = document.getElementById('filterForm');
+                if (val === 'custom') {
+                    wrapper.style.display = 'flex';
+                } else {
+                    wrapper.style.display = 'none';
+                    form.submit();
+                }
+            }
+        </script>
 @endsection

@@ -144,7 +144,7 @@
                 </span>
             </div>
         </div>
-        <a href="{{ route('user.dashboard') }}" class="btn btn-secondary" style="background: rgba(255,255,255,0.1); border: none; color: #f8fafc;">
+        <a href="{{ route('user.dashboard') }}" class="btn btn-secondary">
             <i class="fa fa-arrow-left me-2"></i> Back to Dashboard
         </a>
     </div>
@@ -282,7 +282,7 @@
                     @php
                         $initialDays = 1;
                         if ($booking->pickup_date && $booking->return_date) {
-                            $diff = \Carbon\Carbon::parse($booking->pickup_date)->diffInDays(\Carbon\Carbon::parse($booking->return_date));
+                            $diff = $booking->pickup_date_parsed->diffInDays($booking->return_date_parsed);
                             $initialDays = $diff > 0 ? $diff : 1;
                         }
                     @endphp

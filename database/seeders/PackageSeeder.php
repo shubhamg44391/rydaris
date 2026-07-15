@@ -48,12 +48,30 @@ class PackageSeeder extends Seeder
                 'order' => 2,
             ],
             [
+                'name' => 'Growth Quarterly',
+                'eyebrow' => 'Quarterly Value',
+                'description' => 'For active rental teams looking for quarterly savings and fleet tracking.',
+                'price' => '$499',
+                'billing_period' => '/ quarter',
+                'features' => [
+                    'Up to 100 vehicles',
+                    'Multi-branch availability',
+                    'Inspection and maintenance logs',
+                    'Revenue and utilization dashboards',
+                    'Priority onboarding support',
+                ],
+                'is_featured' => false,
+                'button_text' => 'Start Growth Quarterly',
+                'order' => 4,
+            ],
+            [
                 'name' => 'Enterprise',
                 'eyebrow' => 'Scale',
                 'description' => 'For regional fleets needing advanced permissions, integrations, and launch support.',
                 'price' => 'Custom',
                 'billing_period' => '',
                 'features' => [
+                    'border limit' => 'Unlimited',
                     'Unlimited fleet bands',
                     'Custom approval workflows',
                     'Accounting and API integrations',
@@ -62,7 +80,7 @@ class PackageSeeder extends Seeder
                 ],
                 'is_featured' => false,
                 'button_text' => 'Talk to Sales',
-                'order' => 3,
+                'order' => 5,
             ],
         ];
 

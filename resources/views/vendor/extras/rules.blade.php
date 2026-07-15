@@ -6,30 +6,35 @@
 
 <style>
 /* Retain modal styles but remove custom table styles */
-.xp-overlay      { display:none; position:fixed; inset:0; background:rgba(15,23,42,.55); z-index:2000; align-items:center; justify-content:center; }
+.xp-overlay      { display:none; position:fixed; inset:0; background:rgba(5, 7, 17, 0.85); backdrop-filter: blur(8px); z-index:2000; align-items:center; justify-content:center; }
 .xp-overlay.open { display:flex; }
-.xp-modal        { background:#fff; border-radius:12px; width:480px; max-width:95vw; max-height:90vh; overflow-y:auto; box-shadow:0 24px 64px rgba(0,0,0,.22); }
-.xp-modal-head   { display:flex; justify-content:space-between; align-items:center; padding:16px 22px; border-bottom:1px solid #f1f5f9; }
-.xp-modal-title  { font-weight:700; font-size:.97rem; color:#1e293b; }
-.xp-modal-x      { background:none; border:none; font-size:1.4rem; cursor:pointer; color:#94a3b8; line-height:1; }
+.xp-modal        { background:#0b1020; border: 1px solid rgba(82, 234, 210, 0.25); border-radius:16px; width:480px; max-width:95vw; max-height:90vh; overflow-y:auto; box-shadow:0 12px 40px rgba(0, 0, 0, 0.5); }
+.xp-modal-head   { display:flex; justify-content:space-between; align-items:center; padding:16px 22px; border-bottom:1px solid rgba(255,255,255,0.05); }
+.xp-modal-title  { font-weight:700; font-size:1.05rem; color:#f8fafc; }
+.xp-modal-x      { background:none; border:none; font-size:1.4rem; cursor:pointer; color:#cbd5e1; line-height:1; }
 .xp-modal-body   { padding:20px 22px; }
-.xp-modal-foot   { display:flex; justify-content:flex-end; gap:10px; padding:14px 22px; border-top:1px solid #f1f5f9; }
+.xp-modal-foot   { display:flex; justify-content:flex-end; gap:10px; padding:14px 22px; border-top:1px solid rgba(255,255,255,0.05); }
 
 .xp-modal .xp-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
 .xp-modal .xp-fg  { margin-bottom:14px; }
-.xp-modal .xp-fg label { display:block !important; font-size:.83rem; font-weight:600; color:#374151; margin-bottom:5px; gap:0 !important; }
+.xp-modal .xp-fg label { display:block !important; font-size:.83rem; font-weight:600; color:#f8fafc; margin-bottom:5px; gap:0 !important; }
 .xp-modal .xp-fg input,
 .xp-modal .xp-fg select {
-    width:100%; padding:8px 12px !important; min-height:unset !important;
-    border:1px solid #cbd5e1 !important; border-radius:6px !important;
-    font-size:.88rem !important; color:#1e293b; outline:none; box-sizing:border-box; background:#fff !important;
+    width:100%; padding:12px !important; min-height:unset !important;
+    border:1px solid rgba(255, 255, 255, 0.15) !important; border-radius:8px !important;
+    font-size:.88rem !important; color:#fff; outline:none; box-sizing:border-box; background:rgba(255, 255, 255, 0.05) !important;
+}
+.xp-modal .xp-fg select option {
+    background-color: #0b1020 !important;
+    color: #f8fafc !important;
 }
 .xp-modal .xp-fg input:focus,
-.xp-modal .xp-fg select:focus { border-color:#3b82f6 !important; outline:none !important; box-shadow:none !important; }
+.xp-modal .xp-fg select:focus { border-color:var(--brand, #52ead2) !important; box-shadow: 0 0 0 3px rgba(82, 234, 210, 0.15) !important; outline:none !important; }
 
-.xp-btn-cancel { background:#fff; border:1px solid #cbd5e1; color:#374151; padding:8px 18px; border-radius:6px; cursor:pointer; font-size:.88rem; }
-.xp-btn-save   { background:#2563eb; color:#fff; border:none; padding:8px 18px; border-radius:6px; cursor:pointer; font-size:.88rem; font-weight:600; }
-.xp-btn-save:hover { background:#1d4ed8; }
+.xp-btn-cancel { background:rgba(255, 255, 255, 0.05); border:1px solid rgba(255, 255, 255, 0.15); color:#cbd5e1; padding:10px 20px; border-radius:8px; cursor:pointer; font-size:.88rem; transition: all 0.2s; }
+.xp-btn-cancel:hover { background:rgba(255, 255, 255, 0.1); }
+.xp-btn-save   { background:var(--brand, #52ead2) !important; color:#050711 !important; border:none; padding:10px 20px; border-radius:8px; cursor:pointer; font-size:.88rem; font-weight:700 !important; box-shadow:0 8px 16px rgba(82, 234, 210, 0.2); transition: all 0.2s; }
+.xp-btn-save:hover { background:#2bc2a8 !important; box-shadow:0 8px 20px rgba(82, 234, 210, 0.3); }
 </style>
 
 <div class="admin-panel">
@@ -257,23 +262,23 @@ function xpDelete(id) {
 function xpView(min, max, charge) {
     document.getElementById('xpViewContent').innerHTML = `
         <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;">
-            <div style="width:50px;height:50px;border-radius:10px;background:#eff6ff;display:flex;align-items:center;justify-content:center;color:#3b82f6;flex-shrink:0;">
+            <div style="width:50px;height:50px;border-radius:10px;background:rgba(82, 234, 210, 0.1);display:flex;align-items:center;justify-content:center;color:var(--brand, #52ead2);flex-shrink:0;">
                 <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
             </div>
-            <div><div style="font-size:1.05rem;font-weight:700;color:#1e293b;">Age ${min} – ${max} Years</div><div style="color:#64748b;font-size:.83rem;">Driver Age Rule</div></div>
+            <div><div style="font-size:1.05rem;font-weight:700;color:#f8fafc;">Age ${min} – ${max} Years</div><div style="color:#a8b3c5;font-size:.83rem;">Driver Age Rule</div></div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
-            <div style="background:#f8fafc;padding:14px;border-radius:8px;text-align:center;">
+            <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);padding:14px;border-radius:8px;text-align:center;">
                 <div style="font-size:.7rem;color:#94a3b8;font-weight:700;text-transform:uppercase;margin-bottom:3px;">Min Age</div>
-                <div style="font-size:1.4rem;font-weight:700;color:#1e293b;">${min}</div>
+                <div style="font-size:1.4rem;font-weight:700;color:#f8fafc;">${min}</div>
             </div>
-            <div style="background:#f8fafc;padding:14px;border-radius:8px;text-align:center;">
+            <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);padding:14px;border-radius:8px;text-align:center;">
                 <div style="font-size:.7rem;color:#94a3b8;font-weight:700;text-transform:uppercase;margin-bottom:3px;">Max Age</div>
-                <div style="font-size:1.4rem;font-weight:700;color:#1e293b;">${max}</div>
+                <div style="font-size:1.4rem;font-weight:700;color:#f8fafc;">${max}</div>
             </div>
-            <div style="background:#fef2f2;padding:14px;border-radius:8px;text-align:center;">
-                <div style="font-size:.7rem;color:#94a3b8;font-weight:700;text-transform:uppercase;margin-bottom:3px;">Charge</div>
-                <div style="font-size:1.4rem;font-weight:700;color:#dc2626;">$${charge}</div>
+            <div style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);padding:14px;border-radius:8px;text-align:center;">
+                <div style="font-size:.7rem;color:#f87171;font-weight:700;text-transform:uppercase;margin-bottom:3px;">Charge</div>
+                <div style="font-size:1.4rem;font-weight:700;color:#ef4444;">$${charge}</div>
             </div>
         </div>
     `;

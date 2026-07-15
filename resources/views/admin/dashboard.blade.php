@@ -51,9 +51,11 @@
                   <polyline points="17 18 23 18 23 12"/>
                 </svg>
               </span>
-              <span class="delta warn">-0.4%</span>
+              <span class="delta {{ $churnDelta <= 0 ? 'good' : 'bad' }}">
+                {{ $churnDelta > 0 ? '+' : '' }}{{ $churnDelta }}%
+              </span>
             </div>
-            <strong>4.2%</strong>
+            <strong>{{ $churnRate }}%</strong>
             <span>gross monthly churn</span>
           </article>
 

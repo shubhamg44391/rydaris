@@ -150,8 +150,8 @@
         font-size: 0.85rem;
     }
     .rate-table th {
-        background: var(--table-head);
-        color: #fff;
+        background: #0b1020 !important;
+        color: #fff !important;
         padding: 12px 10px;
         font-weight: 600;
         position: sticky;
@@ -161,8 +161,9 @@
         text-align: center;
         border-bottom: 2px solid var(--line-dark);
     }
-    .rate-table th:nth-child(1) { left: 0; z-index: 11; width: 100px; }
-    .rate-table th:nth-child(2) { left: 100px; z-index: 11; width: 180px; }
+    .rate-table th:nth-child(1) { left: 0 !important; z-index: 12 !important; width: 100px; background: #0b1020 !important; }
+    .rate-table th:nth-child(2) { left: 100px !important; z-index: 12 !important; width: 180px; background: #0b1020 !important; }
+
 
     .rate-table td {
         padding: 8px 10px;
@@ -357,13 +358,17 @@
     }
     
     .row-group td { background: rgba(225, 29, 72, 0.1) !important; color: #fda4af !important; }
-    .row-group td.sticky-group { background: rgba(225, 29, 72, 0.1) !important; color: #fda4af !important; }
+    .row-group td.sticky-date,
+    .row-group td.sticky-group { background: #1d1217 !important; color: #fda4af !important; }
     
     .row-vehicle td { background: rgba(202, 138, 4, 0.1) !important; color: #fde047 !important; }
-    .row-vehicle td.sticky-group { background: rgba(202, 138, 4, 0.1) !important; color: #fde047 !important; }
+    .row-vehicle td.sticky-date,
+    .row-vehicle td.sticky-group { background: #1a1712 !important; color: #fde047 !important; }
 
     .row-group.alt td { background: rgba(3, 105, 161, 0.1) !important; color: #7dd3fc !important; }
-    .row-group.alt td.sticky-group { background: rgba(3, 105, 161, 0.1) !important; color: #7dd3fc !important; }
+    .row-group.alt td.sticky-date,
+    .row-group.alt td.sticky-group { background: #121822 !important; color: #7dd3fc !important; }
+
 
     .cell-input {
         background: var(--bg-2) !important;

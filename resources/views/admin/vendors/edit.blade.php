@@ -12,12 +12,42 @@
                 @csrf
                 @method('PUT')
 
-                <!-- First Name -->
+                <!-- Names Row -->
+                <div class="row" style="display: flex; gap: 20px; margin-bottom: 24px;">
+                    <div style="flex: 1;">
+                        <label for="first_name" class="form-label-custom">First Name</label>
+                        <input type="text" class="form-control form-input-custom @error('first_name') is-invalid @enderror" id="first_name" name="first_name"
+                            value="{{ old('first_name', $vendor->first_name) }}" required placeholder="Enter first name" style="border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%; background: var(--bg-2); color: var(--text);" />
+                        @error('first_name')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div style="flex: 1;">
+                        <label for="middle_name" class="form-label-custom">Middle Name</label>
+                        <input type="text" class="form-control form-input-custom @error('middle_name') is-invalid @enderror" id="middle_name" name="middle_name"
+                            value="{{ old('middle_name', $vendor->middle_name) }}" placeholder="Enter middle name" style="border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%; background: var(--bg-2); color: var(--text);" />
+                        @error('middle_name')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div style="flex: 1;">
+                        <label for="last_name" class="form-label-custom">Last Name</label>
+                        <input type="text" class="form-control form-input-custom @error('last_name') is-invalid @enderror" id="last_name" name="last_name"
+                            value="{{ old('last_name', $vendor->last_name) }}" required placeholder="Enter last name" style="border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%; background: var(--bg-2); color: var(--text);" />
+                        @error('last_name')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                <!-- Username -->
                 <div class="mb-4">
-                    <label for="first_name" class="form-label-custom">First Name</label>
-                    <input type="text" class="form-control form-input-custom @error('first_name') is-invalid @enderror" id="first_name" name="first_name"
-                        value="{{ old('first_name', $vendor->first_name) }}" required placeholder="Enter first name" style="border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%; background: var(--bg-2); color: var(--text);" />
-                    @error('first_name')
+                    <label for="username" class="form-label-custom">Username</label>
+                    <input type="text" class="form-control form-input-custom @error('username') is-invalid @enderror" id="username" name="username"
+                        value="{{ old('username', $vendor->username) }}" required placeholder="Enter username" style="border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%; background: var(--bg-2); color: var(--text);" />
+                    @error('username')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
@@ -44,6 +74,55 @@
                     @enderror
                     @error('contact_number')
                         <div class="text-danger mt-1 small">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <h3 style="font-size: 1.15rem; font-weight: 600; color: var(--brand); margin-top: 32px; margin-bottom: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 8px;">Address Information</h3>
+
+                <div class="mb-4">
+                    <label for="street_address" class="form-label-custom">Street Address</label>
+                    <input type="text" class="form-control form-input-custom @error('street_address') is-invalid @enderror" id="street_address" name="street_address"
+                        value="{{ old('street_address', $vendor->street_address) }}" required placeholder="Enter street address" style="border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%; background: var(--bg-2); color: var(--text);" />
+                    @error('street_address')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-4">
+                    <label for="landmark" class="form-label-custom">Landmark</label>
+                    <input type="text" class="form-control form-input-custom @error('landmark') is-invalid @enderror" id="landmark" name="landmark"
+                        value="{{ old('landmark', $vendor->landmark) }}" placeholder="Enter landmark (optional)" style="border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%; background: var(--bg-2); color: var(--text);" />
+                    @error('landmark')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div style="display: flex; gap: 20px; margin-bottom: 24px;">
+                    <div style="flex: 1;">
+                        <label for="city" class="form-label-custom">City</label>
+                        <input type="text" class="form-control form-input-custom @error('city') is-invalid @enderror" id="city" name="city"
+                            value="{{ old('city', $vendor->city) }}" required placeholder="City" style="border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%; background: var(--bg-2); color: var(--text);" />
+                        @error('city')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div style="flex: 1;">
+                        <label for="pincode" class="form-label-custom">Pincode</label>
+                        <input type="text" class="form-control form-input-custom @error('pincode') is-invalid @enderror" id="pincode" name="pincode"
+                            value="{{ old('pincode', $vendor->pincode) }}" required placeholder="Pincode" style="border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%; background: var(--bg-2); color: var(--text);" />
+                        @error('pincode')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="country" class="form-label-custom">Country</label>
+                    <input type="text" class="form-control form-input-custom @error('country') is-invalid @enderror" id="country" name="country"
+                        value="{{ old('country', $vendor->country) }}" required placeholder="Country" style="border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%; background: var(--bg-2); color: var(--text);" />
+                    @error('country')
+                        <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
 

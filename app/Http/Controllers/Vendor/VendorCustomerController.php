@@ -28,6 +28,25 @@ class VendorCustomerController extends Controller
      */
     public function create()
     {
+        $vendor = auth()->user();
+        $vendor->load(['subscription' => function($q) {
+            $q->where('status', 'active')
+              ->where('starts_at', '<=', now())
+              ->where('ends_at', '>=', now());
+        }, 'subscription.package']);
+
+        if ($vendor->subscription && $vendor->subscription->package) {
+            $maxUsers = $vendor->subscription->package->no_of_users;
+            if (!empty($maxUsers) && $maxUsers != 'Unlimited') {
+                $maxUsers = (int) $maxUsers;
+                $currentUsers = User::where('vendor_id', $vendor->id)->where('role', 'user')->count();
+                
+                if ($currentUsers >= $maxUsers) {
+                    return redirect()->route('vendor.customers.index')->with('error', 'You have reached your maximum customer capacity based on your current plan. Upgrade your plan to add more customers.');
+                }
+            }
+        }
+
         return view('vendor.customers.create');
     }
 

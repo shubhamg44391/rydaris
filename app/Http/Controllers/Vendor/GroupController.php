@@ -24,6 +24,9 @@ class GroupController extends Controller
      */
     public function create()
     {
+        if (!auth()->user()->canAddGroup()) {
+            return redirect()->route('vendor.groups.index')->with('error', 'Your package limit for vehicle groups has been reached. Please upgrade your package.');
+        }
         return view('vendor.groups.create');
     }
 

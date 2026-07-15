@@ -14,8 +14,14 @@ class LocationController extends Controller
      */
     public function index()
     {
-        $locations = PickupLocation::where('vendor_id', Auth::id())
-            ->orderBy('created_at', 'desc')
+        $query = PickupLocation::where('vendor_id', Auth::id());
+        
+        $branchId = auth()->user()->current_branch_id;
+        if ($branchId) {
+            $query->where('branch_id', $branchId);
+        }
+
+        $locations = $query->orderBy('created_at', 'desc')
             ->paginate(15);
 
         return view('vendor.locations.index', compact('locations'));
@@ -26,6 +32,9 @@ class LocationController extends Controller
      */
     public function create()
     {
+        if (!Auth::user()->canAddLocation()) {
+            return redirect()->route('vendor.locations.index')->with('error', 'You have reached your maximum location capacity based on your current plan. Upgrade your plan to add more locations.');
+        }
         $types = PickupLocation::types();
         return view('vendor.locations.create', compact('types'));
     }
@@ -35,6 +44,10 @@ class LocationController extends Controller
      */
     public function store(Request $request)
     {
+        if (!Auth::user()->canAddLocation()) {
+            return back()->withInput()->withErrors(['location' => 'You have reached your maximum location capacity based on your current plan. Upgrade your plan to add more locations.']);
+        }
+
         $request->validate([
             'type'      => ['required', 'string', 'in:' . implode(',', PickupLocation::types())],
             'location'  => ['required', 'string', 'max:255'],
@@ -47,6 +60,7 @@ class LocationController extends Controller
 
         PickupLocation::create([
             'vendor_id' => Auth::id(),
+            'branch_id' => auth()->user()->current_branch_id,
             'type'      => $request->type,
             'location'  => $request->location,
             'price'     => $request->price,

@@ -54,28 +54,44 @@ class AdminVendorController extends Controller
 
         $request->validate([
             'first_name' => ['required', 'string', 'max:255'],
+            'middle_name' => ['nullable', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $id],
+            'username' => ['required', 'string', 'max:255', 'unique:users,username,' . $id],
             'contact_number' => ['required', 'string', 'max:20'],
             'country_code' => ['required', 'string', 'max:10'],
             'status' => ['required', 'string', 'in:active,inactive'],
+            'street_address' => ['required', 'string', 'max:255'],
+            'landmark' => ['nullable', 'string', 'max:255'],
+            'pincode' => ['required', 'string', 'max:20'],
+            'city' => ['required', 'string', 'max:255'],
+            'country' => ['required', 'string', 'max:255'],
         ]);
 
-        $baseName = $vendor->company_name ? $vendor->company_name : $request->first_name;
-        $baseUsername = \Illuminate\Support\Str::slug($baseName, '');
+        $baseUsername = \Illuminate\Support\Str::slug($request->username, '');
         $username = $baseUsername;
         
         while (User::where('username', $username)->where('id', '!=', $vendor->id)->exists()) {
             $username = $baseUsername . random_int(100, 9999);
         }
 
+        $fullName = $request->first_name . ($request->middle_name ? ' ' . $request->middle_name : '') . ' ' . $request->last_name;
+
         $vendor->update([
-            'name' => $request->first_name,
+            'name' => $fullName,
             'first_name' => $request->first_name,
+            'middle_name' => $request->middle_name,
+            'last_name' => $request->last_name,
             'email' => $request->email,
             'contact_number' => $request->contact_number,
             'country_code' => $request->country_code,
             'status' => $request->status,
             'username' => $username,
+            'street_address' => $request->street_address,
+            'landmark' => $request->landmark,
+            'pincode' => $request->pincode,
+            'city' => $request->city,
+            'country' => $request->country,
         ]);
 
         return redirect(route('admin.vendors.index'))->with('success', 'Vendor updated successfully.');

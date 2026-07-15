@@ -173,7 +173,7 @@
                             </div>
                         @endif
 
-                        <form method="POST" action="{{ route('login') }}">
+                        <form method="POST" action="{{ route('admin.login') }}">
                             @csrf
                             <input type="hidden" name="redirect_to" value="{{ request('redirect_to') }}">
                             <!-- Email Address -->

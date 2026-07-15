@@ -109,8 +109,8 @@
                     
                     <!-- Bottom Action Buttons -->
                     <div class="d-flex justify-content-between align-items-center mt-5 mb-5">
-                        <a href="javascript:history.back()" class="btn btn-outline-light px-5 py-3" style="border-radius: 8px; font-weight: 700; border-color: rgba(255,255,255,0.2);">Back</a>
-                        <button type="button" onclick="validateAndSubmit()" class="btn px-5 py-3" style="background: var(--brand); color: #0b1020; border-radius: 8px; font-weight: 800; box-shadow: 0 4px 15px rgba(82, 234, 210, 0.3);">Continue to Checkout</button>
+                        <a href="javascript:history.back()" class="btn px-5 py-3" style="background: linear-gradient(135deg, #52ead2 0%, #00a4e4 100%); color: #0b1020; border-radius: 8px; font-weight: 800; box-shadow: 0 4px 15px rgba(82, 234, 210, 0.3); text-decoration: none;">Back</a>
+                        <button type="button" onclick="validateAndSubmit()" class="btn px-5 py-3" style="background: linear-gradient(135deg, #52ead2 0%, #00a4e4 100%); color: #0b1020; border-radius: 8px; font-weight: 800; box-shadow: 0 4px 15px rgba(82, 234, 210, 0.3);">Continue to Checkout</button>
                     </div>
                 </div>
 

@@ -17,15 +17,20 @@ class LoginController extends Controller
         return view('frontend.login');
     }
 
+    public function showVendorLoginForm()
+    {
+        return view('frontend.vendor-login');
+    }
+
     public function showAdminLoginForm()
     {
         return view('frontend.admin-login');
     }
 
     /**
-     * Handle authentication attempt.
+     * Handle Customer authentication attempt.
      */
-    public function login(Request $request)
+    public function customerLogin(Request $request)
     {
         $credentials = $request->validate([
             'email' => ['required', 'email'],
@@ -35,18 +40,97 @@ class LoginController extends Controller
         $remember = $request->boolean('remember');
 
         if (Auth::attempt($credentials, $remember)) {
+            $user = Auth::user();
+            
+            // Strictly check if the user is a customer/user
+            if ($user->role !== 'user') {
+                Auth::logout();
+                throw ValidationException::withMessages([
+                    'email' => 'This account is not authorized to log in via Customer Login.',
+                ]);
+            }
+
             $request->session()->regenerate();
 
             if ($request->filled('redirect_to')) {
                 return redirect($request->input('redirect_to'));
             }
 
-            if (Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin') {
-                return redirect(route('dashboard'));
-            } elseif (Auth::user()->role === 'user') {
-                return redirect(route('user.dashboard'));
+            return redirect(route('user.vendors.show', $user->vendor_id));
+        }
+
+        throw ValidationException::withMessages([
+            'email' => trans('auth.failed'),
+        ]);
+    }
+
+    /**
+     * Handle Vendor authentication attempt.
+     */
+    public function vendorLogin(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
+
+        $remember = $request->boolean('remember');
+
+        if (Auth::attempt($credentials, $remember)) {
+            $user = Auth::user();
+
+            // Strictly check if the user is a vendor
+            if ($user->role !== 'vendor') {
+                Auth::logout();
+                throw ValidationException::withMessages([
+                    'email' => 'This account is not authorized to log in via Vendor Login.',
+                ]);
             }
+
+            $request->session()->regenerate();
+
+            if ($request->filled('redirect_to')) {
+                return redirect($request->input('redirect_to'));
+            }
+
             return redirect(route('vendor.dashboard'));
+        }
+
+        throw ValidationException::withMessages([
+            'email' => trans('auth.failed'),
+        ]);
+    }
+
+    /**
+     * Handle Admin authentication attempt.
+     */
+    public function adminLogin(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
+
+        $remember = $request->boolean('remember');
+
+        if (Auth::attempt($credentials, $remember)) {
+            $user = Auth::user();
+
+            // Strictly check if the user is an admin or super_admin
+            if ($user->role !== 'admin' && $user->role !== 'super_admin') {
+                Auth::logout();
+                throw ValidationException::withMessages([
+                    'email' => 'This account is not authorized to log in via Admin Login.',
+                ]);
+            }
+
+            $request->session()->regenerate();
+
+            if ($request->filled('redirect_to')) {
+                return redirect($request->input('redirect_to'));
+            }
+
+            return redirect(route('dashboard'));
         }
 
         throw ValidationException::withMessages([

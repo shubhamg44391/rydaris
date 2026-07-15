@@ -19,4 +19,12 @@ class AdminSubscriptionController extends Controller
 
         return view('admin.subscriptions.index', compact('subscriptions'));
     }
+
+    public function subscriptionInvoice($id)
+    {
+        $subscription = VendorSubscription::with(['vendor', 'package'])
+            ->findOrFail($id);
+
+        return view('partials.subscription-invoice', compact('subscription'));
+    }
 }

@@ -20,6 +20,8 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'first_name',
+        'middle_name',
+        'last_name',
         'email',
         'password',
         'contact_number',
@@ -31,6 +33,12 @@ class User extends Authenticatable
         'company_logo',
         'vendor_id',
         'last_checked_bookings_at',
+        'street_address',
+        'landmark',
+        'pincode',
+        'city',
+        'country',
+        'current_branch_id',
     ];
 
     /**
@@ -88,6 +96,16 @@ class User extends Authenticatable
                     });
     }
 
+    public function branches()
+    {
+        return $this->hasMany(Branch::class, 'vendor_id');
+    }
+
+    public function currentBranch()
+    {
+        return $this->belongsTo(Branch::class, 'current_branch_id');
+    }
+
     public function groups()
     {
         return $this->hasMany(Group::class, 'vendor_id');
@@ -98,8 +116,27 @@ class User extends Authenticatable
         return $this->hasMany(Vehicle::class, 'vendor_id');
     }
 
+    public function hasMenuAccess(string $menu): bool
+    {
+        if ($this->role === 'user' && $this->vendor_id) {
+            $vendor = self::find($this->vendor_id);
+            return $vendor ? $vendor->hasMenuAccess($menu) : false;
+        }
+
+        $subscription = $this->activeSubscription;
+        if (!$subscription || !$subscription->package) {
+            return false;
+        }
+
+        $column = $menu . '_menu';
+        return (bool) ($subscription->package->$column ?? false);
+    }
+
     public function canAddGroup()
     {
+        if (!$this->hasMenuAccess('vehicles')) {
+            return false;
+        }
         $subscription = $this->activeSubscription;
         if (!$subscription) {
             return false;
@@ -111,6 +148,9 @@ class User extends Authenticatable
 
     public function canAddVehicle()
     {
+        if (!$this->hasMenuAccess('vehicles')) {
+            return false;
+        }
         $subscription = $this->activeSubscription;
         if (!$subscription) {
             return false;
@@ -120,6 +160,21 @@ class User extends Authenticatable
         return $this->vehicles()->count() < $limit;
     }
 
+    public function canAddBranch()
+    {
+        $subscription = $this->activeSubscription;
+        if (!$subscription) {
+            return false;
+        }
+
+        $limit = $subscription->package->no_of_branches;
+        if (is_null($limit) || $limit === -1) {
+            return true;
+        }
+
+        return $this->branches()->count() < (int)$limit;
+    }
+
     public function paymentSetting()
     {
         return $this->hasOne(VendorPaymentSetting::class, 'vendor_id');
@@ -127,6 +182,9 @@ class User extends Authenticatable
 
     public function hasCouponFeature()
     {
+        if (!$this->hasMenuAccess('coupons')) {
+            return false;
+        }
         $subscription = $this->activeSubscription;
         if (!$subscription) {
             return false;
@@ -143,6 +201,9 @@ class User extends Authenticatable
 
     public function canAddCoupon()
     {
+        if (!$this->hasMenuAccess('coupons')) {
+            return false;
+        }
         $subscription = $this->activeSubscription;
         if (!$subscription) {
             return false;
@@ -150,5 +211,150 @@ class User extends Authenticatable
 
         $limit = (int) $subscription->package->no_of_coupons;
         return $this->coupons()->count() < $limit;
+    }
+
+    public function pickupLocations()
+    {
+        return $this->hasMany(\App\Models\PickupLocation::class, 'vendor_id');
+    }
+
+    public function vendorExtras()
+    {
+        return $this->hasMany(\App\Models\VendorExtra::class, 'vendor_id')->where('type', 'extra');
+    }
+
+    public function vendorInsurances()
+    {
+        return $this->hasMany(\App\Models\VendorExtra::class, 'vendor_id')->where('type', 'insurance');
+    }
+
+    public function vendorFeatures()
+    {
+        return $this->hasMany(\App\Models\VendorFeature::class, 'vendor_id');
+    }
+
+    public function vendorRules()
+    {
+        return $this->hasMany(\App\Models\VendorRule::class, 'vendor_id');
+    }
+
+    public function userInvitations()
+    {
+        return $this->hasMany(\App\Models\UserInvitation::class, 'vendor_id');
+    }
+
+    public function supportTickets()
+    {
+        return $this->hasMany(\App\Models\SupportTicket::class, 'vendor_id');
+    }
+
+    public function checkLimit($count, $limit)
+    {
+        if ($limit === null || $limit === '' || $limit === 'Unlimited') {
+            return true;
+        }
+        return $count < (int)$limit;
+    }
+
+    public function canAddLocation()
+    {
+        if (!$this->hasMenuAccess('locations')) {
+            return false;
+        }
+        $subscription = $this->activeSubscription;
+        if (!$subscription || !$subscription->package) {
+            return false;
+        }
+        return $this->checkLimit($this->pickupLocations()->count(), $subscription->package->no_of_locations);
+    }
+
+    public function canAddExtra()
+    {
+        if (!$this->hasMenuAccess('extras')) {
+            return false;
+        }
+        $subscription = $this->activeSubscription;
+        if (!$subscription || !$subscription->package) {
+            return false;
+        }
+        return $this->checkLimit($this->vendorExtras()->count(), $subscription->package->no_of_extras);
+    }
+
+    public function canAddInsurance()
+    {
+        if (!$this->hasMenuAccess('extras')) {
+            return false;
+        }
+        $subscription = $this->activeSubscription;
+        if (!$subscription || !$subscription->package) {
+            return false;
+        }
+        return $this->checkLimit($this->vendorInsurances()->count(), $subscription->package->no_of_insurances);
+    }
+
+    public function canAddFeature($countToCheck = null)
+    {
+        if (!$this->hasMenuAccess('extras')) {
+            return false;
+        }
+        $subscription = $this->activeSubscription;
+        if (!$subscription || !$subscription->package) {
+            return false;
+        }
+        $count = $countToCheck ?? $this->vendorFeatures()->count();
+        return $this->checkLimit($count, $subscription->package->no_of_features);
+    }
+
+    public function canAddRule()
+    {
+        if (!$this->hasMenuAccess('extras')) {
+            return false;
+        }
+        $subscription = $this->activeSubscription;
+        if (!$subscription || !$subscription->package) {
+            return false;
+        }
+        return $this->checkLimit($this->vendorRules()->count(), $subscription->package->no_of_rules);
+    }
+
+    public function canAddInvitation()
+    {
+        if (!$this->hasMenuAccess('customers')) {
+            return false;
+        }
+        $subscription = $this->activeSubscription;
+        if (!$subscription || !$subscription->package) {
+            return false;
+        }
+        return $this->checkLimit($this->userInvitations()->count(), $subscription->package->no_of_invitations);
+    }
+
+    public function canAcceptSupportTickets()
+    {
+        if (!$this->hasMenuAccess('support_ticket')) {
+            return false;
+        }
+        $subscription = $this->activeSubscription;
+        if (!$subscription || !$subscription->package) {
+            return false;
+        }
+        return $this->checkLimit($this->supportTickets()->count(), $subscription->package->no_of_support_tickets);
+    }
+
+    public function canAcceptBookings()
+    {
+        if (!$this->hasMenuAccess('booking')) {
+            return false;
+        }
+        $subscription = $this->activeSubscription;
+        if (!$subscription || !$subscription->package) {
+            return false;
+        }
+        
+        $count = \App\Models\Booking::where('vendor_id', $this->id)
+            ->where('created_at', '>=', $subscription->starts_at)
+            ->count();
+            
+        return $this->checkLimit($count, $subscription->package->no_of_bookings);
     }
 }

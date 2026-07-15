@@ -21,7 +21,7 @@
         </div>
         <div class="faq-stack">
           @forelse ($productBasics as $index => $faq)
-            <details class="card faq-item" {{ $index === 0 ? 'open' : '' }}>
+            <details class="faq-item">
               <summary>{{ $faq->title }}</summary>
               <p>{{ $faq->description }}</p>
             </details>
@@ -36,7 +36,7 @@
       <div class="wrap split">
         <div class="faq-stack">
           @forelse ($onboarding as $index => $faq)
-            <details class="card faq-item" {{ $index === 0 ? 'open' : '' }}>
+            <details class="faq-item">
               <summary>{{ $faq->title }}</summary>
               <p>{{ $faq->description }}</p>
             </details>
@@ -58,7 +58,7 @@
         <h2>More questions teams ask.</h2>
         <div class="grid cols-2">
           @forelse ($reporting as $faq)
-            <details class="card faq-item">
+            <details class="faq-item">
               <summary>{{ $faq->title }}</summary>
               <p>{{ $faq->description }}</p>
             </details>
@@ -75,14 +75,11 @@
       document.querySelectorAll('details.faq-item').forEach((el) => {
         el.addEventListener('toggle', (e) => {
           if (el.open) {
-            const container = el.closest('.faq-stack, .grid');
-            if (container) {
-              container.querySelectorAll('details.faq-item').forEach((otherEl) => {
-                if (otherEl !== el && otherEl.open) {
-                  otherEl.open = false;
-                }
-              });
-            }
+            document.querySelectorAll('details.faq-item').forEach((otherEl) => {
+              if (otherEl !== el && otherEl.open) {
+                otherEl.open = false;
+              }
+            });
           }
         });
       });

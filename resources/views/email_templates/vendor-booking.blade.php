@@ -125,7 +125,7 @@
             </div>
             <div class="info-row">
                 <div class="info-label">Date of Birth:</div>
-                <div class="info-value">{{ $booking->customer_dob ? \Carbon\Carbon::parse($booking->customer_dob)->format('d.m.Y') : '-' }}</div>
+                <div class="info-value">{{ $booking->customer_dob ? $booking->customer_dob_parsed->format('d.m.Y') : '-' }}</div>
             </div>
         </div>
         
@@ -149,9 +149,9 @@
                     <th>Period</th>
                 </tr>
                 <tr>
-                    <td>{{ \Carbon\Carbon::parse($booking->pickup_date)->format('d.m.Y') }} {{ $booking->pickup_time }} Hrs</td>
-                    <td>{{ \Carbon\Carbon::parse($booking->return_date)->format('d.m.Y') }} {{ $booking->return_time }} Hrs</td>
-                    <td>{{ \Carbon\Carbon::parse($booking->pickup_date)->diffInDays(\Carbon\Carbon::parse($booking->return_date)) }} Days</td>
+                    <td>{{ $booking->pickup_date_parsed->format('d.m.Y') }} {{ $booking->pickup_time }} Hrs</td>
+                    <td>{{ $booking->return_date_parsed->format('d.m.Y') }} {{ $booking->return_time }} Hrs</td>
+                    <td>{{ $booking->pickup_date_parsed->diffInDays($booking->return_date_parsed) }} Days</td>
                 </tr>
             </table>
         </div>

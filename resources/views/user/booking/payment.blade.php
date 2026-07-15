@@ -107,7 +107,7 @@
                                     <div style="flex: 1;">
                                         <div class="d-flex justify-content-between align-items-center mb-1">
                                             <h5 style="color: #f8fafc; font-weight: 700; margin: 0; font-size: 1rem;">Pay on Arrival</h5>
-                                            <span style="color: #ef4444; font-weight: 800; font-size: 1.1rem;">${{ number_format($grandTotal, 2) }}</span>
+                                            <span style="color: #52ead2; font-weight: 800; font-size: 1.1rem;">${{ number_format($grandTotal, 2) }}</span>
                                         </div>
                                         <p style="color: #94a3b8; margin: 0; font-size: 0.85rem;">Pay when you pick up the vehicle</p>
                                     </div>
@@ -128,7 +128,7 @@
                                     <div style="flex: 1;">
                                         <div class="d-flex justify-content-between align-items-center mb-1">
                                             <h5 style="color: #f8fafc; font-weight: 700; margin: 0; font-size: 1rem;">Pay {{ $depositPercent }}% Deposit Now</h5>
-                                            <span style="color: #ef4444; font-weight: 800; font-size: 1.1rem;">${{ number_format($depositAmount, 2) }} ({{ $depositPercent }}%)</span>
+                                            <span style="color: #52ead2; font-weight: 800; font-size: 1.1rem;">${{ number_format($depositAmount, 2) }} ({{ $depositPercent }}%)</span>
                                         </div>
                                         <p style="color: #94a3b8; margin: 0; font-size: 0.85rem;">Pay {{ $depositPercent }}% deposit now (${{ number_format($depositAmount, 2) }}), pay rest on arrival.</p>
                                     </div>
@@ -150,7 +150,7 @@
                                     <div style="flex: 1;">
                                         <div class="d-flex justify-content-between align-items-center mb-1">
                                             <h5 style="color: #f8fafc; font-weight: 700; margin: 0; font-size: 1rem;">Pay Full Amount Now</h5>
-                                            <span style="color: #ef4444; font-weight: 800; font-size: 1.1rem;">${{ number_format($discountedAmount, 2) }} ({{ $fullDiscountPercent }}% Off)</span>
+                                            <span style="color: #52ead2; font-weight: 800; font-size: 1.1rem;">${{ number_format($discountedAmount, 2) }} ({{ $fullDiscountPercent }}% Off)</span>
                                         </div>
                                         <p style="color: #94a3b8; margin: 0; font-size: 0.85rem;">Pay full amount now (${{ number_format($discountedAmount, 2) }}) and get {{ $fullDiscountPercent }}% discount, pay nothing on arrival. Security deposit will be required at the rental desk.</p>
                                     </div>
@@ -159,12 +159,10 @@
                             @endif
 
                             <!-- Terms and Conditions -->
-                            <div class="mb-4 d-flex align-items-start gap-2" style="cursor: pointer;">
-                                <input type="checkbox" id="termsCheckbox" style="width: 18px; height: 18px; min-width: 18px; min-height: 18px; flex-shrink: 0; margin-top: 3px; background-color: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; accent-color: var(--brand); cursor: pointer;">
-                                <label for="termsCheckbox" style="color: #f8fafc; font-size: 0.9rem; font-weight: 600; cursor: pointer; user-select: none; line-height: 1.4;">
-                                    I agree to the <a href="#" style="color: var(--brand); text-decoration: underline;">terms and conditions</a> 
-                                </label>
-                            </div>
+                            <label style="display: inline-flex; align-items: center; gap: 8px; cursor: pointer; margin-bottom: 18px; user-select: none;">
+                                <input type="checkbox" id="termsCheckbox" style="width: 18px; height: 18px; flex-shrink: 0; accent-color: var(--brand); cursor: pointer;">
+                                <span style="color: #f8fafc; font-size: 0.9rem; font-weight: 600; white-space: nowrap;">I agree to the <a href="{{ route('vendor.terms.public', $vehicle->vendor_id) }}" target="_blank" style="color: var(--brand); text-decoration: underline;">Terms &amp; Conditions</a></span>
+                            </label>
 
                             <!-- Warnings & Instructions -->
                             <div style="background: rgba(245, 184, 92, 0.1); border: 1px solid rgba(245, 184, 92, 0.3); border-radius: 8px; padding: 15px; margin-bottom: 20px;">
@@ -184,17 +182,17 @@
                             </div>
 
                             <!-- Confirm Booking Button -->
-                            <button type="button" onclick="confirmBooking()" class="btn w-100 py-3" style="background: #ef4444; color: #fff; font-weight: 800; font-size: 1.1rem; border-radius: 8px; border: none; box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4); text-transform: uppercase; letter-spacing: 1px;">
+                            <button type="button" onclick="confirmBooking()" class="btn w-100 py-3" style="background: linear-gradient(135deg, #52ead2 0%, #00a4e4 100%); color: #0b1020; font-weight: 800; font-size: 1.1rem; border-radius: 8px; border: none; box-shadow: 0 8px 25px rgba(82, 234, 210, 0.3); text-transform: uppercase; letter-spacing: 1px; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 10px 30px rgba(82, 234, 210, 0.45)'" onmouseout="this.style.transform='none'; this.style.boxShadow='0 8px 25px rgba(82, 234, 210, 0.3)'">
                                 Confirm Booking
                             </button>
                             
                             <!-- Payment Logos -->
                             <div class="d-flex justify-content-center align-items-center gap-3 mt-4">
-                                <span style="color: #94a3b8; font-size: 0.8rem; font-weight: 600;">We accept:</span>
-                                <div style="display: flex; gap: 10px;">
-                                    <div style="background: #fff; padding: 4px 8px; border-radius: 4px;"><svg viewBox="0 0 38 12" width="38" height="12" fill="#1A1F71"><path d="M13.628 0L9.08 11.536H4.636L2.348 2.052C2.176 1.48.16.272.032.228V0h6.408c.592 0 1.12.392 1.288 1.056l1.372 7.084L13.628 0zM26.244 8.016c0-2.128-2.908-2.24-2.88-3.184.012-.284.288-.588.9-.664a7.994 7.994 0 012.72.48l.492-3.084a8.683 8.683 0 00-3.152-.564c-3.416 0-5.824 1.82-5.844 4.43-.02 1.928 1.716 2.996 3.02 3.636 1.344.656 1.792 1.08 1.792 1.668-.016.904-1.088 1.312-2.096 1.312a7.067 7.067 0 01-3.356-.632l-.468 3.2c.904.42 2.56.78 4.292.8 3.628 0 5.984-1.792 5.984-4.568.016-.276-.012-.52-.06-.716zm10.748-7.79H34.42a1.442 1.442 0 00-1.376.924L28.16 11.53h4.636s.76-2.08 9.32-2.528l.884 2.528h4.124l-3.872-11.3zm-5.02 3.25l1.196 3.256h-2.86l1.664-3.256zm-17.58.008h4.196L17.18 11.53h-4.32l1.532-11.3z"/></svg></div>
-                                    <div style="background: #fff; padding: 4px 8px; border-radius: 4px;"><svg viewBox="0 0 32 20" width="32" height="20"><circle fill="#EB001B" cx="10" cy="10" r="10"/><circle fill="#F79E1B" cx="22" cy="10" r="10"/><path fill="#FF5F00" d="M16 18c2.9-1.8 4.9-5.1 4.9-8.9 0-3.8-2-7.1-4.9-8.9-2.9 1.8-4.9 5.1-4.9 8.9 0 3.8 2 7.1 4.9 8.9z"/></svg></div>
-                                    <div style="background: #fff; padding: 4px 8px; border-radius: 4px;"><svg viewBox="0 0 32 20" width="32" height="20" fill="#2671B9"><rect width="32" height="20" rx="2"/><path fill="#fff" d="M12.2 13.9H9.4l.7-5.1h2.8l-.7 5.1zm3.8 0h-2l.4-2.8c.2-1.3 1-1.6 2.2-1.6.4 0 .9 0 1.2.1l-.3 2.1c-.2-.1-.5-.1-.7-.1-.6 0-.8.3-.9.9l-.3 1.4h2l-.2 1.4h-3.6l-.3 1.4h-1.5l.8-2.8zm6.5-5.1l-1.3 5.1h-1.7l1.1-4.2-2.7 4.2h-1.9L16.2 9l-.8 5.1h-1.6l1-7.2h2l2 4.4 3.7-4.4h1.9l.4-.1z"/></svg></div>
+                                <span style="color: #94a3b8; font-size: 0.85rem; font-weight: 600;">We accept:</span>
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    <img src="{{ asset('assets/logo/VISA-logo.png') }}" alt="Visa" style="height: 24px; width: auto; display: block;">
+                                    <img src="{{ asset('assets/logo/Mastercard-logo.png') }}" alt="Mastercard" style="height: 24px; width: auto; display: block;">
+                                    <img src="{{ asset('assets/logo/American_Express_logo.svg') }}" alt="Amex" style="height: 24px; width: auto; display: block;">
                                 </div>
                             </div>
 
@@ -281,7 +279,7 @@
                         <!-- Grand Total -->
                         <div class="p-4" style="background: rgba(82, 234, 210, 0.05); border-top: 1px solid rgba(82, 234, 210, 0.15); display: flex; justify-content: space-between; align-items: center;">
                             <span style="color: #f8fafc; font-weight: 800; font-size: 1.1rem;">Total Amount</span>
-                            <span style="color: #ef4444; font-weight: 900; font-size: 1.4rem;">${{ number_format($grandTotal, 2) }}</span>
+                            <span style="color: #52ead2; font-weight: 900; font-size: 1.4rem;">${{ number_format($grandTotal, 2) }}</span>
                         </div>
                         
                         <!-- Breakdown Additions (Visible in Step 5) -->
@@ -292,7 +290,7 @@
                             </div>
                             <div class="d-flex justify-content-between align-items-center">
                                 <span style="color: #94a3b8; font-size: 0.9rem; font-weight: 600;">Pending on Arrival</span>
-                                <span style="color: #ef4444; font-weight: 800; font-size: 1rem;">${{ number_format($grandTotal * 0.95, 2) }}</span>
+                                <span style="color: #52ead2; font-weight: 800; font-size: 1rem;">${{ number_format($grandTotal * 0.95, 2) }}</span>
                             </div>
                         </div>
 

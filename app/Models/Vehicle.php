@@ -11,6 +11,7 @@ class Vehicle extends Model
 
     protected $fillable = [
         'vendor_id',
+        'branch_id',
         'group_id',
         'name',
         'model',
@@ -35,6 +36,11 @@ class Vehicle extends Model
     public function vendor()
     {
         return $this->belongsTo(User::class, 'vendor_id');
+    }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
     }
 
     public function group()

@@ -81,22 +81,40 @@
 </head>
 
 <body class="admin-body">
+  @include('partials.preloader')
+  <!-- Mobile sidebar overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
   <div class="admin-shell">
-    <aside class="admin-sidebar" aria-label="Admin navigation">
-      <a class="brand" href="{{ route('home') }}" aria-label="Rydaris home" style="opacity: 0.9; transition: opacity 0.2s ease;">
-        <img src="{{ asset('assets/logo/rydaris-logo.png') }}" alt="Rydaris Logo" style="height: 32px; width: auto; display: block;">
-      </a>
+    <aside class="admin-sidebar" id="adminSidebar" aria-label="Admin navigation">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-bottom: 10px;">
+        <a class="brand" href="{{ Auth::check() && (Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin') ? route('dashboard') : (Auth::user()->role === 'user' ? route('user.dashboard') : route('vendor.dashboard')) }}" aria-label="Rydaris home" style="opacity: 0.9; transition: opacity 0.2s ease; display: flex; align-items: center; justify-content: center;">
+          <img class="brand-full" src="{{ asset('assets/logo/rydaris-logo.png') }}" alt="Rydaris Logo" style="height: 32px; width: auto; display: block;">
+          <img class="brand-mini" src="{{ asset('assets/logo/favicon.svg') }}" alt="Rydaris Logo" style="height: 32px; width: auto; display: none;">
+        </a>
+        <button class="sidebar-close-btn" onclick="closeSidebar()" aria-label="Close menu">
+          <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
 
       @include('user.layouts.sidebar')
     </aside>
 
     <main class="admin-main" style="display: flex; flex-direction: column; min-height: 100vh;">
       <header class="admin-topbar">
-        <div></div>
+        <div style="display: flex; align-items: center; gap: 15px;">
+          <button class="hamburger-btn" id="hamburgerBtn" onclick="openSidebar()" aria-label="Open menu">
+            <svg viewBox="0 0 24 24" style="width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <button class="desktop-collapse-btn" onclick="toggleSidebarCollapse()" aria-label="Collapse sidebar">
+            <svg class="chevron-left-icon" viewBox="0 0 24 24" style="width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;"><polyline points="15 18 9 12 15 6"/></svg>
+            <svg class="chevron-right-icon" viewBox="0 0 24 24" style="width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;display:none;"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
         <div class="admin-toolbar" style="display: flex; align-items: center; gap: 15px;">
           <span class="user-greeting" style="font-weight: 500;">Hello, {{ Auth::user()->name }}</span>
           
           @if(Auth::check() && Auth::user()->role === 'vendor')
+         
           <a href="{{ route('vendor.profile.index') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 5px; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'" title="Vendor Profile">
             <svg viewBox="0 0 24 24" style="width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:2;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           </a>
@@ -175,6 +193,35 @@
       });
   </script>
   @endif
+
+  <script>
+    function openSidebar() {
+      const sidebar = document.getElementById('adminSidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      if (sidebar) sidebar.classList.add('open');
+      if (overlay) { overlay.style.display = 'block'; setTimeout(() => overlay.classList.add('visible'), 10); }
+    }
+    function closeSidebar() {
+      const sidebar = document.getElementById('adminSidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      if (sidebar) sidebar.classList.remove('open');
+      if (overlay) { overlay.classList.remove('visible'); setTimeout(() => overlay.style.display = 'none', 300); }
+    }
+    function toggleSidebarCollapse() {
+      const body = document.body;
+      body.classList.toggle('sidebar-collapsed');
+      const isCollapsed = body.classList.contains('sidebar-collapsed');
+      localStorage.setItem('sidebar-collapsed', isCollapsed);
+    }
+    // Close sidebar on nav link click (mobile)
+    document.querySelectorAll('#adminSidebar .admin-nav a').forEach(function(link) {
+      link.addEventListener('click', function() { if (window.innerWidth <= 1180) closeSidebar(); });
+    });
+    // Restore collapse state on load
+    if (localStorage.getItem('sidebar-collapsed') === 'true') {
+      document.body.classList.add('sidebar-collapsed');
+    }
+  </script>
 </body>
 
 </html>

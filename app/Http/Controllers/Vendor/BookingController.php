@@ -154,4 +154,108 @@ class BookingController extends Controller
 
         return redirect()->back()->with('success', 'Booking details updated successfully.');
     }
+
+    /**
+     * Export all bookings for the logged-in vendor as a CSV file.
+     *
+     * Algorithm:
+     * 1. Fetch all bookings belonging to the authenticated vendor (no pagination).
+     * 2. Eager-load vehicle, pickupLocation, and returnLocation relationships.
+     * 3. Build CSV headers matching the booking list table columns.
+     * 4. Iterate each booking, sanitize any commas/newlines in string fields,
+     *    and append a comma-separated row.
+     * 5. Stream the CSV back to the browser with appropriate download headers
+     *    (Content-Type: text/csv, Content-Disposition: attachment).
+     */
+    public function exportCsv()
+    {
+        // Step 1 & 2 – Load all vendor bookings with relations
+        $bookings = \App\Models\Booking::with(['vehicle', 'pickupLocation', 'returnLocation', 'user'])
+            ->where('vendor_id', auth()->id())
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // Step 3 – Define column headers
+        $headers = [
+            'S.No',
+            'Date & Time of Booking',
+            'Reservation #',
+            'Customer First Name',
+            'Customer Last Name',
+            'Customer Email',
+            'Customer Phone',
+            'Vehicle',
+            'Pickup Location',
+            'Pickup Date',
+            'Pickup Time',
+            'Return Location',
+            'Return Date',
+            'Return Time',
+            'Total Days',
+            'Paid Amount',
+            'Pending Amount',
+            'Total Amount',
+            'Payment Reference',
+            'Booking Status',
+            'Payment Status',
+            'Created At',
+        ];
+
+        // Helper to safely quote a CSV field
+        $csvField = function ($value) {
+            $value = str_replace('"', '""', (string) $value); // Escape double-quotes
+            return '"' . $value . '"';
+        };
+
+        // Step 4 & 5 – Build CSV content and stream to browser
+        $filename = 'bookings_' . now()->format('Ymd_His') . '.csv';
+
+        $callback = function () use ($bookings, $headers, $csvField) {
+            $handle = fopen('php://output', 'w');
+
+            // UTF-8 BOM so Excel opens it correctly
+            fwrite($handle, "\xEF\xBB\xBF");
+
+            // Write header row
+            fputcsv($handle, $headers);
+
+            // Write data rows
+            foreach ($bookings as $index => $booking) {
+                fputcsv($handle, [
+                    $index + 1,
+                    $booking->created_at ? $booking->created_at->format('Y-m-d H:i:s') : '',
+                    $booking->reservation_number ?? '',
+                    $booking->customer_fname ?? '',
+                    $booking->customer_lname ?? '',
+                    $booking->customer_email ?? '',
+                    $booking->customer_phone ?? '',
+                    $booking->vehicle->name ?? 'N/A',
+                    $booking->pickupLocation->name ?? 'N/A',
+                    $booking->pickup_date ?? '',
+                    $booking->pickup_time ?? '',
+                    $booking->returnLocation->name ?? 'N/A',
+                    $booking->return_date ?? '',
+                    $booking->return_time ?? '',
+                    $booking->total_days ?? '',
+                    number_format((float)$booking->paid_amount, 2, '.', ''),
+                    number_format((float)$booking->pending_amount, 2, '.', ''),
+                    number_format((float)$booking->total_amount, 2, '.', ''),
+                    $booking->payment_reference ?? '',
+                    ucfirst($booking->booking_status ?? ''),
+                    ucfirst($booking->payment_status ?? ''),
+                    $booking->created_at ? $booking->created_at->format('Y-m-d H:i:s') : '',
+                ]);
+            }
+
+            fclose($handle);
+        };
+
+        return response()->stream($callback, 200, [
+            'Content-Type'        => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Pragma'              => 'no-cache',
+            'Cache-Control'       => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires'             => '0',
+        ]);
+    }
 }

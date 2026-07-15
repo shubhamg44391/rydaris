@@ -231,6 +231,7 @@ input[type="checkbox"] {
                 </div>
                 </div>
 
+                @if($type === 'insurance')
                 <!-- Manage Features Mapping Static Design -->
                 <div class="row mb-4 mt-2">
                     <div class="col-md-12">
@@ -282,6 +283,7 @@ input[type="checkbox"] {
                         </div>
                     </div>
                 </div>
+                @endif
 
                 <div class="d-flex align-items-center gap-3" style="display: flex; gap: 16px; align-items: center; margin-top: 24px;">
                     <button type="submit" class="btn btn-primary rounded-pill px-4" style="min-height: 40px; font-weight: 800; font-size: 0.9rem; background: var(--brand, #2563eb); border: none; color: #fff; cursor: pointer;">{{ $type === 'extra' ? 'Update Extra' : 'Update Insurance' }}</button>

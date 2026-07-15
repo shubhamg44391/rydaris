@@ -26,6 +26,18 @@
         <div>
             <h2>Bookings</h2>
         </div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <a href="{{ route('vendor.bookings.export') }}" id="btn-export-bookings"
+               style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: linear-gradient(135deg, #52ead2, #2bc2a8); color: #051013; border-radius: 8px; font-weight: 700; font-size: 0.875rem; text-decoration: none; box-shadow: 0 2px 12px rgba(82,234,210,0.25); transition: opacity 0.2s;"
+               onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+                <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                Export Bookings (CSV)
+            </a>
+        </div>
     </div>
 
     @if(session('success'))
@@ -59,6 +71,7 @@
                         <th style="white-space: nowrap;">Payment Reference</th>
                         <th style="white-space: nowrap;">Booking Status</th>
                         <th style="white-space: nowrap;">Payment Status</th>
+                        <th style="white-space: nowrap;">Terms & Conditions</th>
                         <th style="white-space: nowrap;">Action</th>
                     </tr>
                 </thead>
@@ -116,6 +129,21 @@
                                     <span class="badge" style="{{ $booking->payment_status == 'paid' ? 'background: rgba(74,222,128,0.1); color: #4ade80; border: 1px solid rgba(74,222,128,0.2);' : 'background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.2);' }} padding: 5px 10px;">
                                         {{ ucfirst($booking->payment_status) }}
                                     </span>
+                                </td>
+                                <td style="padding: 15px 20px; white-space: nowrap;">
+                                    <a href="{{ route('vendor.terms.public', auth()->id()) }}" target="_blank"
+                                       title="View Terms & Conditions"
+                                       style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: rgba(82,234,210,0.08); color: #52ead2; border: 1px solid rgba(82,234,210,0.25); border-radius: 6px; font-size: 0.8rem; font-weight: 600; text-decoration: none; transition: all 0.2s;"
+                                       onmouseover="this.style.background='rgba(82,234,210,0.18)';this.style.borderColor='rgba(82,234,210,0.5)'"
+                                       onmouseout="this.style.background='rgba(82,234,210,0.08)';this.style.borderColor='rgba(82,234,210,0.25)'">
+                                        <svg viewBox="0 0 24 24" style="width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;">
+                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                            <polyline points="14 2 14 8 20 8"/>
+                                            <line x1="16" y1="13" x2="8" y2="13"/>
+                                            <line x1="16" y1="17" x2="8" y2="17"/>
+                                        </svg>
+                                        View T&C
+                                    </a>
                                 </td>
                                 <td style="padding: 15px 20px; text-align: right;">
                                     <a href="{{ route('vendor.bookings.show', $booking->id) }}" class="btn btn-sm" title="Edit" style="background: rgba(255,255,255,0.05); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); text-decoration: none; display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0; border-radius: 4px;">

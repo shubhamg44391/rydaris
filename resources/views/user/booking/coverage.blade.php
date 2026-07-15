@@ -24,10 +24,10 @@
             <div style="flex: 1; height: 1px; background: rgba(255, 255, 255, 0.1); margin: -20px 15px 0;"></div>
             <!-- Step 3 (Active) -->
             <div class="step text-center">
-                <div style="width: 35px; height: 35px; border-radius: 50%; background: #ef4444; color: #fff; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-weight: 800; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);">
+                <div style="width: 35px; height: 35px; border-radius: 50%; background: #52ead2; color: #0b1020; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-weight: 800; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);">
                     3
                 </div>
-                <span style="font-size: 0.75rem; color: #ef4444; font-weight: 800;">Coverage</span>
+                <span style="font-size: 0.75rem; color: #52ead2; font-weight: 800;">Coverage</span>
             </div>
             <div style="flex: 1; height: 1px; background: rgba(255, 255, 255, 0.1); margin: -20px 15px 0;"></div>
             <!-- Step 4 -->
@@ -58,82 +58,75 @@
                         <h4 style="color: #f8fafc; font-weight: 800; font-size: 1.25rem;">Coverage</h4>
                     </div>
                     <div class="card-body p-4">
-                        <div class="table-responsive">
-                            <table class="table text-light" style="border-collapse: separate; border-spacing: 0;">
-                                <thead>
-                                    <tr>
-                                        <th style="border-bottom: 1px solid rgba(255,255,255,0.05); padding: 15px; font-weight: 600; color: #94a3b8; font-size: 0.85rem; width: 40%;">Coverage</th>
-                                        @foreach($insurances as $pkg)
-                                            <th class="text-center" style="border-bottom: 1px solid rgba(255,255,255,0.05); padding: 15px;">
-                                                <div style="font-weight: 800; color: #f8fafc; font-size: 0.95rem;">{{ $pkg->name }}</div>
-                                                <div style="font-weight: 600; color: var(--brand); font-size: 0.8rem; margin-top: 5px;">
-                                                    {{ $pkg->price > 0 ? '$' . number_format($pkg->price, 2) . ' / Day' : 'Included' }}
-                                                </div>
-                                            </th>
-                                        @endforeach
-                                        @if($insurances->count() == 0)
-                                            <th class="text-center text-muted">Standard Package</th>
-                                            <th class="text-center text-muted">Premium Package</th>
-                                        @endif
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Dynamic rows from Vendor Extra Features -->
-                                    @php
-                                        // If there are no custom features from DB, fallback to dummy data for mockup look
-                                        $hasCustomFeatures = $vendorFeatures->count() > 0;
-                                        $featuresList = $hasCustomFeatures ? $vendorFeatures : [
-                                            (object)['title' => 'Unlimited Kilometers'], (object)['title' => 'Second Additional Driver'], 
-                                            (object)['title' => 'Airport Surcharge'], (object)['title' => 'Roadside Assistance'], 
-                                            (object)['title' => 'Collision Damage Waiver (CDW)'], (object)['title' => 'Third Party Insurance (TPI)']
-                                        ];
-                                    @endphp
-                                    @foreach($featuresList as $feature)
+                        @if($insurances->count() > 0)
+                            <div class="table-responsive">
+                                <table class="table text-light" style="border-collapse: separate; border-spacing: 0;">
+                                    <thead>
                                         <tr>
-                                            <td style="border-bottom: 1px solid rgba(255,255,255,0.05); padding: 15px; color: #cbd5e1; font-size: 0.85rem;">{{ $feature->title }}</td>
+                                            <th style="border-bottom: 1px solid rgba(255,255,255,0.05); padding: 15px; font-weight: 600; color: #94a3b8; font-size: 0.85rem; width: 40%;">Coverage</th>
                                             @foreach($insurances as $pkg)
-                                                @php
-                                                    $hasFeature = $hasCustomFeatures ? 
-                                                        $featureMappings->where('vendor_extra_id', $pkg->id)->where('vendor_feature_id', $feature->id)->isNotEmpty() : 
-                                                        true;
-                                                @endphp
-                                                <td class="text-center" style="border-bottom: 1px solid rgba(255,255,255,0.05); padding: 15px;">
-                                                    @if($hasFeature)
-                                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                                                    @else
-                                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#ef4444" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                                                    @endif
+                                                <th class="text-center" style="border-bottom: 1px solid rgba(255,255,255,0.05); padding: 15px;">
+                                                    <div style="font-weight: 800; color: #f8fafc; font-size: 0.95rem;">{{ $pkg->name }}</div>
+                                                    <div style="font-weight: 600; color: var(--brand); font-size: 0.8rem; margin-top: 5px;">
+                                                        {{ $pkg->price > 0 ? '$' . number_format($pkg->price, 2) . ' / Day' : 'Included' }}
+                                                    </div>
+                                                </th>
+                                            @endforeach
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Dynamic rows from Vendor Extra Features -->
+                                        @php
+                                            $hasCustomFeatures = $vendorFeatures->count() > 0;
+                                            $featuresList = $hasCustomFeatures ? $vendorFeatures : [];
+                                        @endphp
+                                        @foreach($featuresList as $feature)
+                                            <tr>
+                                                <td style="border-bottom: 1px solid rgba(255,255,255,0.05); padding: 15px; color: #cbd5e1; font-size: 0.85rem;">{{ $feature->title }}</td>
+                                                @foreach($insurances as $pkg)
+                                                    @php
+                                                        $hasFeature = $featureMappings->where('vendor_extra_id', $pkg->id)->where('vendor_feature_id', $feature->id)->isNotEmpty();
+                                                    @endphp
+                                                    <td class="text-center" style="border-bottom: 1px solid rgba(255,255,255,0.05); padding: 15px;">
+                                                        @if($hasFeature)
+                                                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                                        @else
+                                                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#ef4444" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                                        @endif
+                                                    </td>
+                                                @endforeach
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td style="padding: 20px 15px;"></td>
+                                            @foreach($insurances as $pkg)
+                                                <td class="text-center" style="padding: 20px 15px;">
+                                                    <button class="btn w-100 insurance-btn {{ $loop->first ? 'btn-primary' : 'btn-outline-light' }}" 
+                                                        data-id="{{ $pkg->id }}"
+                                                        data-price="{{ $pkg->price }}" 
+                                                        onclick="selectInsurance(this)"
+                                                        style="{{ $loop->first ? 'background: var(--brand); color: #0b1020; border: none;' : 'border-color: rgba(255,255,255,0.2); background: transparent; color: #fff;' }} font-weight: 700; border-radius: 8px; transition: all 0.3s;">
+                                                        {{ $loop->first ? 'Selected' : 'Select' }}
+                                                    </button>
                                                 </td>
                                             @endforeach
-                                            @if($insurances->count() == 0)
-                                                <td class="text-center" style="border-bottom: 1px solid rgba(255,255,255,0.05); padding: 15px;"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg></td>
-                                                <td class="text-center" style="border-bottom: 1px solid rgba(255,255,255,0.05); padding: 15px;"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg></td>
-                                            @endif
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td style="padding: 20px 15px;"></td>
-                                        @foreach($insurances as $pkg)
-                                            <td class="text-center" style="padding: 20px 15px;">
-                                                <button class="btn w-100 insurance-btn {{ $loop->first ? 'btn-primary' : 'btn-outline-light' }}" 
-                                                    data-id="{{ $pkg->id }}"
-                                                    data-price="{{ $pkg->price }}" 
-                                                    onclick="selectInsurance(this)"
-                                                    style="{{ $loop->first ? 'background: var(--brand); color: #0b1020; border: none;' : 'border-color: rgba(255,255,255,0.2); background: transparent; color: #fff;' }} font-weight: 700; border-radius: 8px; transition: all 0.3s;">
-                                                    {{ $loop->first ? 'Selected' : 'Select' }}
-                                                </button>
-                                            </td>
-                                        @endforeach
-                                        @if($insurances->count() == 0)
-                                            <td class="text-center" style="padding: 20px 15px;"><button class="btn btn-outline-light w-100">Select</button></td>
-                                            <td class="text-center" style="padding: 20px 15px;"><button class="btn btn-outline-light w-100">Select</button></td>
-                                        @endif
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        @else
+                            <div class="text-center py-5 px-4" style="background: rgba(255, 255, 255, 0.01); border-radius: 8px; border: 1px dashed rgba(255, 255, 255, 0.08);">
+                                <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="rgba(255, 255, 255, 0.2)" stroke-width="1.5" class="mb-3" style="display: block; margin: 0 auto 15px;">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                </svg>
+                                <h5 style="color: #cbd5e1; font-weight: 700; margin-bottom: 6px;">No Insurance Options Configured</h5>
+                                <p class="text-muted mb-0" style="font-size: 0.85rem; max-width: 600px; margin: 0 auto;">This vendor has not configured any additional coverage plans. Basic third-party coverage is included by default. Please click Continue to proceed.</p>
+                            </div>
+                        @endif
                     </div>
                 </div>
 
@@ -173,8 +166,8 @@
                 
                 <!-- Bottom Action Buttons -->
                 <div class="d-flex justify-content-between align-items-center mt-5 mb-5">
-                    <a href="javascript:history.back()" class="btn btn-outline-light px-5 py-3" style="border-radius: 8px; font-weight: 700; border-color: rgba(255,255,255,0.2);">Back</a>
-                    <button onclick="continueToPayment()" class="btn px-5 py-3" style="background: var(--brand); color: #0b1020; border-radius: 8px; font-weight: 800; box-shadow: 0 4px 15px rgba(82, 234, 210, 0.3); border: none;">Continue</button>
+                    <a href="javascript:history.back()" class="btn px-5 py-3" style="background: linear-gradient(135deg, #52ead2 0%, #00a4e4 100%); color: #0b1020; border-radius: 8px; font-weight: 800; box-shadow: 0 4px 15px rgba(82, 234, 210, 0.3); text-decoration: none;">Back</a>
+                    <button onclick="continueToPayment()" class="btn px-5 py-3" style="background: linear-gradient(135deg, #52ead2 0%, #00a4e4 100%); color: #0b1020; border-radius: 8px; font-weight: 800; box-shadow: 0 4px 15px rgba(82, 234, 210, 0.3); border: none;">Continue</button>
                 </div>
 
             </div>
