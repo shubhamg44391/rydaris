@@ -20,7 +20,7 @@
             <div class="window-bar">
               <div class="dots" aria-hidden="true"><span></span><span></span><span></span></div>
               <span id="demo-title">Rydaris Fleet Board</span>
-              <a href="{{ route('demo.dashboard') }}" style="background: var(--brand, #52ead2); color: #050711; font-size: 0.72rem; font-weight: 700; padding: 4px 12px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 0 10px rgba(82, 234, 210, 0.3); transition: all 0.2s; cursor: pointer;">Live operations</a>
+              <a href="{{ route('demo.dashboard') }}" style="background: linear-gradient(135deg, var(--brand-2, #80a7ff), var(--brand, #52ead2)); color: #050711; font-size: 0.72rem; font-weight: 700; padding: 4px 12px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 0 10px rgba(82, 234, 210, 0.3); transition: all 0.2s; cursor: pointer;">Live operations</a>
             </div>
             <div class="dashboard">
               <aside class="sidebar">

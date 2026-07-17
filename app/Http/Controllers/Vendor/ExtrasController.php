@@ -17,13 +17,29 @@ class ExtrasController extends Controller
         return Auth::id();
     }
 
+    private function getGroups()
+    {
+        $branchId = auth()->user()->current_branch_id;
+        $groupsQuery = Group::where('vendor_id', $this->vendorId());
+        if ($branchId) {
+            $groupsQuery->where(function ($q) use ($branchId) {
+                $q->where('branch_id', $branchId)
+                  ->orWhereNull('branch_id');
+            });
+        }
+        return $groupsQuery->orderBy('name')->get();
+    }
+
     public function extrasIndex()
     {
         $query = VendorExtra::where('vendor_id', $this->vendorId())->where('type', 'extra');
         
         $branchId = auth()->user()->current_branch_id;
         if ($branchId) {
-            $query->where('branch_id', $branchId);
+            $query->where(function ($q) use ($branchId) {
+                $q->where('branch_id', $branchId)
+                  ->orWhereNull('branch_id');
+            });
         }
         
         $extras = $query->get();
@@ -35,7 +51,7 @@ class ExtrasController extends Controller
         if (!Auth::user()->canAddExtra()) {
             return redirect()->route('vendor.extras.index')->with('error', 'You have reached your maximum extras capacity based on your current plan. Upgrade your plan to add more extras.');
         }
-        $groups = Group::where('vendor_id', $this->vendorId())->orderBy('name')->get();
+        $groups = $this->getGroups();
         $vendor_features = \App\Models\VendorFeature::where('vendor_id', $this->vendorId())->orderBy('index_no')->get();
         $insurances = VendorExtra::where('vendor_id', $this->vendorId())->where('type', 'insurance')->get();
         return view('vendor.extras.create', ['type' => 'extra', 'groups' => $groups, 'vendor_features' => $vendor_features, 'insurances' => $insurances]);
@@ -44,7 +60,7 @@ class ExtrasController extends Controller
     public function editExtra($id)
     {
         $item = VendorExtra::where('vendor_id', $this->vendorId())->findOrFail($id);
-        $groups = Group::where('vendor_id', $this->vendorId())->orderBy('name')->get();
+        $groups = $this->getGroups();
         $vendor_features = \App\Models\VendorFeature::where('vendor_id', $this->vendorId())->orderBy('index_no')->get();
         $insurances = VendorExtra::where('vendor_id', $this->vendorId())->where('type', 'insurance')->get();
 
@@ -72,7 +88,7 @@ class ExtrasController extends Controller
         if (!Auth::user()->canAddInsurance()) {
             return redirect()->route('vendor.insurance.index')->with('error', 'You have reached your maximum insurance capacity based on your current plan. Upgrade your plan to add more insurances.');
         }
-        $groups = Group::where('vendor_id', $this->vendorId())->orderBy('name')->get();
+        $groups = $this->getGroups();
         $vendor_features = \App\Models\VendorFeature::where('vendor_id', $this->vendorId())->orderBy('index_no')->get();
         $insurances = VendorExtra::where('vendor_id', $this->vendorId())->where('type', 'insurance')->get();
         return view('vendor.extras.create', ['type' => 'insurance', 'groups' => $groups, 'vendor_features' => $vendor_features, 'insurances' => $insurances]);
@@ -81,7 +97,7 @@ class ExtrasController extends Controller
     public function editInsurance($id)
     {
         $item = VendorExtra::where('vendor_id', $this->vendorId())->findOrFail($id);
-        $groups = Group::where('vendor_id', $this->vendorId())->orderBy('name')->get();
+        $groups = $this->getGroups();
         $vendor_features = \App\Models\VendorFeature::where('vendor_id', $this->vendorId())->orderBy('index_no')->get();
         $insurances = VendorExtra::where('vendor_id', $this->vendorId())->where('type', 'insurance')->get();
 
@@ -110,7 +126,10 @@ class ExtrasController extends Controller
         
         $branchId = auth()->user()->current_branch_id;
         if ($branchId) {
-            $query->where('branch_id', $branchId);
+            $query->where(function ($q) use ($branchId) {
+                $q->where('branch_id', $branchId)
+                  ->orWhereNull('branch_id');
+            });
         }
         
         $insurances = $query->get();

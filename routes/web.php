@@ -511,9 +511,49 @@ Route::get('/dev-login', function() {
     return redirect('/user/dashboard');
 });
 
-// Demo Routes
-Route::prefix('demo')->group(function () {
-    Route::get('/dashboard', [\App\Http\Controllers\Demo\DemoController::class, 'dashboard'])->name('demo.dashboard');
-    Route::get('/fleet', [\App\Http\Controllers\Demo\DemoController::class, 'fleet'])->name('demo.fleet');
-    Route::get('/customers', [\App\Http\Controllers\Demo\DemoController::class, 'customers'])->name('demo.customers');
+// Demo Routes (static mock portal — no live DB)
+Route::prefix('demo')->name('demo.')->group(function () {
+    $demo = \App\Http\Controllers\Demo\DemoController::class;
+
+    Route::get('/dashboard', [$demo, 'dashboard'])->name('dashboard');
+
+    Route::get('/bookings', [$demo, 'bookings'])->name('bookings');
+    Route::get('/bookings/payment', [$demo, 'bookingsPayment'])->name('bookings.payment');
+
+    Route::get('/vehicles', [$demo, 'vehicles'])->name('vehicles');
+    Route::get('/vehicles/create', [$demo, 'vehiclesCreate'])->name('vehicles.create');
+
+    Route::get('/locations', [$demo, 'locations'])->name('locations');
+    Route::get('/locations/create', [$demo, 'locationsCreate'])->name('locations.create');
+
+    Route::get('/customers', [$demo, 'customers'])->name('customers');
+    Route::get('/customers/create', [$demo, 'customersCreate'])->name('customers.create');
+    Route::get('/invitations', [$demo, 'invitations'])->name('invitations');
+    Route::get('/invitations/create', [$demo, 'invitationsCreate'])->name('invitations.create');
+
+    Route::get('/fleet', [$demo, 'fleet'])->name('fleet');
+
+    Route::get('/extras', [$demo, 'extras'])->name('extras');
+    Route::get('/extras/create', [$demo, 'extrasCreate'])->name('extras.create');
+    Route::get('/insurance', [$demo, 'insurance'])->name('insurance');
+    Route::get('/insurance/create', [$demo, 'insuranceCreate'])->name('insurance.create');
+    Route::get('/features', [$demo, 'features'])->name('features');
+    Route::get('/features/create', [$demo, 'featuresCreate'])->name('features.create');
+    Route::get('/rules', [$demo, 'rules'])->name('rules');
+    Route::get('/rules/create', [$demo, 'rulesCreate'])->name('rules.create');
+
+    Route::get('/coupons', [$demo, 'coupons'])->name('coupons');
+    Route::get('/coupons/create', [$demo, 'couponsCreate'])->name('coupons.create');
+    Route::get('/support-tickets', [$demo, 'supportTickets'])->name('support-tickets');
+    Route::get('/support-tickets/create', [$demo, 'supportTicketsCreate'])->name('support-tickets.create');
+
+    Route::get('/subscription', [$demo, 'subscription'])->name('subscription');
+    Route::get('/subscription/history', [$demo, 'subscriptionHistory'])->name('subscription.history');
+
+    Route::get('/terms-conditions', [$demo, 'terms'])->name('terms');
+
+    Route::get('/settings/business', [$demo, 'businessSettings'])->name('settings.business');
+    Route::get('/settings/payment', [$demo, 'paymentSettings'])->name('settings.payment');
+
+    Route::get('/profile', [$demo, 'profile'])->name('profile');
 });

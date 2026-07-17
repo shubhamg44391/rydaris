@@ -48,6 +48,7 @@
     <style>
         :root {
             --brand: #52ead2;
+            --brand-2: #80a7ff;
         }
 
         body {
@@ -138,7 +139,7 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--brand), #ffffff) !important;
+            background: linear-gradient(135deg, var(--brand-2), var(--brand)) !important;
             border: none !important;
             color: #051013 !important;
             font-weight: 800 !important;
@@ -150,6 +151,7 @@
 
         .btn-primary:hover {
             transform: translateY(-1px) !important;
+            background: linear-gradient(135deg, var(--brand-2), var(--brand)) !important;
             box-shadow: 0 12px 30px rgba(82, 234, 210, 0.25) !important;
             color: #051013 !important;
         }

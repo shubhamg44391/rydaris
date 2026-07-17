@@ -28,7 +28,16 @@ class AvailabilityController extends Controller
     public function index()
     {
         $vid = $this->vendorId();
-        $groups  = Group::where('vendor_id', $vid)->orderBy('name')->get();
+        $branchId = auth()->user()->current_branch_id;
+        
+        $groupsQuery = Group::where('vendor_id', $vid);
+        if ($branchId) {
+            $groupsQuery->where(function ($q) use ($branchId) {
+                $q->where('branch_id', $branchId)
+                  ->orWhereNull('branch_id');
+            });
+        }
+        $groups  = $groupsQuery->orderBy('name')->get();
         $periods = RentalPeriod::where('vendor_id', $vid)->orderBy('min_day')->get();
 
         $initialData = $this->getRatesMatrixData($vid, now()->year, 'next30', null, null, []);
@@ -41,8 +50,21 @@ class AvailabilityController extends Controller
      --------------------------------------------------------------- */
     public function create()
     {
-        $groups   = Group::where('vendor_id', $this->vendorId())->orderBy('name')->get();
-        $vehicles = Vehicle::where('vendor_id', $this->vendorId())->where('status', 'active')->orderBy('name')->get();
+        $branchId = auth()->user()->current_branch_id;
+        $groupsQuery = Group::where('vendor_id', $this->vendorId());
+        $vehiclesQuery = Vehicle::where('vendor_id', $this->vendorId())->where('status', 'active');
+        if ($branchId) {
+            $groupsQuery->where(function ($q) use ($branchId) {
+                $q->where('branch_id', $branchId)
+                  ->orWhereNull('branch_id');
+            });
+            $vehiclesQuery->where(function ($q) use ($branchId) {
+                $q->where('branch_id', $branchId)
+                  ->orWhereNull('branch_id');
+            });
+        }
+        $groups   = $groupsQuery->orderBy('name')->get();
+        $vehicles = $vehiclesQuery->orderBy('name')->get();
         $periods  = RentalPeriod::where('vendor_id', $this->vendorId())->orderBy('min_day')->get();
 
         return view('vendor.availability.create', compact('groups', 'vehicles', 'periods'));
@@ -88,8 +110,22 @@ class AvailabilityController extends Controller
     public function edit($id)
     {
         $availability = Availability::where('vendor_id', $this->vendorId())->findOrFail($id);
-        $groups       = Group::where('vendor_id', $this->vendorId())->orderBy('name')->get();
-        $vehicles     = Vehicle::where('vendor_id', $this->vendorId())->where('status', 'active')->orderBy('name')->get();
+        
+        $branchId = auth()->user()->current_branch_id;
+        $groupsQuery = Group::where('vendor_id', $this->vendorId());
+        $vehiclesQuery = Vehicle::where('vendor_id', $this->vendorId())->where('status', 'active');
+        if ($branchId) {
+            $groupsQuery->where(function ($q) use ($branchId) {
+                $q->where('branch_id', $branchId)
+                  ->orWhereNull('branch_id');
+            });
+            $vehiclesQuery->where(function ($q) use ($branchId) {
+                $q->where('branch_id', $branchId)
+                  ->orWhereNull('branch_id');
+            });
+        }
+        $groups       = $groupsQuery->orderBy('name')->get();
+        $vehicles     = $vehiclesQuery->orderBy('name')->get();
         $periods      = RentalPeriod::where('vendor_id', $this->vendorId())->orderBy('min_day')->get();
 
         return view('vendor.availability.edit', compact('availability', 'groups', 'vehicles', 'periods'));
@@ -187,12 +223,25 @@ class AvailabilityController extends Controller
             $to   = now()->endOfMonth();
         }
 
-        $groups = Group::where('vendor_id', $vid)->orderBy('name');
-        if (!empty($groupIds)) {
-            $groups->whereIn('id', $groupIds);
+        $branchId = auth()->user()->current_branch_id;
+        $groupsQuery = Group::where('vendor_id', $vid);
+        if ($branchId) {
+            $groupsQuery->where(function ($q) use ($branchId) {
+                $q->where('branch_id', $branchId)
+                  ->orWhereNull('branch_id');
+            });
         }
-        $groups = $groups->with(['vehicles' => function ($q) use ($vid) {
+        if (!empty($groupIds)) {
+            $groupsQuery->whereIn('id', $groupIds);
+        }
+        $groups = $groupsQuery->orderBy('name')->with(['vehicles' => function ($q) use ($vid, $branchId) {
             $q->where('vendor_id', $vid)->where('status', 'active');
+            if ($branchId) {
+                $q->where(function ($query) use ($branchId) {
+                    $query->where('branch_id', $branchId)
+                          ->orWhereNull('branch_id');
+                });
+            }
         }])->get();
 
         // Fetch all group-level rates in range
@@ -770,8 +819,21 @@ class AvailabilityController extends Controller
         $vid = $this->vendorId();
         $file = $request->file('csv_file');
         
-        $groups = Group::where('vendor_id', $vid)->get()->keyBy('name');
-        $vehicles = Vehicle::where('vendor_id', $vid)->get()->keyBy('name');
+        $branchId = auth()->user()->current_branch_id;
+        $groupsQuery = Group::where('vendor_id', $vid);
+        $vehiclesQuery = Vehicle::where('vendor_id', $vid);
+        if ($branchId) {
+            $groupsQuery->where(function ($q) use ($branchId) {
+                $q->where('branch_id', $branchId)
+                  ->orWhereNull('branch_id');
+            });
+            $vehiclesQuery->where(function ($q) use ($branchId) {
+                $q->where('branch_id', $branchId)
+                  ->orWhereNull('branch_id');
+            });
+        }
+        $groups = $groupsQuery->get()->keyBy('name');
+        $vehicles = $vehiclesQuery->get()->keyBy('name');
         
         $handle = fopen($file->getRealPath(), "r");
         $header = fgetcsv($handle); // Skip header

@@ -18,7 +18,10 @@ class LocationController extends Controller
         
         $branchId = auth()->user()->current_branch_id;
         if ($branchId) {
-            $query->where('branch_id', $branchId);
+            $query->where(function ($q) use ($branchId) {
+                $q->where('branch_id', $branchId)
+                  ->orWhereNull('branch_id');
+            });
         }
 
         $locations = $query->orderBy('created_at', 'desc')

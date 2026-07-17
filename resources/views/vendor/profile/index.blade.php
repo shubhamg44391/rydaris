@@ -112,56 +112,114 @@
                     @error('country')<div style="color: #ff6b6b; font-size: 0.875rem; margin-top: 5px;">{{ $message }}</div>@enderror
                 </div>
 
-                 <div style="margin-bottom: 20px;">
-                    <label style="display: block; margin-bottom: 8px; color: var(--muted-2); font-size: 0.875rem;">Default Active Branch</label>
-                    <select name="current_branch_id" style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius); color: #ffffff; outline: none; cursor: pointer;">
-                        <option value="" style="background-color: #0b1020; color: #f8fafc;" {{ is_null($user->current_branch_id) ? 'selected' : '' }}>All Branches</option>
-                        @foreach($branches as $b)
-                            <option value="{{ $b->id }}" style="background-color: #0b1020; color: #f8fafc;" {{ $user->current_branch_id == $b->id ? 'selected' : '' }}>{{ $b->name }}</option>
-                        @endforeach
-                    </select>
-                    @error('current_branch_id')<div style="color: #ff6b6b; font-size: 0.875rem; margin-top: 5px;">{{ $message }}</div>@enderror
-                </div>
+                <input type="hidden" name="current_branch_id" value="{{ $user->current_branch_id }}">
 
                 <button type="submit" class="btn btn-primary" style="margin-top: 15px;">Save Changes</button>
             </form>
         </article>
 
-        <!-- Change Password -->
-        <article class="kpi-card" style="padding: 30px;">
-            <h2 style="font-size: 1.25rem; font-weight: 600; color: #ffffff; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.05);">Change Password</h2>
-            <form action="{{ route('vendor.profile.password') }}" method="POST">
-                @csrf
-                
-                <div style="margin-bottom: 20px;">
-                    <label style="display: block; margin-bottom: 8px; color: var(--muted-2); font-size: 0.875rem;">Current Password</label>
-                    <input type="password" name="current_password" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius); color: #ffffff;">
-                    @error('current_password')<div style="color: #ff6b6b; font-size: 0.875rem; margin-top: 5px;">{{ $message }}</div>@enderror
-                </div>
+        <!-- Right Column (Change Password & Branch Selection) -->
+        <div style="display: flex; flex-direction: column; gap: 30px;">
+            <!-- Change Password -->
+            <article class="kpi-card" style="padding: 30px;">
+                <h2 style="font-size: 1.25rem; font-weight: 600; color: #ffffff; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.05);">Change Password</h2>
+                <form action="{{ route('vendor.profile.password') }}" method="POST">
+                    @csrf
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; color: var(--muted-2); font-size: 0.875rem;">Current Password</label>
+                        <input type="password" name="current_password" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius); color: #ffffff;">
+                        @error('current_password')<div style="color: #ff6b6b; font-size: 0.875rem; margin-top: 5px;">{{ $message }}</div>@enderror
+                    </div>
 
-                <div style="margin-bottom: 20px;">
-                    <label style="display: block; margin-bottom: 8px; color: var(--muted-2); font-size: 0.875rem;">New Password</label>
-                    <input type="password" name="password" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius); color: #ffffff;">
-                    @error('password')<div style="color: #ff6b6b; font-size: 0.875rem; margin-top: 5px;">{{ $message }}</div>@enderror
-                </div>
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; color: var(--muted-2); font-size: 0.875rem;">New Password</label>
+                        <input type="password" name="password" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius); color: #ffffff;">
+                        @error('password')<div style="color: #ff6b6b; font-size: 0.875rem; margin-top: 5px;">{{ $message }}</div>@enderror
+                    </div>
 
-                <div style="margin-bottom: 20px;">
-                    <label style="display: block; margin-bottom: 8px; color: var(--muted-2); font-size: 0.875rem;">Confirm New Password</label>
-                    <input type="password" name="password_confirmation" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius); color: #ffffff;">
-                </div>
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; color: var(--muted-2); font-size: 0.875rem;">Confirm New Password</label>
+                        <input type="password" name="password_confirmation" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius); color: #ffffff;">
+                    </div>
 
-                <button type="submit" class="btn btn-primary" style="margin-top: 15px;">Update Password</button>
-            </form>
-        </article>
+                    <button type="submit" class="btn btn-primary" style="margin-top: 15px;">Update Password</button>
+                </form>
+            </article>
+
+            <!-- Default Active Branch -->
+            <article class="kpi-card" style="padding: 30px;">
+                <h2 style="font-size: 1.25rem; font-weight: 600; color: #ffffff; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.05);">Default Active Branch</h2>
+                <form id="branchSelectForm">
+                    @csrf
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; color: var(--muted-2); font-size: 0.875rem;">Select Branch</label>
+                        <select name="branch_id" id="profileBranchSelect" style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius); color: #ffffff; outline: none; cursor: pointer;">
+                            <option value="" style="background-color: #0b1020; color: #f8fafc;" {{ is_null($user->current_branch_id) ? 'selected' : '' }}>All Branches</option>
+                            @foreach($branches as $b)
+                                <option value="{{ $b->id }}" style="background-color: #0b1020; color: #f8fafc;" {{ $user->current_branch_id == $b->id ? 'selected' : '' }}>{{ $b->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Switch Branch</button>
+                </form>
+            </article>
+        </div>
     </div>
 </section>
 @endsection
 
 @section('js')
     @include('partials.phone-input')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             initializeIntlTelInput('reg_phone', 'hidden_country_code', 'hidden_contact_number');
+
+            const branchForm = document.getElementById('branchSelectForm');
+            if (branchForm) {
+                branchForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const branchId = document.getElementById('profileBranchSelect').value;
+                    
+                    fetch('{{ route("vendor.branches.select") }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({ branch_id: branchId })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: data.message,
+                                timer: 1500,
+                                showConfirmButton: false
+                            }).then(() => {
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: data.message || 'Failed to switch branch.'
+                            });
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'An error occurred while switching branch.'
+                        });
+                    });
+                });
+            }
         });
     </script>
 @endsection

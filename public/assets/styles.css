@@ -456,7 +456,7 @@ h3 {
 
 .btn.primary {
   color: #061218;
-  background: linear-gradient(135deg, var(--brand), #ffffff);
+  background: linear-gradient(135deg, var(--brand-2), var(--brand));
   box-shadow: 0 18px 42px rgba(82, 234, 210, 0.2);
   transition: all 0.2s ease;
 }
@@ -666,7 +666,7 @@ h3 {
   padding: 5px 8px;
   border-radius: 999px;
   color: #061218;
-  background: var(--brand);
+  background: linear-gradient(135deg, var(--brand-2), var(--brand));
   font-size: 0.75rem;
   font-weight: 850;
 }

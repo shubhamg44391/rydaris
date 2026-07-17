@@ -13,6 +13,7 @@ class Group extends Model
         'name',
         'description',
         'vendor_id',
+        'branch_id',
     ];
 
     /**
@@ -21,6 +22,14 @@ class Group extends Model
     public function vendor()
     {
         return $this->belongsTo(User::class, 'vendor_id');
+    }
+
+    /**
+     * Get the branch that owns the group.
+     */
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
     }
 
     /**

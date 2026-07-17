@@ -138,12 +138,11 @@ class User extends Authenticatable
             return false;
         }
         $subscription = $this->activeSubscription;
-        if (!$subscription) {
+        if (!$subscription || !$subscription->package) {
             return false;
         }
 
-        $limit = (int) $subscription->package->no_of_groups;
-        return $this->groups()->count() < $limit;
+        return $this->checkLimit($this->groups()->count(), $subscription->package->no_of_groups);
     }
 
     public function canAddVehicle()
@@ -152,12 +151,11 @@ class User extends Authenticatable
             return false;
         }
         $subscription = $this->activeSubscription;
-        if (!$subscription) {
+        if (!$subscription || !$subscription->package) {
             return false;
         }
 
-        $limit = (int) $subscription->package->no_of_vehicles;
-        return $this->vehicles()->count() < $limit;
+        return $this->checkLimit($this->vehicles()->count(), $subscription->package->no_of_vehicles);
     }
 
     public function canAddBranch()

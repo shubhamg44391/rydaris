@@ -15,7 +15,17 @@ class GroupController extends Controller
      */
     public function index()
     {
-        $groups = Group::where('vendor_id', Auth::id())->orderBy('created_at', 'desc')->paginate(10);
+        $query = Group::where('vendor_id', Auth::id());
+
+        $branchId = auth()->user()->current_branch_id;
+        if ($branchId) {
+            $query->where(function ($q) use ($branchId) {
+                $q->where('branch_id', $branchId)
+                  ->orWhereNull('branch_id');
+            });
+        }
+
+        $groups = $query->orderBy('created_at', 'desc')->paginate(10);
         return view('vendor.groups.index', compact('groups'));
     }
 
@@ -39,18 +49,21 @@ class GroupController extends Controller
             return redirect()->back()->withInput()->with('error', 'Your package limit for vehicle groups has been reached. Please upgrade your package.');
         }
 
+        $branchId = auth()->user()->current_branch_id;
+
         $request->validate([
             'name' => [
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('groups', 'name')->where(function ($query) {
-                    return $query->where('vendor_id', Auth::id());
+                Rule::unique('groups', 'name')->where(function ($query) use ($branchId) {
+                    return $query->where('vendor_id', Auth::id())
+                                 ->where('branch_id', $branchId);
                 }),
             ],
             'description' => ['nullable', 'string'],
         ], [
-            'name.unique' => 'You already have a vehicle group with this name. Please use a different name.',
+            'name.unique' => 'You already have a vehicle group with this name in this branch. Please use a different name.',
             'name.required' => 'Group name is required.',
             'name.max' => 'Group name must not exceed 255 characters.',
         ]);
@@ -59,6 +72,7 @@ class GroupController extends Controller
             'name' => $request->name,
             'description' => $request->description,
             'vendor_id' => Auth::id(),
+            'branch_id' => $branchId,
         ]);
 
         return redirect(route('vendor.groups.index'))->with('success', 'Vehicle Group created successfully.');
@@ -79,19 +93,21 @@ class GroupController extends Controller
     public function update(Request $request, $id)
     {
         $group = Group::where('vendor_id', Auth::id())->findOrFail($id);
+        $branchId = auth()->user()->current_branch_id;
 
         $request->validate([
             'name' => [
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('groups', 'name')->ignore($id)->where(function ($query) {
-                    return $query->where('vendor_id', Auth::id());
+                Rule::unique('groups', 'name')->ignore($id)->where(function ($query) use ($branchId) {
+                    return $query->where('vendor_id', Auth::id())
+                                 ->where('branch_id', $branchId);
                 }),
             ],
             'description' => ['nullable', 'string'],
         ], [
-            'name.unique' => 'You already have a vehicle group with this name. Please use a different name.',
+            'name.unique' => 'You already have a vehicle group with this name in this branch. Please use a different name.',
             'name.required' => 'Group name is required.',
             'name.max' => 'Group name must not exceed 255 characters.',
         ]);

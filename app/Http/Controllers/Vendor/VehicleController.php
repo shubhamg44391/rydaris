@@ -21,7 +21,10 @@ class VehicleController extends Controller
         
         $branchId = auth()->user()->current_branch_id;
         if ($branchId) {
-            $query->where('branch_id', $branchId);
+            $query->where(function ($q) use ($branchId) {
+                $q->where('branch_id', $branchId)
+                  ->orWhereNull('branch_id');
+            });
         }
 
         $vehicles = $query->orderBy('created_at', 'desc')
@@ -38,7 +41,15 @@ class VehicleController extends Controller
         if (!auth()->user()->canAddVehicle()) {
             return redirect()->route('vendor.vehicles.index')->with('error', 'Your package limit for vehicles has been reached. Please upgrade your package.');
         }
-        $groups = Group::where('vendor_id', Auth::id())->orderBy('name')->get();
+        $branchId = auth()->user()->current_branch_id;
+        $groupsQuery = Group::where('vendor_id', Auth::id());
+        if ($branchId) {
+            $groupsQuery->where(function ($q) use ($branchId) {
+                $q->where('branch_id', $branchId)
+                  ->orWhereNull('branch_id');
+            });
+        }
+        $groups = $groupsQuery->orderBy('name')->get();
         return view('vendor.vehicles.create', compact('groups'));
     }
 
@@ -109,7 +120,15 @@ class VehicleController extends Controller
     public function edit($id)
     {
         $vehicle = Vehicle::where('vendor_id', Auth::id())->findOrFail($id);
-        $groups = Group::where('vendor_id', Auth::id())->orderBy('name')->get();
+        $branchId = auth()->user()->current_branch_id;
+        $groupsQuery = Group::where('vendor_id', Auth::id());
+        if ($branchId) {
+            $groupsQuery->where(function ($q) use ($branchId) {
+                $q->where('branch_id', $branchId)
+                  ->orWhereNull('branch_id');
+            });
+        }
+        $groups = $groupsQuery->orderBy('name')->get();
 
         return view('vendor.vehicles.edit', compact('vehicle', 'groups'));
     }
