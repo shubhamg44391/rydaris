@@ -1,6 +1,6 @@
 @extends('frontend.layout.main')
 
-@section('title', 'Sitemap | Rydaris')
+@section('title', $seo_title ?? 'Sitemap | Rydaris')
 
 @section('content')
   <main style="background: #050711; color: #f8fafc; min-height: 100vh; padding-bottom: 80px;">

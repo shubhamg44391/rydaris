@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Insurance Management')
+@section('title', $seo_title ?? 'Insurance Management')
 
 @section('main-content')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">

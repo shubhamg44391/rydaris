@@ -1,6 +1,6 @@
 @extends('frontend.layout.main')
 
-@section('title', 'Contact Us | Rydaris')
+@section('title', $seo_title ?? 'Contact Us | Rydaris')
 
 @section('content')
   <main>

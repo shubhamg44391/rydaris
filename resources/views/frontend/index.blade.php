@@ -1,6 +1,6 @@
 @extends('frontend.layout.main')
 
-@section('title', 'Rydaris | Car Rental Management System')
+@section('title', $seo_title ?? 'Rydaris | Car Rental Management System')
 
 @section('content')
     <main>
@@ -124,14 +124,14 @@
                     </p>
                   </div>
                   <a href="{{ route('terms') }}" target="_blank"
-                     style="display:inline-flex; align-items:center; gap:6px; padding:8px 20px; background:linear-gradient(135deg, #52ead2, #2bc2a8); color:#051013; border-radius:8px; font-weight:700; font-size:0.75rem; text-decoration:none; box-shadow:0 2px 10px rgba(82,234,210,0.15); transition:opacity 0.2s;"
+                     style="display:inline-flex; align-items:center; gap:6px; padding:8px 20px; background:linear-gradient(135deg, var(--brand-2, #80a7ff), var(--brand, #52ead2)); color:#051013; border-radius:8px; font-weight:700; font-size:0.75rem; text-decoration:none; box-shadow:0 2px 10px rgba(82,234,210,0.15); transition:opacity 0.2s;"
                      onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
                     <svg viewBox="0 0 24 24" style="width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2.5;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                     View Terms &amp; Conditions
                   </a>
                 </div>
               </section>
-
+ 
               <!-- REPORTS PANEL -->
               <section class="board" id="panel-reports" style="display:none; flex-direction:column; padding:14px;">
                 <!-- Header -->
@@ -141,7 +141,7 @@
                     <span style="font-size:0.68rem; background:rgba(82,234,210,0.15); color:#52ead2; padding:2px 8px; border-radius:20px; font-weight:700;">All Reservations</span>
                   </div>
                   <button onclick="downloadReportExcel()"
-                     style="display:inline-flex; align-items:center; gap:6px; padding:6px 14px; background:linear-gradient(135deg, #52ead2, #2bc2a8); color:#051013; border:none; border-radius:6px; font-weight:700; font-size:0.68rem; cursor:pointer; transition:opacity 0.2s;"
+                     style="display:inline-flex; align-items:center; gap:6px; padding:6px 14px; background:linear-gradient(135deg, var(--brand-2, #80a7ff), var(--brand, #52ead2)); color:#051013; border:none; border-radius:6px; font-weight:700; font-size:0.68rem; cursor:pointer; transition:opacity 0.2s;"
                      onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
                     <svg viewBox="0 0 24 24" style="width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                     Excel Download

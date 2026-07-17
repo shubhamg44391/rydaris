@@ -477,7 +477,7 @@ h3 {
 
 
 .btn {
-  transition: transform 0.22s cubic-bezier(0.4,0,0.2,1), box-shadow 0.22s cubic-bezier(0.4,0,0.2,1), background 0.22s ease, border-color 0.22s ease, color 0.22s ease;
+  transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.22s cubic-bezier(0.4, 0, 0.2, 1), background 0.22s ease, border-color 0.22s ease, color 0.22s ease;
 }
 
 .btn:hover {
@@ -583,13 +583,14 @@ h3 {
 }
 
 .side-item.active {
-  color: #061218 !important;
+  color: #ffffff !important;
   background: linear-gradient(135deg, var(--brand-2), var(--brand)) !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
 }
 
 .side-item:not(.active):hover {
   color: #f0fafa !important;
-  background: rgba(82, 234, 210, 0.12) !important;
+  background: rgba(60, 212, 160, 0.12) !important;
 }
 
 .board {
@@ -2857,6 +2858,7 @@ nav[role="navigation"] a:hover,
   align-items: center;
   justify-content: center;
 }
+
 .btn-teal:hover {
   background: linear-gradient(135deg, #00a4e4 0%, #52ead2 100%) !important;
   color: #050b14 !important;
@@ -2873,6 +2875,7 @@ nav[role="navigation"] a:hover,
   box-shadow: 0 4px 15px rgba(82, 234, 210, 0.2) !important;
   transition: all 0.2s ease-in-out !important;
 }
+
 .btn-primary:hover {
   background: linear-gradient(135deg, #00a4e4 0%, #52ead2 100%) !important;
   color: #050b14 !important;
@@ -2881,14 +2884,17 @@ nav[role="navigation"] a:hover,
 }
 
 /* Global btn-secondary and btn-outline styling */
-.btn-secondary, .btn-outline {
+.btn-secondary,
+.btn-outline {
   background: rgba(82, 234, 210, 0.05) !important;
   border: 1px solid rgba(82, 234, 210, 0.25) !important;
   color: var(--brand, #52ead2) !important;
   font-weight: 600 !important;
   transition: all 0.2s ease-in-out !important;
 }
-.btn-secondary:hover, .btn-outline:hover {
+
+.btn-secondary:hover,
+.btn-outline:hover {
   background: rgba(82, 234, 210, 0.15) !important;
   color: #ffffff !important;
   border-color: var(--brand, #52ead2) !important;
@@ -2903,6 +2909,7 @@ nav[role="navigation"] a:hover,
   font-weight: 600 !important;
   transition: all 0.2s ease-in-out !important;
 }
+
 .btn-outline-primary:hover {
   background: var(--brand, #52ead2) !important;
   color: #050b14 !important;
@@ -2919,6 +2926,7 @@ nav[role="navigation"] a:hover,
   box-shadow: 0 4px 15px rgba(128, 167, 255, 0.2) !important;
   transition: all 0.2s ease-in-out !important;
 }
+
 .btn-blue:hover {
   background: linear-gradient(135deg, #00a4e4 0%, #80a7ff 100%) !important;
   color: #050b14 !important;
@@ -2927,9 +2935,9 @@ nav[role="navigation"] a:hover,
 }
 
 /* Enforce common design rules for all user site buttons & a-tag buttons */
-.btn, 
-button, 
-input[type="submit"], 
+.btn,
+button,
+input[type="submit"],
 input[type="button"],
 .btn-secondary,
 .btn-teal,
@@ -2951,6 +2959,7 @@ input[type="button"],
   overflow: hidden;
   transition: opacity 0.5s ease, visibility 0.5s ease;
 }
+
 .site-preloader video {
   position: absolute;
   top: 0;
@@ -2976,6 +2985,7 @@ input[type="button"],
   z-index: 1;
   pointer-events: none;
 }
+
 .preloader-spinner .spinner-circle {
   width: 50px;
   height: 50px;
@@ -2984,6 +2994,7 @@ input[type="button"],
   border-radius: 50%;
   animation: preloader-spin 1s linear infinite;
 }
+
 .preloader-spinner span {
   margin-top: 16px;
   font-size: 13px;
@@ -2993,10 +3004,12 @@ input[type="button"],
   font-weight: 500;
   opacity: 0.8;
 }
+
 @keyframes preloader-spin {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }

@@ -9,11 +9,8 @@
   <meta name="viewport"
     content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>Edion Admin Dashboard</title>
-
-  {{-- <title>Admin Dashboard</title> --}}
-
-  <meta name="description" content="" />
+  <title>@yield('title', $seo_title ?? 'Rydaris Admin Dashboard')</title>
+  <meta name="description" content="{{ $seo_description ?? 'Rydaris is the ultimate car rental management software designed for fleet operations, reservation booking, and real-time damage tracking.' }}" />
 
   <!-- Favicon -->
   <link class="favicon" rel="icon" type="image/png" href="{{ asset('assets/logo/favicon.png') }}" />

@@ -103,4 +103,13 @@ class HomeController extends Controller
 
         return redirect()->route('contact')->with('success', 'Thank you! Your message has been sent successfully. We will get back to you within one business day.');
     }
+
+    /**
+     * Show custom page on frontend dynamically by slug.
+     */
+    public function showPage($slug)
+    {
+        $page = \App\Models\Page::where('slug', $slug)->firstOrFail();
+        return view('frontend.page', compact('page'));
+    }
 }

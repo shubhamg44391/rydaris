@@ -8,8 +8,17 @@
         </div>
         <div><h3>Product</h3><ul class="footer-links"><li><a href="{{ route('home') }}">Overview</a></li><li><a href="{{ route('pricing') }}">Pricing</a></li><li><a href="{{ route('faq') }}">FAQ</a></li></ul></div>
         <div><h3>Company</h3><ul class="footer-links"><li><a href="{{ route('about') }}">About us</a></li><li><a href="{{ route('contact') }}">Contact</a></li><li><a href="{{ route('contact') }}">Partners</a></li><li><a href="{{ route('contact') }}">Careers</a></li></ul></div>
-        <div><h3>Resources</h3><ul class="footer-links"><li><a href="{{ route('faq') }}">Help center</a></li><li><a href="{{ route('pricing') }}">ROI guide</a></li><li><a href="{{ route('about') }}">Fleet playbook</a></li><li><a href="{{ route('contact') }}">Support desk</a></li><li><a href="{{ route('sitemap.html') }}">Sitemap</a></li></ul></div>
-        <div><h3>Legal</h3><ul class="footer-links"><li><a href="{{ route('faq') }}">Security</a></li><li><a href="{{ route('faq') }}">Privacy policy</a></li><li><a href="{{ route('terms') }}">Terms of service</a></li><li><a href="mailto:sales@rydaris.com">sales@rydaris.com</a></li></ul></div>
+        @php
+            $helpCenterPage = \App\Models\Page::where('slug', 'help-center')->first();
+            $roiGuidePage = \App\Models\Page::where('slug', 'roi-guide')->first();
+            $fleetPlaybookPage = \App\Models\Page::where('slug', 'fleet-playbook')->first();
+            $supportDeskPage = \App\Models\Page::where('slug', 'support-desk')->first();
+            $sitemapPage = \App\Models\Page::where('slug', 'sitemap')->first();
+            $securityPage = \App\Models\Page::where('slug', 'security')->first();
+            $privacyPolicyPage = \App\Models\Page::where('slug', 'privacy-policy')->first();
+        @endphp
+        <div><h3>Resources</h3><ul class="footer-links"><li><a href="{{ $helpCenterPage ? route('frontend.page', 'help-center') : route('faq') }}">Help center</a></li><li><a href="{{ $roiGuidePage ? route('frontend.page', 'roi-guide') : route('pricing') }}">ROI guide</a></li><li><a href="{{ $fleetPlaybookPage ? route('frontend.page', 'fleet-playbook') : route('about') }}">Fleet playbook</a></li><li><a href="{{ $supportDeskPage ? route('frontend.page', 'support-desk') : route('contact') }}">Support desk</a></li><li><a href="{{ $sitemapPage ? route('frontend.page', 'sitemap') : route('sitemap.html') }}">Sitemap</a></li></ul></div>
+        <div><h3>Legal</h3><ul class="footer-links"><li><a href="{{ $securityPage ? route('frontend.page', 'security') : route('faq') }}">Security</a></li><li><a href="{{ $privacyPolicyPage ? route('frontend.page', 'privacy-policy') : route('faq') }}">Privacy policy</a></li><li><a href="{{ route('terms') }}">Terms of service</a></li><li><a href="mailto:sales@rydaris.com">sales@rydaris.com</a></li></ul></div>
       </div>
       <div class="wrap footer-bottom">
         <span>Copyright © 2026 Rydaris. All rights reserved.</span>

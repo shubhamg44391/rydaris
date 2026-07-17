@@ -572,7 +572,10 @@
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="sidebar-logo" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-            <div class="logo-text">Rydaris.<span></span></div>
+           <a class="brand" href="{{ Auth::check() && (Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin') ? route('dashboard') : (Auth::user()->role === 'user' ? route('user.dashboard') : route('vendor.dashboard')) }}" aria-label="Rydaris home" style="opacity: 0.9; transition: opacity 0.2s ease; display: flex; align-items: center; justify-content: center;">
+          <img class="brand-full" src="{{ asset('assets/logo/rydaris-logo.png') }}" alt="Rydaris Logo" style="height: 32px; width: auto; display: block;">
+          <img class="brand-mini" src="{{ asset('assets/logo/favicon.svg') }}" alt="Rydaris Logo" style="height: 32px; width: auto; display: none;">
+        </a>
             <button class="btn-close-sidebar" onclick="toggleSidebarCollapse()" style="display: none; background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; padding: 4px; line-height: 1;">
                 <i class="fa-solid fa-xmark"></i>
             </button>
@@ -691,10 +694,10 @@
             <div class="topbar-right" style="gap: 25px; display: flex; align-items: center;">
                 <div class="branch-display-wrap" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(82, 234, 210, 0.08); border: 1px solid rgba(82, 234, 210, 0.2); border-radius: 8px; padding: 6px 12px; font-size: 0.85rem; font-weight: 600; color: #f8fafc;">
                     <i class="fa-solid fa-house-chimney" style="color: var(--brand, #52ead2); font-size: 0.85rem;"></i>
-                    <span>Branch: Dhili</span>
+                    <span>Branch: Delhi</span>
                 </div>
                 <a href="{{ route('demo.profile') }}" style="font-weight: 600; font-size: 0.9rem; color: #fff; display: inline-flex; align-items: center; gap: 8px; text-decoration: none;">
-                    Hello, Cynthia Keane Meyers Buck 
+                    Hello, Demo  
                     <i class="fa-regular fa-circle-user" style="color: var(--brand); font-size: 1.1rem;"></i>
                 </a>
                 <a href="{{ route('home') }}" style="border: none; background: transparent; padding: 0; color: #ef4444; font-size: 0.9rem; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; transition: color 0.2s;">

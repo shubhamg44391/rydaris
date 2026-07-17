@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Rules Management')
+@section('title', $seo_title ?? 'Rules Management')
 
 @section('main-content')
 

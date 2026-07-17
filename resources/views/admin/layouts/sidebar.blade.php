@@ -91,6 +91,70 @@
         </svg>Custom Packages
     </a>
 
+    <!-- Pages Parent Menu with Submenu -->
+    <div class="admin-nav-group">
+        <a href="javascript:void(0);" class="nav-toggle" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ Request::is('admin/pages*') ? 'color: #f8fafc; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb;' }} font-size: 0.92rem; font-weight: 780; transition: background 0.2s; text-decoration: none;">
+            <span style="display: flex; align-items: center; gap: 10px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                </svg>Pages
+            </span>
+            <svg class="chevron" viewBox="0 0 24 24" style="width: 14px; height: 14px; transition: transform 0.2s ease; {{ Request::is('admin/pages*') ? 'transform: rotate(180deg);' : '' }}"><path d="m6 9 6 6 6-6"/></svg>
+        </a>
+        <div class="admin-submenu" style="{{ Request::is('admin/pages*') ? 'display: flex;' : 'display: none;' }} padding-left: 20px; margin-top: 4px; flex-direction: column; gap: 4px;">
+            <a href="{{ route('admin.pages.index') }}" class="submenu-item {{ Request::is('admin/pages') && !Request::is('admin/pages/create') && !Request::is('admin/pages/*/edit') ? 'active' : '' }}" style="{{ Request::is('admin/pages') && !Request::is('admin/pages/create') && !Request::is('admin/pages/*/edit') ? 'color: var(--brand, #52ead2) !important; font-weight: bold; background: rgba(255, 255, 255, 0.04) !important;' : '' }} text-decoration: none;">
+                <span class="dot" style="{{ Request::is('admin/pages') && !Request::is('admin/pages/create') && !Request::is('admin/pages/*/edit') ? 'background: var(--brand, #52ead2) !important;' : '' }}"></span>
+                All Pages
+            </a>
+            @php
+                $createdPages = \App\Models\Page::orderBy('title', 'asc')->get();
+            @endphp
+            @foreach($createdPages as $dbPage)
+                @php
+                    $pageUrl = route('admin.pages.edit', $dbPage->id);
+                    $isActiveSub = Request::is('admin/pages/' . $dbPage->id . '/edit') || (isset($page) && $page->id == $dbPage->id);
+                @endphp
+                <a href="{{ $pageUrl }}" class="submenu-item {{ $isActiveSub ? 'active' : '' }}" style="{{ $isActiveSub ? 'color: var(--brand, #52ead2) !important; font-weight: bold; background: rgba(255, 255, 255, 0.04) !important;' : '' }} text-decoration: none;">
+                    <span class="dot" style="{{ $isActiveSub ? 'background: var(--brand, #52ead2) !important;' : '' }}"></span>
+                    {{ $dbPage->title }}
+                </a>
+            @endforeach
+        </div>
+    </div>
+
+    <!-- SEO Metadata Parent Menu with Custom Collapsible Submenu -->
+    <div class="admin-nav-group">
+        <a href="javascript:void(0);" class="nav-toggle" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ Request::is('admin/seo-settings*') ? 'color: #f8fafc; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb;' }} font-size: 0.92rem; font-weight: 780; transition: background 0.2s; text-decoration: none;">
+            <span style="display: flex; align-items: center; gap: 10px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;">
+                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                    <line x1="7" y1="7" x2="7.01" y2="7"/>
+                </svg>SEO Page Metadata
+            </span>
+            <svg class="chevron" viewBox="0 0 24 24" style="width: 14px; height: 14px; transition: transform 0.2s ease; {{ Request::is('admin/seo-settings*') ? 'transform: rotate(180deg);' : '' }}"><path d="m6 9 6 6 6-6"/></svg>
+        </a>
+        <div class="admin-submenu" style="{{ Request::is('admin/seo-settings*') ? 'display: flex;' : 'display: none;' }} padding-left: 20px; margin-top: 4px; flex-direction: column; gap: 4px;">
+            @php
+                $isFrontendActive = (Request::is('admin/seo-settings') && request('type', 'frontend') === 'frontend') || (Request::is('admin/seo-settings/*/edit') && isset($seoMetadata) && $seoMetadata->portal_type === 'frontend');
+                $isUserActive = (Request::is('admin/seo-settings') && request('type') === 'user') || (Request::is('admin/seo-settings/*/edit') && isset($seoMetadata) && $seoMetadata->portal_type === 'user');
+                $isVendorActive = (Request::is('admin/seo-settings') && request('type') === 'vendor') || (Request::is('admin/seo-settings/*/edit') && isset($seoMetadata) && $seoMetadata->portal_type === 'vendor');
+            @endphp
+            <a href="{{ route('admin.seo-settings.index', ['type' => 'frontend']) }}" class="submenu-item {{ $isFrontendActive ? 'active' : '' }}" style="{{ $isFrontendActive ? 'color: var(--brand, #52ead2) !important; font-weight: bold; background: rgba(255, 255, 255, 0.04) !important;' : '' }} text-decoration: none;">
+                <span class="dot" style="{{ $isFrontendActive ? 'background: var(--brand, #52ead2) !important;' : '' }}"></span>
+                Frontend Pages
+            </a>
+            <a href="{{ route('admin.seo-settings.index', ['type' => 'user']) }}" class="submenu-item {{ $isUserActive ? 'active' : '' }}" style="{{ $isUserActive ? 'color: var(--brand, #52ead2) !important; font-weight: bold; background: rgba(255, 255, 255, 0.04) !important;' : '' }} text-decoration: none;">
+                <span class="dot" style="{{ $isUserActive ? 'background: var(--brand, #52ead2) !important;' : '' }}"></span>
+                User Pages
+            </a>
+            <a href="{{ route('admin.seo-settings.index', ['type' => 'vendor']) }}" class="submenu-item {{ $isVendorActive ? 'active' : '' }}" style="{{ $isVendorActive ? 'color: var(--brand, #52ead2) !important; font-weight: bold; background: rgba(255, 255, 255, 0.04) !important;' : '' }} text-decoration: none;">
+                <span class="dot" style="{{ $isVendorActive ? 'background: var(--brand, #52ead2) !important;' : '' }}"></span>
+                Vendor Pages
+            </a>
+        </div>
+    </div>
+
     <!-- Settings Parent Menu with Custom Collapsible Submenu -->
     <div class="admin-nav-group">
         <a href="javascript:void(0);" class="nav-toggle" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ Request::is('admin/settings*') ? 'color: #f8fafc; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb;' }} font-size: 0.92rem; font-weight: 780; transition: background 0.2s; text-decoration: none;">

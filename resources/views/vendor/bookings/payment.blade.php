@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Booking Payments')
+@section('title', $seo_title ?? 'Booking Payments')
 
 @section('main-content')
 <div class="admin-panel">

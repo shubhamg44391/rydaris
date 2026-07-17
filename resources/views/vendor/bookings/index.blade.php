@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Bookings List')
+@section('title', $seo_title ?? 'Bookings List')
 
 @section('main-content')
 <div class="admin-panel">
@@ -84,7 +84,7 @@
                             <td style="white-space: nowrap;">
                                 {{ $booking->created_at->format('M d, Y h:i A') }}
                             </td>
-                            <td style="color: #f8fafc; font-weight: 700;">
+                            <td style="white-space: nowrap;">
                                 {{ $booking->reservation_number }}
                             </td>
                             <td style="white-space: nowrap;">

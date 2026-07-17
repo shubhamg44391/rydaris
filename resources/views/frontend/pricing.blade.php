@@ -1,6 +1,6 @@
 @extends('frontend.layout.main')
 
-@section('title', 'Pricing | Rydaris')
+@section('title', $seo_title ?? 'Pricing | Rydaris')
 
 @section('content')
   <link rel="stylesheet" href="{{ asset('assets/admin/vendor/fonts/boxicons.css') }}" />

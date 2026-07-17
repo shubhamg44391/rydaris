@@ -17,11 +17,11 @@ return new class extends Migration
                 $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
             }
             
-            // Drop old composite unique constraint
-            $table->dropUnique('groups_vendor_id_name_unique');
-            
-            // Add new composite unique constraint including branch_id
+            // Add new composite unique constraint including branch_id first
             $table->unique(['vendor_id', 'branch_id', 'name'], 'groups_vendor_id_branch_id_name_unique');
+            
+            // Drop old composite unique constraint after
+            $table->dropUnique('groups_vendor_id_name_unique');
         });
     }
 
@@ -31,8 +31,11 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('groups', function (Blueprint $table) {
-            $table->dropUnique('groups_vendor_id_branch_id_name_unique');
+            // Restore old unique index first
             $table->unique(['vendor_id', 'name'], 'groups_vendor_id_name_unique');
+            
+            // Drop new unique index after
+            $table->dropUnique('groups_vendor_id_branch_id_name_unique');
             
             if (Schema::hasColumn('groups', 'branch_id')) {
                 $table->dropForeign(['branch_id']);

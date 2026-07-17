@@ -70,6 +70,7 @@ Route::get('/pricing', [HomeController::class, 'pricing'])->name('pricing');
 Route::get('/faq', [HomeController::class, 'faq'])->name('faq');
 Route::get('/terms-of-service', [HomeController::class, 'terms'])->name('terms');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
+Route::get('/page/{slug}', [HomeController::class, 'showPage'])->name('frontend.page');
 Route::get('/sitemap', function() {
     return view('frontend.sitemap');
 })->name('sitemap.html');
@@ -265,6 +266,15 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
         'destroy' => 'admin.packages.destroy',
     ]);
 
+    Route::resource('pages', \App\Http\Controllers\Admin\AdminPageController::class)->names([
+        'index' => 'admin.pages.index',
+        'create' => 'admin.pages.create',
+        'store' => 'admin.pages.store',
+        'edit' => 'admin.pages.edit',
+        'update' => 'admin.pages.update',
+        'destroy' => 'admin.pages.destroy',
+    ]);
+
     Route::resource('contact-inquiries', AdminContactInquiryController::class)->only(['index', 'destroy'])->names([
         'index' => 'admin.contact-inquiries.index',
         'destroy' => 'admin.contact-inquiries.destroy',
@@ -299,6 +309,15 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     // Subscriptions
     Route::get('/subscriptions', [\App\Http\Controllers\Admin\AdminSubscriptionController::class, 'index'])->name('admin.subscriptions.index');
     Route::get('/subscriptions/{id}/invoice', [\App\Http\Controllers\Admin\AdminSubscriptionController::class, 'subscriptionInvoice'])->name('admin.subscriptions.invoice');
+
+    // SEO Settings
+    Route::resource('seo-settings', \App\Http\Controllers\Admin\SeoMetadataController::class)->only(['index', 'edit', 'update'])->names([
+        'index' => 'admin.seo-settings.index',
+        'edit' => 'admin.seo-settings.edit',
+        'update' => 'admin.seo-settings.update',
+    ])->parameters([
+        'seo-settings' => 'seoMetadata'
+    ]);
 });
 
 // Vendor registration

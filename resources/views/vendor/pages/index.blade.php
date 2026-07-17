@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Terms & Conditions')
+@section('title', $seo_title ?? 'Terms & Conditions')
 
 @section('main-content')
 

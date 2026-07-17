@@ -89,9 +89,19 @@
 
         .form-control:focus {
             border-color: var(--brand) !important;
-            box-shadow: 0 0 0 0.25rem rgba(82, 234, 210, 0.15) !important;
+            box-shadow: 0 0 0 0.25rem rgba(60, 212, 160, 0.15) !important;
             background-color: rgba(255, 255, 255, 0.08) !important;
             color: #ffffff !important;
+        }
+
+        /* Fix autocomplete/autofill text visibility */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 50px #0b1020 inset !important;
+            -webkit-text-fill-color: #ffffff !important;
+            caret-color: #ffffff !important;
         }
 
         .input-group-text {
