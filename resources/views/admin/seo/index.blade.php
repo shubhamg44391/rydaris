@@ -3,7 +3,7 @@
 @section('title', 'Manage Page SEO | Rydaris Admin')
 
 @section('main-content')
-    <!-- Breadcrumb -->
+    
     <div style="margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
         <div>
             <h4 style="margin: 0; color: #fff; font-weight: 700; font-size: 1.4rem;">SEO Page Metadata</h4>
@@ -23,10 +23,10 @@
 
         @if($type === 'vendor' && $grouped)
 
-            {{-- Grouped Vendor View — mirrors sidebar structure --}}
+            
             @foreach($grouped as $groupName => $items)
                 <div style="margin-bottom: 28px;">
-                    {{-- Group Header --}}
+                    
                     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--line);">
                         <div style="width: 4px; height: 20px; background: linear-gradient(180deg, var(--brand-2), var(--brand)); border-radius: 2px; flex-shrink: 0;"></div>
                         <h5 style="margin: 0; color: var(--brand); font-size: 0.88rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;">{{ $groupName }}</h5>
@@ -35,7 +35,7 @@
                         </span>
                     </div>
 
-                    {{-- Sub-pages table --}}
+                    
                     <div class="admin-table-wrap" style="overflow-x: auto;">
                         <table class="admin-table" style="margin-bottom: 0;">
                             <thead>
@@ -43,6 +43,7 @@
                                     <th style="width: 180px;">Page</th>
                                     <th>Path (URL)</th>
                                     <th>Meta Title</th>
+                                    <th>Keywords</th>
                                     <th style="width: 80px; text-align: center;">Edit</th>
                                 </tr>
                             </thead>
@@ -60,7 +61,10 @@
                                             <code style="color: var(--brand); font-family: monospace; font-size: 0.8rem;">{{ $data->url_path }}</code>
                                         </td>
                                         <td>
-                                            <span style="color: #cbd5e1; font-size: 0.87rem;">{{ Str::limit($data->meta_title, 55) ?: '-' }}</span>
+                                            <span style="color: #cbd5e1; font-size: 0.87rem;">{{ Str::limit($data->meta_title, 45) ?: '-' }}</span>
+                                        </td>
+                                        <td>
+                                            <span style="color: #94a3b8; font-size: 0.82rem;">{{ Str::limit($data->keyword, 35) ?: '-' }}</span>
                                         </td>
                                         <td>
                                             <div style="display: flex; justify-content: center;">
@@ -83,7 +87,7 @@
 
         @else
 
-            {{-- Flat Table — Frontend & User portals --}}
+            
             <div class="panel-body admin-table-wrap" style="overflow-x: auto;">
                 <table class="admin-table">
                     <thead>
@@ -92,6 +96,7 @@
                             <th>Page Name</th>
                             <th>Path (URL)</th>
                             <th>Meta Title</th>
+                            <th>Keywords</th>
                             <th style="width: 100px; text-align: center;">Actions</th>
                         </tr>
                     </thead>
@@ -104,7 +109,8 @@
                                 <td>{{ $startingNumber++ }}</td>
                                 <td><strong style="color: #fff;">{{ $data->page_name }}</strong></td>
                                 <td><code style="color: var(--brand); font-family: monospace; font-size: 0.85rem;">{{ $data->url_path }}</code></td>
-                                <td><span style="color: #cbd5e1; font-size: 0.9rem;">{{ Str::limit($data->meta_title, 55) ?: '-' }}</span></td>
+                                <td><span style="color: #cbd5e1; font-size: 0.9rem;">{{ Str::limit($data->meta_title, 45) ?: '-' }}</span></td>
+                                <td><span style="color: #94a3b8; font-size: 0.82rem;">{{ Str::limit($data->keyword, 35) ?: '-' }}</span></td>
                                 <td>
                                     <div style="display: flex; justify-content: center;">
                                         <a href="{{ route('admin.seo-settings.edit', $data->id) }}"
@@ -119,7 +125,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="text-center py-4" style="color: #64748b; font-style: italic; text-align: center;">No metadata records found.</td>
+                                <td colspan="6" class="text-center py-4" style="color: #64748b; font-style: italic; text-align: center;">No metadata records found.</td>
                             </tr>
                         @endforelse
                     </tbody>

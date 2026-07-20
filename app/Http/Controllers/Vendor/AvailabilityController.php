@@ -22,9 +22,8 @@ class AvailabilityController extends Controller
         return Auth::id();
     }
 
-    /* ---------------------------------------------------------------
-     | 1. INDEX — main pricing management view
-     --------------------------------------------------------------- */
+    
+
     public function index()
     {
         $vid = $this->vendorId();
@@ -45,9 +44,8 @@ class AvailabilityController extends Controller
         return view('vendor.availability.index', compact('groups', 'periods', 'initialData'));
     }
 
-    /* ---------------------------------------------------------------
-     | 2. CREATE — add rate form
-     --------------------------------------------------------------- */
+    
+
     public function create()
     {
         $branchId = auth()->user()->current_branch_id;
@@ -70,9 +68,8 @@ class AvailabilityController extends Controller
         return view('vendor.availability.create', compact('groups', 'vehicles', 'periods'));
     }
 
-    /* ---------------------------------------------------------------
-     | 3. STORE — save new rate
-     --------------------------------------------------------------- */
+    
+
     public function store(Request $request)
     {
         $request->validate([
@@ -104,9 +101,8 @@ class AvailabilityController extends Controller
             ->with('success', 'Rate added successfully.');
     }
 
-    /* ---------------------------------------------------------------
-     | 4. EDIT — load edit form
-     --------------------------------------------------------------- */
+    
+
     public function edit($id)
     {
         $availability = Availability::where('vendor_id', $this->vendorId())->findOrFail($id);
@@ -131,9 +127,8 @@ class AvailabilityController extends Controller
         return view('vendor.availability.edit', compact('availability', 'groups', 'vehicles', 'periods'));
     }
 
-    /* ---------------------------------------------------------------
-     | 5. UPDATE — save edited rate
-     --------------------------------------------------------------- */
+    
+
     public function update(Request $request, $id)
     {
         $availability = Availability::where('vendor_id', $this->vendorId())->findOrFail($id);
@@ -166,9 +161,8 @@ class AvailabilityController extends Controller
             ->with('success', 'Rate updated successfully.');
     }
 
-    /* ---------------------------------------------------------------
-     | 6. DESTROY — delete rate
-     --------------------------------------------------------------- */
+    
+
     public function destroy($id)
     {
         $availability = Availability::where('vendor_id', $this->vendorId())->findOrFail($id);
@@ -178,9 +172,8 @@ class AvailabilityController extends Controller
             ->with('success', 'Rate deleted successfully.');
     }
 
-    /* ---------------------------------------------------------------
-     | 7. TOGGLE STATUS — AJAX
-     --------------------------------------------------------------- */
+    
+
     public function toggleStatus(Request $request, $id)
     {
         $availability = Availability::where('vendor_id', $this->vendorId())->findOrFail($id);
@@ -189,9 +182,8 @@ class AvailabilityController extends Controller
         return response()->json(['status' => $availability->status]);
     }
 
-    /* ---------------------------------------------------------------
-     | 8. FETCH RATES — AJAX → returns matrix JSON for table
-     --------------------------------------------------------------- */
+    
+
     public function fetchRates(Request $request)
     {
         $vid       = $this->vendorId();
@@ -200,15 +192,16 @@ class AvailabilityController extends Controller
         $startDate = $request->input('start_date');
         $endDate   = $request->input('end_date');
         $groupIds  = $request->input('group_ids', []);
+        $vehicleId = $request->input('vehicle_id');
 
-        $result = $this->getRatesMatrixData($vid, $year, $month, $startDate, $endDate, $groupIds);
+        $result = $this->getRatesMatrixData($vid, $year, $month, $startDate, $endDate, $groupIds, $vehicleId);
 
         return response()->json(array_merge(['status' => 'success'], $result));
     }
 
-    private function getRatesMatrixData($vid, $year, $month, $startDate, $endDate, $groupIds)
+    private function getRatesMatrixData($vid, $year, $month, $startDate, $endDate, $groupIds, $vehicleId = null)
     {
-        // Determine date range
+        
         if ($startDate && $endDate) {
             $from = Carbon::parse($startDate)->startOfDay();
             $to   = Carbon::parse($endDate)->endOfDay();
@@ -224,6 +217,14 @@ class AvailabilityController extends Controller
         }
 
         $branchId = auth()->user()->current_branch_id;
+
+        if ($vehicleId) {
+            $vObj = Vehicle::where('vendor_id', $vid)->find($vehicleId);
+            if ($vObj && $vObj->group_id) {
+                $groupIds = [$vObj->group_id];
+            }
+        }
+
         $groupsQuery = Group::where('vendor_id', $vid);
         if ($branchId) {
             $groupsQuery->where(function ($q) use ($branchId) {
@@ -234,8 +235,13 @@ class AvailabilityController extends Controller
         if (!empty($groupIds)) {
             $groupsQuery->whereIn('id', $groupIds);
         }
-        $groups = $groupsQuery->orderBy('name')->with(['vehicles' => function ($q) use ($vid, $branchId) {
-            $q->where('vendor_id', $vid)->where('status', 'active');
+        $groups = $groupsQuery->orderBy('name')->with(['vehicles' => function ($q) use ($vid, $branchId, $vehicleId) {
+            $q->where('vendor_id', $vid);
+            if ($vehicleId) {
+                $q->where('id', $vehicleId);
+            } else {
+                $q->where('status', 'active');
+            }
             if ($branchId) {
                 $q->where(function ($query) use ($branchId) {
                     $query->where('branch_id', $branchId)
@@ -244,7 +250,7 @@ class AvailabilityController extends Controller
             }
         }])->get();
 
-        // Fetch all group-level rates in range
+        
         $rates = Availability::where('vendor_id', $vid)
             ->where('status', 1)
             ->where('pickup_date', '<=', $to->toDateString())
@@ -253,7 +259,7 @@ class AvailabilityController extends Controller
             ->orderBy('id', 'asc')
             ->get();
 
-        // Fetch vehicle-level overrides
+        
         $vehicleIds = $groups->pluck('vehicles')->flatten()->pluck('id')->unique()->values();
         $vRates = VehicleAvailability::where('vendor_id', $vid)
             ->where('status', 1)
@@ -263,14 +269,14 @@ class AvailabilityController extends Controller
             ->orderBy('id', 'asc')
             ->get();
 
-        // Build date list
+        
         $dates = [];
         $period = CarbonPeriod::create($from, $to);
         foreach ($period as $date) {
             $dates[] = $date->toDateString();
         }
 
-        // Pre-build index for O(1) lookups: $groupRatesLookup[group_id][date_string]
+        
         $groupRatesLookup = [];
         foreach ($rates as $r) {
             $pStr = is_object($r->pickup_date) ? $r->pickup_date->toDateString() : $r->pickup_date;
@@ -282,7 +288,7 @@ class AvailabilityController extends Controller
             }
         }
 
-        // Pre-build index for vehicle overrides: $vehRatesLookup[vehicle_id][date_string]
+        
         $vehRatesLookup = [];
         foreach ($vRates as $r) {
             $pStr = is_object($r->pickup_date) ? $r->pickup_date->toDateString() : $r->pickup_date;
@@ -331,13 +337,13 @@ class AvailabilityController extends Controller
                     $vMatchGroup = $groupRatesLookup[$group->id][$date] ?? [];
                     $vMatchVehicle = $vehRatesLookup[$vehicle->id][$date] ?? [];
 
-                    // Group rates as base
+                    
                     foreach ($vMatchGroup as $r) {
                         for ($d = $r->min_day; $d <= $r->max_day; $d++) {
                             $dayRates[$d] = ['price' => (float) $r->price, 'id' => $r->id, 'pid' => $r->rental_period_id, 'source' => 'group'];
                         }
                     }
-                    // Vehicle overrides
+                    
                     foreach ($vMatchVehicle as $r) {
                         for ($d = $r->min_day; $d <= $r->max_day; $d++) {
                             $dayRates[$d] = ['price' => (float) $r->price, 'id' => $r->id, 'pid' => $r->rental_period_id, 'source' => 'vehicle'];
@@ -352,9 +358,8 @@ class AvailabilityController extends Controller
         return ['data' => $matrix, 'dates' => $dates];
     }
 
-    /* ---------------------------------------------------------------
-     | 9. UPDATE SINGLE RATE — AJAX inline cell edit
-     --------------------------------------------------------------- */
+    
+
     public function updateSingleRate(Request $request)
     {
         $request->validate([
@@ -373,7 +378,7 @@ class AvailabilityController extends Controller
         $vehicleId = $request->vehicle_id ? (int) $request->vehicle_id : null;
 
         if ($vehicleId) {
-            // 1. Delete previous EXACT single-day override for this vehicle date
+            
             VehicleAvailability::where('vendor_id', $vid)
                 ->where('vehicle_id', $vehicleId)
                 ->where('pickup_date', $date)
@@ -382,7 +387,7 @@ class AvailabilityController extends Controller
                 ->where('max_day', $day)
                 ->delete();
 
-            // 2. Insert new exact override
+            
             VehicleAvailability::create([
                 'vendor_id'   => $vid,
                 'vehicle_id'  => $vehicleId,
@@ -394,7 +399,7 @@ class AvailabilityController extends Controller
                 'status'      => 1,
             ]);
         } else {
-            // 1. Delete previous EXACT single-day override for this group date
+            
             Availability::where('vendor_id', $vid)
                 ->where('group_id', $groupId)
                 ->whereNull('vehicle_id')
@@ -404,7 +409,7 @@ class AvailabilityController extends Controller
                 ->where('max_day', $day)
                 ->delete();
 
-            // 2. Insert new exact override
+            
             Availability::create([
                 'vendor_id'   => $vid,
                 'group_id'    => $groupId,
@@ -427,9 +432,8 @@ class AvailabilityController extends Controller
         return response()->json(['status' => 'success', 'day' => $day, 'price' => $price]);
     }
 
-    /* ---------------------------------------------------------------
-     | 10. BULK COPY DAY 1 RATES TO ALL DAYS (2-31)
-     --------------------------------------------------------------- */
+    
+
     public function bulkCopyDay1(Request $request)
     {
         $request->validate([
@@ -454,7 +458,7 @@ class AvailabilityController extends Controller
             $vehicleId = $u['vehicle_id'] ? (int) $u['vehicle_id'] : null;
             
             if ($vehicleId) {
-                // Delete existing for this specific date and vehicle
+                
                 VehicleAvailability::where('vendor_id', $vid)
                     ->where('vehicle_id', $vehicleId)
                     ->where('pickup_date', $date)
@@ -478,7 +482,7 @@ class AvailabilityController extends Controller
                     ];
                 }
             } else {
-                // Delete existing for this specific date and group
+                
                 Availability::where('vendor_id', $vid)
                     ->where('group_id', $groupId)
                     ->whereNull('vehicle_id')
@@ -525,9 +529,8 @@ class AvailabilityController extends Controller
         return response()->json(['status' => 'success']);
     }
 
-    /* ---------------------------------------------------------------
-     | 10. BULK UPDATE RATES — AJAX
-     --------------------------------------------------------------- */
+    
+
     public function bulkUpdateRates(Request $request)
     {
         $request->validate([
@@ -552,7 +555,7 @@ class AvailabilityController extends Controller
             $dateStrings[] = $date->toDateString();
         }
 
-        // 1. Fetch existing records BEFORE deleting so we can calculate overrides
+        
         if ($vehicleId) {
             $existingRecords = VehicleAvailability::where('vendor_id', $vid)
                 ->where('vehicle_id', $vehicleId)
@@ -560,7 +563,7 @@ class AvailabilityController extends Controller
                 ->where('dropup_date', '>=', $fromDate->toDateString())
                 ->get();
 
-            // 2. Delete previous exact single-day overrides for the selected combination
+            
             VehicleAvailability::where('vendor_id', $vid)
                 ->where('vehicle_id', $vehicleId)
                 ->whereIn('pickup_date', $dateStrings)
@@ -577,7 +580,7 @@ class AvailabilityController extends Controller
                 ->where('dropup_date', '>=', $fromDate->toDateString())
                 ->get();
 
-            // 2. Delete previous exact single-day overrides for the selected combination
+            
             Availability::where('vendor_id', $vid)
                 ->whereIn('group_id', $groupIds)
                 ->whereNull('vehicle_id')
@@ -589,7 +592,7 @@ class AvailabilityController extends Controller
                 ->delete();
         }
 
-        // Pre-build index for O(1) lookup
+        
         $lookup = [];
         foreach ($existingRecords as $rec) {
             $pStr = is_object($rec->pickup_date) ? $rec->pickup_date->toDateString() : $rec->pickup_date;
@@ -610,7 +613,7 @@ class AvailabilityController extends Controller
         foreach ($dateStrings as $dateStr) {
             $keys = $vehicleId ? [$vehicleId] : $groupIds;
             foreach ($keys as $keyVal) {
-                // Find records covering this specific date in O(1) time
+                
                 $matching = $lookup[$keyVal][$dateStr] ?? [];
                 
                 foreach ($days as $day) {
@@ -672,7 +675,7 @@ class AvailabilityController extends Controller
             }
         }
 
-        // Bulk insert in chunks for massive speed improvement
+        
         foreach (array_chunk($insertData, 500) as $chunk) {
             if ($vehicleId) {
                 VehicleAvailability::insert($chunk);
@@ -699,9 +702,8 @@ class AvailabilityController extends Controller
         return response()->json(array_merge(['status' => 'success'], $result));
     }
 
-    /* ---------------------------------------------------------------
-     | 11. BULK IMPORT RATES — AJAX
-     --------------------------------------------------------------- */
+    
+
     public function bulkImportRates(Request $request)
     {
         $request->validate([
@@ -742,9 +744,8 @@ class AvailabilityController extends Controller
         return response()->json(['status' => 'success', 'imported' => count($rates)]);
     }
 
-    /* ---------------------------------------------------------------
-     | 12. EXPORT RATES — CSV
-     --------------------------------------------------------------- */
+    
+
     public function exportRates(Request $request)
     {
         $vid = $this->vendorId();
@@ -777,7 +778,7 @@ class AvailabilityController extends Controller
         return response()->stream(function () use ($matrix, $dates) {
             $handle = fopen('php://output', 'w');
             
-            // Header row
+            
             $headerRow = ['Pickup Date', 'ACRISS / VEHICLE'];
             for ($i = 1; $i <= 31; $i++) {
                 $headerRow[] = "Day $i";
@@ -807,9 +808,8 @@ class AvailabilityController extends Controller
         }, 200, $headers);
     }
 
-    /* ---------------------------------------------------------------
-     | 13. IMPORT RATES FROM CSV (FormData)
-     --------------------------------------------------------------- */
+    
+
     public function importRatesCSV(Request $request)
     {
         $request->validate([
@@ -836,7 +836,7 @@ class AvailabilityController extends Controller
         $vehicles = $vehiclesQuery->get()->keyBy('name');
         
         $handle = fopen($file->getRealPath(), "r");
-        $header = fgetcsv($handle); // Skip header
+        $header = fgetcsv($handle); 
         
         $importedCount = 0;
         $currentDate = null;
@@ -858,7 +858,7 @@ class AvailabilityController extends Controller
             $groupId = null;
             $vehicleId = null;
             
-            // Extract ID if present (highly robust)
+            
             if (preg_match('/\(ID:(\d+)\)/', $nameCol, $matches)) {
                 $id = (int)$matches[1];
                 if ($isGroup) {
@@ -867,19 +867,19 @@ class AvailabilityController extends Controller
                     $vehicleId = $id;
                 }
             } else {
-                // Fallback to name matching (for older exports)
-                // Remove [G] and leading non-alphanumeric chars (like mangled bullets from Excel)
+                
+                
                 $cleanName = trim(str_replace(['[G]', '•'], '', $nameCol));
                 $cleanName = trim(preg_replace('/^[^a-zA-Z0-9]+/', '', $cleanName));
                 
                 if ($isGroup) {
-                    // Try to find group by name
+                    
                     $matchedGroup = $groups->first(function($g) use ($cleanName) {
                         return str_contains($g->name, $cleanName) || str_contains($cleanName, $g->name);
                     });
                     if ($matchedGroup) $groupId = $matchedGroup->id;
                 } elseif ($isVehicle) {
-                    // Try to find vehicle by name
+                    
                     $matchedVeh = $vehicles->first(function($v) use ($cleanName) {
                         return str_contains($v->name, $cleanName) || str_contains($cleanName, $v->name);
                     });
@@ -953,9 +953,8 @@ class AvailabilityController extends Controller
         return response()->json(['status' => 'success', 'imported' => $importedCount]);
     }
 
-    /* ---------------------------------------------------------------
-     | 14. FETCH HISTORY
-     --------------------------------------------------------------- */
+    
+
     public function getHistory()
     {
         $history = VendorRateHistory::where('vendor_id', $this->vendorId())
@@ -966,9 +965,8 @@ class AvailabilityController extends Controller
         return response()->json(['status' => 'success', 'history' => $history]);
     }
 
-    /* ---------------------------------------------------------------
-     | RENTAL PERIODS — CRUD helpers (simple sub-resource)
-     --------------------------------------------------------------- */
+    
+
     public function periodsIndex()
     {
         $periods = RentalPeriod::where('vendor_id', $this->vendorId())->orderBy('min_day')->get();
@@ -999,21 +997,20 @@ class AvailabilityController extends Controller
         return redirect(route('vendor.availability.periods'))->with('success', 'Period deleted.');
     }
 
-    /* ---------------------------------------------------------------
-     | PRIVATE HELPERS
-     --------------------------------------------------------------- */
+    
+
     private function applyOperation(float $price, string $op): float
     {
         if (str_ends_with($op, '%')) {
             $val = (float) rtrim($op, '%');
             return str_starts_with($op, '-')
-                ? max(0, $price + ($price * $val / 100))   // val is negative
+                ? max(0, $price + ($price * $val / 100))   
                 : $price + ($price * $val / 100);
         }
         $val = (float) $op;
         if (str_starts_with($op, '+') || str_starts_with($op, '-')) {
             return max(0, $price + $val);
         }
-        return max(0, $val); // fixed set
+        return max(0, $val); 
     }
 }

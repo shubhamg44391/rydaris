@@ -113,7 +113,7 @@
                     Ref: <strong style="color: #cbd5e1;">{{ $booking->reservation_number }}</strong>
                 </span>
 
-                {{-- Booking Status --}}
+                
                 @php
                     $statusColors = [
                         'pending'   => ['bg' => 'rgba(251,191,36,0.15)', 'border' => '#fbbf24', 'text' => '#fbbf24'],
@@ -129,7 +129,7 @@
                     ● {{ ucfirst(str_replace('_', ' ', $booking->booking_status ?? 'pending')) }}
                 </span>
 
-                {{-- Payment Status --}}
+                
                 @php
                     $payColors = [
                         'paid'    => ['bg' => 'rgba(34,197,94,0.12)',  'border' => '#22c55e', 'text' => '#22c55e'],
@@ -163,9 +163,9 @@
         @csrf
         @method('PUT')
         
-        <!-- Trip Details Row -->
+        
         <div class="row mb-4">
-            <!-- Pickup Details -->
+            
             <div class="col-md-6">
                 <div class="dark-card p-4 h-100 mb-0">
                     <h5 class="section-heading">
@@ -193,7 +193,7 @@
                 </div>
             </div>
 
-            <!-- Return Details -->
+            
             <div class="col-md-6">
                 <div class="dark-card p-4 h-100 mb-0">
                     <h5 class="section-heading">
@@ -222,7 +222,7 @@
             </div>
         </div>
 
-        <!-- Optional Extras -->
+        
         <div class="dark-card p-4">
             <h5 class="section-heading">
                 <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path><line x1="16" y1="8" x2="2" y2="22"></line><line x1="17.5" y1="15" x2="9" y2="6.5"></line></svg>
@@ -234,8 +234,12 @@
                     <div class="col-md-12">
                         <div class="extra-item" style="display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; background: rgba(11, 16, 32, 0.4); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; margin-bottom: 15px;">
                             <div style="display: flex; align-items: center; gap: 15px;">
-                                <div style="color: #00d2ff; background: rgba(0, 210, 255, 0.1); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                <div style="color: #00d2ff; background: rgba(0, 210, 255, 0.1); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">
+                                    @if(!empty($extra->icon_class))
+                                        <i class="{{ $extra->icon_class }}"></i>
+                                    @else
+                                        <i class="fas fa-box"></i>
+                                    @endif
                                 </div>
                                 <div>
                                     <h6 style="color: #f8fafc; font-weight: 600; margin-bottom: 3px;">{{ $extra->name }}</h6>
@@ -259,7 +263,7 @@
             </div>
         </div>
 
-        <!-- Current Vehicle & Pricing -->
+        
         <div class="dark-card p-4">
             <h5 class="section-heading">
                 <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="7" cy="21" r="2"></circle><circle cx="17" cy="21" r="2"></circle><path d="M14 11V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v4"></path></svg>
@@ -267,17 +271,17 @@
             </h5>
             <div class="row">
                 <div class="col-md-6">
-                    {{-- Hidden field to keep vehicle_id in form submission --}}
+                    
                     <input type="hidden" name="vehicle_id" value="{{ $booking->vehicle_id }}">
 
-                    {{-- Vehicle Image --}}
+                    
                     @if($booking->vehicle && $booking->vehicle->image)
                         <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 12px; text-align: center; margin-bottom: 14px;">
                             <img src="{{ asset('storage/' . $booking->vehicle->image) }}" alt="{{ $booking->vehicle->name }}" style="max-height: 130px; max-width: 100%; object-fit: contain; filter: drop-shadow(0 8px 20px rgba(0,0,0,0.5));">
                         </div>
                     @endif
 
-                    {{-- Vehicle Name --}}
+                    
                     <h6 style="color: #f8fafc; font-weight: 700; font-size: 1.05rem; margin-bottom: 4px;">{{ $booking->vehicle->name ?? 'N/A' }}</h6>
                     @php
                         $initialDays = 1;
@@ -317,7 +321,7 @@
             </div>
         </div>
 
-        <!-- Passenger Information -->
+        
         <div class="dark-card p-4">
             <h5 class="section-heading">
                 <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>

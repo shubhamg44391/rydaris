@@ -149,7 +149,7 @@
 </head>
 <body>
 
-    <!-- Top Bar -->
+    
     <div class="topbar">
         <div class="vendor-name">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
@@ -161,7 +161,7 @@
         <button class="close-btn" onclick="window.close()">✕ Close</button>
     </div>
 
-    <!-- Content -->
+    
     <div class="container">
 
         <div class="tc-header">

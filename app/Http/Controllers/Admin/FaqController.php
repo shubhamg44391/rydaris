@@ -8,9 +8,8 @@ use App\Models\Faq;
 
 class FaqController extends Controller
 {
-    /**
-     * Display a listing of the FAQs, optionally filtered by category.
-     */
+    
+
     public function index(Request $request)
     {
         $category = $request->query('category');
@@ -25,18 +24,16 @@ class FaqController extends Controller
         return view('admin.faqs.index', compact('faqs', 'category'));
     }
 
-    /**
-     * Show the form for creating a new FAQ.
-     */
+    
+
     public function create(Request $request)
     {
         $category = $request->query('category');
         return view('admin.faqs.create', compact('category'));
     }
 
-    /**
-     * Store a newly created FAQ in database.
-     */
+    
+
     public function store(Request $request)
     {
         $request->validate([
@@ -55,18 +52,16 @@ class FaqController extends Controller
             ->with('success', 'FAQ created successfully.');
     }
 
-    /**
-     * Show the form for editing the specified FAQ.
-     */
+    
+
     public function edit($id)
     {
         $faq = Faq::findOrFail($id);
         return view('admin.faqs.edit', compact('faq'));
     }
 
-    /**
-     * Update the specified FAQ in database.
-     */
+    
+
     public function update(Request $request, $id)
     {
         $faq = Faq::findOrFail($id);
@@ -87,9 +82,8 @@ class FaqController extends Controller
             ->with('success', 'FAQ updated successfully.');
     }
 
-    /**
-     * Remove the specified FAQ from database.
-     */
+    
+
     public function destroy($id)
     {
         $faq = Faq::findOrFail($id);

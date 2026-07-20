@@ -27,25 +27,22 @@ class PickupLocation extends Model
         'longitude' => 'decimal:7',
     ];
 
-    /**
-     * The vendor (user) who owns this location.
-     */
+    
+
     public function vendor()
     {
         return $this->belongsTo(User::class, 'vendor_id');
     }
 
-    /**
-     * The branch associated with this location.
-     */
+    
+
     public function branch()
     {
         return $this->belongsTo(Branch::class, 'branch_id');
     }
 
-    /**
-     * Available location types.
-     */
+    
+
     public static function types(): array
     {
         return [

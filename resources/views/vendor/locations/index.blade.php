@@ -89,7 +89,7 @@
             </table>
         </div>
 
-        <!-- Pagination -->
+        
         <div style="border-top:1px solid #d7e0e8;display:flex;justify-content:space-between;align-items:center;padding:16px 24px;">
             <div class="text-muted small">
                 Showing {{ $locations->firstItem() ?? 0 }} to {{ $locations->lastItem() ?? 0 }}

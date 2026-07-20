@@ -7,7 +7,7 @@
         <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Vendors
     </a>
 
-    <!-- Subscriptions Link -->
+    
     <a class="{{ Request::is('admin/subscriptions*') ? 'active' : '' }}" href="{{ route('admin.subscriptions.index') }}" style="text-decoration: none;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="2" y="5" width="20" height="14" rx="2" ry="2"/>
@@ -15,7 +15,7 @@
         </svg>Subscriptions
     </a>
 
-    <!-- FAQ Parent Menu with Custom JavaScript Toggle -->
+    
     <div class="admin-nav-group">
         <a href="javascript:void(0);" class="nav-toggle" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ Request::is('admin/faqs*') ? 'color: #f8fafc; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb;' }} font-size: 0.92rem; font-weight: 780; transition: background 0.2s; text-decoration: none;">
             <span style="display: flex; align-items: center; gap: 10px;">
@@ -43,7 +43,7 @@
         </div>
     </div>
 
-    <!-- Packages Link -->
+    
     <a class="{{ Request::is('admin/packages*') ? 'active' : '' }}" href="{{ route('admin.packages.index') }}" style="text-decoration: none;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="12" y1="1" x2="12" y2="23"/>
@@ -51,7 +51,7 @@
         </svg>Packages
     </a>
 
-    <!-- Terms & Conditions -->
+    
     <a class="{{ Request::is('admin/terms-conditions*') ? 'active' : '' }}" href="{{ route('admin.terms.index') }}" style="text-decoration: none;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -61,7 +61,7 @@
         </svg>Terms & Conditions
     </a>
 
-    <!-- Inquiries Parent Menu -->
+    
     <div class="admin-nav-group">
         <a href="javascript:void(0);" class="nav-toggle" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ Request::is('admin/contact-inquiries*') || Request::is('admin/demo-inquiries*') ? 'color: #f8fafc; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb;' }} font-size: 0.92rem; font-weight: 780; transition: background 0.2s; text-decoration: none;">
             <span style="display: flex; align-items: center; gap: 10px;">
@@ -84,14 +84,14 @@
         </div>
     </div>
 
-    <!-- Custom Package Requests Link -->
+    
     <a class="{{ Request::is('admin/custom-package-requests*') ? 'active' : '' }}" href="{{ route('admin.custom-package-requests.index') }}" style="text-decoration: none;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
         </svg>Custom Packages
     </a>
 
-    <!-- Pages Parent Menu with Submenu -->
+    
     <div class="admin-nav-group">
         <a href="javascript:void(0);" class="nav-toggle" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ Request::is('admin/pages*') ? 'color: #f8fafc; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb;' }} font-size: 0.92rem; font-weight: 780; transition: background 0.2s; text-decoration: none;">
             <span style="display: flex; align-items: center; gap: 10px;">
@@ -123,7 +123,7 @@
         </div>
     </div>
 
-    <!-- SEO Metadata Parent Menu with Custom Collapsible Submenu -->
+    
     <div class="admin-nav-group">
         <a href="javascript:void(0);" class="nav-toggle" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ Request::is('admin/seo-settings*') ? 'color: #f8fafc; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb;' }} font-size: 0.92rem; font-weight: 780; transition: background 0.2s; text-decoration: none;">
             <span style="display: flex; align-items: center; gap: 10px;">
@@ -155,7 +155,7 @@
         </div>
     </div>
 
-    <!-- Settings Parent Menu with Custom Collapsible Submenu -->
+    
     <div class="admin-nav-group">
         <a href="javascript:void(0);" class="nav-toggle" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ Request::is('admin/settings*') ? 'color: #f8fafc; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb;' }} font-size: 0.92rem; font-weight: 780; transition: background 0.2s; text-decoration: none;">
             <span style="display: flex; align-items: center; gap: 10px;">

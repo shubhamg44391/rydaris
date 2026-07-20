@@ -163,7 +163,7 @@
                                 </td>
                                 <td>
                                     <input type="text" name="features[{{ $rowIndex }}][title]" value="{{ $feature->title }}" class="feature-input" placeholder="e.g. Unlimited Kilometers" required>
-                                    <input type="hidden" name="features[{{ $rowIndex }}][index_no]" value="{{ $feature->index_no }}">
+                                    <input type="hidden" name="features[{{ $rowIndex }}][index_no]" value="{{ $feature->index_no > 0 ? $feature->index_no : ($rowIndex + 1) }}">
                                 </td>
                                 <td style="text-align: center;">
                                     <button type="button" onclick="removeRow(this)" class="btn-action btn-delete" title="Delete Feature">
@@ -179,7 +179,7 @@
                                 </td>
                                 <td>
                                     <input type="text" name="features[0][title]" class="feature-input" placeholder="e.g. Unlimited Kilometers" required>
-                                    <input type="hidden" name="features[0][index_no]" value="0">
+                                    <input type="hidden" name="features[0][index_no]" value="1">
                                 </td>
                                 <td style="text-align: center;">
                                     <button type="button" onclick="removeRow(this)" class="btn-action btn-delete" title="Delete Feature">
@@ -214,7 +214,7 @@ function updateRowNumbers() {
     rows.forEach((row, index) => {
         row.querySelector('.row-num').textContent = index + 1;
         const hiddenInput = row.querySelector('input[type="hidden"]');
-        if(hiddenInput) hiddenInput.value = index;
+        if(hiddenInput) hiddenInput.value = index + 1;
     });
 }
 
@@ -232,14 +232,15 @@ function addFeatureRow() {
     const tbody = document.getElementById('featuresBody');
     const tr = document.createElement('tr');
     tr.className = 'feature-row';
+    const newNum = tbody.children.length + 1;
 
     tr.innerHTML = `
         <td style="text-align: center; color: var(--text-muted); font-weight: 500;">
-            <span class="row-num"></span>
+            <span class="row-num">${newNum}</span>
         </td>
         <td>
             <input type="text" name="features[${nextRowIndex}][title]" class="feature-input" placeholder="e.g. New Feature" required>
-            <input type="hidden" name="features[${nextRowIndex}][index_no]" value="${nextRowIndex}">
+            <input type="hidden" name="features[${nextRowIndex}][index_no]" value="${newNum}">
         </td>
         <td style="text-align: center;">
             <button type="button" onclick="removeRow(this)" class="btn-action btn-delete" title="Delete Feature">

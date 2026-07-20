@@ -69,6 +69,7 @@ class AppServiceProvider extends ServiceProvider
                 if ($seo) {
                     $view->with('seo_title', $seo->meta_title);
                     $view->with('seo_description', $seo->meta_description);
+                    $view->with('seo_keyword', $seo->keyword);
                 }
             }
         });

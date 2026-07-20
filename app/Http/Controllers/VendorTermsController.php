@@ -7,9 +7,8 @@ use App\Models\User;
 
 class VendorTermsController extends Controller
 {
-    /**
-     * Display vendor's Terms & Conditions publicly (opens in new tab).
-     */
+    
+
     public function show($vendorId)
     {
         $vendor = User::findOrFail($vendorId);
@@ -18,9 +17,8 @@ class VendorTermsController extends Controller
         return view('public.vendor-terms', compact('vendor', 'tc'));
     }
 
-    /**
-     * Display vehicle-specific Terms & Conditions publicly (opens in new tab).
-     */
+    
+
     public function showVehicleTerms($vehicleId)
     {
         $vehicle = \App\Models\Vehicle::findOrFail($vehicleId);

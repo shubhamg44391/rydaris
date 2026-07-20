@@ -22,10 +22,8 @@ class HomeController extends Controller
         return view('frontend.index');
     }
 
-    /**
-     * Show frontend homepage directly without auth redirect.
-     * Used by the "Visit Website" button in the admin/vendor panel.
-     */
+    
+
     public function frontend()
     {
         return view('frontend.index');
@@ -88,25 +86,24 @@ class HomeController extends Controller
             'message' => ['required', 'string'],
         ]);
 
-        // Save to database
+        
         \App\Models\ContactInquiry::create($validated);
 
-        // Find the super admin's email or default
+        
         $adminEmail = \App\Models\User::where('role', 'super_admin')->first()->email ?? 'admin@rydaris.com';
 
         try {
             Mail::to($adminEmail)->send(new ContactSubmissionMail($validated));
         } catch (\Exception $e) {
-            // Log the error but proceed so the inquiry is still registered in database
+            
             \Illuminate\Support\Facades\Log::error('Contact email notification failed: ' . $e->getMessage());
         }
 
         return redirect()->route('contact')->with('success', 'Thank you! Your message has been sent successfully. We will get back to you within one business day.');
     }
 
-    /**
-     * Show custom page on frontend dynamically by slug.
-     */
+    
+
     public function showPage($slug)
     {
         $page = \App\Models\Page::where('slug', $slug)->firstOrFail();

@@ -3,7 +3,7 @@
 @section('main-content')
 <div class="admin-panel" style="padding: 20px;">
     
-    <!-- Header & Search -->
+    
     <div class="d-flex justify-content-between align-items-center mb-5 flex-wrap gap-3">
         <div>
             <h2 style="font-weight: 700; color: #f8fafc; margin-bottom: 5px;">Discover Vendors</h2>
@@ -17,7 +17,7 @@
         </form>
     </div>
 
-    <!-- Vendors Grid -->
+    
     <div class="row g-4">
         @forelse($vendors as $vendor)
             <div class="col-md-6 col-lg-4">

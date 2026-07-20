@@ -11,15 +11,14 @@
 
 <section class="admin-form-section" style="margin-top: 22px;">
 
-
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
-        <!-- Profile Details -->
+        
         <article class="kpi-card" style="padding: 30px;">
             <h2 style="font-size: 1.25rem; font-weight: 600; color: #ffffff; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.05);">Profile Information</h2>
             <form action="{{ route('vendor.profile.update') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 
-                <!-- Company Logo Upload -->
+                
                 <div style="margin-bottom: 25px; display: flex; align-items: center; gap: 20px;">
                     <div style="width: 80px; height: 80px; border-radius: 50%; background: rgba(82, 234, 210, 0.1); border: 2px dashed rgba(82, 234, 210, 0.3); display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;">
                         @if($user->company_logo)
@@ -118,9 +117,9 @@
             </form>
         </article>
 
-        <!-- Right Column (Change Password & Branch Selection) -->
+        
         <div style="display: flex; flex-direction: column; gap: 30px;">
-            <!-- Change Password -->
+            
             <article class="kpi-card" style="padding: 30px;">
                 <h2 style="font-size: 1.25rem; font-weight: 600; color: #ffffff; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.05);">Change Password</h2>
                 <form action="{{ route('vendor.profile.password') }}" method="POST">
@@ -147,7 +146,7 @@
                 </form>
             </article>
 
-            <!-- Default Active Branch -->
+            
             <article class="kpi-card" style="padding: 30px;">
                 <h2 style="font-size: 1.25rem; font-weight: 600; color: #ffffff; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.05);">Default Active Branch</h2>
                 <form id="branchSelectForm">

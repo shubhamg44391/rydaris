@@ -17,9 +17,8 @@ class UserInvitation extends Model
         'status',
     ];
 
-    /**
-     * Get the vendor that created the invitation.
-     */
+    
+
     public function vendor()
     {
         return $this->belongsTo(User::class, 'vendor_id');

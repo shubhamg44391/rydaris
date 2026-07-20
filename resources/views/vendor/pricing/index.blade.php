@@ -22,7 +22,7 @@
                     <p class="card-text" style="color: #aab7cb; min-height: 48px; font-size: 0.95rem;">{{ $pkg->description }}</p>
                     
                     <div class="my-4">
-                        <span class="display-5 fw-bold" style="color: #f8fafc; font-size: 2.5rem;">{{ $pkg->price }}</span>
+                        <span id="pkg-price-{{ $pkg->id }}" data-raw-price="{{ $pkg->price }}" class="display-5 fw-bold" style="color: #f8fafc; font-size: 2.5rem;">{{ $pkg->price }}</span>
                         @if(strtolower($pkg->price) !== 'custom')
                             <span style="color: #aab7cb;">/{{ $pkg->billing_period }}</span>
                         @endif
@@ -257,7 +257,7 @@
         @endforelse
     </div>
 
-    {{-- Custom Package Request Modal --}}
+    
     <div id="customPackageModal" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.85); align-items: center; justify-content: center; backdrop-filter: blur(8px);">
         <div style="background: #111620; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; width: 100%; max-width: 560px; padding: 28px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); position: relative; font-family: 'Inter', sans-serif; color: #f8fafc;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 15px;">
@@ -314,27 +314,27 @@
         </div>
     </div>
 
-    <!-- Razorpay Checkout SDK -->
+    
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
-    <!-- Confirm Details Modal (Styled after Razorpay Mockup) -->
+    
     <div id="confirmDetailsModal" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.85); align-items: center; justify-content: center; backdrop-filter: blur(8px);">
         <div style="background: #111620; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; padding: 25px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); position: relative; font-family: 'Inter', sans-serif; color: #f8fafc; text-align: left; box-sizing: border-box;">
             
-            <!-- Header -->
+            
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h3 style="margin: 0; font-size: 1.35rem; font-weight: 700; color: #ffffff;">Confirm Your Details</h3>
                 <button onclick="closeDetailsModal()" style="background: none; border: none; color: #a0aec0; cursor: pointer; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; padding: 0;">&times;</button>
             </div>
 
-            <!-- Package Details Box -->
+            
             <div style="background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 255, 255, 0.12); border-radius: 12px; padding: 15px 20px; margin-bottom: 20px; font-size: 0.95rem; line-height: 1.6;">
                 <div><span style="color: #a0aec0;">Selected Package:</span> <strong id="modalPackageName" style="color: #ffffff;">Standard</strong></div>
                 <div><span style="color: #a0aec0;">Billing Cycle:</span> <strong id="modalBillingCycle" style="color: #ffffff;">Monthly</strong></div>
                 <div style="margin-top: 4px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.05);"><span style="color: #a0aec0;">Total Price (incl. {{ \App\Models\SiteSetting::first()?->tax_percentage ?? 18 }}% tax):</span> <strong id="modalTotalPrice" style="color: #ff5429;">₹74,282.82 / Monthly</strong></div>
             </div>
 
-            <!-- Form fields -->
+            
             <div style="display: flex; flex-direction: column; gap: 15px;">
                 <div>
                     <label style="display: block; margin-bottom: 6px; color: #a0aec0; font-size: 0.85rem; font-weight: 500;">Full Name <span style="color: #ff4d4d;">*</span></label>
@@ -413,11 +413,13 @@
         
         const taxRate = {{ \App\Models\SiteSetting::first()?->tax_percentage ?? 18 }};
         let numericPrice = parseFloat(packagePrice.replace(/[^0-9.]/g, '')) || 0;
-        let taxAmount = numericPrice * (taxRate / 100);
-        let totalPrice = numericPrice + taxAmount;
         
-        let currencySymbol = packagePrice.match(/[^0-9.]/)?.[0] || '₹';
-        let formattedTotalPrice = currencySymbol + totalPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        // Base price is already in INR
+        let priceInInr = numericPrice;
+        let taxAmount = priceInInr * (taxRate / 100);
+        let totalPrice = priceInInr + taxAmount;
+        
+        let formattedTotalPrice = '₹' + totalPrice.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
         
         document.getElementById('modalPackageName').innerText = packageName;
         document.getElementById('modalBillingCycle').innerText = billingPeriod || 'Monthly';
@@ -668,6 +670,107 @@
                     }
                 });
             }
+
+            // Localize Pricing Logic with Caching
+            async function localizePricing() {
+                let userCurrency = 'INR'; // Default base currency
+                let userLocale = 'en-IN';
+                let userRate = 1;
+
+                const cacheKey = 'pricing_localization_data';
+                const cacheTTL = 3600 * 1000; // 1 hour
+
+                // Smart fallback using browser timezone
+                const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                const isIndiaTz = userTimezone && (userTimezone === 'Asia/Kolkata' || userTimezone === 'Asia/Calcutta');
+
+                if (isIndiaTz) {
+                    userCurrency = 'INR';
+                    userLocale = 'en-IN';
+                }
+
+                try {
+                    let cachedData = localStorage.getItem(cacheKey);
+                    if (cachedData) {
+                        cachedData = JSON.parse(cachedData);
+                        if (Date.now() - cachedData.timestamp < cacheTTL) {
+                            userCurrency = cachedData.currency;
+                            userLocale = cachedData.locale;
+                            userRate = cachedData.rate;
+                            updatePricingDOM(userCurrency, userLocale, userRate);
+                            return;
+                        }
+                    }
+
+                    // 1. Fetch User's currency based on IP
+                    const geoRes = await fetch('https://ipapi.co/json/');
+                    if (geoRes.ok) {
+                        const geoData = await geoRes.json();
+                        if (!geoData.error && geoData.currency) {
+                            userCurrency = geoData.currency;
+                            userLocale = geoData.languages ? geoData.languages.split(',')[0] : (userCurrency === 'INR' ? 'en-IN' : 'en-US');
+                        }
+                    } else if (isIndiaTz) {
+                        userCurrency = 'INR';
+                        userLocale = 'en-IN';
+                    } else {
+                        // Fallback to USD if not in India and IP fails
+                        userCurrency = 'USD';
+                        userLocale = 'en-US';
+                    }
+                    
+                    // 2. Fetch Exchange Rates with INR as base
+                    const ratesRes = await fetch('https://open.er-api.com/v6/latest/INR');
+                    if (ratesRes.ok) {
+                        const ratesData = await ratesRes.json();
+                        const rates = ratesData.rates;
+                        userRate = rates[userCurrency] || 1;
+                    }
+
+                    // Save to Cache
+                    localStorage.setItem(cacheKey, JSON.stringify({
+                        currency: userCurrency,
+                        locale: userLocale,
+                        rate: userRate,
+                        timestamp: Date.now()
+                    }));
+
+                } catch (error) {
+                    console.error("Localization API failed, falling back to timezone defaults.", error);
+                    if (!isIndiaTz) {
+                        userCurrency = 'USD';
+                        userLocale = 'en-US';
+                    }
+                }
+
+                updatePricingDOM(userCurrency, userLocale, userRate);
+            }
+
+            function updatePricingDOM(currency, locale, rate) {
+                // Formatter for user currency
+                const formatter = new Intl.NumberFormat(locale, {
+                    style: 'currency',
+                    currency: currency,
+                    maximumFractionDigits: 0
+                });
+
+                // Update Pricing DOM
+                document.querySelectorAll('[id^="pkg-price-"]').forEach(el => {
+                    const rawPrice = el.getAttribute('data-raw-price').toLowerCase();
+                    if (rawPrice === 'free' || rawPrice === 'custom' || rawPrice === 'enterprise' || rawPrice === '0' || rawPrice === '$0') {
+                        return; // Leave as is
+                    }
+                    
+                    // The raw price from the DB is in INR
+                    let numericBase = parseFloat(rawPrice.replace(/[^0-9.]/g, ''));
+                    if (numericBase > 0) {
+                        // Convert INR base to local currency using the exchange rate multiplier
+                        let convertedPrice = numericBase * rate;
+                        el.innerText = formatter.format(convertedPrice);
+                    }
+                });
+            }
+            localizePricing();
         });
     </script>
 </div>

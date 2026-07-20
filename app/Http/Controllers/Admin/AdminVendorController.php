@@ -8,9 +8,8 @@ use App\Models\User;
 
 class AdminVendorController extends Controller
 {
-    /**
-     * Display a paginated listing of the vendors.
-     */
+    
+
     public function index(Request $request)
     {
         $status = $request->query('status');
@@ -24,9 +23,8 @@ class AdminVendorController extends Controller
         return view('admin.vendors.index', compact('vendors', 'status'));
     }
 
-    /**
-     * Toggle the status of a vendor between active and inactive.
-     */
+    
+
     public function toggleStatus($id)
     {
         $vendor = User::where('role', 'vendor')->findOrFail($id);
@@ -36,18 +34,16 @@ class AdminVendorController extends Controller
         return redirect()->back()->with('success', 'Vendor status updated successfully.');
     }
 
-    /**
-     * Show the form for editing the specified vendor.
-     */
+    
+
     public function edit($id)
     {
         $vendor = User::where('role', 'vendor')->findOrFail($id);
         return view('admin.vendors.edit', compact('vendor'));
     }
 
-    /**
-     * Update the specified vendor details in database.
-     */
+    
+
     public function update(Request $request, $id)
     {
         $vendor = User::where('role', 'vendor')->findOrFail($id);
@@ -97,9 +93,8 @@ class AdminVendorController extends Controller
         return redirect(route('admin.vendors.index'))->with('success', 'Vendor updated successfully.');
     }
 
-    /**
-     * Remove the specified vendor from database.
-     */
+    
+
     public function destroy($id)
     {
         $vendor = User::where('role', 'vendor')->findOrFail($id);

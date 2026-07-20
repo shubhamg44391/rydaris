@@ -47,4 +47,9 @@ class Vehicle extends Model
     {
         return $this->belongsTo(Group::class, 'group_id');
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }

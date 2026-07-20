@@ -15,7 +15,7 @@
             </div>
         </div>
 
-        <!-- Filter Tab Buttons -->
+        
         <div class="panel-filter-bar">
             <a href="{{ route('admin.vendors.index') }}" class="btn btn-sm {{ !($status ?? null) ? 'active' : '' }}">
                 All Vendors
@@ -97,7 +97,7 @@
                             </td>
                             <td>
                                 <div class="table-actions" style="display: flex; gap: 8px;">
-                                    {{-- View Button --}}
+                                    
                                     @php
                                         $vendorSubsData = $vendor->subscriptions->map(function($s) {
                                             return [
@@ -126,11 +126,11 @@
                                         data-subs='{{ json_encode($vendorSubsData) }}'>
                                         <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                                     </button>
-                                    {{-- Edit Button --}}
+                                    
                                     <a href="{{ route('admin.vendors.edit', $vendor->id) }}" class="icon-button" title="Edit">
                                         <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2;"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
                                     </a>
-                                    {{-- Delete Button --}}
+                                    
                                     <form action="{{ route('admin.vendors.destroy', $vendor->id) }}" method="POST" style="display: inline;">
                                         @csrf
                                         @method('DELETE')
@@ -150,7 +150,7 @@
             </table>
         </div>
         
-        <!-- Pagination Controls -->
+        
         <div class="d-flex justify-content-between align-items-center px-4 py-3" style="border-top: 1px solid var(--line);">
             <div class="text-muted small">
                 Showing {{ $vendors->firstItem() ?? 0 }} to {{ $vendors->lastItem() ?? 0 }} of {{ $vendors->total() }} results
@@ -161,16 +161,14 @@
         </div>
     </div>
 
-    {{-- ============================================================
-         VENDOR DETAIL SLIDE-IN PANEL
-    ============================================================ --}}
-    <!-- Overlay -->
+    
+    
     <div id="vendorPanelOverlay" onclick="closeVendorPanel()" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:1040; backdrop-filter:blur(4px);"></div>
 
-    <!-- Panel -->
+    
     <div id="vendorDetailPanel" style="display:none; position:fixed; top:0; right:0; height:100vh; width:420px; max-width:100vw; background:#0d1526; border-left:1px solid rgba(255,255,255,0.08); z-index:1050; overflow-y:auto; padding:0; box-shadow:-20px 0 60px rgba(0,0,0,0.5); transition:transform 0.3s ease; font-family:'Inter',sans-serif;">
 
-        <!-- Panel Header -->
+        
         <div style="padding:20px 24px; border-bottom:1px solid rgba(255,255,255,0.07); display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.02);">
             <div style="display:flex; align-items:center; gap:10px;">
                 <div style="width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg, var(--brand,#52ead2), #2bc2a8); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1rem; color:#050711;" id="panelAvatar">V</div>
@@ -183,7 +181,7 @@
             <button onclick="closeVendorPanel()" style="background:none; border:none; color:#94a3b8; font-size:1.4rem; cursor:pointer; line-height:1;">&times;</button>
         </div>
 
-        <!-- Vendor Details -->
+        
         <div style="padding:20px 24px;">
             <p style="font-size:0.7rem; font-weight:700; color:#52ead2; text-transform:uppercase; letter-spacing:1px; margin-bottom:12px;">Vendor Details</p>
             <div style="display:flex; flex-direction:column; gap:10px;">
@@ -210,10 +208,10 @@
             </div>
         </div>
 
-        <!-- Divider -->
+        
         <div style="margin:0 24px; height:1px; background:rgba(255,255,255,0.07);"></div>
 
-        <!-- Address Section -->
+        
         <div style="padding:20px 24px;">
             <p style="font-size:0.7rem; font-weight:700; color:#52ead2; text-transform:uppercase; letter-spacing:1px; margin-bottom:12px;">Address Details</p>
             <div style="display:flex; flex-direction:column; gap:10px;">
@@ -240,17 +238,17 @@
             </div>
         </div>
 
-        <!-- Divider -->
+        
         <div style="margin:0 24px; height:1px; background:rgba(255,255,255,0.07);"></div>
 
-        <!-- Packages Section -->
+        
         <div style="padding:20px 24px;">
             <p style="font-size:0.7rem; font-weight:700; color:#52ead2; text-transform:uppercase; letter-spacing:1px; margin-bottom:12px; display:flex; align-items:center; gap:6px;">
                 <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
                 Package History
             </p>
             <div id="panelPackages" style="display:flex; flex-direction:column; gap:10px;">
-                <!-- filled by JS -->
+                
             </div>
         </div>
     </div>
@@ -355,7 +353,7 @@
                             </div>
                             <div style="font-size:0.75rem; color:#64748b; display:flex; gap:12px; flex-wrap:wrap;">
                                 <span>📅 ${s.starts} → ${s.ends}</span>
-                                ${s.amount > 0 ? `<span>💰 ₹${parseFloat(s.amount).toFixed(2)}</span>` : '<span style="color:#52ead2;">Free</span>'}
+                                ${s.amount > 0 ? `<span>💰 $${(parseFloat(s.amount) / 83).toFixed(2)}</span>` : '<span style="color:#52ead2;">Free</span>'}
                             </div>`;
                         pkgContainer.appendChild(card);
                     });

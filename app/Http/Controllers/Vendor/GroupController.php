@@ -10,9 +10,8 @@ use Illuminate\Validation\Rule;
 
 class GroupController extends Controller
 {
-    /**
-     * Display a paginated listing of the groups belonging to the logged-in vendor.
-     */
+    
+
     public function index()
     {
         $query = Group::where('vendor_id', Auth::id());
@@ -29,9 +28,8 @@ class GroupController extends Controller
         return view('vendor.groups.index', compact('groups'));
     }
 
-    /**
-     * Show the form for creating a new group.
-     */
+    
+
     public function create()
     {
         if (!auth()->user()->canAddGroup()) {
@@ -40,9 +38,8 @@ class GroupController extends Controller
         return view('vendor.groups.create');
     }
 
-    /**
-     * Store a newly created group in database.
-     */
+    
+
     public function store(Request $request)
     {
         if (!auth()->user()->canAddGroup()) {
@@ -78,18 +75,16 @@ class GroupController extends Controller
         return redirect(route('vendor.groups.index'))->with('success', 'Vehicle Group created successfully.');
     }
 
-    /**
-     * Show the form for editing the specified group.
-     */
+    
+
     public function edit($id)
     {
         $group = Group::where('vendor_id', Auth::id())->findOrFail($id);
         return view('vendor.groups.edit', compact('group'));
     }
 
-    /**
-     * Update the specified group in database.
-     */
+    
+
     public function update(Request $request, $id)
     {
         $group = Group::where('vendor_id', Auth::id())->findOrFail($id);
@@ -120,9 +115,8 @@ class GroupController extends Controller
         return redirect(route('vendor.groups.index'))->with('success', 'Vehicle Group updated successfully.');
     }
 
-    /**
-     * Remove the specified group from database.
-     */
+    
+
     public function destroy($id)
     {
         $group = Group::where('vendor_id', Auth::id())->findOrFail($id);

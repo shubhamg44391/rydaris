@@ -11,7 +11,7 @@
             <form method="POST" action="{{ route('admin.faqs.store') }}">
                 @csrf
 
-                <!-- Category -->
+                
                 <div class="mb-4">
                     <label for="category" class="form-label-custom">Category</label>
                     <select name="category" id="category" class="form-select form-input-custom @error('category') is-invalid @enderror" required style="border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%; background-color: var(--bg-2); color: var(--text); border: 1px solid var(--line);">
@@ -25,7 +25,7 @@
                     @enderror
                 </div>
 
-                <!-- Title (Question) -->
+                
                 <div class="mb-4">
                     <label for="title" class="form-label-custom">Question / Title</label>
                     <input type="text" class="form-control form-input-custom @error('title') is-invalid @enderror" id="title" name="title"
@@ -35,7 +35,7 @@
                     @enderror
                 </div>
 
-                <!-- Description (Answer) -->
+                
                 <div class="mb-4">
                     <label for="description" class="form-label-custom">Answer / Description</label>
                     <textarea class="form-control form-input-custom @error('description') is-invalid @enderror" id="description" name="description"
@@ -45,7 +45,7 @@
                     @enderror
                 </div>
 
-                <!-- Actions -->
+                
                 <div class="d-flex align-items-center gap-3" style="display: flex; gap: 16px; align-items: center; margin-top: 24px;">
                     <button type="submit" class="btn btn-primary rounded-pill px-4" style="min-height: 40px; font-weight: 800; font-size: 0.9rem; background: linear-gradient(135deg, var(--brand), var(--brand-2)) !important; border: none !important; color: #051013 !important; cursor: pointer; box-shadow: 0 4px 12px rgba(82, 234, 210, 0.15) !important;">Create FAQ</button>
                     <a href="{{ route('admin.faqs.index', ['category' => $category]) }}" class="btn btn-link text-muted cancel-link">Cancel</a>

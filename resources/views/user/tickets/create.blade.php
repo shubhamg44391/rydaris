@@ -72,7 +72,7 @@
             <div class="row">
                 @if(auth()->user()->vendor_id)
                     <input type="hidden" name="vendor_id" value="{{ auth()->user()->vendor_id }}">
-                    <!-- Category / Department -->
+                    
                     <div class="col-md-12 form-group">
                         <label class="glass-label">Department / Category *</label>
                         <select name="category" class="glass-input" required>
@@ -85,7 +85,7 @@
                         </select>
                     </div>
                 @else
-                    <!-- Vendor -->
+                    
                     <div class="col-md-6 form-group">
                         <label class="glass-label">Select Vendor *</label>
                         <select name="vendor_id" class="glass-input" required>
@@ -96,7 +96,7 @@
                         </select>
                     </div>
 
-                    <!-- Category / Department -->
+                    
                     <div class="col-md-6 form-group">
                         <label class="glass-label">Department / Category *</label>
                         <select name="category" class="glass-input" required>
@@ -111,20 +111,20 @@
                 @endif
             </div>
 
-            <!-- Subject -->
+            
             <div class="form-group">
                 <label class="glass-label">Subject *</label>
                 <input type="text" name="subject" class="glass-input" placeholder="Enter ticket subject" value="{{ old('subject') }}" required>
             </div>
 
-            <!-- Message -->
+            
             <div class="form-group">
                 <label class="glass-label">Message *</label>
                 <textarea name="message" class="glass-input" rows="6" placeholder="Describe your issue in detail" required>{{ old('message') }}</textarea>
             </div>
 
             <div class="row">
-                <!-- Priority -->
+                
                 <div class="col-md-6 form-group">
                     <label class="glass-label">Priority *</label>
                     <div class="radio-group">
@@ -143,7 +143,7 @@
                     </div>
                 </div>
 
-                <!-- Attachment -->
+                
                 <div class="col-md-6 form-group">
                     <label class="glass-label">Attachment (if any)</label>
                     <input type="file" name="attachment" class="glass-input" style="padding: 8px;">
@@ -151,7 +151,7 @@
                 </div>
             </div>
 
-            <!-- Submit -->
+            
             <div style="margin-top: 10px;">
                 <button type="submit" class="btn btn-teal" style="font-weight: 600; padding: 12px 30px; border-radius: 6px;">
                     Submit Ticket

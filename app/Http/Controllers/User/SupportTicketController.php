@@ -21,7 +21,7 @@ class SupportTicketController extends Controller
 
     public function create()
     {
-        // Get all active vendors
+        
         $vendors = User::where('role', 'vendor')
             ->where('status', 'active')
             ->get();
@@ -97,7 +97,7 @@ class SupportTicketController extends Controller
             'attachment' => $attachmentPath
         ]);
 
-        // Re-open ticket if it was closed
+        
         if ($ticket->status === 'closed') {
             $ticket->update(['status' => 'open']);
         }

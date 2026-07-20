@@ -93,7 +93,7 @@
     <div class="wrapper">
         <div class="container">
             <div class="header">
-                <!-- Vendor custom logo or fall back to vendor name -->
+                
                 @if($invitation->vendor->company_logo && file_exists(public_path($invitation->vendor->company_logo)))
                     <img src="{{ url($invitation->vendor->company_logo) }}" alt="{{ $invitation->vendor->company_name ?? $invitation->vendor->name }}">
                 @else
@@ -112,12 +112,12 @@
                     Please click the button below to accept this invitation, complete your profile details, and set up your account password:
                 </div>
                 
-                <!-- CTA Button -->
+                
                 <div style="margin: 25px 0;">
                     <a href="{{ $registrationUrl }}" class="cta-btn">Accept Invitation & Register</a>
                 </div>
                 
-                <!-- Link fallback -->
+                
                 <div class="link-note">
                     If the button above doesn't work, copy and paste this link into your web browser:
                     <br><br>

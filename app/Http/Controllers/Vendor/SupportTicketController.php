@@ -49,7 +49,7 @@ class SupportTicketController extends Controller
             'attachment' => $attachmentPath
         ]);
 
-        // Keep it open or updated
+        
         if ($ticket->status === 'closed') {
             $ticket->update(['status' => 'open']);
         }

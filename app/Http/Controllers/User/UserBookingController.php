@@ -18,10 +18,10 @@ class UserBookingController extends Controller
     {
         $vehicle = Vehicle::with(['vendor'])->findOrFail($vehicle_id);
         
-        // Calculate Days
-        $pickupDate = $request->input('pickup_date'); // Format: d/m/Y
-        $returnDate = $request->input('return_date'); // Format: d/m/Y
-        $rentalDays = 2; // Default
+        
+        $pickupDate = $request->input('pickup_date'); 
+        $returnDate = $request->input('return_date'); 
+        $rentalDays = 2; 
 
         if ($pickupDate && $returnDate) {
             try {
@@ -34,7 +34,7 @@ class UserBookingController extends Controller
             }
         }
 
-        // Base price
+        
         $availability = \App\Models\VehicleAvailability::where('vehicle_id', $vehicle->id)
             ->where('status', 1)
             ->orderBy('price', 'asc')
@@ -43,11 +43,11 @@ class UserBookingController extends Controller
         $vehicle->base_price = $availability ? $availability->price : 50.00;
         $vehicle->total_price = $vehicle->base_price * $rentalDays;
 
-        // Time
+        
         $pickupTime = $request->input('pickup_time', '00:00');
         $returnTime = $request->input('return_time', '00:00');
 
-        // Locations
+        
         $pickupLocation = null;
         $returnLocation = null;
         if ($request->has('pickup_location') && $request->input('pickup_location')) {
@@ -57,14 +57,14 @@ class UserBookingController extends Controller
             $returnLocation = PickupLocation::find($request->input('return_location'));
         }
 
-        // Fetch Extras for the vendor
+        
         $insurances = VendorExtra::with('features')
                         ->where('vendor_id', $vehicle->vendor_id)
                         ->where('type', 'insurance')
                         ->where('status', 1)
                         ->get();
         
-        // Fetch all global features defined by the vendor for the rows
+        
         $vendorFeatures = \App\Models\VendorFeature::where('vendor_id', $vehicle->vendor_id)
                         ->where('status', 1)
                         ->orderBy('index_no')
@@ -89,10 +89,10 @@ class UserBookingController extends Controller
     {
         $vehicle = Vehicle::with(['vendor'])->findOrFail($vehicle_id);
         
-        // Calculate Days
+        
         $pickupDate = $request->input('pickup_date'); 
         $returnDate = $request->input('return_date'); 
-        $rentalDays = 2; // Default
+        $rentalDays = 2; 
 
         if ($pickupDate && $returnDate) {
             try {
@@ -105,7 +105,7 @@ class UserBookingController extends Controller
             }
         }
 
-        // Base price
+        
         $availability = \App\Models\VehicleAvailability::where('vehicle_id', $vehicle->id)
             ->where('status', 1)
             ->orderBy('price', 'asc')
@@ -114,11 +114,11 @@ class UserBookingController extends Controller
         $vehicle->base_price = $availability ? $availability->price : 50.00;
         $vehicle->total_price = $vehicle->base_price * $rentalDays;
 
-        // Time
+        
         $pickupTime = $request->input('pickup_time', '00:00');
         $returnTime = $request->input('return_time', '00:00');
 
-        // Locations
+        
         $pickupLocation = null;
         $returnLocation = null;
         if ($request->has('pickup_location') && $request->input('pickup_location')) {
@@ -128,16 +128,16 @@ class UserBookingController extends Controller
             $returnLocation = PickupLocation::find($request->input('return_location'));
         }
 
-        // Fetch Selected Insurance
+        
         $selectedInsurance = null;
         if ($request->filled('insurance_id')) {
             $selectedInsurance = VendorExtra::find($request->input('insurance_id'));
         }
 
-        // Fetch Selected Extras
+        
         $selectedExtras = collect();
         if ($request->filled('extras')) {
-            // Format: id:qty,id:qty
+            
             $extrasArr = explode(',', $request->input('extras'));
             foreach ($extrasArr as $ex) {
                 $parts = explode(':', $ex);
@@ -151,7 +151,7 @@ class UserBookingController extends Controller
             }
         }
 
-        // Calculate Grand Total
+        
         $insuranceTotal = $selectedInsurance ? ($selectedInsurance->price * $rentalDays) : 0;
         
         $extrasTotal = 0;
@@ -161,10 +161,10 @@ class UserBookingController extends Controller
 
         $grandTotal = $vehicle->total_price + $insuranceTotal + $extrasTotal;
 
-        // Fetch vendor's payment gateway settings
+        
         $paymentSettings = \App\Models\VendorPaymentSetting::where('vendor_id', $vehicle->vendor_id)->first();
 
-        // Fetch vendor's Terms & Conditions
+        
         $vendorTC = \App\Models\VendorPage::where('vendor_id', $vehicle->vendor_id)->first();
 
         return view('user.booking.payment', compact(
@@ -178,10 +178,10 @@ class UserBookingController extends Controller
     {
         $vehicle = Vehicle::with(['vendor'])->findOrFail($vehicle_id);
         
-        // Calculate Days
+        
         $pickupDate = $request->input('pickup_date'); 
         $returnDate = $request->input('return_date'); 
-        $rentalDays = 2; // Default
+        $rentalDays = 2; 
 
         if ($pickupDate && $returnDate) {
             try {
@@ -194,7 +194,7 @@ class UserBookingController extends Controller
             }
         }
 
-        // Base price
+        
         $availability = \App\Models\VehicleAvailability::where('vehicle_id', $vehicle->id)
             ->where('status', 1)
             ->orderBy('price', 'asc')
@@ -203,11 +203,11 @@ class UserBookingController extends Controller
         $vehicle->base_price = $availability ? $availability->price : 50.00;
         $vehicle->total_price = $vehicle->base_price * $rentalDays;
 
-        // Time
+        
         $pickupTime = $request->input('pickup_time', '00:00');
         $returnTime = $request->input('return_time', '00:00');
 
-        // Locations
+        
         $pickupLocation = null;
         $returnLocation = null;
         if ($request->has('pickup_location') && $request->input('pickup_location')) {
@@ -217,16 +217,16 @@ class UserBookingController extends Controller
             $returnLocation = PickupLocation::find($request->input('return_location'));
         }
 
-        // Fetch Selected Insurance
+        
         $selectedInsurance = null;
         if ($request->filled('insurance_id')) {
             $selectedInsurance = VendorExtra::find($request->input('insurance_id'));
         }
 
-        // Fetch Selected Extras
+        
         $selectedExtras = collect();
         if ($request->filled('extras')) {
-            // Format: id:qty,id:qty
+            
             $extrasArr = explode(',', $request->input('extras'));
             foreach ($extrasArr as $ex) {
                 $parts = explode(':', $ex);
@@ -240,7 +240,7 @@ class UserBookingController extends Controller
             }
         }
 
-        // Calculate Grand Total
+        
         $insuranceTotal = $selectedInsurance ? ($selectedInsurance->price * $rentalDays) : 0;
         
         $extrasTotal = 0;
@@ -268,7 +268,7 @@ class UserBookingController extends Controller
 
         $reservationNumber = 'DCR' . mt_rand(10000, 99999);
 
-        // Retrieve total price from request or recalculate
+        
         $totalAmount = (float)$request->input('total_price', 0);
         $paidAmount = 0; 
         $pendingAmount = $totalAmount;
@@ -276,7 +276,7 @@ class UserBookingController extends Controller
         $paymentReference = null;
         $paymentMethod = $request->input('payment_method', 'arrival');
 
-        // Fetch vendor payment settings to calculate deposit or full discount
+        
         $paymentSettings = \App\Models\VendorPaymentSetting::where('vendor_id', $vehicle->vendor_id)->first();
         
         if ($request->has('razorpay_payment_id') && !empty($request->input('razorpay_payment_id'))) {
@@ -292,15 +292,15 @@ class UserBookingController extends Controller
                 $discountPercent = (float)($paymentSettings->full_payment_discount ?? 5);
                 $paidAmount = $totalAmount * ((100 - $discountPercent) / 100);
                 $pendingAmount = 0; 
-                // Note: The total booking value effectively becomes $paidAmount in case of a full payment discount, 
-                // but we keep total_amount as original and just set pending to 0.
+                
+                
             }
         }
 
         $booking = \App\Models\Booking::create([
             'reservation_number' => $reservationNumber,
             'vendor_id' => $vehicle->vendor_id,
-            'user_id' => auth()->id(), // nullable
+            'user_id' => auth()->id(), 
             'vehicle_id' => $vehicle->id,
             'customer_fname' => $request->input('fname'),
             'customer_lname' => $request->input('lname'),
@@ -322,7 +322,7 @@ class UserBookingController extends Controller
             'payment_status' => $paymentStatus,
         ]);
 
-        // Save Selected Insurance
+        
         if ($request->filled('insurance_id')) {
             $selectedInsurance = \App\Models\VendorExtra::find($request->input('insurance_id'));
             if ($selectedInsurance) {
@@ -335,9 +335,9 @@ class UserBookingController extends Controller
             }
         }
 
-        // Save Selected Extras
+        
         if ($request->filled('extras')) {
-            // Format: id:qty,id:qty
+            
             $extrasArr = explode(',', $request->input('extras'));
             foreach ($extrasArr as $ex) {
                 $parts = explode(':', $ex);
@@ -355,21 +355,21 @@ class UserBookingController extends Controller
             }
         }
 
-        // Send Emails
+        
         try {
-            // Backup default config
+            
             $defaultConfig = config('mail');
 
-            // Apply vendor specific SMTP config if available
+            
             VendorSmtpSetting::setMailConfig($vehicle->vendor_id);
 
-            // Send to Customer
+            
             Mail::send('email_templates.user-booking', ['booking' => $booking, 'vehicle' => $vehicle], function ($message) use ($booking) {
                 $message->to($booking->customer_email)
                         ->subject('Your Booking Under Review - Rydaris');
             });
 
-            // Send to Vendor
+            
             $vendor = User::find($vehicle->vendor_id);
             if ($vendor) {
                 Mail::send('email_templates.vendor-booking', ['booking' => $booking, 'vehicle' => $vehicle], function ($message) use ($vendor, $booking) {
@@ -378,7 +378,7 @@ class UserBookingController extends Controller
                 });
             }
 
-            // Restore default config
+            
             Config::set('mail', $defaultConfig);
             \Illuminate\Support\Facades\Mail::purge('smtp');
 
@@ -386,7 +386,7 @@ class UserBookingController extends Controller
             \Illuminate\Support\Facades\Log::error('Error sending booking emails: ' . $e->getMessage());
         }
 
-        // Redirect to success page with reservation number
+        
         $urlParams = $request->except(['_token']);
         $urlParams['reservation_number'] = $reservationNumber;
         $queryString = http_build_query($urlParams);
@@ -398,10 +398,10 @@ class UserBookingController extends Controller
     {
         $vehicle = Vehicle::with(['vendor'])->findOrFail($vehicle_id);
         
-        // Calculate Days
+        
         $pickupDate = $request->input('pickup_date'); 
         $returnDate = $request->input('return_date'); 
-        $rentalDays = 2; // Default
+        $rentalDays = 2; 
 
         if ($pickupDate && $returnDate) {
             try {
@@ -414,7 +414,7 @@ class UserBookingController extends Controller
             }
         }
 
-        // Base price
+        
         $availability = \App\Models\VehicleAvailability::where('vehicle_id', $vehicle->id)
             ->where('status', 1)
             ->orderBy('price', 'asc')
@@ -423,11 +423,11 @@ class UserBookingController extends Controller
         $vehicle->base_price = $availability ? $availability->price : 50.00;
         $vehicle->total_price = $vehicle->base_price * $rentalDays;
 
-        // Time
+        
         $pickupTime = $request->input('pickup_time', '00:00');
         $returnTime = $request->input('return_time', '00:00');
 
-        // Locations
+        
         $pickupLocation = null;
         $returnLocation = null;
         if ($request->has('pickup_location') && $request->input('pickup_location')) {
@@ -437,16 +437,16 @@ class UserBookingController extends Controller
             $returnLocation = PickupLocation::find($request->input('return_location'));
         }
 
-        // Fetch Selected Insurance
+        
         $selectedInsurance = null;
         if ($request->filled('insurance_id')) {
             $selectedInsurance = VendorExtra::find($request->input('insurance_id'));
         }
 
-        // Fetch Selected Extras
+        
         $selectedExtras = collect();
         if ($request->filled('extras')) {
-            // Format: id:qty,id:qty
+            
             $extrasArr = explode(',', $request->input('extras'));
             foreach ($extrasArr as $ex) {
                 $parts = explode(':', $ex);
@@ -460,7 +460,7 @@ class UserBookingController extends Controller
             }
         }
 
-        // Calculate Grand Total
+        
         $insuranceTotal = $selectedInsurance ? ($selectedInsurance->price * $rentalDays) : 0;
         
         $extrasTotal = 0;
@@ -521,7 +521,7 @@ class UserBookingController extends Controller
             'special_comments' => 'nullable|string'
         ]);
 
-        // Calculate Days
+        
         $pickupDate = $request->input('pickup_date');
         $returnDate = $request->input('return_date');
         
@@ -555,11 +555,11 @@ class UserBookingController extends Controller
         $diff = $pDate->diffInDays($rDate);
         $rentalDays = $diff > 0 ? $diff : 1;
 
-        // Calculate Vehicle Price
+        
         $vehicle = \App\Models\Vehicle::findOrFail($request->input('vehicle_id'));
         $carTotal = ($vehicle->price_per_day ?? 50) * $rentalDays;
 
-        // Calculate Extras Total and Prepare Sync Data
+        
         $extrasTotal = 0;
         $syncExtras = [];
         if ($request->has('extras')) {
@@ -569,9 +569,9 @@ class UserBookingController extends Controller
                     $extra = \App\Models\VendorExtra::find($extraId);
                     if ($extra) {
                         $price = $extra->price;
-                        if ($extra->price_type == 1) { // Per Day
+                        if ($extra->price_type == 1) { 
                             $extrasTotal += ($price * $rentalDays * $qty);
-                        } else { // Total
+                        } else { 
                             $extrasTotal += ($price * $qty);
                         }
                         $syncExtras[] = [
@@ -591,7 +591,7 @@ class UserBookingController extends Controller
             $pendingAmount = 0;
         }
 
-        // Update Booking
+        
         $booking->update([
             'customer_fname' => $request->input('customer_fname'),
             'customer_lname' => $request->input('customer_lname'),
@@ -610,27 +610,27 @@ class UserBookingController extends Controller
             'pending_amount' => $pendingAmount,
         ]);
 
-        // Sync Extras
+        
         $booking->extras()->delete();
         foreach ($syncExtras as $se) {
             $booking->extras()->create($se);
         }
 
-        // Reload booking with fresh relations for email
+        
         $booking->load(['vehicle', 'pickupLocation', 'returnLocation', 'vendor', 'extras.vendorExtra']);
 
-        // Send Emails
+        
         try {
             $defaultConfig = config('mail');
             VendorSmtpSetting::setMailConfig($booking->vendor_id);
 
-            // Mail to Customer
+            
             Mail::send('email_templates.modify-booking', ['booking' => $booking], function ($message) use ($booking) {
                 $message->to($booking->customer_email)
                         ->subject('Your Booking Has Been Modified - ' . $booking->reservation_number);
             });
 
-            // Mail to Vendor
+            
             $vendor = User::find($booking->vendor_id);
             if ($vendor) {
                 Mail::send('email_templates.modify-booking', ['booking' => $booking], function ($message) use ($vendor, $booking) {
@@ -667,12 +667,36 @@ class UserBookingController extends Controller
             ->where('user_id', auth()->id())
             ->findOrFail($id);
 
-        return view('user.booking.checkin', compact('booking'));
+        
+        $recentDocBooking = \App\Models\Booking::where('user_id', auth()->id())
+            ->where('checkin_status', true)
+            ->where('updated_at', '>=', now()->subMonths(3))
+            ->orderBy('updated_at', 'desc')
+            ->first();
+
+        $autoFilledFromRecent = false;
+        if (!$booking->checkin_status && $recentDocBooking) {
+            if (!$booking->license_number) $booking->license_number = $recentDocBooking->license_number;
+            if (!$booking->license_issue_date) $booking->license_issue_date = $recentDocBooking->license_issue_date;
+            if (!$booking->license_expiry_date) $booking->license_expiry_date = $recentDocBooking->license_expiry_date;
+            if (!$booking->pass_number) $booking->pass_number = $recentDocBooking->pass_number;
+            if (!$booking->license_image) $booking->license_image = $recentDocBooking->license_image;
+            if (!$booking->passport_image) $booking->passport_image = $recentDocBooking->passport_image;
+            $autoFilledFromRecent = true;
+        }
+
+        return view('user.booking.checkin', compact('booking', 'recentDocBooking', 'autoFilledFromRecent'));
     }
 
     public function submitCheckin(Request $request, $id)
     {
         $booking = \App\Models\Booking::where('user_id', auth()->id())->findOrFail($id);
+
+        $recentDocBooking = \App\Models\Booking::where('user_id', auth()->id())
+            ->where('checkin_status', true)
+            ->where('updated_at', '>=', now()->subMonths(3))
+            ->orderBy('updated_at', 'desc')
+            ->first();
 
         $request->validate([
             'license_number' => 'required|string|max:255',
@@ -699,6 +723,8 @@ class UserBookingController extends Controller
                 \Storage::disk('public')->delete($booking->license_image);
             }
             $data['license_image'] = $request->file('license_image')->store('documents', 'public');
+        } elseif (!$booking->license_image && $recentDocBooking && $recentDocBooking->license_image) {
+            $data['license_image'] = $recentDocBooking->license_image;
         }
 
         if ($request->hasFile('passport_image')) {
@@ -706,6 +732,8 @@ class UserBookingController extends Controller
                 \Storage::disk('public')->delete($booking->passport_image);
             }
             $data['passport_image'] = $request->file('passport_image')->store('documents', 'public');
+        } elseif (!$booking->passport_image && $recentDocBooking && $recentDocBooking->passport_image) {
+            $data['passport_image'] = $recentDocBooking->passport_image;
         }
 
         $booking->update($data);
@@ -797,5 +825,30 @@ class UserBookingController extends Controller
             ->findOrFail($id);
 
         return view('partials.booking-invoice', compact('booking'));
+    }
+
+    public function submitReview(Request $request, $id)
+    {
+        $booking = \App\Models\Booking::where('user_id', auth()->id())->findOrFail($id);
+
+        if (\App\Models\Review::where('booking_id', $booking->id)->exists()) {
+            return redirect()->back()->with('error', 'You have already submitted a review for this booking.');
+        }
+
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'nullable|string|max:1000'
+        ]);
+
+        \App\Models\Review::create([
+            'booking_id' => $booking->id,
+            'vendor_id' => $booking->vendor_id,
+            'vehicle_id' => $booking->vehicle_id,
+            'user_id' => auth()->id(),
+            'rating' => (int)$request->input('rating'),
+            'comment' => $request->input('comment')
+        ]);
+
+        return redirect()->back()->with('success', 'Thank you! Your review has been submitted successfully.');
     }
 }

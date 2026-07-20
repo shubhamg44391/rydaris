@@ -8,9 +8,8 @@ use App\Models\ContactInquiry;
 
 class ContactInquiryController extends Controller
 {
-    /**
-     * Display a listing of the contact inquiries.
-     */
+    
+
     public function index(\Illuminate\Http\Request $request)
     {
         $status = $request->query('status');
@@ -25,7 +24,7 @@ class ContactInquiryController extends Controller
 
         $inquiries = $query->paginate(10)->appends(['status' => $status]);
 
-        // Counts for badges
+        
         $totalCount  = ContactInquiry::count();
         $unreadCount = ContactInquiry::where('status', 'unread')->count();
         $readCount   = ContactInquiry::where('status', 'read')->count();
@@ -33,9 +32,8 @@ class ContactInquiryController extends Controller
         return view('admin.contact_inquiries.index', compact('inquiries', 'status', 'totalCount', 'unreadCount', 'readCount'));
     }
 
-    /**
-     * Toggle the status of the contact inquiry between read and unread.
-     */
+    
+
     public function toggleStatus($id)
     {
         $inquiry = ContactInquiry::findOrFail($id);
@@ -45,9 +43,8 @@ class ContactInquiryController extends Controller
         return redirect()->back()->with('success', 'Inquiry status updated successfully.');
     }
 
-    /**
-     * Remove the specified contact inquiry from database.
-     */
+    
+
     public function destroy($id)
     {
         $inquiry = ContactInquiry::findOrFail($id);

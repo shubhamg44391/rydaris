@@ -85,7 +85,7 @@
             </table>
         </div>
         
-        <!-- Pagination Controls -->
+        
         <div class="d-flex justify-content-between align-items-center px-4 py-3" style="border-top: 1px solid #d7e0e8; display: flex; justify-content: space-between; align-items: center; padding: 16px 24px;">
             <div class="text-muted small">
                 Showing {{ $vehicles->firstItem() ?? 0 }} to {{ $vehicles->lastItem() ?? 0 }} of {{ $vehicles->total() }} results

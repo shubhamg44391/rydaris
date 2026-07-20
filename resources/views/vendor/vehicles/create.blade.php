@@ -30,7 +30,7 @@
             <form method="POST" action="{{ route('vendor.vehicles.store') }}" enctype="multipart/form-data" id="vehicleForm">
                 @csrf
 
-                <!-- Row 1 -->
+                
                 <div class="row">
                     <div class="col-md-3 mb-4">
                         <label for="name" class="form-label-custom">Vehicle Name</label>
@@ -66,7 +66,7 @@
                     </div>
                 </div>
 
-                <!-- Row 2 -->
+                
                 <div class="row">
                     <div class="col-md-3 mb-4">
                         <label for="bags" class="form-label-custom">Bags</label>
@@ -112,7 +112,7 @@
                     </div>
                 </div>
 
-                <!-- Row 3 -->
+                
                 <div class="row">
                     <div class="col-md-3 mb-4">
                         <label for="gear_system" class="form-label-custom">Gear system</label>
@@ -153,7 +153,7 @@
                     </div>
                 </div>
 
-                <!-- Row 4 -->
+                
                 <div class="row">
                     <div class="col-md-3 mb-4">
                         <label for="stock" class="form-label-custom">Stock</label>
@@ -165,7 +165,7 @@
                     </div>
                 </div>
 
-                <!-- Row 5: Dynamic Features -->
+                
                 <div class="row mb-4">
                     <div class="col-md-6 mb-3">
                         <label class="form-label-custom">Vehicle Features</label>
@@ -178,7 +178,7 @@
                     </div>
                 </div>
 
-                <!-- Row 6: Terms & Conditions -->
+                
                 <div class="row mb-4">
                     <div class="col-md-12">
                         <label for="terms" class="form-label-custom">Terms & Conditions</label>

@@ -18,7 +18,7 @@
             @csrf
             
             <div class="row align-items-center g-4">
-                <!-- Pay on Arrival -->
+                
                 <div class="col-md-3">
                     <div class="d-flex flex-column gap-2">
                         <label class="form-label-custom" style="font-weight: 600;">Pay on Arrival</label>
@@ -29,7 +29,7 @@
                     </div>
                 </div>
 
-                <!-- Pay Deposit -->
+                
                 <div class="col-md-3">
                     <div class="d-flex flex-column gap-2">
                         <label class="form-label-custom" style="font-weight: 600;">Pay <span id="depositPercentDisplay">{{ $settings->deposit_percentage }}</span>% Deposit</label>
@@ -49,7 +49,7 @@
                     </div>
                 </div>
 
-                <!-- Pay Full Amount -->
+                
                 <div class="col-md-3">
                     <div class="d-flex flex-column gap-2">
                         <label class="form-label-custom" style="font-weight: 600;">Pay Full Amount</label>
@@ -60,7 +60,7 @@
                     </div>
                 </div>
 
-                <!-- Full Payment Discount -->
+                
                 <div class="col-md-3">
                     <div class="d-flex flex-column gap-2">
                         <label class="form-label-custom" style="font-weight: 600;">Full Payment Discount (%)</label>

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -12,11 +11,8 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    
+
     protected $fillable = [
         'name',
         'first_name',
@@ -41,36 +37,28 @@ class User extends Authenticatable
         'current_branch_id',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
+    
+
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
+    
+
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
 
-    /**
-     * Get the vendor that this user belongs to.
-     */
+    
+
     public function vendor()
     {
         return $this->belongsTo(User::class, 'vendor_id');
     }
 
-    /**
-     * Get the users/customers under this vendor.
-     */
+    
+
     public function customers()
     {
         return $this->hasMany(User::class, 'vendor_id');
@@ -109,6 +97,16 @@ class User extends Authenticatable
     public function groups()
     {
         return $this->hasMany(Group::class, 'vendor_id');
+    }
+
+    public function unreadNotificationsCount()
+    {
+        return $this->notifications()->whereNull('read_at')->count();
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'vendor_id'); 
     }
 
     public function vehicles()
@@ -184,12 +182,12 @@ class User extends Authenticatable
             return false;
         }
         $subscription = $this->activeSubscription;
-        if (!$subscription) {
+        if (!$subscription || !$subscription->package) {
             return false;
         }
 
-        $limit = (int) $subscription->package->no_of_coupons;
-        return $limit > 0;
+        $limit = $subscription->package->no_of_coupons;
+        return $limit === null || $limit === '' || $limit === 'Unlimited' || (int)$limit > 0;
     }
 
     public function coupons()
@@ -203,12 +201,11 @@ class User extends Authenticatable
             return false;
         }
         $subscription = $this->activeSubscription;
-        if (!$subscription) {
+        if (!$subscription || !$subscription->package) {
             return false;
         }
 
-        $limit = (int) $subscription->package->no_of_coupons;
-        return $this->coupons()->count() < $limit;
+        return $this->checkLimit($this->coupons()->count(), $subscription->package->no_of_coupons);
     }
 
     public function pickupLocations()

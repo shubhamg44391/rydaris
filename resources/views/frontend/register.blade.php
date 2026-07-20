@@ -11,38 +11,38 @@
 
     <meta name="description" content="" />
 
-    <!-- Favicon -->
+    
     <link rel="icon" type="image/png" href="{{ asset('assets/logo/favicon.png') }}" />
 
-    <!-- Fonts -->
+    
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
         href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
         rel="stylesheet" />
 
-    <!-- Icons. Uncomment required icon fonts -->
+    
     <link rel="stylesheet" href="{{asset('assets/admin/vendor/fonts/boxicons.css')}}" />
 
-    <!-- Core CSS -->
+    
     <link rel="stylesheet" href="{{asset('assets/admin/vendor/css/core.css')}}"
         class="template-customizer-core-css" />
     <link rel="stylesheet" href="{{asset('assets/admin/vendor/css/theme-default.css')}}"
         class="template-customizer-theme-css" />
     <link rel="stylesheet" href="{{asset('assets/admin/css/demo.css')}}" />
 
-    <!-- Vendors CSS -->
+    
     <link rel="stylesheet"
         href="{{asset('assets/admin/vendor/libs/perfect-scrollbar/perfect-scrollbar.css')}}" />
 
-    <!-- Page CSS -->
-    <!-- Page -->
+    
+    
     <link rel="stylesheet" href="{{asset('assets/admin/vendor/css/pages/page-auth.css')}}" />
-    <!-- Helpers -->
+    
     <script src="{{asset('assets/admin/vendor/js/helpers.js')}}"></script>
 
-    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
-    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    
+    
     <script src="{{asset('assets/admin/js/config.js')}}"></script>
 
     <style>
@@ -181,15 +181,15 @@
 </head>
 
 <body>
-    <!-- Content -->
+    
 
     <div class="container-xxl">
         <div class="authentication-wrapper authentication-basic container-p-y">
             <div class="authentication-inner">
-                <!-- Register -->
+                
                 <div class="card">
                     <div class="card-body">
-                        <!-- Logo -->
+                        
                         <div class="app-brand justify-content-center">
                             <a href="{{ route('home') }}" class="app-brand-link gap-2">
                                 <span class="app-brand-logo demo">
@@ -198,13 +198,13 @@
                                 </span>
                             </a>
                         </div>
-                        <!-- /Logo -->
+                        
                         <h4 class="mb-6" id="form-title">Get Started! 👋</h4>
 
                         <form method="POST" action="{{ route('vendor.register.submit') }}">
                             @csrf
                             
-                            <!-- Registration Type -->
+                            
                             <div class="form-group mb-4">
                                 <label class="form-label d-block">{{ __('Register As') }}</label>
                                 <div class="form-check form-check-inline">
@@ -220,7 +220,7 @@
                                 @enderror
                             </div>
 
-                            <!-- Company Name (For Vendors Only) -->
+                            
                             <div class="form-group mb-3" id="company_name_container" style="display: {{ old('role') === 'vendor' ? 'block' : 'none' }};">
                                 <label for="company_name" class="form-label">{{ __('Company Name') }}</label>
                                 <input id="company_name" class="form-control" type="text" name="company_name"
@@ -230,7 +230,7 @@
                                 @enderror
                             </div>
 
-                            <!-- First Name -->
+                            
                             <div class="form-group mb-3">
                                 <label for="first_name" class="form-label">{{ __('First Name') }}</label>
                                 <input id="first_name" class="form-control" type="text" name="first_name"
@@ -240,7 +240,7 @@
                                 @enderror
                             </div>
 
-                            <!-- Email Address -->
+                            
                             <div class="form-group mb-3">
                                 <label for="email" class="form-label">{{ __('Email') }}</label>
                                 <input id="email" class="form-control" type="email" name="email"
@@ -250,7 +250,7 @@
                                 @enderror
                             </div>
 
-                            <!-- Phone and Country Code -->
+                            
                             <div class="mb-3">
                                 <label class="form-label">{{ __('Contact Details') }}</label>
                                 <div class="input-group">
@@ -268,7 +268,7 @@
                                 @enderror
                             </div>
 
-                            <!-- Password -->
+                            
                             <div class="mb-3 form-password-toggle">
                                 <label class="form-label" for="password">{{ __('Password') }}</label>
                                 <div class="input-group input-group-merge">
@@ -281,7 +281,7 @@
                                 @enderror
                             </div>
 
-                            <!-- Confirm Password -->
+                            
                             <div class="mb-3 form-password-toggle">
                                 <label class="form-label" for="password_confirmation">{{ __('Confirm Password') }}</label>
                                 <div class="input-group input-group-merge">
@@ -306,30 +306,30 @@
                         </p>
                     </div>
                 </div>
-                <!-- /Register -->
+                
             </div>
         </div>
     </div>
 
-    <!-- / Content -->
-    <!-- Core JS -->
-    <!-- build:js assets/vendor/js/core.js -->
+    
+    
+    
     <script src="{{asset('assets/admin/vendor/libs/jquery/jquery.js')}}"></script>
     <script src="{{asset('assets/admin/vendor/libs/popper/popper.js')}}"></script>
     <script src="{{asset('assets/admin/vendor/js/bootstrap.js')}}"></script>
     <script src="{{asset('assets/admin/vendor/libs/perfect-scrollbar/perfect-scrollbar.js')}}"></script>
 
     <script src="{{asset('assets/admin/vendor/js/menu.js')}}"></script>
-    <!-- endbuild -->
+    
 
-    <!-- Vendors JS -->
+    
 
-    <!-- Main JS -->
+    
     <script src="{{asset('assets/admin/js/main.js')}}"></script>
 
-    <!-- Page JS -->
+    
 
-    <!-- Place this tag in your head or just before your close body tag. -->
+    
     <script async defer src="https://buttons.github.io/buttons.js"></script>
 
     <script>

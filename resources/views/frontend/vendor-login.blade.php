@@ -11,38 +11,38 @@
 
     <meta name="description" content="" />
 
-    <!-- Favicon -->
+    
     <link rel="icon" type="image/png" href="{{ asset('assets/logo/favicon.png') }}" />
 
-    <!-- Fonts -->
+    
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
         href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
         rel="stylesheet" />
 
-    <!-- Icons. Uncomment required icon fonts -->
+    
     <link rel="stylesheet" href="{{asset('assets/admin/vendor/fonts/boxicons.css')}}" />
 
-    <!-- Core CSS -->
+    
     <link rel="stylesheet" href="{{asset('assets/admin/vendor/css/core.css')}}"
         class="template-customizer-core-css" />
     <link rel="stylesheet" href="{{asset('assets/admin/vendor/css/theme-default.css')}}"
         class="template-customizer-theme-css" />
     <link rel="stylesheet" href="{{asset('assets/admin/css/demo.css')}}" />
 
-    <!-- Vendors CSS -->
+    
     <link rel="stylesheet"
         href="{{asset('assets/admin/vendor/libs/perfect-scrollbar/perfect-scrollbar.css')}}" />
 
-    <!-- Page CSS -->
-    <!-- Page -->
+    
+    
     <link rel="stylesheet" href="{{asset('assets/admin/vendor/css/pages/page-auth.css')}}" />
-    <!-- Helpers -->
+    
     <script src="{{asset('assets/admin/vendor/js/helpers.js')}}"></script>
 
-    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
-    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    
+    
     <script src="{{asset('assets/admin/js/config.js')}}"></script>
 
     <style>
@@ -215,15 +215,15 @@
 </head>
 
 <body>
-    <!-- Content -->
+    
 
     <div class="container-xxl">
         <div class="authentication-wrapper authentication-basic container-p-y">
             <div class="authentication-inner">
-                <!-- Register -->
+                
                 <div class="card">
                     <div class="card-body">
-                        <!-- Logo -->
+                        
                         <div class="app-brand justify-content-center">
                             <a href="{{ route('home') }}" class="app-brand-link gap-2">
                                 <span class="app-brand-logo demo">
@@ -232,10 +232,10 @@
                                 </span>
                             </a>
                         </div>
-                        <!-- /Logo -->
+                        
                         <h4 class="mb-6">Vendor Sign In</h4>
 
-                        <!-- Session Status -->
+                        
                         @if (session('status'))
                             <div class="mb-4 text-success">
                                 {{ session('status') }}
@@ -245,7 +245,7 @@
                         <form method="POST" action="{{ route('vendor.login') }}">
                             @csrf
                             <input type="hidden" name="redirect_to" value="{{ request('redirect_to') }}">
-                            <!-- Email Address -->
+                            
                             <div class="form-group mb-3">
                                 <label for="email" class="form-label">{{ __('Email') }}</label>
                                 <input id="email" class="form-control" type="email" name="email"
@@ -255,7 +255,7 @@
                                 @enderror
                             </div>
 
-                            <!-- Password -->
+                            
                             <div class="mb-3 form-password-toggle">
                                 <div class="d-flex justify-content-between align-items-baseline">
                                     <label class="form-label" for="password">Password</label>
@@ -271,7 +271,7 @@
                                 </div>
                             </div>
 
-                            <!-- Remember Me -->
+                            
                             <div class="form-group form-check mb-3">
                                 <input class="form-check-input" type="checkbox" id="remember_me" name="remember">
                                 <label class="form-check-label" for="remember_me">{{ __('Remember me') }}</label>
@@ -299,7 +299,7 @@
         </div>
     </div>
 
-    <!-- / Content -->
+    
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function showForgotPasswordAlert(e) {
@@ -318,29 +318,29 @@
         }
     </script>
 
-    <!-- Core JS -->
-    <!-- build:js assets/vendor/js/core.js -->
+    
+    
     <script src="{{asset('assets/admin/vendor/libs/jquery/jquery.js')}}"></script>
     <script src="{{asset('assets/admin/vendor/libs/popper/popper.js')}}"></script>
     <script src="{{asset('assets/admin/vendor/js/bootstrap.js')}}"></script>
     <script src="{{asset('assets/admin/vendor/libs/perfect-scrollbar/perfect-scrollbar.js')}}"></script>
 
     <script src="{{asset('assets/admin/vendor/js/menu.js')}}"></script>
-    <!-- endbuild -->
+    
 
-    <!-- Vendors JS -->
+    
 
-    <!-- Main JS -->
+    
     <script src="{{asset('assets/admin/js/main.js')}}"></script>
 
-    <!-- Page JS -->
+    
 
-    <!-- Place this tag in your head or just before your close body tag. -->
+    
     <script async defer src="https://buttons.github.io/buttons.js"></script>
 
-    <!-- ===== FULLSCREEN VIDEO LOADER (shows on login submit) ===== -->
+    
     <div id="loginPreloader" class="site-preloader" style="display:none; opacity:0; position:fixed; top:0; left:0; width:100vw; height:100vh; background:#050711; z-index:999999; overflow:hidden; transition:opacity 0.3s ease;">
-        <!-- Fallback Spinner -->
+        
         <div class="preloader-spinner">
             <div class="spinner-circle"></div>
             <span>Logging in</span>
@@ -399,7 +399,7 @@
             });
         });
     </script>
-    <!-- ===== END LOADER ===== -->
+    
 </body>
 
 </html>

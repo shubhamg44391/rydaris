@@ -85,13 +85,28 @@
     color: var(--brand, #52ead2) !important;
     font-weight: 600 !important;
 }
-/* Checkbox Theme Accent Redesign */
-input[type="checkbox"] {
-    accent-color: var(--brand, #52ead2) !important;
+/* Checkbox Theme Accent Redesign & Double-Checkmark Fix */
+.form-check-input {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    accent-color: initial !important;
+    width: 1.2rem !important;
+    height: 1.2rem !important;
+    background-color: var(--bg, #050711) !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: 0.75rem 0.75rem !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    vertical-align: middle !important;
+    box-shadow: none !important;
 }
 .form-check-input:checked {
     background-color: var(--brand, #52ead2) !important;
     border-color: var(--brand, #52ead2) !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M4 10l4 4l8-8'/%3e%3c/svg%3e") !important;
 }
 </style>
     <div class="admin-panel">
@@ -115,7 +130,7 @@ input[type="checkbox"] {
                 @csrf
                 <input type="hidden" name="type" value="{{ $type }}">
 
-                <!-- Row 1 -->
+                
                 <div class="row">
                     <div class="col-md-4 mb-4">
                         <label for="name" class="form-label-custom">{{ $type === 'extra' ? 'Extra Name' : 'Insurance Name' }} <span style="color:#ef4444">*</span></label>
@@ -143,7 +158,7 @@ input[type="checkbox"] {
                     </div>
                 </div>
 
-                <!-- Row 2 -->
+                
                 <div class="row">
                     <div class="col-md-6 mb-4">
                         <label for="icon_class" class="form-label-custom">Icon Class <span style="color:#ef4444">*</span></label>
@@ -193,7 +208,7 @@ input[type="checkbox"] {
                     </div>
                 </div>
 
-                <!-- Row 3 -->
+                
                 <div class="row">
                     <div class="col-md-4 mb-4">
                         <label for="refunded_amount" class="form-label-custom">Refundable Deposit Amount <span style="color:#ef4444">*</span></label>
@@ -232,7 +247,7 @@ input[type="checkbox"] {
                 </div>
 
                 @if($type === 'insurance')
-                <!-- Manage Features Mapping Static Design -->
+                
                 <div class="row mb-4 mt-2">
                     <div class="col-md-12">
                         <h6 class="text-white mb-1" style="font-weight: 600; font-size: 0.95rem;">Manage Features Mapping</h6>

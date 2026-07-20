@@ -12,7 +12,7 @@
                 @csrf
                 @method('PUT')
 
-                <!-- Names Row -->
+                
                 <div class="row" style="display: flex; gap: 20px; margin-bottom: 24px;">
                     <div style="flex: 1;">
                         <label for="first_name" class="form-label-custom">First Name</label>
@@ -42,7 +42,7 @@
                     </div>
                 </div>
 
-                <!-- Username -->
+                
                 <div class="mb-4">
                     <label for="username" class="form-label-custom">Username</label>
                     <input type="text" class="form-control form-input-custom @error('username') is-invalid @enderror" id="username" name="username"
@@ -52,7 +52,7 @@
                     @enderror
                 </div>
 
-                <!-- Email -->
+                
                 <div class="mb-4">
                     <label for="email" class="form-label-custom">Email Address</label>
                     <input type="email" class="form-control form-input-custom @error('email') is-invalid @enderror" id="email" name="email"
@@ -62,7 +62,7 @@
                     @enderror
                 </div>
 
-                <!-- Contact Details -->
+                
                 <div class="mb-4">
                     <label class="form-label-custom">Contact Details</label>
                     @include('partials.phone-input')
@@ -126,7 +126,7 @@
                     @enderror
                 </div>
 
-                <!-- Status -->
+                
                 <div class="mb-4">
                     <label for="status" class="form-label-custom">Vendor Status</label>
                     <select class="form-select @error('status') is-invalid @enderror" id="status" name="status" style="border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%; background-color: var(--bg-2); color: var(--text); border: 1px solid var(--line);" required>
@@ -138,7 +138,7 @@
                     @enderror
                 </div>
 
-                <!-- Actions -->
+                
                 <div class="d-flex align-items-center gap-3" style="display: flex; gap: 16px; align-items: center; margin-top: 24px;">
                     <button type="submit" class="btn btn-primary rounded-pill px-4" style="min-height: 40px; font-weight: 800; font-size: 0.9rem; background: linear-gradient(135deg, var(--brand), var(--brand-2)) !important; border: none !important; color: #051013 !important; cursor: pointer; box-shadow: 0 4px 12px rgba(82, 234, 210, 0.15) !important;">Save Changes</button>
                     <a href="{{ route('admin.vendors.index') }}" class="btn btn-link text-muted cancel-link">Cancel</a>

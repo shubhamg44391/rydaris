@@ -15,9 +15,9 @@
             </div>
         </div>
 
-        <!-- Invitation Stats Cards -->
+        
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
-            <!-- Total Sent Card -->
+            
             <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 12px; padding: 20px; display: flex; align-items: center; gap: 15px;">
                 <div style="background: rgba(82, 234, 210, 0.1); color: var(--brand, #52ead2); padding: 12px; border-radius: 10px;">
                     <svg viewBox="0 0 24 24" style="width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
@@ -28,7 +28,7 @@
                 </div>
             </div>
             
-            <!-- Pending Card -->
+            
             <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 12px; padding: 20px; display: flex; align-items: center; gap: 15px;">
                 <div style="background: rgba(251, 191, 36, 0.1); color: #fbbf24; padding: 12px; border-radius: 10px;">
                     <svg viewBox="0 0 24 24" style="width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
@@ -39,7 +39,7 @@
                 </div>
             </div>
 
-            <!-- Accepted Card -->
+            
             <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 12px; padding: 20px; display: flex; align-items: center; gap: 15px;">
                 <div style="background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 12px; border-radius: 10px;">
                     <svg viewBox="0 0 24 24" style="width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
@@ -87,7 +87,7 @@
                             <td>
                                 <div class="table-actions" style="display: flex; gap: 8px; justify-content: center;">
                                     @if($invitation->status === 'pending')
-                                        <!-- Resend Button -->
+                                        
                                         <form action="{{ route('vendor.invitations.resend', $invitation->id) }}" method="POST" class="resend-form" style="margin: 0;">
                                             @csrf
                                             <button type="submit" class="icon-button resend-btn" title="Resend Invitation Email" style="color: #60a5fa; background: rgba(96, 165, 250, 0.1); border: 1px solid rgba(96, 165, 250, 0.2); padding: 6px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
@@ -95,13 +95,13 @@
                                             </button>
                                         </form>
 
-                                        <!-- Edit Button -->
+                                        
                                         <a href="{{ route('vendor.invitations.edit', $invitation->id) }}" class="icon-button edit-btn" title="Edit Invitation" style="color: var(--brand, #52ead2); background: rgba(82, 234, 210, 0.1); border: 1px solid rgba(82, 234, 210, 0.2); padding: 6px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; text-decoration: none;">
                                             <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                                         </a>
                                     @endif
 
-                                    <!-- Delete Button -->
+                                    
                                     <form action="{{ route('vendor.invitations.destroy', $invitation->id) }}" method="POST" class="delete-form" style="margin: 0;">
                                         @csrf
                                         @method('DELETE')
@@ -121,7 +121,7 @@
             </table>
         </div>
         
-        <!-- Pagination Controls -->
+        
         @if($invitations->hasPages())
             <div class="d-flex justify-content-between align-items-center px-4 py-3" style="border-top: 1px solid var(--line, rgba(255, 255, 255, 0.08));">
                 <div class="text-muted small">

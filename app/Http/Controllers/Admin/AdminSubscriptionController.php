@@ -8,9 +8,8 @@ use App\Models\VendorSubscription;
 
 class AdminSubscriptionController extends Controller
 {
-    /**
-     * Display a listing of vendor subscriptions (payment entries).
-     */
+    
+
     public function index()
     {
         $subscriptions = VendorSubscription::with(['vendor', 'package'])

@@ -8,20 +8,18 @@ use App\Models\VendorPage;
 
 class PageController extends Controller
 {
-    /**
-     * Show Terms & Conditions form — load existing record if any.
-     */
+    
+
     public function index()
     {
-        // Each vendor has at most ONE Terms & Conditions record
+        
         $page = VendorPage::where('vendor_id', auth()->id())->first();
 
         return view('vendor.pages.index', compact('page'));
     }
 
-    /**
-     * Save (create or update) the Terms & Conditions.
-     */
+    
+
     public function store(Request $request)
     {
         $request->validate([
@@ -32,7 +30,7 @@ class PageController extends Controller
             'description.required' => 'Description / Content is required.',
         ]);
 
-        // Update existing or create new — one record per vendor
+        
         VendorPage::updateOrCreate(
             ['vendor_id' => auth()->id()],
             [
@@ -45,7 +43,7 @@ class PageController extends Controller
             ->with('success', 'Terms & Conditions saved successfully!');
     }
 
-    // ── These are kept for route compatibility but redirect to index ──
+    
     public function edit($id)
     {
         return redirect()->route('vendor.pages.index');

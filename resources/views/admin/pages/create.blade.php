@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('main-content')
-    <!-- Breadcrumb -->
+    
     <div style="margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
         <div>
             <h4 style="margin: 0; color: #fff; font-weight: 700; font-size: 1.4rem;">Create Custom Page</h4>
@@ -38,12 +38,12 @@
         }
     @endphp
 
-    <!-- Main Grid Form -->
+    
     <form id="createPageForm" action="{{ route('admin.pages.store') }}" method="POST">
         @csrf
         <div class="create-page-grid" style="display: grid; grid-template-columns: 2.2fr 1fr; gap: 24px;">
             
-            <!-- Left Side: Page Content -->
+            
             <div style="display: flex; flex-direction: column; gap: 24px;">
                 <div class="admin-panel" style="padding: 24px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel);">
                     <div style="margin-bottom: 20px;">
@@ -76,10 +76,10 @@
                 </div>
             </div>
 
-            <!-- Right Side: Sidebar Actions & SEO -->
+            
             <div style="display: flex; flex-direction: column; gap: 24px;">
                 
-                <!-- Action Panel -->
+                
                 <div class="admin-panel" style="padding: 20px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel);">
                     <h5 style="margin: 0 0 15px; color: #fff; font-size: 1rem; font-weight: 700; border-bottom: 1px solid var(--line); padding-bottom: 10px;">Publishing</h5>
                     
@@ -98,7 +98,7 @@
                     </div>
                 </div>
 
-                <!-- SEO Config -->
+                
                 <div class="admin-panel" style="padding: 20px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel);">
                     <h5 style="margin: 0 0 15px; color: var(--brand); font-size: 1rem; font-weight: 700; border-bottom: 1px solid var(--line); padding-bottom: 10px;">SEO Settings</h5>
                     

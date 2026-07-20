@@ -3,7 +3,7 @@
 @section('title', 'Edit Page SEO | Rydaris Admin')
 
 @section('main-content')
-    <!-- Breadcrumb -->
+    
     <div style="margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
         <div>
             <h4 style="margin: 0; color: #fff; font-weight: 700; font-size: 1.4rem;">Edit Page SEO Tags</h4>
@@ -20,13 +20,13 @@
         </div>
     </div>
 
-    <!-- Main Grid Form -->
+    
     <form id="editSeoForm" action="{{ route('admin.seo-settings.update', $seoMetadata->id) }}" method="POST">
         @csrf
         @method('PUT')
         <div class="edit-seo-grid" style="display: grid; grid-template-columns: 2.2fr 1fr; gap: 24px;">
             
-            <!-- Left Side: Core Metadata Fields -->
+            
             <div style="display: flex; flex-direction: column; gap: 24px;">
                 <div class="admin-panel" style="padding: 24px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel);">
                     
@@ -52,11 +52,16 @@
                         <textarea name="meta_description" id="meta_description" class="form-control" required rows="4" placeholder="Enter SEO page description..." style="background: rgba(255,255,255,0.03) !important; border: 1px solid var(--line); border-radius: 8px; padding: 12px; font-size: 0.95rem; color: #fff; width: 100%; height: 120px; resize: vertical;">{{ old('meta_description', $seoMetadata->meta_description) }}</textarea>
                         <div class="error-msg" id="error-meta_description" style="color: #ef4444; font-size: 0.8rem; margin-top: 6px; display: none;"></div>
                     </div>
+                     <div style="margin-bottom: 20px;">
+                        <label class="form-label" for="keyword" style="font-weight: 600; font-size: 0.9rem; margin-bottom: 8px; display: block; color: #fff;">Keywords</label>
+                        <textarea name="keyword" id="keyword" class="form-control" rows="4" placeholder="Enter SEO keywords (comma-separated)..." style="background: rgba(255,255,255,0.03) !important; border: 1px solid var(--line); border-radius: 8px; padding: 12px; font-size: 0.95rem; color: #fff; width: 100%; height: 100px; resize: vertical;">{{ old('keyword', $seoMetadata->keyword) }}</textarea>
+                        <div class="error-msg" id="error-keyword" style="color: #ef4444; font-size: 0.8rem; margin-top: 6px; display: none;"></div>
+                    </div>
 
                 </div>
             </div>
 
-            <!-- Right Side: Details Card -->
+            
             <div style="display: flex; flex-direction: column; gap: 24px;">
                 <div class="admin-panel" style="padding: 24px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel);">
                     <h3 style="margin-top: 0; margin-bottom: 20px; color: #fff; font-size: 1.1rem; font-weight: 600; border-bottom: 1px solid var(--line); padding-bottom: 12px;">Publish Info</h3>

@@ -11,38 +11,38 @@
 
     <meta name="description" content="" />
 
-    <!-- Favicon -->
+    
     <link rel="icon" type="image/png" href="{{ asset('assets/logo/favicon.png') }}" />
 
-    <!-- Fonts -->
+    
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
         href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
         rel="stylesheet" />
 
-    <!-- Icons. Uncomment required icon fonts -->
+    
     <link rel="stylesheet" href="{{asset('assets/admin/vendor/fonts/boxicons.css')}}" />
 
-    <!-- Core CSS -->
+    
     <link rel="stylesheet" href="{{asset('assets/admin/vendor/css/core.css')}}"
         class="template-customizer-core-css" />
     <link rel="stylesheet" href="{{asset('assets/admin/vendor/css/theme-default.css')}}"
         class="template-customizer-theme-css" />
     <link rel="stylesheet" href="{{asset('assets/admin/css/demo.css')}}" />
 
-    <!-- Vendors CSS -->
+    
     <link rel="stylesheet"
         href="{{asset('assets/admin/vendor/libs/perfect-scrollbar/perfect-scrollbar.css')}}" />
 
-    <!-- Page CSS -->
-    <!-- Page -->
+    
+    
     <link rel="stylesheet" href="{{asset('assets/admin/vendor/css/pages/page-auth.css')}}" />
-    <!-- Helpers -->
+    
     <script src="{{asset('assets/admin/vendor/js/helpers.js')}}"></script>
 
-    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
-    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    
+    
     <script src="{{asset('assets/admin/js/config.js')}}"></script>
     <style>
         :root {
@@ -329,15 +329,15 @@
 </head>
 
 <body>
-    <!-- Content -->
+    
 
     <div class="container-xxl">
         <div class="authentication-wrapper authentication-basic container-p-y">
             <div class="authentication-inner">
-                <!-- Register -->
+                
                 <div class="card">
                     <div class="card-body">
-                        <!-- Logo -->
+                        
                         <div class="app-brand justify-content-center">
                             <a href="{{ route('home') }}" class="app-brand-link gap-2">
                                 <span class="app-brand-logo demo">
@@ -346,31 +346,15 @@
                                 </span>
                             </a>
                         </div>
-                        <!-- /Logo -->
+                        
                         @if(isset($invitation))
                             <h4 class="mb-6" id="form-title">Get Started as a User!</h4>
                         @else
                             <h4 class="mb-6" id="form-title">Get Started as a Vendor!</h4>
                         @endif
 
-                        <!-- Stepper -->
-                        <!--
-                        <div class="stepper">
-                            <div class="stepper-progress"></div>
-                            <div class="step-item active">
-                                <div class="step-circle">1</div>
-                                <div class="step-title">Account</div>
-                            </div>
-                            <div class="step-item">
-                                <div class="step-circle">2</div>
-                                <div class="step-title">Address</div>
-                            </div>
-                            <div class="step-item">
-                                <div class="step-circle">3</div>
-                                <div class="step-title">Security</div>
-                            </div>
-                        </div>
-                        -->
+                        
+                        
 
                         <form method="POST" action="{{ route('vendor.register.submit') }}" id="vendorRegisterForm">
                             @csrf
@@ -380,12 +364,12 @@
                                 <input type="hidden" name="package_id" value="{{ old('package_id') }}" />
                             @endif
                             
-                            <!-- Step 1: Account Information -->
+                            
                             <div class="form-step">
                                 <h5 class="mb-4" style="color: var(--brand); font-weight: 700; letter-spacing: 0.5px;">Account Information</h5>
-                                <!-- Name Fields Row -->
+                                
                                 <div class="row">
-                                    <!-- First Name -->
+                                    
                                     <div class="col-md-4 form-group mb-3">
                                         <label for="first_name" class="form-label">{{ __('First Name') }} <span style="color: #ff4d4d;">*</span></label>
                                         <input id="first_name" class="form-control" type="text" name="first_name"
@@ -395,7 +379,7 @@
                                         @enderror
                                     </div>
 
-                                    <!-- Middle Name -->
+                                    
                                     <div class="col-md-4 form-group mb-3">
                                         <label for="middle_name" class="form-label">{{ __('Middle Name') }}</label>
                                         <input id="middle_name" class="form-control" type="text" name="middle_name"
@@ -405,7 +389,7 @@
                                         @enderror
                                     </div>
 
-                                    <!-- Last Name -->
+                                    
                                     <div class="col-md-4 form-group mb-3">
                                         <label for="last_name" class="form-label">{{ __('Last Name') }} <span style="color: #ff4d4d;">*</span></label>
                                         <input id="last_name" class="form-control" type="text" name="last_name"
@@ -423,7 +407,7 @@
                                 @else
                                     <input type="hidden" name="role" value="vendor" />
                                     
-                                    <!-- Company Name (Required for direct Vendor signup) -->
+                                    
                                     <div class="form-group mb-3" id="company_name_container">
                                         <label for="company_name" class="form-label">{{ __('Company Name') }} <span style="color: #ff4d4d;">*</span></label>
                                         <input id="company_name" class="form-control" type="text" name="company_name"
@@ -434,7 +418,7 @@
                                     </div>
                                 @endif
 
-                                <!-- Email Address -->
+                                
                                 <div class="form-group mb-3">
                                     <label for="email" class="form-label">{{ __('Email') }} <span style="color: #ff4d4d;">*</span></label>
                                     <input id="email" class="form-control" type="email" name="email"
@@ -444,7 +428,7 @@
                                     @enderror
                                 </div>
 
-                                <!-- Phone and Country Code -->
+                                
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('Contact Details') }} <span style="color: #ff4d4d;">*</span></label>
                                     <input type="tel" id="reg_phone" class="form-control" placeholder="Phone number" value="{{ old('country_code', isset($invitation) ? $invitation->vendor->country_code : '') }}{{ old('contact_number') }}" required style="width: 100%;">
@@ -459,10 +443,10 @@
                                 </div>
                             </div>
 
-                            <!-- Step 2: Address Details -->
+                            
                             <div class="form-step d-none">
                                 <h5 class="mb-4" style="color: var(--brand); font-weight: 700; letter-spacing: 0.5px;">Address Details</h5>
-                                <!-- Street Address -->
+                                
                                 <div class="form-group mb-3">
                                     <label for="street_address" class="form-label">{{ __('Street Address') }} @if(!isset($invitation))<span style="color: #ff4d4d;">*</span>@endif</label>
                                     <input id="street_address" class="form-control" type="text" name="street_address"
@@ -472,7 +456,7 @@
                                     @enderror
                                 </div>
 
-                                <!-- Landmark -->
+                                
                                 <div class="form-group mb-3">
                                     <label for="landmark" class="form-label">{{ __('Landmark') }}</label>
                                     <input id="landmark" class="form-control" type="text" name="landmark"
@@ -483,7 +467,7 @@
                                 </div>
 
                                 <div class="row">
-                                    <!-- City -->
+                                    
                                     <div class="col-md-6 form-group mb-3">
                                         <label for="city" class="form-label">{{ __('City') }} @if(!isset($invitation))<span style="color: #ff4d4d;">*</span>@endif</label>
                                         <input id="city" class="form-control" type="text" name="city"
@@ -493,7 +477,7 @@
                                         @enderror
                                     </div>
 
-                                    <!-- Pincode -->
+                                    
                                     <div class="col-md-6 form-group mb-3">
                                         <label for="pincode" class="form-label">{{ __('Pincode') }} @if(!isset($invitation))<span style="color: #ff4d4d;">*</span>@endif</label>
                                         <input id="pincode" class="form-control" type="text" name="pincode"
@@ -504,7 +488,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Country -->
+                                
                                 <div class="form-group mb-3">
                                     <label for="country" class="form-label">{{ __('Country') }} @if(!isset($invitation))<span style="color: #ff4d4d;">*</span>@endif</label>
                                     <input id="country" class="form-control" type="text" name="country"
@@ -515,10 +499,10 @@
                                 </div>
                             </div>
 
-                            <!-- Step 3: Security Details -->
+                            
                             <div class="form-step d-none">
                                 <h5 class="mb-4" style="color: var(--brand); font-weight: 700; letter-spacing: 0.5px;">Security Settings</h5>
-                                <!-- Password -->
+                                
                                 <div class="mb-3 form-password-toggle">
                                     <label class="form-label" for="password">{{ __('Password') }} <span style="color: #ff4d4d;">*</span></label>
                                     <div class="input-group input-group-merge">
@@ -531,7 +515,7 @@
                                     @enderror
                                 </div>
 
-                                <!-- Confirm Password -->
+                                
                                 <div class="mb-3 form-password-toggle">
                                     <label class="form-label" for="password_confirmation">{{ __('Confirm Password') }} <span style="color: #ff4d4d;">*</span></label>
                                     <div class="input-group input-group-merge">
@@ -542,7 +526,7 @@
                                 </div>
                             </div>
 
-                            <!-- Navigation Buttons -->
+                            
                             <div class="d-flex justify-content-between mt-4 gap-2">
                                 <button type="button" id="btnPrev" class="btn btn-secondary-wizard d-none w-100">
                                     {{ __('Back') }}
@@ -564,30 +548,30 @@
                         </p>
                     </div>
                 </div>
-                <!-- /Register -->
+                
             </div>
         </div>
     </div>
 
-    <!-- / Content -->
-    <!-- Core JS -->
-    <!-- build:js assets/vendor/js/core.js -->
+    
+    
+    
     <script src="{{asset('assets/admin/vendor/libs/jquery/jquery.js')}}"></script>
     <script src="{{asset('assets/admin/vendor/libs/popper/popper.js')}}"></script>
     <script src="{{asset('assets/admin/vendor/js/bootstrap.js')}}"></script>
     <script src="{{asset('assets/admin/vendor/libs/perfect-scrollbar/perfect-scrollbar.js')}}"></script>
 
     <script src="{{asset('assets/admin/vendor/js/menu.js')}}"></script>
-    <!-- endbuild -->
+    
 
-    <!-- Vendors JS -->
+    
 
-    <!-- Main JS -->
+    
     <script src="{{asset('assets/admin/js/main.js')}}"></script>
 
-    <!-- Page JS -->
+    
 
-    <!-- Place this tag in your head or just before your close body tag. -->
+    
     <script async defer src="https://buttons.github.io/buttons.js"></script>
 
     <script>
@@ -688,10 +672,9 @@
         });
     </script>
 
-
-    <!-- ===== FULLSCREEN VIDEO LOADER (shows on register submit) ===== -->
+    
     <div id="registerPreloader" class="site-preloader" style="display:none; opacity:0; position:fixed; top:0; left:0; width:100vw; height:100vh; background:#050711; z-index:999999; overflow:hidden; transition:opacity 0.3s ease;">
-        <!-- Fallback Spinner -->
+        
         <div class="preloader-spinner">
             <div class="spinner-circle"></div>
             <span>Submitting</span>
@@ -777,7 +760,7 @@
             });
         })();
     </script>
-    <!-- ===== END LOADER ===== -->
+    
 
 </body>
 

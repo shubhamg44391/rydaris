@@ -14,7 +14,7 @@
                 @method('PUT')
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
-                    <!-- First Name -->
+                    
                     <div>
                         <label for="first_name" class="form-label-custom">First Name</label>
                         <input type="text" class="form-control form-input-custom @error('first_name') is-invalid @enderror" id="first_name" name="first_name"
@@ -24,7 +24,7 @@
                         @enderror
                     </div>
 
-                    <!-- Last Name -->
+                    
                     <div>
                         <label for="name" class="form-label-custom">Last Name</label>
                         <input type="text" class="form-control form-input-custom @error('name') is-invalid @enderror" id="name" name="name"
@@ -35,7 +35,7 @@
                     </div>
                 </div>
 
-                <!-- Email -->
+                
                 <div class="mb-4">
                     <label for="email" class="form-label-custom">Email Address</label>
                     <input type="email" class="form-control form-input-custom @error('email') is-invalid @enderror" id="email" name="email"
@@ -45,7 +45,7 @@
                     @enderror
                 </div>
 
-                <!-- Contact Details -->
+                
                 <div class="mb-4">
                     <label class="form-label-custom">Contact Details <span style="color: #ff4d4d;">*</span></label>
                     @include('partials.phone-input')
@@ -61,7 +61,7 @@
                 </div>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">
-                    <!-- Password -->
+                    
                     <div>
                         <label for="password" class="form-label-custom">Password (Leave blank to keep current)</label>
                         <input type="password" class="form-control form-input-custom @error('password') is-invalid @enderror" id="password" name="password"
@@ -71,7 +71,7 @@
                         @enderror
                     </div>
 
-                    <!-- Confirm Password -->
+                    
                     <div>
                         <label for="password_confirmation" class="form-label-custom">Confirm Password</label>
                         <input type="password" class="form-control form-input-custom" id="password_confirmation" name="password_confirmation"

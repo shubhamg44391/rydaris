@@ -9,26 +9,29 @@
   <meta name="viewport"
     content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>Edion Admin Dashboard</title>
+  <title>@yield('title', $seo_title ?? 'Rydaris Customer Portal')</title>
+  <meta name="description" content="{{ $seo_description ?? '' }}" />
+  @if(isset($seo_keyword) && $seo_keyword)
+    <meta name="keywords" content="{{ $seo_keyword }}" />
+  @else
+    @yield('meta_keywords')
+  @endif
 
-  {{-- <title>Admin Dashboard</title> --}}
-
-  <meta name="description" content="" />
-
-  <!-- Favicon -->
+  
   <link class="favicon" rel="icon" type="image/png" href="{{ asset('assets/logo/favicon.png') }}" />
 
-  <!-- Fonts -->
+  
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
     href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
     rel="stylesheet" />
 
-  <!-- Icons. Uncomment required icon fonts -->
+  
   <link rel="stylesheet" href="{{ asset('assets/admin/vendor/fonts/boxicons.css')}}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  <!-- Core CSS -->
+  
   <link rel="stylesheet" href="{{ asset('assets/admin/vendor/css/core.css')}}"
     class="template-customizer-core-css" />
   <link rel="stylesheet" href="{{ asset('assets/admin/vendor/css/theme-default.css')}}"
@@ -53,12 +56,11 @@
     .swal2-confirm, .swal2-styled.swal2-confirm { background: linear-gradient(135deg, #52ead2, #2bc2a8) !important; color: #050711 !important; font-weight: 600 !important; border-radius: 8px !important; padding: 12px 28px !important; border: none !important; box-shadow: 0 8px 16px rgba(82, 234, 210, 0.2) !important; transition: all 0.3s ease !important; }
   </style>
 
-
-  <!-- Helpers -->
+  
   <script src="{{ asset('assets/admin/vendor/js/helpers.js')}}"></script>
 
-  <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
-  <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+  
+  
   <script src="{{ asset('assets/admin/js/config.js')}}"></script>
   <style>
     canvas {
@@ -82,7 +84,7 @@
 
 <body class="admin-body">
   @include('partials.preloader')
-  <!-- Mobile sidebar overlay -->
+  
   <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
   <div class="admin-shell">
     <aside class="admin-sidebar" id="adminSidebar" aria-label="Admin navigation">
@@ -137,19 +139,13 @@
         @yield('main-content')
       </div>
       
-      <!-- Footer -->
-      <!-- <footer class="content-footer footer" style="padding: 20px 24px; border-top: 1px solid rgba(0,0,0,0.05); color: #64748b; font-size: 0.9rem; background: #ffffff;">
-        <div>
-          © <script>document.write(new Date().getFullYear());</script>, made with ❤️ by Edion Web Technologies
-        </div>
-      </footer> -->
+      
+      
     </main>
   </div>
 
-
-
-  <!-- Core JS -->
-  <!-- build:js assets/vendor/js/core.js -->
+  
+  
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.3.1/dist/sweetalert2.min.js"></script>
   <script src="{{ asset('assets/admin/vendor/libs/jquery/jquery.js')}}"></script>
   <script src="{{ asset('assets/admin/vendor/libs/popper/popper.js')}}"></script>
@@ -157,18 +153,18 @@
   <script src="{{ asset('assets/admin/vendor/libs/perfect-scrollbar/perfect-scrollbar.js')}}"></script>
 
   <script src="{{ asset('assets/admin/vendor/js/menu.js')}}"></script>
-  <!-- endbuild -->
+  
 
-  <!-- Vendors JS -->
+  
   <script src="{{ asset('assets/admin/vendor/libs/apex-charts/apexcharts.js')}}"></script>
 
-  <!-- Main JS -->
+  
   <script src="{{ asset('assets/admin/js/main.js')}}"></script>
 
-  <!-- Page JS -->
+  
   <script src="{{ asset('assets/admin/js/dashboards-analytics.js')}}"></script>
 
-  <!-- Place this tag in your head or just before your close body tag. -->
+  
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   @yield('js')
 

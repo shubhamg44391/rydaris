@@ -39,7 +39,7 @@ class SiteSetting extends Model
             \Illuminate\Support\Facades\Config::set('mail.from.address', $setting->from_email ?? $setting->smtp_username);
             \Illuminate\Support\Facades\Config::set('mail.from.name', $setting->from_name ?? 'Rydaris');
             
-            // Purge the mailer cache to force it to read the new config
+            
             \Illuminate\Support\Facades\Mail::purge('smtp');
             
             return true;

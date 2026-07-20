@@ -31,7 +31,7 @@
                 @csrf
                 @method('PUT')
 
-                <!-- Row 1 -->
+                
                 <div class="row">
                     <div class="col-md-3 mb-4">
                         <label for="name" class="form-label-custom">Vehicle Name</label>
@@ -67,7 +67,7 @@
                     </div>
                 </div>
 
-                <!-- Row 2 -->
+                
                 <div class="row">
                     <div class="col-md-3 mb-4">
                         <label for="bags" class="form-label-custom">Bags</label>
@@ -113,7 +113,7 @@
                     </div>
                 </div>
 
-                <!-- Row 3 -->
+                
                 <div class="row">
                     <div class="col-md-3 mb-4">
                         <label for="gear_system" class="form-label-custom">Gear system</label>
@@ -154,7 +154,7 @@
                     </div>
                 </div>
 
-                <!-- Row 4 -->
+                
                 <div class="row">
                     <div class="col-md-3 mb-4">
                         <label for="stock" class="form-label-custom">Stock</label>
@@ -166,7 +166,7 @@
                     </div>
                 </div>
 
-                <!-- Row 5: Dynamic Features -->
+                
                 <div class="row mb-4">
                     <div class="col-md-6 mb-3">
                         <label class="form-label-custom">Vehicle Features</label>
@@ -197,7 +197,7 @@
                     </div>
                 </div>
 
-                <!-- Row 6: Terms & Conditions -->
+                
                 <div class="row mb-4">
                     <div class="col-md-12">
                         <label for="terms" class="form-label-custom">Terms & Conditions</label>
@@ -216,7 +216,7 @@
         </div>
     </div>
     
-    <!-- Include Pricing Management Module -->
+    
     <div class="mt-5 pt-4" style="border-top: 1px solid var(--line); width: 100%; max-width: 100%; overflow-x: hidden; box-sizing: border-box;">
         @include('vendor.availability.partial', ['singleVehicleMode' => true])
     </div>
@@ -296,7 +296,6 @@
     }
 </script>
 
-<!-- Pricing Management Script logic -->
 <script>
     const singleVehicleMode = true;
     const filterVehicleId = {{ $vehicle->id }};

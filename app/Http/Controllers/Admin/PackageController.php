@@ -8,26 +8,23 @@ use App\Models\Package;
 
 class PackageController extends Controller
 {
-    /**
-     * Display a listing of the packages.
-     */
+    
+
     public function index()
     {
         $packages = Package::orderBy('order', 'asc')->orderBy('created_at', 'desc')->paginate(10);
         return view('admin.packages.index', compact('packages'));
     }
 
-    /**
-     * Show the form for creating a new package.
-     */
+    
+
     public function create()
     {
         return view('admin.packages.create');
     }
 
-    /**
-     * Store a newly created package in database.
-     */
+    
+
     public function store(Request $request)
     {
         $request->validate([
@@ -70,7 +67,7 @@ class PackageController extends Controller
             'description' => $request->description,
             'price' => $request->price,
             'billing_period' => $request->billing_period,
-            'features' => [], // no longer used from input
+            'features' => [], 
             'is_featured' => $request->has('is_featured'),
             'is_active' => $request->has('is_active'),
             'button_text' => $request->button_text,
@@ -102,9 +99,8 @@ class PackageController extends Controller
         return redirect()->route('admin.packages.index')->with('success', 'Package created successfully.');
     }
 
-    /**
-     * Show the form for editing the specified package.
-     */
+    
+
     public function edit($id)
     {
         $package = Package::findOrFail($id);
@@ -112,9 +108,8 @@ class PackageController extends Controller
         return view('admin.packages.edit', compact('package'));
     }
 
-    /**
-     * Update the specified package in database.
-     */
+    
+
     public function update(Request $request, $id)
     {
         $package = Package::findOrFail($id);
@@ -159,7 +154,7 @@ class PackageController extends Controller
             'description' => $request->description,
             'price' => $request->price,
             'billing_period' => $request->billing_period,
-            'features' => [], // no longer used from input
+            'features' => [], 
             'is_featured' => $request->has('is_featured'),
             'is_active' => $request->has('is_active'),
             'button_text' => $request->button_text,
@@ -191,9 +186,8 @@ class PackageController extends Controller
         return redirect()->route('admin.packages.index')->with('success', 'Package updated successfully.');
     }
 
-    /**
-     * Remove the specified package from database.
-     */
+    
+
     public function destroy($id)
     {
         $package = Package::findOrFail($id);

@@ -7,9 +7,8 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    /**
-     * Display the Vendor Dashboard.
-     */
+    
+
     public function index(Request $request)
     {
         if (!auth()->user()->activeSubscription) {
@@ -18,7 +17,7 @@ class DashboardController extends Controller
 
         $vendorId = auth()->id();
 
-        // Retrieve date range filter options
+        
         $range = $request->query('range', '12');
         $startMonthStr = $request->query('start_month');
         $endMonthStr = $request->query('end_month');
@@ -30,7 +29,7 @@ class DashboardController extends Controller
             $startDate = \Carbon\Carbon::parse($startMonthStr . '-01')->startOfMonth();
             $endDate = \Carbon\Carbon::parse($endMonthStr . '-01')->endOfMonth();
             
-            // Limit to max 12 months for chart display layout protection
+            
             $diffInMonths = $startDate->diffInMonths($endDate);
             if ($diffInMonths > 12) {
                 $startDate = (clone $endDate)->subMonths(11)->startOfMonth();
@@ -41,7 +40,7 @@ class DashboardController extends Controller
             $endDate = now()->endOfDay();
         }
 
-        // 1. KPI Metrics (filtered by selected range)
+        
         $totalVehicles = \App\Models\Vehicle::where('vendor_id', $vendorId)->count();
         
         $bookingsQuery = \App\Models\Booking::where('vendor_id', $vendorId);
@@ -57,7 +56,7 @@ class DashboardController extends Controller
             ->whereYear('created_at', now()->year)
             ->sum('paid_amount');
 
-        // 2. Monthly Revenue Chart (Dynamic Range based on filter selection)
+        
         $monthlyRevenue = [];
         if ($startDate && $endDate) {
             $tempDate = (clone $startDate)->startOfMonth();
@@ -83,20 +82,29 @@ class DashboardController extends Controller
 
         $maxRevenue = collect($monthlyRevenue)->max('revenue') ?: 1;
 
-        // 3. Recent Bookings / Activities (not limited by filter to show latest actions)
+        
         $recentBookings = \App\Models\Booking::with('vehicle')
             ->where('vendor_id', $vendorId)
             ->orderBy('id', 'desc')
             ->take(5)
             ->get();
 
-        // 4. Fleet transmission distribution
+        
         $automaticCount = \App\Models\Vehicle::where('vendor_id', $vendorId)->where('gear_system', 'Automatic')->count();
         $manualCount = \App\Models\Vehicle::where('vendor_id', $vendorId)->where('gear_system', 'Manual')->count();
         $totalGear = $automaticCount + $manualCount;
         
         $autoPercent = $totalGear > 0 ? round(($automaticCount / $totalGear) * 100) : 50;
         $manualPercent = $totalGear > 0 ? round(($manualCount / $totalGear) * 100) : 50;
+
+        
+        $avgRating = \App\Models\Review::where('vendor_id', $vendorId)->avg('rating') ?: 5.0;
+        $totalReviewsCount = \App\Models\Review::where('vendor_id', $vendorId)->count();
+        $recentReviews = \App\Models\Review::with(['user', 'vehicle', 'booking'])
+            ->where('vendor_id', $vendorId)
+            ->latest()
+            ->take(5)
+            ->get();
 
         return view('vendor.dashboard', compact(
             'totalVehicles',
@@ -109,7 +117,10 @@ class DashboardController extends Controller
             'automaticCount',
             'manualCount',
             'autoPercent',
-            'manualPercent'
+            'manualPercent',
+            'avgRating',
+            'totalReviewsCount',
+            'recentReviews'
         ));
     }
 
@@ -155,7 +166,7 @@ class DashboardController extends Controller
         $package = \App\Models\Package::findOrFail($packageId);
         $user = auth()->user();
 
-        // Expire any existing active subscriptions
+        
         \App\Models\VendorSubscription::where('vendor_id', $user->id)
             ->where('status', 'active')
             ->update(['status' => 'expired']);
@@ -169,7 +180,7 @@ class DashboardController extends Controller
             $endsAt = now()->addMonth();
         }
 
-        // Create new subscription
+        
         \App\Models\VendorSubscription::create([
             'vendor_id' => $user->id,
             'package_id' => $package->id,
@@ -181,9 +192,8 @@ class DashboardController extends Controller
         return redirect()->back()->with('success', 'Successfully subscribed to ' . $package->name . ' package.');
     }
 
-    /**
-     * Create order for Razorpay subscription checkout.
-     */
+    
+
     public function createOrder(Request $request, $packageId)
     {
         $request->validate([
@@ -196,16 +206,19 @@ class DashboardController extends Controller
 
         $package = \App\Models\Package::findOrFail($packageId);
         
-        // Extract numeric price
+        
         $priceStr = $package->price;
         $price = (float) filter_var($priceStr, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
         
-        // Read tax percentage from site settings (default 18%)
+        
+        $priceInInr = $price;
+        
+        
         $siteSettings = \App\Models\SiteSetting::first();
         $taxRate = $siteSettings ? (float) $siteSettings->tax_percentage : 18.0;
-        $totalPrice = $price * (1 + $taxRate / 100);
+        $totalPrice = $priceInInr * (1 + $taxRate / 100);
 
-        // ── FREE PACKAGE ── Skip Razorpay entirely
+        
         if ($price <= 0) {
             return response()->json([
                 'status'           => 'success',
@@ -216,14 +229,14 @@ class DashboardController extends Controller
             ]);
         }
         
-        // Get settings
+        
         $settings = \App\Models\SiteSetting::first();
         
         $isRazorpayActive = $settings && $settings->razorpay_active && !empty($settings->razorpay_key_id) && !empty($settings->razorpay_key_secret);
         
         if ($isRazorpayActive) {
             try {
-                // Convert price to paise (cents)
+                
                 $amountInPaise = round($totalPrice * 100);
                 
                 $response = \Illuminate\Support\Facades\Http::withoutVerifying()
@@ -256,7 +269,7 @@ class DashboardController extends Controller
                 ], 500);
             }
         } else {
-            // Mock/Test payment mode
+            
             return response()->json([
                 'status'           => 'success',
                 'mode'             => 'mock',
@@ -267,9 +280,8 @@ class DashboardController extends Controller
         }
     }
 
-    /**
-     * Verify payment signature and activate subscription.
-     */
+    
+
     public function verifyPayment(Request $request)
     {
         $request->validate([
@@ -285,14 +297,17 @@ class DashboardController extends Controller
         $package = \App\Models\Package::findOrFail($packageId);
         $user = auth()->user();
         
-        // Extract numeric price
+        
         $priceStr = $package->price;
         $price = (float) filter_var($priceStr, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 
-        // Read tax percentage from site settings (default 18%)
+        
+        $priceInInr = $price;
+
+        
         $siteSettings = \App\Models\SiteSetting::first();
         $taxRate = $siteSettings ? (float) $siteSettings->tax_percentage : 18.0;
-        $totalPrice = $price * (1 + $taxRate / 100);
+        $totalPrice = $priceInInr * (1 + $taxRate / 100);
 
         $billingPeriod = strtolower(trim($package->billing_period));
         if ($billingPeriod === '/ year') {
@@ -311,7 +326,7 @@ class DashboardController extends Controller
             $settings = \App\Models\SiteSetting::first();
             $keySecret = $settings ? $settings->razorpay_key_secret : '';
             
-            // Signature verification
+            
             $expectedSignature = hash_hmac('sha256', $razorpayOrderId . '|' . $razorpayPaymentId, $keySecret);
             
             if ($expectedSignature !== $razorpaySignature) {
@@ -321,12 +336,26 @@ class DashboardController extends Controller
                 ], 400);
             }
             
-            // Expire any existing active subscriptions for this user/vendor
+            
+            $paymentMethod = null;
+            try {
+                $paymentResponse = \Illuminate\Support\Facades\Http::withBasicAuth($settings ? $settings->razorpay_key_id : '', $keySecret)
+                    ->get("https://api.razorpay.com/v1/payments/{$razorpayPaymentId}");
+                
+                if ($paymentResponse->successful()) {
+                    $paymentData = $paymentResponse->json();
+                    $paymentMethod = $paymentData['method'] ?? null;
+                }
+            } catch (\Exception $e) {
+                
+            }
+
+            
             \App\Models\VendorSubscription::where('vendor_id', $user->id)
                 ->where('status', 'active')
                 ->update(['status' => 'expired']);
                 
-            // Create subscription
+            
             \App\Models\VendorSubscription::create([
                 'vendor_id' => $user->id,
                 'package_id' => $package->id,
@@ -336,6 +365,7 @@ class DashboardController extends Controller
                 'razorpay_order_id' => $razorpayOrderId,
                 'razorpay_payment_id' => $razorpayPaymentId,
                 'razorpay_signature' => $razorpaySignature,
+                'payment_method' => $paymentMethod,
                 'amount_paid' => $totalPrice,
                 'street_address' => $request->input('street_address'),
                 'landmark' => $request->input('landmark'),
@@ -352,7 +382,7 @@ class DashboardController extends Controller
                 'redirect_url' => route('vendor.dashboard'),
             ]);
         } elseif ($mode === 'free') {
-            // ── FREE PLAN ── No payment needed, record subscription directly
+            
             \App\Models\VendorSubscription::where('vendor_id', $user->id)
                 ->where('status', 'active')
                 ->update(['status' => 'expired']);
@@ -379,13 +409,13 @@ class DashboardController extends Controller
                 'redirect_url' => route('vendor.dashboard'),
             ]);
         } else {
-            // Mock/Test mode
-            // Expire any existing active subscriptions for this user/vendor
+            
+            
             \App\Models\VendorSubscription::where('vendor_id', $user->id)
                 ->where('status', 'active')
                 ->update(['status' => 'expired']);
                 
-            // Create subscription
+            
             \App\Models\VendorSubscription::create([
                 'vendor_id' => $user->id,
                 'package_id' => $package->id,

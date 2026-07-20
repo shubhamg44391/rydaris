@@ -24,11 +24,11 @@ class UserDashboardController extends Controller
     {
         $search = $request->input('search');
 
-        // Fetch all active vendors who have an active subscription, along with their active vehicles
+        
         $vendorsQuery = User::where('role', 'vendor')
             ->where('status', 'active');
 
-        // Restrict search to the user's assigned vendor if applicable
+        
         if (auth()->check() && auth()->user()->vendor_id) {
             $vendorsQuery->where('id', auth()->user()->vendor_id);
         }
@@ -66,12 +66,12 @@ class UserDashboardController extends Controller
             })
             ->findOrFail($id);
 
-        // Ensure user can only view their assigned vendor
+        
         if (auth()->check() && auth()->user()->vendor_id && auth()->user()->vendor_id != $vendor->id) {
             abort(403, 'You are not authorized to view other vendors.');
         }
 
-        // Fetch active branches
+        
         $branches = \App\Models\Branch::where('vendor_id', $id)->where('status', true)->orderBy('name')->get();
         $selectedBranchId = $request->input('branch_id');
 
@@ -81,10 +81,10 @@ class UserDashboardController extends Controller
         }
         $locations = $locationsQuery->get();
 
-        // Calculate Days
-        $pickupDate = $request->input('pickup_date'); // Format: d/m/Y
-        $returnDate = $request->input('return_date'); // Format: d/m/Y
-        $rentalDays = 2; // Default
+        
+        $pickupDate = $request->input('pickup_date'); 
+        $returnDate = $request->input('return_date'); 
+        $rentalDays = 2; 
 
         if ($pickupDate && $returnDate) {
             try {
@@ -97,7 +97,7 @@ class UserDashboardController extends Controller
             }
         }
 
-        // Fetch Vehicles
+        
         $vehiclesQuery = \App\Models\Vehicle::where('vendor_id', $id)->where('status', 'active');
         
         if ($selectedBranchId) {
@@ -110,19 +110,19 @@ class UserDashboardController extends Controller
 
         $vehicles = $vehiclesQuery->get();
 
-        // Attach dummy/base price if no availability is found, or exact price if found
-        // For now, we'll fetch a sample base price from VehicleAvailability
+        
+        
         foreach ($vehicles as $vehicle) {
             $availability = \App\Models\VehicleAvailability::where('vehicle_id', $vehicle->id)
                 ->where('status', 1)
                 ->orderBy('price', 'asc')
                 ->first();
             
-            $vehicle->base_price = $availability ? $availability->price : 50.00; // default 50 if missing
+            $vehicle->base_price = $availability ? $availability->price : 50.00; 
             $vehicle->total_price = $vehicle->base_price * $rentalDays;
         }
 
-        // Apply price sorting
+        
         $sortPrice = $request->input('sort_price');
         if ($sortPrice === 'highest') {
             $vehicles = $vehicles->sortByDesc('total_price')->values();

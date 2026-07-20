@@ -18,7 +18,6 @@
         </div>
         
 
-
         <div class="panel-body admin-table-wrap">
             <table class="admin-table">
                 <thead>

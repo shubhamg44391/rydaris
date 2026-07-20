@@ -12,9 +12,9 @@
             <form method="POST" action="{{ route('vendor.locations.store') }}" id="locationForm">
                 @csrf
 
-                {{-- Row 1: Type | Location | Price --}}
+                
                 <div class="row">
-                    {{-- Type --}}
+                    
                     <div class="col-md-4 mb-4">
                         <label for="type" class="form-label-custom">Type <span style="color:#ef4444;">*</span></label>
                         <select class="form-select form-input-custom @error('type') is-invalid @enderror"
@@ -28,7 +28,7 @@
                         @error('type')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
 
-                    {{-- Location --}}
+                    
                     <div class="col-md-4 mb-4">
                         <label for="location" class="form-label-custom">Location <span style="color:#ef4444;">*</span></label>
                         <input type="text"
@@ -40,7 +40,7 @@
                         @error('location')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
 
-                    {{-- Price --}}
+                    
                     <div class="col-md-4 mb-4">
                         <label for="price" class="form-label-custom">Price <span style="color:#ef4444;">*</span></label>
                         <input type="number" step="0.01" min="0"
@@ -53,9 +53,9 @@
                     </div>
                 </div>
 
-                {{-- Row 2: Map Type | Conditional fields --}}
+                
                 <div class="row">
-                    {{-- Map Type --}}
+                    
                     <div class="col-md-4 mb-4">
                         <label for="map_type" class="form-label-custom">Map Type</label>
                         <select class="form-select form-input-custom @error('map_type') is-invalid @enderror"
@@ -68,7 +68,7 @@
                         @error('map_type')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
 
-                    {{-- Latitude (coordinates) --}}
+                    
                     <div class="col-md-4 mb-4" id="field-latitude">
                         <label for="latitude" class="form-label-custom">Latitude</label>
                         <input type="text"
@@ -80,7 +80,7 @@
                         @error('latitude')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
 
-                    {{-- Longitude (coordinates) --}}
+                    
                     <div class="col-md-4 mb-4" id="field-longitude">
                         <label for="longitude" class="form-label-custom">Longitude</label>
                         <input type="text"
@@ -92,7 +92,7 @@
                         @error('longitude')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
 
-                    {{-- Embed code (embedded) --}}
+                    
                     <div class="col-md-8 mb-4" id="field-embed" style="display:none;">
                         <label for="map_embed" class="form-label-custom">Map Embed Code (iframe)</label>
                         <textarea class="form-control form-input-custom @error('map_embed') is-invalid @enderror"
@@ -103,7 +103,7 @@
                     </div>
                 </div>
 
-                {{-- Submit --}}
+                
                 <div style="display:flex;justify-content:flex-end;padding-top:8px;gap:12px;">
                     <a href="{{ route('vendor.locations.index') }}" class="btn btn-secondary" style="padding:10px 20px;font-size:0.95rem;text-decoration:none;display:inline-flex;align-items:center;">
                         Cancel

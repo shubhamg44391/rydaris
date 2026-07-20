@@ -20,7 +20,7 @@
             <div class="window-bar">
               <div class="dots" aria-hidden="true"><span></span><span></span><span></span></div>
               <span id="demo-title">Rydaris Fleet Board</span>
-              <a href="{{ route('demo.dashboard') }}" style="background: linear-gradient(135deg, var(--brand-2, #80a7ff), var(--brand, #52ead2)); color: #050711; font-size: 0.72rem; font-weight: 700; padding: 4px 12px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 0 10px rgba(82, 234, 210, 0.3); transition: all 0.2s; cursor: pointer;">Live operations</a>
+              <button type="button" onclick="openDemoInquiryModal()" style="background: linear-gradient(135deg, var(--brand-2, #80a7ff), var(--brand, #52ead2)); color: #050711; border: none; font-size: 0.72rem; font-weight: 700; padding: 4px 12px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 0 10px rgba(82, 234, 210, 0.3); transition: all 0.2s; cursor: pointer; outline: none;">Live operations</button>
             </div>
             <div class="dashboard">
               <aside class="sidebar">
@@ -38,7 +38,7 @@
                 </div>
               </aside>
 
-              <!-- FLEET BOARD PANEL -->
+              
               <section class="board" id="panel-fleet" style="display:flex;">
                 <div class="board-grid">
                   <div>
@@ -64,9 +64,9 @@
                 </div>
               </section>
 
-              <!-- RESERVATIONS PANEL -->
+              
               <section class="board" id="panel-reservations" style="display:none; flex-direction:column; padding:14px;">
-                <!-- Header -->
+                
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
                   <div style="display:flex; align-items:center; gap:10px;">
                     <h3 style="margin:0; font-size:0.85rem; font-weight:700; color:#f1f5f9;">Reservations</h3>
@@ -78,7 +78,7 @@
                   </div>
                 </div>
 
-                <!-- Table -->
+                
                 <div style="border:1px solid rgba(255,255,255,0.08); border-radius:8px; overflow:hidden; flex:1;">
                   <table id="res-table" style="width:100%; border-collapse:collapse; font-size:0.7rem;">
                     <thead>
@@ -94,19 +94,19 @@
                       </tr>
                     </thead>
                     <tbody id="res-tbody">
-                      <!-- Rows injected by JS -->
+                      
                     </tbody>
                   </table>
                 </div>
 
-                <!-- Pagination -->
+                
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
                   <span id="res-info" style="font-size:0.63rem; color:#64748b;"></span>
                   <div style="display:flex; gap:4px; align-items:center;" id="res-pagination"></div>
                 </div>
               </section>
 
-              <!-- AGREEMENTS PANEL -->
+              
               <section class="board" id="panel-agreements" style="display:none; padding:14px; align-items:center; justify-content:center; height:100%; min-height:280px; width:100%;">
                 <div style="width:100%; max-width:400px; padding:24px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:16px; border:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.04); border-radius:12px; margin:auto;">
                   <div style="width: 50px; height: 50px; background: rgba(82, 234, 210, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
@@ -132,9 +132,9 @@
                 </div>
               </section>
  
-              <!-- REPORTS PANEL -->
+              
               <section class="board" id="panel-reports" style="display:none; flex-direction:column; padding:14px;">
-                <!-- Header -->
+                
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
                   <div style="display:flex; align-items:center; gap:10px;">
                     <h3 style="margin:0; font-size:0.85rem; font-weight:700; color:#f1f5f9;">Booking Reports</h3>
@@ -148,7 +148,7 @@
                   </button>
                 </div>
 
-                <!-- Table -->
+                
                 <div style="border:1px solid rgba(255,255,255,0.08); border-radius:8px; overflow:hidden; flex:1;">
                   <table style="width:100%; border-collapse:collapse; font-size:0.7rem;">
                     <thead>
@@ -163,12 +163,12 @@
                       </tr>
                     </thead>
                     <tbody id="rep-tbody">
-                      <!-- Rows injected by JS -->
+                      
                     </tbody>
                   </table>
                 </div>
 
-                <!-- Info footer -->
+                
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
                   <span style="font-size:0.63rem; color:#64748b;">Showing active analytics overview reports</span>
                   <span style="font-size:0.63rem; color:#64748b;">Total volume: ₹12,84,500</span>

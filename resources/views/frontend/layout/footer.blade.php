@@ -50,9 +50,14 @@
         title: 'Request Submitted!',
         text: @json(session('demo_inquiry_success')),
         icon: 'success',
-        confirmButtonText: 'Great!',
-        timer: 4500,
-        timerProgressBar: true
+        showCancelButton: true,
+        confirmButtonText: 'View Demo',
+        cancelButtonText: 'Close',
+        reverseButtons: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = "{{ route('demo.dashboard') }}";
+        }
       });
     @endif
 

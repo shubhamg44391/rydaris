@@ -40,15 +40,17 @@
                 <thead>
                     <tr>
                         <th style="white-space: nowrap;">S.No</th>
-                        <th style="white-space: nowrap;">Date & time</th>
+                        <th style="white-space: nowrap;">Booking Date</th>
                         <th style="white-space: nowrap;">Reservation #</th>
                         <th style="white-space: nowrap;">Customer Name</th>
                         <th style="white-space: nowrap;">Vehicle</th>
+                        <th style="white-space: nowrap;">Pickup & Return Time</th>
                         <th style="white-space: nowrap;">Payment Method</th>
                         <th style="white-space: nowrap;">Total Amount</th>
                         <th style="white-space: nowrap;">Paid Amount</th>
                         <th style="white-space: nowrap;">Pending Amount</th>
                         <th style="white-space: nowrap;">Payment Status</th>
+                        <th style="white-space: nowrap;">Customer Review</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -69,6 +71,14 @@
                             <td style="white-space: nowrap;">
                                 {{ $booking->vehicle->name ?? 'N/A' }}
                             </td>
+                            <td style="white-space: nowrap; font-size: 0.82rem;">
+                                <div style="color: #4ade80;">
+                                    <i class="fa fa-calendar-check me-1"></i> Pickup: {{ $booking->pickup_date_parsed ? $booking->pickup_date_parsed->format('Y/m/d') : $booking->pickup_date }} {{ $booking->pickup_time ? 'at ' . date('h:i A', strtotime($booking->pickup_time)) : '' }}
+                                </div>
+                                <div style="color: #f87171; margin-top: 2px;">
+                                    <i class="fa fa-calendar-times me-1"></i> Return: {{ $booking->return_date_parsed ? $booking->return_date_parsed->format('Y/m/d') : $booking->return_date }} {{ $booking->return_time ? 'at ' . date('h:i A', strtotime($booking->return_time)) : '' }}
+                                </div>
+                            </td>
                             <td style="white-space: nowrap; text-transform: capitalize;">
                                 {{ $booking->payment_method_label }}
                             </td>
@@ -86,10 +96,23 @@
                                     {{ ucfirst($booking->payment_status) }}
                                 </span>
                             </td>
+                            <td style="white-space: nowrap;">
+                                @if($booking->review)
+                                    <a href="{{ route('vendor.reviews.index') }}" class="badge" style="background: rgba(251, 191, 36, 0.15); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.4); text-decoration: none; padding: 5px 10px; font-size: 0.8rem;" title="View Customer Review">
+                                        <i class="fa fa-star me-1"></i> {{ $booking->review->rating }}★ Review
+                                    </a>
+                                @elseif($booking->is_completed_or_ended)
+                                    <span class="badge" style="background: rgba(255, 255, 255, 0.05); color: #94a3b8; border: 1px solid rgba(255, 255, 255, 0.1); padding: 5px 10px; font-size: 0.78rem;" title="Trip Ended - Awaiting Customer Review">
+                                        <i class="fa fa-star-half-alt me-1" style="color: #fbbf24;"></i> Trip Ended
+                                    </span>
+                                @else
+                                    <span style="font-size: 0.78rem; color: #64748b;">In Progress</span>
+                                @endif
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="10" class="text-center" style="padding: 30px; color: #94a3b8;">
+                            <td colspan="12" class="text-center" style="padding: 30px; color: #94a3b8;">
                                 <p>No payment records found.</p>
                             </td>
                         </tr>

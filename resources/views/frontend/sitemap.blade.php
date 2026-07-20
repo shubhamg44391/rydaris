@@ -5,7 +5,7 @@
 @section('content')
   <main style="background: #050711; color: #f8fafc; min-height: 100vh; padding-bottom: 80px;">
 
-    {{-- Page Hero --}}
+    
     <section class="page-hero" style="padding: 80px 0 40px; text-align: center; background: radial-gradient(circle at top, rgba(82, 234, 210, 0.08) 0%, transparent 60%);">
       <div class="wrap" style="text-align: center;">
         <p class="eyebrow" style="justify-content: center;">Sitemap</p>
@@ -14,12 +14,12 @@
       </div>
     </section>
 
-    {{-- Cards Grid --}}
+    
     <section class="section" style="padding: 40px 0 60px;">
       <div class="wrap">
         <div class="grid cols-3">
 
-          {{-- Main Website --}}
+          
           <article class="feature-card">
             <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
               <span class="icon" style="flex-shrink: 0;">
@@ -57,7 +57,7 @@
             </ul>
           </article>
 
-          {{-- Customer Panel --}}
+          
           <article class="feature-card">
             <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
               <span class="icon" style="flex-shrink: 0;">
@@ -95,7 +95,7 @@
             </ul>
           </article>
 
-          {{-- Vendor Panel --}}
+          
           <article class="feature-card">
             <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
               <span class="icon" style="flex-shrink: 0;">

@@ -63,19 +63,19 @@
 
 <body>
 
-    <!-- OUTER -->
+    
 
     <table width="100%" cellpadding="0" cellspacing="0" bgcolor="#f5f5f5">
 
         <tr>
             <td align="center">
 
-                <!-- MAIN TABLE -->
+                
 
                 <table width="700" cellpadding="0" cellspacing="0" class="main-table" bgcolor="#ffffff"
                     style="width:700px; max-width:700px;">
 
-                    <!-- HERO SECTION -->
+                    
 
                     <tr>
 
@@ -87,7 +87,7 @@ background-repeat:no-repeat;
 padding:30px 40px 40px 40px;;
 ">
 
-                            <!-- LOGO FIXED -->
+                            
 
                             <table width="100%">
 
@@ -108,7 +108,7 @@ display:block;
 
                             </table>
 
-                            <!-- RED BOX -->
+                            
 
                             <table width="100%">
 
@@ -153,7 +153,7 @@ line-height:1.5;
 
                     </tr>
 
-                    <!-- CONTENT -->
+                    
 
                     <tr>
 
@@ -182,7 +182,7 @@ line-height:1.7;
 
                             </p>
 
-                            <!-- STATUS BOX -->
+                            
 
                             <table width="100%">
 
@@ -221,7 +221,7 @@ font-size:15px;
 
                     </tr>
 
-                    <!-- FOOTER -->
+                    
 
                     <tr>
 

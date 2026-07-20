@@ -48,10 +48,15 @@ class Booking extends Model
         return $this->hasMany(BookingExtra::class);
     }
 
+    public function review()
+    {
+        return $this->hasOne(Review::class);
+    }
+
     public function getPaymentMethodLabelAttribute()
     {
         $paymentId = $this->payment_reference;
-        $method = $this->payment_method; // 'arrival', 'deposit', 'full'
+        $method = $this->payment_method; 
 
         if (empty($paymentId)) {
             return $method === 'arrival' ? 'Pay on Arrival' : 'N/A';
@@ -68,7 +73,7 @@ class Booking extends Model
                 $keySecret = $settings ? $settings->razorpay_secret : '';
 
                 if (empty($keyId) || empty($keySecret)) {
-                    // Try site-wide settings as fallback
+                    
                     $siteSettings = \App\Models\SiteSetting::first();
                     $keyId = $siteSettings ? $siteSettings->razorpay_key_id : '';
                     $keySecret = $siteSettings ? $siteSettings->razorpay_key_secret : '';
@@ -123,5 +128,27 @@ class Booking extends Model
     public function getCustomerDobParsedAttribute()
     {
         return self::parseRobust($this->customer_dob, \Carbon\Carbon::now()->subYears(20));
+    }
+
+    public function getIsCompletedOrEndedAttribute()
+    {
+        if (in_array(strtolower($this->booking_status), ['completed', 'finished'])) {
+            return true;
+        }
+        try {
+            $returnDt = $this->return_date_parsed->copy();
+            if ($this->return_time) {
+                $timeStr = date('H:i', strtotime($this->return_time));
+                $parts = explode(':', $timeStr);
+                $h = isset($parts[0]) ? (int)$parts[0] : 12;
+                $m = isset($parts[1]) ? (int)$parts[1] : 0;
+                $returnDt->setTime($h, $m);
+            } else {
+                $returnDt->endOfDay();
+            }
+            return \Carbon\Carbon::now()->greaterThanOrEqualTo($returnDt);
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 }

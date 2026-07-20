@@ -1,4 +1,4 @@
-{{-- Shared demo list page shell --}}
+
 @php
     $pageTitle = $pageTitle ?? 'List';
     $pageSubtitle = $pageSubtitle ?? null;
@@ -86,7 +86,6 @@
     </div>
 </div>
 
-{{-- Add Modal (fields mirror the vendor create form) --}}
 <div id="{{ $modalId }}" class="xp-overlay">
     <div class="xp-modal" style="{{ $addFields ? 'width: 640px;' : '' }}">
         <div class="xp-modal-head">
@@ -142,7 +141,7 @@
 </div>
 
 @once
-{{-- View Modal (shared, populated dynamically) --}}
+
 <div id="demoViewModal" class="xp-overlay">
     <div class="xp-modal">
         <div class="xp-modal-head">
@@ -186,7 +185,7 @@
         xpOpen('demoViewModal');
     }
 
-    {{-- kept for backward compatibility: now opens a form/detail instead of the info popup --}}
+    
     function demoOnlyAction() {}
 </script>
 @endonce

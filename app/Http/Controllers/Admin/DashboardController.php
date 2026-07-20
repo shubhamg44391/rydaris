@@ -11,9 +11,8 @@ use App\Models\VendorSubscription;
 
 class DashboardController extends Controller
 {
-    /**
-     * Display the Admin Dashboard.
-     */
+    
+
     public function index()
     {
         $totalVendors   = User::where('role', 'vendor')->count();
@@ -21,12 +20,12 @@ class DashboardController extends Controller
         $inactiveVendors = User::where('role', 'vendor')->where('status', 'inactive')->count();
         $recentVendors  = User::where('role', 'vendor')->orderBy('created_at', 'desc')->take(5)->get();
 
-        // ── Gross Monthly Churn Calculation ──────────────────────────────────
-        // Formula: (Churned last month / Active at start of last month) × 100
+        
+        
         $lastMonthStart = Carbon::now()->subMonth()->startOfMonth();
         $lastMonthEnd   = Carbon::now()->subMonth()->endOfMonth();
 
-        // Subscriptions that were active at start of last month
+        
         $activeAtStartOfLastMonth = VendorSubscription::where('starts_at', '<=', $lastMonthStart)
             ->where(function ($q) use ($lastMonthStart) {
                 $q->whereNull('ends_at')
@@ -34,7 +33,7 @@ class DashboardController extends Controller
             })
             ->count();
 
-        // Subscriptions that expired/cancelled during last month
+        
         $churnedLastMonth = VendorSubscription::where(function ($q) use ($lastMonthStart, $lastMonthEnd) {
                 $q->where('status', 'expired')
                   ->orWhere('status', 'cancelled')
@@ -47,14 +46,14 @@ class DashboardController extends Controller
             ->whereBetween('ends_at', [$lastMonthStart, $lastMonthEnd])
             ->count();
 
-        // Calculate churn percentage (avoid division by zero)
+        
         if ($activeAtStartOfLastMonth > 0) {
             $churnRate = round(($churnedLastMonth / $activeAtStartOfLastMonth) * 100, 1);
         } else {
             $churnRate = 0.0;
         }
 
-        // Month-over-month churn delta (compare to 2 months ago)
+        
         $twoMonthsStart = Carbon::now()->subMonths(2)->startOfMonth();
         $twoMonthsEnd   = Carbon::now()->subMonths(2)->endOfMonth();
 

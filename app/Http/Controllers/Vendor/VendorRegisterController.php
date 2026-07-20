@@ -16,9 +16,8 @@ use Illuminate\Support\Str;
 
 class VendorRegisterController extends Controller
 {
-    /**
-     * Show the vendor registration form.
-     */
+    
+
     public function showRegisterForm()
     {
         $vendors = User::where('role', 'vendor')->where('status', 'active')->get();
@@ -37,9 +36,8 @@ class VendorRegisterController extends Controller
         return view('frontend.vendor-register', compact('vendors', 'invitation'));
     }
 
-    /**
-     * Handle vendor registration request.
-     */
+    
+
     public function register(Request $request)
     {
         $invitation = null;
@@ -52,7 +50,7 @@ class VendorRegisterController extends Controller
                 return back()->withInput()->withErrors(['invite_token' => 'The invitation token is invalid or has already been used.']);
             }
             
-            // Force values from invitation
+            
             $request->merge([
                 'role' => 'user',
                 'vendor_id' => $invitation->vendor_id,
@@ -82,7 +80,7 @@ class VendorRegisterController extends Controller
         if ($request->role === 'user' && $request->vendor_id) {
             $vendorId = $request->vendor_id;
             
-            // Get the vendor's active subscription
+            
             $vendor = User::with(['subscription' => function($q) {
                 $q->where('status', 'active')
                   ->where('starts_at', '<=', now())
@@ -92,7 +90,7 @@ class VendorRegisterController extends Controller
             if ($vendor && $vendor->subscription && $vendor->subscription->package) {
                 $maxUsers = $vendor->subscription->package->no_of_users;
                 
-                // If maxUsers is not null/empty, check the limit
+                
                 if (!empty($maxUsers) && $maxUsers != 'Unlimited') {
                     $maxUsers = (int) $maxUsers;
                     $currentUsers = User::where('vendor_id', $vendorId)->where('role', 'user')->count();
@@ -179,11 +177,8 @@ class VendorRegisterController extends Controller
         }
     }
 
-    /**
-     * Send vendor welcome and admin notification emails.
-     *
-     * @throws \Throwable
-     */
+    
+
     private function sendVendorRegistrationEmails(User $user): void
     {
         try {

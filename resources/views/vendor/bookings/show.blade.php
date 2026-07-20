@@ -12,7 +12,6 @@
         </a>
     </div>
 
-
     
     @if ($errors->any())
         <div class="alert alert-danger" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: #f87171;">
@@ -169,14 +168,14 @@
             </div>
         </div>
 
-        <!-- Customer Verification Documents Card -->
+        
         <div class="card mb-4" style="background: rgba(11, 16, 32, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
             <div class="card-header" style="background: rgba(11, 16, 32, 0.8); border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding: 15px 20px;">
                 <h5 class="mb-0" style="color: #f8fafc; font-weight: 600; font-size: 1rem;">Customer Verification Documents</h5>
             </div>
             <div class="card-body p-4">
                 <div class="row g-4">
-                    <!-- Driver's License -->
+                    
                     <div class="col-md-6">
                         <h6 style="color: #cbd5e1; font-weight: 700; margin-bottom: 15px; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 8px;">Driver's License Details</h6>
                         @if($booking->license_number)
@@ -217,7 +216,7 @@
                         @endif
                     </div>
 
-                    <!-- Passport / ID Card -->
+                    
                     <div class="col-md-6">
                         <h6 style="color: #cbd5e1; font-weight: 700; margin-bottom: 15px; border-bottom: 1px dashed rgba(255,255,255,0.05); padding-bottom: 8px;">Passport / ID Details</h6>
                         @if($booking->pass_number)

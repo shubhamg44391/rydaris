@@ -12,7 +12,7 @@
                 @csrf
                 @method('PUT')
 
-                <!-- Name -->
+                
                 <div class="mb-4">
                     <label for="name" class="form-label-custom">Variant Name</label>
                     <input type="text" class="form-control form-input-custom @error('name') is-invalid @enderror" id="name" name="name"
@@ -22,7 +22,7 @@
                     @enderror
                 </div>
 
-                <!-- Description -->
+                
                 <div class="mb-4">
                     <label for="description" class="form-label-custom">Description</label>
                     <textarea class="form-control form-input-custom @error('description') is-invalid @enderror" id="description" name="description"

@@ -8,7 +8,7 @@
             </div>
         </div>
 
-        {{-- Filter Tabs --}}
+        
         <div class="panel-filter-bar">
             <a href="{{ route('admin.contact-inquiries.index') }}" class="btn btn-sm {{ !$status ? 'active' : '' }}">
                 All
@@ -62,7 +62,7 @@
                                 <span style="font-size: 0.85rem; color: #64748b;">{{ $inquiry->created_at->format('M d, Y H:i') }}</span>
                             </td>
                             <td>
-                                {{-- Clickable status badge toggles read/unread --}}
+                                
                                 <form action="{{ route('admin.contact-inquiries.toggle-status', $inquiry->id) }}" method="POST" style="display: inline;">
                                     @csrf
                                      @if($inquiry->status === 'unread')
@@ -74,11 +74,11 @@
                             </td>
                             <td>
                                 <div class="table-actions" style="display: flex; gap: 8px;">
-                                    {{-- Reply button --}}
+                                    
                                     <a href="mailto:{{ $inquiry->email }}?subject=Re: Rydaris Inquiry" title="Reply via Email" class="icon-button">
                                         <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;"><polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>
                                     </a>
-                                    {{-- Delete button --}}
+                                    
                                     <form action="{{ route('admin.contact-inquiries.destroy', $inquiry->id) }}" method="POST" style="display: inline;">
                                         @csrf
                                         @method('DELETE')

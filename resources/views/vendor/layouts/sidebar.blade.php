@@ -5,7 +5,7 @@
     </a>
     @endif
     
-    <!-- Bookings Menu -->
+    
     @if(auth()->user()->hasMenuAccess('booking'))
     <div class="admin-nav-group">
         <button type="button" class="nav-toggle {{ Request::is('vendor/bookings*') ? 'active' : '' }}" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; width: 100%; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); background: transparent; border: none; cursor: pointer; {{ Request::is('vendor/bookings*') ? 'color: #f8fafc; font-weight: bold;' : 'color: #aab7cb; font-weight: 780;' }} font-size: 0.92rem; transition: background 0.2s;">
@@ -51,7 +51,7 @@
     </div>
     @endif
  
-    <!-- Vehicles Parent Menu with Custom JavaScript Toggle -->
+    
     @if(auth()->user()->hasMenuAccess('vehicles'))
     <div class="admin-nav-group">
         <a href="javascript:void(0);" class="nav-toggle" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ (Request::is('vendor/groups*') || Request::is('vendor/vehicles*')) ? 'color: #f8fafc; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb;' }} font-size: 0.92rem; font-weight: 780; transition: background 0.2s;">
@@ -82,7 +82,7 @@
     </div>
     @endif
  
-    <!-- Locations Menu -->
+    
     @if(auth()->user()->hasMenuAccess('locations'))
     <div class="admin-nav-group">
         <a href="javascript:void(0);" class="nav-toggle" onclick="toggleSubmenu(this)"
@@ -118,7 +118,7 @@
     </div>
     @endif
  
-    <!-- Customers Dropdown -->
+    
     @if(auth()->user()->hasMenuAccess('customers'))
     <div class="admin-nav-group">
         <a href="javascript:void(0);" class="nav-toggle" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ (Request::is('vendor/customers*') || Request::is('vendor/invitations*')) ? 'color: #f8fafc; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb;' }} font-size: 0.92rem; font-weight: 780; transition: background 0.2s;">
@@ -145,7 +145,7 @@
     </div>
     @endif
  
-    <!-- Fleet Management Menu -->
+    
     @if(auth()->user()->hasMenuAccess('fleet_management'))
     <div class="admin-nav-group">
         <a href="{{ route('vendor.availability.index') }}" class="nav-toggle {{ Request::is('vendor/availability*') ? 'active' : '' }}"
@@ -161,7 +161,7 @@
     </div>
     @endif
  
-    <!-- Extras Menu -->
+    
     @if(auth()->user()->hasMenuAccess('extras'))
     <div class="admin-nav-group">
         <a href="javascript:void(0);" class="nav-toggle" onclick="toggleSubmenu(this)"
@@ -203,7 +203,7 @@
     </div>
     @endif
  
-    <!-- Coupons Menu -->
+    
     @if(auth()->user()->hasMenuAccess('coupons'))
     <div class="admin-nav-group">
         <a href="{{ route('vendor.coupons.index') }}" class="nav-toggle {{ Request::is('vendor/coupons*') ? 'active' : '' }}"
@@ -219,7 +219,7 @@
     </div>
     @endif
  
-    <!-- Support Ticket -->
+    
     @if(auth()->user()->hasMenuAccess('support_ticket'))
     <div class="admin-nav-group">
         <a href="{{ route('vendor.support-tickets.index') }}" class="nav-toggle {{ Request::is('vendor/support-tickets*') ? 'active' : '' }}"
@@ -233,8 +233,21 @@
         </a>
     </div>
     @endif
+
+    
+    <div class="admin-nav-group">
+        <a href="{{ route('vendor.reviews.index') }}" class="nav-toggle {{ Request::is('vendor/reviews*') ? 'active' : '' }}"
+           style="justify-content: flex-start; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ Request::is('vendor/reviews*') ? 'color: var(--brand, #52ead2); font-weight: bold; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb; font-weight: 780;' }} font-size: 0.92rem; transition: background 0.2s;">
+            <span style="display: flex; align-items: center; gap: 10px;">
+                <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+                Customer Reviews
+            </span>
+        </a>
+    </div>
  
-    {{-- Subscription / Pricing Menu --}}
+    
     <div class="admin-nav-group">
         <a href="javascript:void(0);" class="nav-toggle" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ (Request::is('vendor/pricing*') || Request::is('vendor/subscription*')) ? 'color: #f8fafc; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb;' }} font-size: 0.92rem; font-weight: 780; transition: background 0.2s;">
             <span style="display: flex; align-items: center; gap: 10px;">
@@ -256,7 +269,7 @@
         </div>
     </div>
  
-    <!-- Terms & Conditions Menu -->
+    
     @if(auth()->user()->activeSubscription)
     <div class="admin-nav-group">
         <a href="{{ route('vendor.pages.index') }}" class="nav-toggle {{ Request::is('vendor/terms-conditions*') ? 'active' : '' }}"
@@ -275,7 +288,7 @@
     </div>
     @endif
 
-    <!-- Settings Menu -->
+    
 
     @if(auth()->user()->hasMenuAccess('settings'))
     <div class="admin-nav-group">

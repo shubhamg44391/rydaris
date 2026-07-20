@@ -22,7 +22,7 @@
             </div>
         </div>
 
-        <!-- Filter Tab Buttons -->
+        
         <div class="panel-filter-bar">
             <a href="{{ route('admin.faqs.index') }}" class="btn btn-sm {{ !$category ? 'active' : '' }}">
                 All Categories
@@ -99,7 +99,7 @@
             </table>
         </div>
         
-        <!-- Pagination Controls -->
+        
         @if($faqs->hasPages())
             <div class="d-flex justify-content-between align-items-center px-4 py-3" style="border-top: 1px solid var(--line);">
                 <div class="text-muted small">

@@ -13,7 +13,7 @@
             <form method="POST" action="{{ route('admin.settings.mail.update') }}" id="mailSettingsForm">
                 @csrf
 
-                <!-- SMTP Server details -->
+                
                 <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(82, 234, 210, 0.1); border-radius: var(--radius); padding: 24px; margin-bottom: 24px;">
                     <h4 style="margin: 0 0 20px; color: #f8fafc; font-weight: 600; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px;">
                         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--brand, #52ead2);">
@@ -24,7 +24,7 @@
                     </h4>
 
                     <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 20px; margin-bottom: 20px;">
-                        <!-- SMTP Host -->
+                        
                         <div>
                             <label for="smtp_host" class="form-label-custom">SMTP Host</label>
                             <input type="text" 
@@ -39,7 +39,7 @@
                             @enderror
                         </div>
 
-                        <!-- SMTP Port -->
+                        
                         <div>
                             <label for="smtp_port" class="form-label-custom">SMTP Port</label>
                             <input type="text" 
@@ -54,7 +54,7 @@
                             @enderror
                         </div>
 
-                        <!-- SMTP Encryption -->
+                        
                         <div>
                             <label for="smtp_encryption" class="form-label-custom">Encryption</label>
                             <select class="form-control form-input-custom @error('smtp_encryption') is-invalid @enderror" 
@@ -72,7 +72,7 @@
                     </div>
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <!-- SMTP Username -->
+                        
                         <div>
                             <label for="smtp_username" class="form-label-custom">SMTP Username</label>
                             <input type="text" 
@@ -87,7 +87,7 @@
                             @enderror
                         </div>
 
-                        <!-- SMTP Password -->
+                        
                         <div>
                             <label for="smtp_password" class="form-label-custom">SMTP Password</label>
                             <div style="position: relative;">
@@ -114,7 +114,7 @@
                     </div>
                 </div>
 
-                <!-- Sender settings -->
+                
                 <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(82, 234, 210, 0.1); border-radius: var(--radius); padding: 24px; margin-bottom: 24px;">
                     <h4 style="margin: 0 0 20px; color: #f8fafc; font-weight: 600; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px;">
                         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--brand, #52ead2);">
@@ -125,7 +125,7 @@
                     </h4>
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <!-- From Email -->
+                        
                         <div>
                             <label for="from_email" class="form-label-custom">Sender Email (From Email)</label>
                             <input type="email" 
@@ -140,7 +140,7 @@
                             @enderror
                         </div>
 
-                        <!-- From Name -->
+                        
                         <div>
                             <label for="from_name" class="form-label-custom">Sender Name (From Name)</label>
                             <input type="text" 
@@ -157,7 +157,7 @@
                     </div>
                 </div>
 
-                <!-- Submit Form -->
+                
                 <div style="display: flex; gap: 12px; margin-bottom: 30px;">
                     <button type="submit" class="admin-action primary" style="border: none; padding: 12px 28px; cursor: pointer; font-size: 0.95rem; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; border-radius: var(--radius);">
                         Save Configuration
@@ -165,37 +165,7 @@
                 </div>
             </form>
 
-            <!-- @if($settings->smtp_host)
-            <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(82, 234, 210, 0.1); border-radius: var(--radius); padding: 24px;">
-                <h4 style="margin: 0 0 16px; color: #f8fafc; font-weight: 600; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 14px;">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--brand, #52ead2);">
-                        <line x1="22" y1="2" x2="11" y2="13"/>
-                        <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-                    </svg>
-                    Send Test Email
-                </h4>
-                <p style="margin: 0 0 20px; font-size: 0.85rem; color: #aab7cb;">You can verify if your SMTP configuration is correct by sending a test email to any recipient.</p>
-                
-                <form method="POST" action="{{ route('admin.settings.mail.test') }}">
-                    @csrf
-                    <div style="display: flex; gap: 15px; max-width: 500px; align-items: flex-end;">
-                        <div style="flex: 1;">
-                            <label for="test_email" class="form-label-custom" style="margin-bottom: 6px; display: block; font-size: 0.85rem; color: #aab7cb;">Recipient Email Address</label>
-                            <input type="email" 
-                                   class="form-control form-input-custom" 
-                                   id="test_email" 
-                                   name="test_email" 
-                                   required 
-                                   placeholder="test@example.com" 
-                                   style="border: 1px solid rgba(255, 255, 255, 0.15); border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%; background: rgba(255,255,255,0.05); color: #fff;" />
-                        </div>
-                        <button type="submit" class="admin-action" style="border: 1px solid var(--brand); background: rgba(82, 234, 210, 0.1); color: var(--brand); padding: 12px 24px; cursor: pointer; font-size: 0.95rem; font-weight: 600; border-radius: var(--radius); display: inline-flex; align-items: center; justify-content: center; height: 46px; box-sizing: border-box; transition: all 0.2s;">
-                            Send Test Mail
-                        </button>
-                    </div>
-                </form>
-            </div>
-            @endif -->
+            
         </div>
     </div>
 

@@ -10,9 +10,8 @@ use Illuminate\Support\Str;
 
 class VendorCustomerController extends Controller
 {
-    /**
-     * Display a listing of the customers.
-     */
+    
+
     public function index()
     {
         $customers = User::where('role', 'user')
@@ -23,9 +22,8 @@ class VendorCustomerController extends Controller
         return view('vendor.customers.index', compact('customers'));
     }
 
-    /**
-     * Show the form for creating a new customer.
-     */
+    
+
     public function create()
     {
         $vendor = auth()->user();
@@ -50,21 +48,20 @@ class VendorCustomerController extends Controller
         return view('vendor.customers.create');
     }
 
-    /**
-     * Store a newly created customer in storage.
-     */
+    
+
     public function store(Request $request)
     {
         $request->validate([
             'first_name'     => 'required|string|max:255',
-            'name'           => 'required|string|max:255', // Last Name
+            'name'           => 'required|string|max:255', 
             'email'          => 'required|string|email|max:255|unique:users,email',
             'country_code'   => 'required|string|max:10',
             'contact_number' => 'required|string|max:20',
             'password'       => 'required|string|min:8|confirmed',
         ]);
 
-        // Check if vendor has reached user capacity
+        
         $vendor = auth()->user();
         $vendor->load(['subscription' => function($q) {
             $q->where('status', 'active')
@@ -84,7 +81,7 @@ class VendorCustomerController extends Controller
             }
         }
 
-        // Generate username
+        
         $baseName = $request->first_name;
         $baseUsername = Str::slug($baseName, '');
         $username = $baseUsername;
@@ -109,9 +106,8 @@ class VendorCustomerController extends Controller
         return redirect()->route('vendor.customers.index')->with('success', 'Customer created successfully.');
     }
 
-    /**
-     * Show the form for editing the specified customer.
-     */
+    
+
     public function edit($id)
     {
         $customer = User::where('role', 'user')
@@ -121,9 +117,8 @@ class VendorCustomerController extends Controller
         return view('vendor.customers.edit', compact('customer'));
     }
 
-    /**
-     * Update the specified customer in storage.
-     */
+    
+
     public function update(Request $request, $id)
     {
         $customer = User::where('role', 'user')
@@ -156,9 +151,8 @@ class VendorCustomerController extends Controller
         return redirect()->route('vendor.customers.index')->with('success', 'Customer updated successfully.');
     }
 
-    /**
-     * Remove the specified customer from storage.
-     */
+    
+
     public function destroy($id)
     {
         $customer = User::where('role', 'user')

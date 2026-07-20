@@ -1,6 +1,6 @@
-<!-- Fullscreen Video Preloader — hidden by default, shows only on first nav click -->
+
 <div id="sitePreloader" class="site-preloader" style="display:none; opacity:0;">
-    <!-- Fallback Spinner -->
+    
     <div class="preloader-spinner">
         <div class="spinner-circle"></div>
         <span>Loading</span>

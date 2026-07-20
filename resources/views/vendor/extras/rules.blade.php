@@ -101,7 +101,6 @@
     </div>
 </div>
 
-{{-- Add Rule Modal --}}
 <div id="xpAddModal" class="xp-overlay">
     <div class="xp-modal">
         <div class="xp-modal-head">
@@ -141,7 +140,6 @@
     </div>
 </div>
 
-{{-- Edit Rule Modal --}}
 <div id="xpEditModal" class="xp-overlay">
     <div class="xp-modal">
         <div class="xp-modal-head">
@@ -181,7 +179,6 @@
     </div>
 </div>
 
-{{-- View Modal --}}
 <div id="xpViewModal" class="xp-overlay">
     <div class="xp-modal" style="width:420px;">
         <div class="xp-modal-head">

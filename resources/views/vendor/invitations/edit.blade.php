@@ -13,7 +13,7 @@
                 @csrf
                 @method('PUT')
 
-                <!-- Name -->
+                
                 <div class="mb-4">
                     <label for="name" class="form-label-custom">Invited Person's Name (Optional)</label>
                     <input type="text" class="form-control form-input-custom @error('name') is-invalid @enderror" id="name" name="name"
@@ -23,7 +23,7 @@
                     @enderror
                 </div>
 
-                <!-- Email -->
+                
                 <div class="mb-4">
                     <label for="email" class="form-label-custom">Email Address</label>
                     <input type="email" class="form-control form-input-custom @error('email') is-invalid @enderror" id="email" name="email"

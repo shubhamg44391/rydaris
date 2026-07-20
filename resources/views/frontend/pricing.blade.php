@@ -27,7 +27,7 @@
               <h2>{{ $pkg->name }}</h2>
               <p>{{ $pkg->description }}</p>
               <div class="price">
-                <strong>{{ $pkg->price }}</strong>
+                <strong id="pkg-price-{{ $pkg->id }}" data-raw-price="{{ $pkg->price }}">{{ $pkg->price }}</strong>
                 @if(strtolower($pkg->price) !== 'custom' && strtolower($pkg->price) !== 'enterprise' && !empty($pkg->billing_period))
                   <span>{{ $pkg->billing_period }}</span>
                 @endif
@@ -133,16 +133,16 @@
                 @if(strtolower($pkg->price) === 'custom' || strtolower($pkg->name) === 'custom' || strtolower($pkg->name) === 'enterprise')
                   <button type="button" class="btn primary" style="width: 100%; max-width: 240px; padding: 14px 28px; font-size: 1.05rem;" onclick="document.getElementById('customPackageModal').style.display='flex'">{{ $pkg->button_text }}</button>
                 @elseif(auth()->check() && auth()->user()->role === 'vendor')
-                  {{-- Vendor: can buy --}}
+                  
                   <button type="button" id="buy-btn-{{ $pkg->id }}" class="btn primary" style="width: 100%; max-width: 240px; padding: 14px 28px; font-size: 1.05rem;" onclick="openDetailsModal({{ $pkg->id }}, '{{ $pkg->name }}', '{{ $pkg->price }}', '{{ $pkg->billing_period }}')">{{ $pkg->button_text }}</button>
                 @elseif(auth()->check())
-                  {{-- Logged-in non-vendor: show info --}}
+                  
                   <span style="display:inline-flex; align-items:center; gap:6px; font-size:0.88rem; color:#94a3b8; font-style:italic;">
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#94a3b8" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                     Available for Vendors only
                   </span>
                 @else
-                  {{-- Guest: redirect to register --}}
+                  
                   <a class="btn primary" style="width: 100%; max-width: 240px; padding: 14px 28px; font-size: 1.05rem;" href="{{ route('vendor.register') }}?package_id={{ $pkg->id }}">{{ $pkg->button_text }}</a>
                 @endif
               </div>
@@ -185,7 +185,7 @@
       </div>
     </section>
 
-    <!-- Custom Package Modal -->
+    
     <div id="customPackageModal" class="custom-modal">
       <div class="modal-content">
         <div class="modal-header">
@@ -333,7 +333,6 @@
       }
     </style>
 
-
     <script>
       // Close modal if clicking outside of it
       window.onclick = function(event) {
@@ -344,29 +343,29 @@
       }
     </script>
 
-    <!-- Razorpay Checkout SDK -->
+    
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
-    <!-- Confirm Details Modal (Styled after Razorpay Mockup) -->
+    
     <div id="confirmDetailsModal" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.85); align-items: center; justify-content: center; backdrop-filter: blur(8px); padding: 20px;">
         <div style="background: #111620; border: 1px solid rgba(82, 234, 210, 0.25); border-radius: 16px; width: 100%; max-width: 750px; max-height: 90vh; overflow-y: auto; padding: 25px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); position: relative; font-family: 'Inter', sans-serif; color: #f8fafc; text-align: left; box-sizing: border-box;">
             
-            <!-- Header -->
+            
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 15px;">
                 <h3 style="margin: 0; font-size: 1.35rem; font-weight: 700; color: #ffffff;">Confirm Your Details</h3>
                 <button onclick="closeDetailsModal()" style="background: none; border: none; color: #a0aec0; cursor: pointer; font-size: 1.8rem; display: flex; align-items: center; justify-content: center; padding: 0; line-height: 1;">&times;</button>
             </div>
 
-            <!-- Package Details Box -->
+            
             <div style="background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(82, 234, 210, 0.3); border-radius: 12px; padding: 15px 20px; margin-bottom: 20px; font-size: 0.95rem; line-height: 1.6;">
                 <div><span style="color: #a0aec0;">Selected Package:</span> <strong id="modalPackageName" style="color: #ffffff;">Standard</strong></div>
                 <div><span style="color: #a0aec0;">Billing Cycle:</span> <strong id="modalBillingCycle" style="color: #ffffff;">Monthly</strong></div>
                 <div style="margin-top: 4px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.05);"><span style="color: #a0aec0;">Total Price (incl. {{ \App\Models\SiteSetting::first()?->tax_percentage ?? 18 }}% tax):</span> <strong id="modalTotalPrice" style="color: var(--brand);">₹74,282.82 / Monthly</strong></div>
             </div>
 
-            <!-- Form fields -->
+            
             <div class="confirm-fields-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
-                <!-- Column 1: Account / Contact Details -->
+                
                 <div style="display: flex; flex-direction: column; gap: 15px;">
                     <div>
                         <label style="display: block; margin-bottom: 6px; color: #a0aec0; font-size: 0.85rem; font-weight: 500;">Full Name <span style="color: #ff4d4d;">*</span></label>
@@ -394,7 +393,7 @@
                     </div>
                 </div>
 
-                <!-- Column 2: Billing / Address details -->
+                
                 <div style="display: flex; flex-direction: column; gap: 15px;">
                     <div style="position: relative;">
                         <label style="display: block; margin-bottom: 6px; color: #a0aec0; font-size: 0.85rem; font-weight: 500;">Street Address <span style="color: #ff4d4d;">*</span></label>
@@ -424,7 +423,7 @@
                 </div>
             </div>
 
-            <!-- Submit Button (Full Width) -->
+            
             <button onclick="proceedToPay()" id="proceedPayBtn" style="width: 100%; margin-top: 15px; padding: 14px; background: #ff5429; color: #ffffff; border: none; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;">
                 <span id="btnText">Proceed to Pay</span>
                 <span id="btnLoader" style="display: none; width: 18px; height: 18px; border: 2px solid #ffffff; border-top: 2px solid transparent; border-radius: 50%; animation: spin 0.8s linear infinite;"></span>
@@ -450,11 +449,13 @@
         
         const taxRate = {{ \App\Models\SiteSetting::first()?->tax_percentage ?? 18 }};
         let numericPrice = parseFloat(packagePrice.replace(/[^0-9.]/g, '')) || 0;
-        let taxAmount = numericPrice * (taxRate / 100);
-        let totalPrice = numericPrice + taxAmount;
         
-        let currencySymbol = packagePrice.match(/[^0-9.]/)?.[0] || '₹';
-        let formattedTotalPrice = currencySymbol + totalPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        // Base price is already in INR
+        let priceInInr = numericPrice;
+        let taxAmount = priceInInr * (taxRate / 100);
+        let totalPrice = priceInInr + taxAmount;
+        
+        let formattedTotalPrice = '₹' + totalPrice.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
         
         document.getElementById('modalPackageName').innerText = packageName;
         document.getElementById('modalBillingCycle').innerText = billingPeriod || 'Monthly';
@@ -710,6 +711,107 @@
                     }, 300);
                 }
             }
+
+            // Localize Pricing Logic with Caching
+            async function localizePricing() {
+                let userCurrency = 'INR'; // Default base currency
+                let userLocale = 'en-IN';
+                let userRate = 1;
+
+                const cacheKey = 'pricing_localization_data';
+                const cacheTTL = 3600 * 1000; // 1 hour
+
+                // Smart fallback using browser timezone
+                const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                const isIndiaTz = userTimezone && (userTimezone === 'Asia/Kolkata' || userTimezone === 'Asia/Calcutta');
+
+                if (isIndiaTz) {
+                    userCurrency = 'INR';
+                    userLocale = 'en-IN';
+                }
+
+                try {
+                    let cachedData = localStorage.getItem(cacheKey);
+                    if (cachedData) {
+                        cachedData = JSON.parse(cachedData);
+                        if (Date.now() - cachedData.timestamp < cacheTTL) {
+                            userCurrency = cachedData.currency;
+                            userLocale = cachedData.locale;
+                            userRate = cachedData.rate;
+                            updatePricingDOM(userCurrency, userLocale, userRate);
+                            return;
+                        }
+                    }
+
+                    // 1. Fetch User's currency based on IP
+                    const geoRes = await fetch('https://ipapi.co/json/');
+                    if (geoRes.ok) {
+                        const geoData = await geoRes.json();
+                        if (!geoData.error && geoData.currency) {
+                            userCurrency = geoData.currency;
+                            userLocale = geoData.languages ? geoData.languages.split(',')[0] : (userCurrency === 'INR' ? 'en-IN' : 'en-US');
+                        }
+                    } else if (isIndiaTz) {
+                        userCurrency = 'INR';
+                        userLocale = 'en-IN';
+                    } else {
+                        // Fallback to USD if not in India and IP fails
+                        userCurrency = 'USD';
+                        userLocale = 'en-US';
+                    }
+                    
+                    // 2. Fetch Exchange Rates with INR as base
+                    const ratesRes = await fetch('https://open.er-api.com/v6/latest/INR');
+                    if (ratesRes.ok) {
+                        const ratesData = await ratesRes.json();
+                        const rates = ratesData.rates;
+                        userRate = rates[userCurrency] || 1;
+                    }
+
+                    // Save to Cache
+                    localStorage.setItem(cacheKey, JSON.stringify({
+                        currency: userCurrency,
+                        locale: userLocale,
+                        rate: userRate,
+                        timestamp: Date.now()
+                    }));
+
+                } catch (error) {
+                    console.error("Localization API failed, falling back to timezone defaults.", error);
+                    if (!isIndiaTz) {
+                        userCurrency = 'USD';
+                        userLocale = 'en-US';
+                    }
+                }
+
+                updatePricingDOM(userCurrency, userLocale, userRate);
+            }
+
+            function updatePricingDOM(currency, locale, rate) {
+                // Formatter for user currency
+                const formatter = new Intl.NumberFormat(locale, {
+                    style: 'currency',
+                    currency: currency,
+                    maximumFractionDigits: 0
+                });
+
+                // Update Pricing DOM
+                document.querySelectorAll('[id^="pkg-price-"]').forEach(el => {
+                    const rawPrice = el.getAttribute('data-raw-price').toLowerCase();
+                    if (rawPrice === 'free' || rawPrice === 'custom' || rawPrice === 'enterprise' || rawPrice === '0' || rawPrice === '$0') {
+                        return; // Leave as is
+                    }
+                    
+                    // The raw price from the DB is in INR
+                    let numericBase = parseFloat(rawPrice.replace(/[^0-9.]/g, ''));
+                    if (numericBase > 0) {
+                        // Convert INR base to local currency using the exchange rate multiplier
+                        let convertedPrice = numericBase * rate;
+                        el.innerText = formatter.format(convertedPrice);
+                    }
+                });
+            }
+            localizePricing();
         });
     </script>
   </main>

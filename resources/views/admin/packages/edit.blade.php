@@ -13,7 +13,7 @@
                 @method('PUT')
 
                 <div class="row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
-                    <!-- Name -->
+                    
                     <div>
                         <label for="name" class="form-label-custom">Package Name</label>
                         <input type="text" class="form-control form-input-custom @error('name') is-invalid @enderror" id="name" name="name"
@@ -23,7 +23,7 @@
                         @enderror
                     </div>
 
-                    <!-- Eyebrow -->
+                    
                     <div>
                         <label for="eyebrow" class="form-label-custom">Eyebrow / Badge Text</label>
                         <input type="text" class="form-control form-input-custom @error('eyebrow') is-invalid @enderror" id="eyebrow" name="eyebrow"
@@ -35,7 +35,7 @@
                 </div>
 
                 <div class="row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
-                    <!-- Billing Period -->
+                    
                     <div>
                         <label for="billing_period" class="form-label-custom">Billing Cycle</label>
                         <select id="billing_period" name="billing_period" class="form-select form-input-custom" style="border: 1px solid #d7e0e8; border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%; cursor: pointer;">
@@ -49,7 +49,7 @@
                         @enderror
                     </div>
 
-                    <!-- Price -->
+                    
                     <div>
                         <label for="price" class="form-label-custom">Price</label>
                         <input type="text" class="form-control form-input-custom @error('price') is-invalid @enderror" id="price" name="price"
@@ -66,7 +66,7 @@
                     </div>
                 </div>
 
-                <!-- Description -->
+                
                 <div class="mb-4">
                     <label for="description" class="form-label-custom">Description</label>
                     <textarea class="form-control form-input-custom @error('description') is-invalid @enderror" id="description" name="description"
@@ -77,7 +77,7 @@
                 </div>
 
                 <div class="row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">
-                    <!-- Button Text -->
+                    
                     <div>
                         <label for="button_text" class="form-label-custom">Button Text</label>
                         <input type="text" class="form-control form-input-custom @error('button_text') is-invalid @enderror" id="button_text" name="button_text"
@@ -87,7 +87,7 @@
                         @enderror
                     </div>
 
-                    <!-- Order -->
+                    
                     <div>
                         <label for="order" class="form-label-custom">Display Order</label>
                         <input type="number" class="form-control form-input-custom @error('order') is-invalid @enderror" id="order" name="order"
@@ -98,13 +98,13 @@
                     </div>
                 </div>
 
-                <!-- Menu Permissions & Record Limits -->
+                
                 <div class="mb-4" style="border: 1px solid var(--line, rgba(255, 255, 255, 0.12)); border-radius: var(--radius); padding: 24px; background: var(--bg-2, #0b1020);">
                     <label class="form-label-custom d-block" style="font-weight: 700; margin-bottom: 20px; font-size: 1.1rem; color: var(--text, #f8fafc);">Menu Permissions & Limits</label>
                     
                     <div class="permissions-grid">
                         
-                        <!-- Booking Menu -->
+                        
                         <div class="menu-permission-card">
                             <div style="display: flex; align-items: center; gap: 12px; min-width: 260px; flex-shrink: 0;">
                                 <label class="theme-switch">
@@ -133,7 +133,7 @@
                             </div>
                         </div>
 
-                        <!-- Vehicles Menu -->
+                        
                         <div class="menu-permission-card">
                             <div style="display: flex; align-items: center; gap: 12px; min-width: 260px; flex-shrink: 0;">
                                 <label class="theme-switch">
@@ -143,7 +143,7 @@
                                 <span class="menu-title-text" onclick="document.getElementById('vehicles_menu').click();">Vehicles Menu</span>
                             </div>
                             <div id="vehicles_limit_container" class="limit-input-wrapper" style="flex-direction: column; gap: 12px; align-items: flex-end;">
-                                <!-- Vehicles Limit -->
+                                
                                 <div style="display: flex; align-items: center; gap: 12px;">
                                     <span class="limit-input-label">Vehicles Limit:</span>
                                     <div class="segmented-control">
@@ -157,7 +157,7 @@
                                         <input type="number" name="no_of_vehicles" id="no_of_vehicles" class="limit-input-field @error('no_of_vehicles') is-invalid @enderror" value="{{ old('no_of_vehicles', $package->no_of_vehicles ?? 0) }}" min="0" placeholder="Limit count" />
                                     </div>
                                 </div>
-                                <!-- Groups Limit -->
+                                
                                 <div style="display: flex; align-items: center; gap: 12px;">
                                     <span class="limit-input-label">Groups Limit:</span>
                                     <div class="segmented-control">
@@ -180,7 +180,7 @@
                             </div>
                         </div>
 
-                        <!-- Locations Menu -->
+                        
                         <div class="menu-permission-card">
                             <div style="display: flex; align-items: center; gap: 12px; min-width: 260px; flex-shrink: 0;">
                                 <label class="theme-switch">
@@ -190,7 +190,7 @@
                                 <span class="menu-title-text" onclick="document.getElementById('locations_menu').click();">Locations Menu</span>
                             </div>
                             <div id="locations_limit_container" class="limit-input-wrapper" style="flex-direction: column; gap: 12px; align-items: flex-end;">
-                                <!-- Locations Limit -->
+                                
                                 <div style="display: flex; align-items: center; gap: 12px;">
                                     <span class="limit-input-label">Locations Limit:</span>
                                     <div class="segmented-control">
@@ -204,7 +204,7 @@
                                         <input type="number" name="no_of_locations" id="no_of_locations" class="limit-input-field @error('no_of_locations') is-invalid @enderror" value="{{ old('no_of_locations', $package->no_of_locations ?? 0) }}" min="0" placeholder="Limit count" />
                                     </div>
                                 </div>
-                                <!-- Branches Limit -->
+                                
                                 <div style="display: flex; align-items: center; gap: 12px;">
                                     <span class="limit-input-label">Branches Limit:</span>
                                     <div class="segmented-control">
@@ -227,7 +227,7 @@
                             </div>
                         </div>
 
-                        <!-- Customers Menu -->
+                        
                         <div class="menu-permission-card">
                             <div style="display: flex; align-items: center; gap: 12px; min-width: 260px; flex-shrink: 0;">
                                 <label class="theme-switch">
@@ -237,7 +237,7 @@
                                 <span class="menu-title-text" onclick="document.getElementById('customers_menu').click();">Customers Menu</span>
                             </div>
                             <div id="customers_limit_container" class="limit-input-wrapper" style="flex-direction: column; gap: 12px; align-items: flex-end;">
-                                <!-- Customers Limit -->
+                                
                                 <div style="display: flex; align-items: center; gap: 12px;">
                                     <span class="limit-input-label">Customers Limit:</span>
                                     <div class="segmented-control">
@@ -251,7 +251,7 @@
                                         <input type="number" name="no_of_users" id="no_of_users" class="limit-input-field @error('no_of_users') is-invalid @enderror" value="{{ old('no_of_users', $package->no_of_users ?? 0) }}" min="0" placeholder="Limit count" />
                                     </div>
                                 </div>
-                                <!-- Invitations Limit -->
+                                
                                 <div style="display: flex; align-items: center; gap: 12px;">
                                     <span class="limit-input-label">Invitations Limit:</span>
                                     <div class="segmented-control">
@@ -274,7 +274,7 @@
                             </div>
                         </div>
 
-                        <!-- Fleet Management Menu -->
+                        
                         <div class="menu-permission-card">
                             <div style="display: flex; align-items: center; gap: 12px; min-width: 260px; flex-shrink: 0;">
                                 <label class="theme-switch">
@@ -285,7 +285,7 @@
                             </div>
                         </div>
 
-                        <!-- Extras Menu -->
+                        
                         <div class="menu-permission-card">
                             <div style="display: flex; align-items: center; gap: 12px; min-width: 260px; flex-shrink: 0;">
                                 <label class="theme-switch">
@@ -295,7 +295,7 @@
                                 <span class="menu-title-text" onclick="document.getElementById('extras_menu').click();">Extras Menu</span>
                             </div>
                             <div id="extras_limit_container" class="limit-input-wrapper" style="flex-direction: column; gap: 12px; align-items: flex-end;">
-                                <!-- Extras Limit -->
+                                
                                 <div style="display: flex; align-items: center; gap: 12px;">
                                     <span class="limit-input-label">Extras Limit:</span>
                                     <div class="segmented-control">
@@ -309,7 +309,7 @@
                                         <input type="number" name="no_of_extras" id="no_of_extras" class="limit-input-field @error('no_of_extras') is-invalid @enderror" value="{{ old('no_of_extras', $package->no_of_extras ?? 0) }}" min="0" placeholder="Limit count" />
                                     </div>
                                 </div>
-                                <!-- Insurances Limit -->
+                                
                                 <div style="display: flex; align-items: center; gap: 12px;">
                                     <span class="limit-input-label">Insurances Limit:</span>
                                     <div class="segmented-control">
@@ -323,7 +323,7 @@
                                         <input type="number" name="no_of_insurances" id="no_of_insurances" class="limit-input-field @error('no_of_insurances') is-invalid @enderror" value="{{ old('no_of_insurances', $package->no_of_insurances ?? 0) }}" min="0" placeholder="Limit count" />
                                     </div>
                                 </div>
-                                <!-- Features Limit -->
+                                
                                 <div style="display: flex; align-items: center; gap: 12px;">
                                     <span class="limit-input-label">Features Limit:</span>
                                     <div class="segmented-control">
@@ -337,7 +337,7 @@
                                         <input type="number" name="no_of_features" id="no_of_features" class="limit-input-field @error('no_of_features') is-invalid @enderror" value="{{ old('no_of_features', $package->no_of_features ?? 0) }}" min="0" placeholder="Limit count" />
                                     </div>
                                 </div>
-                                <!-- Rules Limit -->
+                                
                                 <div style="display: flex; align-items: center; gap: 12px;">
                                     <span class="limit-input-label">Rules Limit:</span>
                                     <div class="segmented-control">
@@ -366,7 +366,7 @@
                             </div>
                         </div>
 
-                        <!-- Coupons Menu -->
+                        
                         <div class="menu-permission-card">
                             <div style="display: flex; align-items: center; gap: 12px; min-width: 260px; flex-shrink: 0;">
                                 <label class="theme-switch">
@@ -395,7 +395,7 @@
                             </div>
                         </div>
 
-                        <!-- Support Ticket Menu -->
+                        
                         <div class="menu-permission-card">
                             <div style="display: flex; align-items: center; gap: 12px; min-width: 260px; flex-shrink: 0;">
                                 <label class="theme-switch">
@@ -424,7 +424,7 @@
                             </div>
                         </div>
 
-                        <!-- Settings Menu -->
+                        
                         <div class="menu-permission-card">
                             <div style="display: flex; align-items: center; gap: 12px; min-width: 260px; flex-shrink: 0;">
                                 <label class="theme-switch">
@@ -438,7 +438,7 @@
                     </div>
                 </div>
 
-                <!-- Status Toggle -->
+                
                 <div class="mb-4" style="border: 1px solid var(--line, rgba(255, 255, 255, 0.12)); border-radius: var(--radius); padding: 16px 20px; background: rgba(255, 255, 255, 0.03); max-width: 600px;">
                     <div style="display: flex; align-items: center; gap: 15px;">
                         <label class="theme-switch" style="margin: 0;">
@@ -766,7 +766,7 @@
                     });
                 </script>
 
-                <!-- Actions -->
+                
                 <div class="d-flex align-items-center gap-3" style="display: flex; gap: 16px; align-items: center; margin-top: 24px;">
                     <button type="submit" class="btn btn-primary rounded-pill px-4" style="min-height: 40px; font-weight: 800; font-size: 0.9rem; background: var(--brand, #52ead2); border: none; color: #061218; cursor: pointer;">Update Package</button>
                     <a href="{{ route('admin.packages.index') }}" class="btn btn-link text-muted cancel-link">Cancel</a>

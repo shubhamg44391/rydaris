@@ -122,9 +122,9 @@
           </div>
         </section>
 
-        <!-- KPI Metrics Section for Vendor -->
+        
         <section class="admin-kpis" aria-label="Vendor KPIs" style="margin-top: 22px; margin-bottom: 22px;">
-          <!-- Monthly Earnings -->
+          
           <article class="kpi-card">
             <div class="kpi-top">
               <span class="admin-icon" style="background: rgba(82,234,210,0.12); border-radius: 10px; display: flex; align-items: center; justify-content: center; width: 42px; height: 42px;">
@@ -138,7 +138,7 @@
             <span>monthly rental earnings</span>
           </article>
 
-          <!-- Total Vehicles -->
+          
           <article class="kpi-card">
             <div class="kpi-top">
               <span class="admin-icon" style="background: rgba(129,140,248,0.12); border-radius: 10px; display: flex; align-items: center; justify-content: center; width: 42px; height: 42px;">
@@ -154,7 +154,7 @@
             <span>total fleet vehicles</span>
           </article>
 
-          <!-- Total Bookings -->
+          
           <article class="kpi-card">
             <div class="kpi-top">
               <span class="admin-icon" style="background: rgba(251,191,36,0.12); border-radius: 10px; display: flex; align-items: center; justify-content: center; width: 42px; height: 42px;">
@@ -170,7 +170,7 @@
             <span>total rental bookings</span>
           </article>
 
-          <!-- Rating -->
+          
           <article class="kpi-card">
             <div class="kpi-top">
               <span class="admin-icon" style="background: rgba(251,113,133,0.12); border-radius: 10px; display: flex; align-items: center; justify-content: center; width: 42px; height: 42px;">
@@ -184,7 +184,7 @@
           </article>
         </section>
 
-        <!-- Charts Grid Section for Vendor -->
+        
         <section id="analytics" class="admin-grid" style="margin-bottom: 22px;">
           <article class="admin-panel">
             <div class="panel-head" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
@@ -237,7 +237,7 @@
           </article>
         </section>
 
-        <!-- Fleet Health and Activity Lists -->
+        
         <section class="admin-grid" style="margin-bottom: 22px;">
           <article class="admin-panel">
             <div class="panel-head">

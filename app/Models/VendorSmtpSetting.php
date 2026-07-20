@@ -37,7 +37,7 @@ class VendorSmtpSetting extends Model
             \Illuminate\Support\Facades\Config::set('mail.from.address', $smtpSetting->from_email ?? $smtpSetting->smtp_username);
             \Illuminate\Support\Facades\Config::set('mail.from.name', $smtpSetting->from_name ?? 'Rydaris Vendor');
             
-            // Purge the mailer cache to force it to read the new config
+            
             \Illuminate\Support\Facades\Mail::purge('smtp');
             
             return true;

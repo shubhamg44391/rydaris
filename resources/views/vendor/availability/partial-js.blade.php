@@ -167,7 +167,11 @@
                 if (!(typeof filterVehicleId !== 'undefined' && filterVehicleId)) {
                     totalRowsForDate += 1; // Group row
                 }
-                totalRowsForDate += Object.keys(matrix[gid].vehicles || {}).length; // Vehicle rows
+                let vKeys = Object.keys(matrix[gid].vehicles || {});
+                if (typeof filterVehicleId !== 'undefined' && filterVehicleId) {
+                    vKeys = vKeys.filter(vid => parseInt(vid) === parseInt(filterVehicleId));
+                }
+                totalRowsForDate += vKeys.length; // Vehicle rows
             });
 
             let altRow = false;
@@ -198,6 +202,9 @@
                 // Vehicle Sub-rows
                 const vIds = Object.keys(group.vehicles || {});
                 vIds.forEach(vid => {
+                    if (typeof filterVehicleId !== 'undefined' && filterVehicleId && parseInt(vid) !== parseInt(filterVehicleId)) {
+                        return;
+                    }
                     const vehicle = group.vehicles[vid];
                     const vRates = vehicle.dates[date] || {};
                     

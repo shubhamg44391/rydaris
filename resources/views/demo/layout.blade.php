@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rydaris | Vendor Workspace</title>
     
-    <!-- Google Fonts -->
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- FontAwesome for icons -->
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     
     <style>
@@ -569,13 +569,11 @@
 </head>
 <body>
 
-    <!-- Sidebar -->
+    
     <aside class="sidebar">
         <div class="sidebar-logo" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-           <a class="brand" href="{{ Auth::check() && (Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin') ? route('dashboard') : (Auth::user()->role === 'user' ? route('user.dashboard') : route('vendor.dashboard')) }}" aria-label="Rydaris home" style="opacity: 0.9; transition: opacity 0.2s ease; display: flex; align-items: center; justify-content: center;">
           <img class="brand-full" src="{{ asset('assets/logo/rydaris-logo.png') }}" alt="Rydaris Logo" style="height: 32px; width: auto; display: block;">
           <img class="brand-mini" src="{{ asset('assets/logo/favicon.svg') }}" alt="Rydaris Logo" style="height: 32px; width: auto; display: none;">
-        </a>
             <button class="btn-close-sidebar" onclick="toggleSidebarCollapse()" style="display: none; background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; padding: 4px; line-height: 1;">
                 <i class="fa-solid fa-xmark"></i>
             </button>
@@ -676,11 +674,11 @@
         </div>
     </aside>
 
-    <!-- Main Viewport -->
+    
     <div class="viewport">
-        <!-- Topbar -->
+        
         <header class="topbar">
-            <!-- Left Topbar Elements matching screenshot -->
+            
             <div class="topbar-left" style="gap: 15px; display: flex; align-items: center;">
                 <button class="btn-collapse-sidebar" onclick="toggleSidebarCollapse()" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: #fff; width: 36px; height: 36px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; outline: none; transition: all 0.2s;">
                     <i class="fa-solid fa-chevron-left" id="collapse-icon"></i>
@@ -690,7 +688,7 @@
                 </a>
             </div>
 
-            <!-- Right Topbar Elements matching screenshot -->
+            
             <div class="topbar-right" style="gap: 25px; display: flex; align-items: center;">
                 <div class="branch-display-wrap" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(82, 234, 210, 0.08); border: 1px solid rgba(82, 234, 210, 0.2); border-radius: 8px; padding: 6px 12px; font-size: 0.85rem; font-weight: 600; color: #f8fafc;">
                     <i class="fa-solid fa-house-chimney" style="color: var(--brand, #52ead2); font-size: 0.85rem;"></i>
@@ -706,7 +704,7 @@
             </div>
         </header>
 
-        <!-- Content -->
+        
         <main class="content">
             @yield('content')
         </main>

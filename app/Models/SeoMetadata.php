@@ -17,5 +17,6 @@ class SeoMetadata extends Model
         'meta_title',
         'meta_description',
         'portal_type',
+        'keyword'
     ];
 }

@@ -12,9 +12,8 @@ use Illuminate\Validation\Rule;
 
 class VehicleController extends Controller
 {
-    /**
-     * Display a paginated listing of the vehicles.
-     */
+    
+
     public function index()
     {
         $query = Vehicle::where('vendor_id', Auth::id())->with('group');
@@ -33,9 +32,8 @@ class VehicleController extends Controller
         return view('vendor.vehicles.index', compact('vehicles'));
     }
 
-    /**
-     * Show the form for creating a new vehicle.
-     */
+    
+
     public function create()
     {
         if (!auth()->user()->canAddVehicle()) {
@@ -53,9 +51,8 @@ class VehicleController extends Controller
         return view('vendor.vehicles.create', compact('groups'));
     }
 
-    /**
-     * Store a newly created vehicle in database.
-     */
+    
+
     public function store(Request $request)
     {
         if (!auth()->user()->canAddVehicle()) {
@@ -114,9 +111,8 @@ class VehicleController extends Controller
         return redirect(route('vendor.vehicles.index'))->with('success', 'Vehicle created successfully.');
     }
 
-    /**
-     * Show the form for editing the specified vehicle.
-     */
+    
+
     public function edit($id)
     {
         $vehicle = Vehicle::where('vendor_id', Auth::id())->findOrFail($id);
@@ -133,9 +129,8 @@ class VehicleController extends Controller
         return view('vendor.vehicles.edit', compact('vehicle', 'groups'));
     }
 
-    /**
-     * Update the specified vehicle in database.
-     */
+    
+
     public function update(Request $request, $id)
     {
         $vehicle = Vehicle::where('vendor_id', Auth::id())->findOrFail($id);
@@ -193,9 +188,8 @@ class VehicleController extends Controller
         return redirect(route('vendor.vehicles.index'))->with('success', 'Vehicle updated successfully.');
     }
 
-    /**
-     * Remove the specified vehicle from database.
-     */
+    
+
     public function destroy($id)
     {
         $vehicle = Vehicle::where('vendor_id', Auth::id())->findOrFail($id);

@@ -142,7 +142,7 @@
 </head>
 <body>
     <div class="invoice-box">
-        <!-- Header -->
+        
         <table class="header-table">
             <tr>
                 <td>
@@ -163,7 +163,7 @@
             </tr>
         </table>
 
-        <!-- Meta Information -->
+        
         <table class="meta-table">
             <tr>
                 <td style="width: 50%;">
@@ -202,7 +202,7 @@
             </tr>
         </table>
 
-        <!-- Itemized Table -->
+        
         <table class="invoice-items">
             <thead>
                 <tr>
@@ -244,7 +244,7 @@
             </tbody>
         </table>
 
-        <!-- Summary section -->
+        
         <table class="summary-wrapper-table">
             <tr>
                 <td style="width: 50%;"></td>
@@ -271,7 +271,7 @@
             </tr>
         </table>
 
-        <!-- Footer -->
+        
         <div class="footer">
             <h5>Payment Terms</h5>
             <p>

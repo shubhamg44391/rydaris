@@ -36,7 +36,7 @@ class VendorSubscription extends Model
         static::created(function ($subscription) {
             if ($subscription->status === 'active') {
                 try {
-                    // Set SMTP settings dynamically
+                    
                     \App\Models\SiteSetting::setMailConfig();
 
                     $vendor = $subscription->vendor;

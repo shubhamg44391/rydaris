@@ -1,32 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google Tag Manager -->
-  <script>
-  (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-  new Date().getTime(),event:'gtm.js'});
-  var f=d.getElementsByTagName(s)[0],
-  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
-  j.async=true;
-  j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
-  f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-MMC2V5M');
-  </script>
-  <!-- End Google Tag Manager -->
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LTYQMFM7YH"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HMW649RZV1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-    // Google Analytics (GA4)
-    gtag('config', 'G-LTYQMFM7YH');
-
-    // Google Ads
-    gtag('config', 'AW-502456641');
-  </script>
+  gtag('config', 'G-HMW649RZV1');
+</script>
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,16 +20,16 @@
   @else
     @yield('meta_description')
   @endif
+  @if(isset($seo_keyword) && $seo_keyword)
+    <meta name="keywords" content="{{ $seo_keyword }}">
+  @else
+    @yield('meta_keywords')
+  @endif
   <link rel="shortcut icon" type="image/png" href="{{ asset('assets/logo/favicon.png') }}">
   <link rel="stylesheet" href="{{ asset('assets/styles.css') }}?v={{ time() }}">
 </head>
 <body>
-  <!-- Google Tag Manager (noscript) -->
-  <noscript>
-  <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MMC2V5M"
-  height="0" width="0" style="display:none;visibility:hidden"></iframe>
-  </noscript>
-  <!-- End Google Tag Manager (noscript) -->
+
 
   @include('partials.preloader')
   <div class="site-shell">

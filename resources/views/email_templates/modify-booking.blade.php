@@ -26,11 +26,11 @@
 
                 <table width="700" cellpadding="0" cellspacing="0" class="main-table" bgcolor="#ffffff" style="width:700px;max-width:700px;">
 
-                    <!-- HERO SECTION -->
+                    
                     <tr>
                         <td background="{{ asset('assets/frontend/images/pending-bg.png') }}" style="background-image:url('{{ asset('assets/frontend/images/pending-bg.png') }}');background-size:cover;background-position:center;background-repeat:no-repeat;padding:30px 40px 40px 40px;">
 
-                            <!-- LOGO -->
+                            
                             <table width="100%">
                                 <tr>
                                     <td align="left">
@@ -39,7 +39,7 @@
                                 </tr>
                             </table>
 
-                            <!-- HERO BOX -->
+                            
                             <table width="100%">
                                 <tr>
                                     <td class="hero-box" style="background:#0f766e;color:white;padding:35px;border-radius:18px;">
@@ -56,7 +56,7 @@
                         </td>
                     </tr>
 
-                    <!-- CONTENT -->
+                    
                     <tr>
                         <td class="padding-mobile" style="padding:30px 40px;font-size:16px;color:#444;line-height:1.7;">
 
@@ -67,7 +67,7 @@
                                 We're writing to confirm that your booking <strong>#{{ $booking->reservation_number }}</strong> has been successfully modified. Here is a summary of your updated booking details:
                             </p>
 
-                            <!-- STATUS BOX -->
+                            
                             <table width="100%">
                                 <tr>
                                     <td style="background:#fff4e5;border-left:5px solid #0f766e;padding:18px;font-size:15px;border-radius:4px;margin-bottom:20px;">
@@ -80,7 +80,7 @@
 
                             <br>
 
-                            <!-- BOOKING DETAILS TABLE -->
+                            
                             <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #eee;border-radius:8px;overflow:hidden;">
                                 <tr>
                                     <td colspan="2" style="background:#0f766e;color:#fff;padding:15px 20px;font-size:16px;font-weight:700;">
@@ -125,7 +125,7 @@
                                     </td>
                                 </tr>
                                 @endif
-                                <!-- PRICE ROWS -->
+                                
                                 <tr>
                                     <td colspan="2" style="background:#0f766e;color:#fff;padding:15px 20px;font-size:16px;font-weight:700;">
                                         Price Breakdown
@@ -153,7 +153,7 @@
                         </td>
                     </tr>
 
-                    <!-- FOOTER -->
+                    
                     <tr>
                         <td style="background:#2c3e50;color:white;text-align:center;padding:25px;font-size:14px;line-height:1.6;">
                             If you have any questions, please contact us:<br><br>

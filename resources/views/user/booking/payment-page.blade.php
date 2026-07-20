@@ -135,7 +135,7 @@
     @endif
 
     <div class="row">
-        <!-- Left Column: Terms & Conditions -->
+        
         <div class="col-lg-6">
             <div class="dark-card p-4">
                 <h5 class="section-heading">
@@ -185,7 +185,7 @@
             </div>
         </div>
 
-        <!-- Right Column: Order Summary & Interactive Payment -->
+        
         <div class="col-lg-6">
             <div class="dark-card p-4">
                 <h5 class="section-heading">
@@ -195,13 +195,22 @@
 
                 <div class="d-flex align-items-center mb-4 gap-3">
                     @if($booking->vehicle && $booking->vehicle->image)
-                        <img src="{{ asset('storage/' . $booking->vehicle->image) }}" alt="{{ $booking->vehicle->name }}" style="max-height: 70px; max-width: 100px; object-fit: contain; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));">
+                        @php
+                            $vImgClean = ltrim(str_replace(['public/', 'storage/'], '', $booking->vehicle->image), '/');
+                            $vImgUrl = \Illuminate\Support\Str::startsWith($booking->vehicle->image, ['http://', 'https://']) ? $booking->vehicle->image : asset('storage/' . $vImgClean);
+                        @endphp
+                        <img src="{{ $vImgUrl }}" alt="{{ $booking->vehicle->name }}" style="max-height: 70px; max-width: 100px; object-fit: contain; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));">
                     @endif
                     <div>
                         <h6 style="color: #f8fafc; font-weight: 700; margin: 0;">{{ $booking->vehicle->name ?? 'N/A' }}</h6>
-                        <span style="color: #64748b; font-size: 0.8rem;">
-                            {{ date('d M Y', strtotime($booking->pickup_date)) }} - {{ date('d M Y', strtotime($booking->return_date)) }}
-                        </span>
+                        <div style="font-size: 0.8rem; margin-top: 4px;">
+                            <span style="color: #4ade80; display: block;">
+                                <i class="fa fa-calendar-check me-1"></i> Pickup: {{ $booking->pickup_date_parsed ? $booking->pickup_date_parsed->format('Y/m/d') : $booking->pickup_date }} {{ $booking->pickup_time ? 'at ' . date('h:i A', strtotime($booking->pickup_time)) : '' }}
+                            </span>
+                            <span style="color: #f87171; display: block; margin-top: 2px;">
+                                <i class="fa fa-calendar-times me-1"></i> Return: {{ $booking->return_date_parsed ? $booking->return_date_parsed->format('Y/m/d') : $booking->return_date }} {{ $booking->return_time ? 'at ' . date('h:i A', strtotime($booking->return_time)) : '' }}
+                            </span>
+                        </div>
                     </div>
                 </div>
 
@@ -262,21 +271,21 @@
                     <span>${{ number_format($booking->total_amount, 2) }}</span>
                 </div>
 
-                <!-- Payment Status Logic Block -->
+                
                 @if($booking->pending_amount <= 0 || $booking->payment_status === 'paid')
-                    <!-- 1. FULLY PAID -->
-                    <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 8px; padding: 20px; text-align: center;">
+                    
+                    <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 8px; padding: 20px; text-align: center; margin-bottom: 20px;">
                         <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#22c55e" stroke-width="2" style="margin-bottom: 10px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
                         <h6 style="color: #22c55e; font-weight: 700; margin: 0 0 4px;">Payment Completed</h6>
                         <p style="color: #94a3b8; font-size: 0.8rem; margin: 0;">This booking is fully paid. No further payments are required.</p>
                     </div>
                 @else
-                    <!-- 2. NOT FULLY PAID -->
+                    
                     <form action="{{ route('user.bookings.payment-page.submit', $booking->id) }}" method="POST" id="paymentForm">
                         @csrf
                         <span style="color: #94a3b8; font-size: 0.8rem; display: block; margin-bottom: 12px; font-weight: 600; text-transform: uppercase;">Select Payment Option</span>
 
-                        <!-- OPTION A: 5% Deposit -->
+                        
                         @if($booking->payment_status === 'unpaid' || $booking->payment_status === 'pending')
                             <div class="payment-option-card selected" onclick="selectPaymentOption(this, 'deposit')">
                                 <div class="radio-circle"></div>
@@ -290,7 +299,7 @@
                             </div>
                         @endif
 
-                        <!-- OPTION B: Full Payment -->
+                        
                         <div class="payment-option-card {{ ($booking->payment_status === 'partial_paid') ? 'selected' : '' }}" onclick="selectPaymentOption(this, 'full')">
                             <div class="radio-circle"></div>
                             <div style="flex-grow: 1;">
@@ -316,6 +325,83 @@
                             </button>
                         </div>
                     </form>
+                @endif
+
+                
+                @if($booking->is_completed_or_ended)
+                    <div style="margin-top: 25px; padding-top: 20px; border-top: 1px dashed rgba(255, 255, 255, 0.1);">
+                        <h6 style="color: #fbbf24; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="#fbbf24" stroke="#fbbf24" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            Rate & Review Your Experience
+                        </h6>
+
+                        @if($booking->review)
+                            <div class="p-3" style="background: rgba(251, 191, 36, 0.08); border: 1px solid rgba(251, 191, 36, 0.25); border-radius: 8px;">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <div style="color: #fbbf24; font-size: 1.05rem; font-weight: 700;">
+                                        @for($s = 1; $s <= 5; $s++)
+                                            @if($s <= $booking->review->rating)
+                                                ★
+                                            @else
+                                                ☆
+                                            @endif
+                                        @endfor
+                                        <span class="ms-2" style="font-size: 0.85rem; color: #f8fafc;">{{ $booking->review->rating }}/5 Stars</span>
+                                    </div>
+                                    <span class="badge" style="background: rgba(34, 197, 94, 0.2); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.4); font-size: 0.72rem;">
+                                        <i class="fa fa-check me-1"></i> Review Submitted
+                                    </span>
+                                </div>
+                                @if($booking->review->comment)
+                                    <p style="margin: 0; font-size: 0.85rem; color: #e2e8f0; font-style: italic;">
+                                        "{{ $booking->review->comment }}"
+                                    </p>
+                                @endif
+                                <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 8px;">
+                                    Submitted on {{ $booking->review->created_at->format('d M, Y \a\t h:i A') }}
+                                </div>
+                            </div>
+                        @else
+                            <p style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 12px;">
+                                Your trip has ended! Please share your feedback for <strong>{{ $booking->vehicle->name ?? 'Vehicle' }}</strong> and <strong>{{ $booking->vendor->company_name ?? $booking->vendor->name ?? 'Vendor' }}</strong>.
+                            </p>
+                            <form action="{{ route('user.bookings.review.submit', $booking->id) }}" method="POST">
+                                @csrf
+                                <div class="mb-3">
+                                    <label class="dark-label" style="display: block; font-weight: 600; font-size: 0.85rem;">Your Rating *</label>
+                                    <div class="star-rating-selector-pay" style="display: flex; gap: 8px; font-size: 1.5rem; cursor: pointer; color: #64748b;">
+                                        @for($star = 1; $star <= 5; $star++)
+                                            <span class="star-btn-pay" data-value="{{ $star }}" onclick="setPayRating({{ $star }})" style="transition: color 0.2s;">★</span>
+                                        @endfor
+                                    </div>
+                                    <input type="hidden" name="rating" id="selected_pay_rating_input" value="5" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="dark-label" style="font-size: 0.85rem;">Your Feedback / Review Comments</label>
+                                    <textarea name="comment" class="form-control dark-input" rows="2" placeholder="Tell us about the vehicle condition, vendor service..."></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-teal btn-sm">
+                                    <i class="fa fa-paper-plane me-1"></i> Submit Review
+                                </button>
+                            </form>
+                            <script>
+                                function setPayRating(val) {
+                                    document.getElementById('selected_pay_rating_input').value = val;
+                                    const stars = document.querySelectorAll('.star-btn-pay');
+                                    stars.forEach((star, idx) => {
+                                        if (idx < val) {
+                                            star.style.color = '#fbbf24';
+                                        } else {
+                                            star.style.color = '#64748b';
+                                        }
+                                    });
+                                }
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    setPayRating(5);
+                                });
+                            </script>
+                        @endif
+                    </div>
                 @endif
             </div>
         </div>

@@ -29,7 +29,7 @@
                     </div>
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <!-- Razorpay Key ID -->
+                        
                         <div>
                             <label for="razorpay_key_id" class="form-label-custom">Razorpay Key ID</label>
                             <input type="text" 
@@ -44,7 +44,7 @@
                             @enderror
                         </div>
 
-                        <!-- Razorpay Key Secret -->
+                        
                         <div>
                             <label for="razorpay_key_secret" class="form-label-custom">Razorpay Key Secret</label>
                             <div style="position: relative;">
@@ -71,7 +71,7 @@
                     </div>
                 </div>
 
-                {{-- Tax Percentage Section --}}
+                
                 <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(82, 234, 210, 0.1); border-radius: var(--radius); padding: 24px; margin-bottom: 24px;">
                     <h4 style="margin: 0 0 16px; color: #f8fafc; font-weight: 600; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 14px;">
                         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--brand, #52ead2);">

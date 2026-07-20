@@ -1,8 +1,5 @@
 <nav class="admin-nav">
-    <!-- <a class="{{ Request::is('user/dashboard*') && !request()->has('search') && !Request::is('user/bookings/*') ? 'active' : '' }}" href="{{ route('user.dashboard') }}">
-        <svg viewBox="0 0 24 24"><path d="M3 3h7v7H3Z"/><path d="M14 3h7v7h-7Z"/><path d="M14 14h7v7h-7Z"/><path d="M3 14h7v7H3Z"/></svg> Dashboard
-    </a>
-     -->
+    
      @if(auth()->user()->hasMenuAccess('vehicles'))
         @if(auth()->check() && auth()->user()->vendor_id)
             <a class="{{ Request::is('user/vendor/*') ? 'active' : '' }}" href="{{ route('user.vendors.show', auth()->user()->vendor_id) }}">
@@ -30,7 +27,7 @@
         </svg> My Bookings
     </a>
 
-    <!-- Check-in -->
+    
     <a class="{{ Request::is('user/bookings/*/checkin') || Request::is('user/checkin') ? 'active' : '' }}" href="{{ route('user.checkin.redirect') }}">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
@@ -38,7 +35,7 @@
         </svg> Check-in
     </a>
 
-    <!-- Payments -->
+    
     <a class="{{ Request::is('user/bookings/*/payment-page') || Request::is('user/payment') ? 'active' : '' }}" href="{{ route('user.payment.redirect') }}">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
@@ -47,7 +44,7 @@
     </a>
     @endif
 
-    <!-- Support Ticket -->
+    
     @if(auth()->user()->hasMenuAccess('support_ticket'))
     <a class="{{ Request::is('user/support-tickets*') ? 'active' : '' }}" href="{{ route('user.support-tickets.index') }}">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

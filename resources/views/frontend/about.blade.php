@@ -2,6 +2,7 @@
 
 @section('title', $seo_title ?? 'About Us | Rydaris')
 
+
 @section('content')
   <main>
     <section class="page-hero">

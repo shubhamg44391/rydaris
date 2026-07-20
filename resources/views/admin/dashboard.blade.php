@@ -8,9 +8,9 @@
           </div>
         </section>
 
-        <!-- KPI Metrics Section -->
+        
         <section class="admin-kpis" aria-label="Business KPIs" style="margin-top: 22px; margin-bottom: 22px;">
-          <!-- Estimated Recurring Revenue -->
+          
           <article class="kpi-card">
             <div class="kpi-top">
               <span class="admin-icon" style="background: rgba(82,234,210,0.12); border-radius: 10px; display: flex; align-items: center; justify-content: center; width: 42px; height: 42px;">
@@ -21,11 +21,11 @@
               </span>
               <span class="delta">+14.8%</span>
             </div>
-            <strong>₹{{ number_format($totalVendors * 1840, 0) }}</strong>
+            <strong>${{ number_format(($totalVendors * 1840) / 83, 0) }}</strong>
             <span>estimated recurring revenue</span>
           </article>
 
-          <!-- Registered Vendor Accounts -->
+          
           <a class="kpi-card" href="{{ route('admin.vendors.index') }}" style="text-decoration: none; color: inherit; display: block;">
             <div class="kpi-top">
               <span class="admin-icon" style="background: rgba(129,140,248,0.12); border-radius: 10px; display: flex; align-items: center; justify-content: center; width: 42px; height: 42px;">
@@ -42,7 +42,7 @@
             <span>registered vendor accounts</span>
           </a>
 
-          <!-- Gross Monthly Churn -->
+          
           <article class="kpi-card">
             <div class="kpi-top">
               <span class="admin-icon" style="background: rgba(251,191,36,0.12); border-radius: 10px; display: flex; align-items: center; justify-content: center; width: 42px; height: 42px;">
@@ -59,7 +59,7 @@
             <span>gross monthly churn</span>
           </article>
 
-          <!-- Inactive Vendor Accounts -->
+          
           <a class="kpi-card" href="{{ route('admin.vendors.index', ['status' => 'inactive']) }}" style="text-decoration: none; color: inherit; display: block;">
             <div class="kpi-top">
               <span class="admin-icon" style="background: rgba(251,113,133,0.12); border-radius: 10px; display: flex; align-items: center; justify-content: center; width: 42px; height: 42px;">
@@ -76,10 +76,7 @@
           </a>
         </section>
 
-
-
-
-        <!-- Recent Customers Section -->
+        
         <section id="customers" class="admin-panel" style="margin-bottom: 22px;">
           <div class="panel-head">
             <div><h2>Recent Vendor Registrations</h2><p class="panel-muted">Latest companies registered on Rydaris, contact details, status, and registration date.</p></div>
@@ -130,39 +127,6 @@
           </div>
         </section>
 
-        <!-- Subscription Health and Activity Lists -->
-        <!-- <section class="admin-grid" style="margin-bottom: 22px;">
-          <article class="admin-panel">
-            <div class="panel-head">
-              <div><h2>Country Code</h2><p class="panel-muted">Signals for renewals, product adoption, and account risk.</p></div>
-            </div>
-            <div class="panel-body health-grid">
-              <div><div class="health-row"><strong>Active customers using invoices weekly</strong><span>81%</span></div><div class="progress"><span style="width: 81%;"></span></div></div>
-              <div><div class="health-row"><strong>Accounts with connected payment method</strong><span>92%</span></div><div class="progress"><span style="width: 92%;"></span></div></div>
-              <div><div class="health-row"><strong>Renewals with success plan completed</strong><span>68%</span></div><div class="progress"><span style="width: 68%;"></span></div></div>
-              <div><div class="health-row"><strong>Accounts below adoption threshold</strong><span>14%</span></div><div class="progress"><span style="width: 14%; background: #f97316;"></span></div></div>
-            </div>
-          </article>
-
-          <article id="support" class="admin-panel">
-            <div class="panel-head">
-              <div><h2>Recent activity</h2><p class="panel-muted">Customer events, support signals, and billing updates.</p></div>
-            </div>
-            <div class="panel-body activity-list">
-              @foreach($recentVendors as $index => $vendor)
-                <div class="activity-item">
-                  <span class="admin-icon" style="background: rgba(82, 234, 210, 0.1); color: var(--brand);"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></span>
-                  <p><strong>{{ $vendor->first_name ?? $vendor->name }}</strong> registered as a new vendor.</p>
-                  <small>{{ $vendor->created_at->diffForHumans() }}</small>
-                </div>
-              @endforeach
-              @if($recentVendors->isEmpty())
-                <div class="activity-item">
-                  <span class="admin-icon"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>
-                  <p>No recent activity available.</p>
-                </div>
-              @endif
-            </div>
-          </article>
-        </section> -->
+        
+        
 @endsection

@@ -12,7 +12,7 @@ class UserRegisterController extends Controller
 {
     public function showRegistrationForm()
     {
-        // Fetch active vendors for the user to select
+        
         $vendors = User::where('role', 'vendor')
             ->where('status', 1)
             ->get();
@@ -24,7 +24,7 @@ class UserRegisterController extends Controller
     {
         $request->validate([
             'first_name' => 'required|string|max:255',
-            'name'       => 'required|string|max:255', // Last name
+            'name'       => 'required|string|max:255', 
             'email'      => 'required|string|email|max:255|unique:users',
             'password'   => 'required|string|min:8|confirmed',
             'vendor_id'  => 'required|exists:users,id',

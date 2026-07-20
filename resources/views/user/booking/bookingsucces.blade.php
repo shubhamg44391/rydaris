@@ -21,10 +21,10 @@
             </div>
 
             <div class="row g-4 animate-fade-in-up delay-3">
-                <!-- Left Details Column -->
+                
                 <div class="col-lg-8">
                     
-                    <!-- Rental Period -->
+                    
                     <div class="card mb-4" style="background: rgba(11, 16, 32, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; overflow: hidden;">
                         <div class="card-header border-0 p-4 pb-2" style="background: transparent;">
                             <h4 style="color: #f8fafc; font-weight: 700; font-size: 1.1rem;">Rental Period</h4>
@@ -59,7 +59,7 @@
                         </div>
                     </div>
 
-                    <!-- Vehicle & Extras -->
+                    
                     <div class="row mb-4 g-4">
                         <div class="col-md-12">
                             @php
@@ -92,7 +92,7 @@
                         </div>
                     </div>
 
-                    <!-- Personal Info -->
+                    
                     <div class="card mb-4" style="background: rgba(11, 16, 32, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; overflow: hidden;">
                         <div class="card-header border-0 p-4 pb-2" style="background: transparent;">
                             <h4 style="color: #f8fafc; font-weight: 700; font-size: 1.1rem;">Personal Information</h4>
@@ -129,10 +129,10 @@
 
                 </div>
 
-                <!-- Right Actions Column -->
+                
                 <div class="col-lg-4">
                     
-                    <!-- Actions -->
+                    
                     <div class="card mb-4 no-print" style="background: rgba(16, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; overflow: hidden;">
                         <div class="card-header border-0 p-4 pb-2" style="background: transparent;">
                             <h4 style="color: #f8fafc; font-weight: 700; font-size: 1.1rem;">Booking Actions</h4>
@@ -153,7 +153,7 @@
                         </div>
                     </div>
                     
-                    <!-- Needs Help? -->
+                    
                     <div class="card no-print" style="background: rgba(59, 130, 246, 0.05); border: 1px solid rgba(59, 130, 246, 0.15); border-radius: 12px; overflow: hidden;">
                         <div class="card-body p-4">
                             <h4 style="color: #60a5fa; font-weight: 700; font-size: 1.1rem; margin-bottom: 15px;">Need Help?</h4>
@@ -172,7 +172,7 @@
             </div>
         </div>
 
-        <!-- Hidden invoice template for PDF downloads and native printing -->
+        
         @php
             $logoBase64 = null;
             $vendor = $vehicle->vendor;
@@ -185,177 +185,266 @@
                 }
             }
         @endphp
-        <div id="hidden-invoice-template" style="position: absolute; left: -9999px; top: -9999px; font-family: 'Arial', sans-serif; background: #ffffff; color: #1e293b; padding: 50px 60px; box-sizing: border-box; width: 800px; opacity: 1; visibility: visible;">
-            <!-- Logo & Header -->
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; width: 100%;">
-                <div>
-                    @if($logoBase64)
-                        <img src="{{ $logoBase64 }}" alt="{{ $vendor->company_name ?? $vendor->name }}" style="max-height: 55px; max-width: 180px; object-fit: contain;">
-                    @elseif($vendor && $vendor->company_logo)
-                        <img src="{{ asset('storage/' . $vendor->company_logo) }}" alt="{{ $vendor->company_name ?? $vendor->name }}" style="max-height: 55px; max-width: 180px; object-fit: contain;">
-                    @else
-                        <span style="font-size: 1.5rem; font-weight: 800; color: #00a4e4; letter-spacing: -0.5px;">{{ $vendor->company_name ?? $vendor->name ?? 'Car Rental' }}</span>
-                    @endif
-                </div>
-                <div style="text-align: right;">
-                    <h1 style="margin: 0; font-size: 1.8rem; font-weight: 800; color: #0f172a; letter-spacing: 0.5px;">BOOKING CONFIRMATION</h1>
-                    <p style="margin: 5px 0 0 0; font-size: 0.95rem; color: #64748b; font-weight: 600;">Order #<span id="invoice-order-num">{{ request()->input('reservation_number', 'DCR' . rand(10000, 99999)) }}</span></p>
-                </div>
-            </div>
-
-            <!-- Theme Line Separator -->
-            <div style="height: 3px; background: #00a4e4; margin-bottom: 30px; width: 100%;"></div>
-
-            <!-- Details Row -->
-            <div style="display: flex; gap: 40px; margin-bottom: 30px; width: 100%;">
-                <!-- Booking Details -->
-                <div style="flex: 1;">
-                    <h4 style="margin: 0 0 15px 0; font-size: 0.9rem; font-weight: 800; color: #0f172a; text-transform: uppercase; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">BOOKING DETAILS</h4>
-                    <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.85rem; color: #334155;">
-                        <div><span style="font-weight: 700; color: #475569; width: 120px; display: inline-block;">Order Number:</span> <span style="font-weight: 600; color: #0f172a;">{{ request()->input('reservation_number', 'DCR' . rand(10000, 99999)) }}</span></div>
-                        <div><span style="font-weight: 700; color: #475569; width: 120px; display: inline-block;">Booking Date:</span> <span style="font-weight: 600; color: #0f172a;">{{ date('M d, Y H:i') }}</span></div>
-                        <div><span style="font-weight: 700; color: #475569; width: 120px; display: inline-block;">Payment Status:</span> <span style="font-weight: 800; color: #00a4e4;">Pending</span></div>
-                        <div><span style="font-weight: 700; color: #475569; width: 120px; display: inline-block;">Payment Method:</span> <span style="font-weight: 600; color: #0f172a; text-transform: capitalize;">{{ str_replace('_', ' ', request()->input('payment_method', 'Pay On Arrival')) }}</span></div>
-                    </div>
-                </div>
-
-                <!-- Customer Details -->
-                <div style="flex: 1;">
-                    <h4 style="margin: 0 0 15px 0; font-size: 0.9rem; font-weight: 800; color: #0f172a; text-transform: uppercase; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">CUSTOMER DETAILS</h4>
-                    <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.85rem; color: #334155;">
-                        <div><span style="font-weight: 700; color: #475569; width: 80px; display: inline-block;">Name:</span> <span style="font-weight: 600; color: #0f172a;">{{ request()->input('fname') }} {{ request()->input('lname') }}</span></div>
-                        <div><span style="font-weight: 700; color: #475569; width: 80px; display: inline-block;">Email:</span> <span style="font-weight: 600; color: #0f172a;">{{ request()->input('email') }}</span></div>
-                        <div><span style="font-weight: 700; color: #475569; width: 80px; display: inline-block;">Phone:</span> <span style="font-weight: 600; color: #0f172a;">{{ request()->input('phone') }}</span></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Section 1: Rental Period & Locations -->
-            <div style="border: 1px solid #e2e8f0; border-radius: 6px; overflow: hidden; margin-bottom: 25px; width: 100%;">
-                <div style="background: #f8fafc; padding: 10px 15px; border-bottom: 1px solid #e2e8f0; font-weight: 800; font-size: 0.9rem; color: #0f172a; width: 100%; box-sizing: border-box;">
-                    Rental Period & Locations
-                </div>
-                <div style="display: flex; padding: 15px; gap: 20px; width: 100%; box-sizing: border-box;">
-                    <!-- Pickup -->
-                    <div style="flex: 1;">
-                        <h5 style="margin: 0 0 8px 0; color: #00a4e4; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">PICKUP</h5>
-                        <div style="font-size: 0.85rem; color: #334155; display: flex; flex-direction: column; gap: 4px;">
-                            <div><strong>Date/Time:</strong> {{ $pickupDate ?? 'Today' }} @ {{ $pickupTime }}</div>
-                            <div><strong>Location:</strong> {{ $pickupLocation ? $pickupLocation->location : 'Selected Location' }}</div>
-                        </div>
-                    </div>
-                    <!-- Divider line -->
-                    <div style="width: 1px; background: #e2e8f0;"></div>
-                    <!-- Return -->
-                    <div style="flex: 1;">
-                        <h5 style="margin: 0 0 8px 0; color: #00a4e4; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">RETURN</h5>
-                        <div style="font-size: 0.85rem; color: #334155; display: flex; flex-direction: column; gap: 4px;">
-                            <div><strong>Date/Time:</strong> {{ $returnDate ?? '+2 Days' }} @ {{ $returnTime }}</div>
-                            <div><strong>Location:</strong> {{ $returnLocation ? $returnLocation->location : 'Selected Location' }}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Section 2: Vehicle & Trip Information -->
-            <div style="border: 1px solid #e2e8f0; border-radius: 6px; overflow: hidden; margin-bottom: 25px; width: 100%;">
-                <div style="background: #f8fafc; padding: 10px 15px; border-bottom: 1px solid #e2e8f0; font-weight: 800; font-size: 0.9rem; color: #0f172a; width: 100%; box-sizing: border-box;">
-                    Vehicle & Trip Information
-                </div>
-                <div style="display: flex; padding: 15px; gap: 40px; align-items: center; width: 100%; box-sizing: border-box;">
-                    <div style="flex: 2; display: flex; flex-direction: column; gap: 8px; font-size: 0.85rem; color: #334155;">
-                        <div><span style="font-weight: 700; color: #475569; width: 120px; display: inline-block;">Vehicle:</span> <span style="font-weight: 600; color: #0f172a;">{{ $vehicle->name }}</span></div>
-                        <div><span style="font-weight: 700; color: #475569; width: 120px; display: inline-block;">Type:</span> <span style="font-weight: 600; color: #0f172a;">{{ $vehicle->type ?? 'Standard' }}</span></div>
-                        <div><span style="font-weight: 700; color: #475569; width: 120px; display: inline-block;">Rental Duration:</span> <span style="font-weight: 600; color: #0f172a;">{{ $rentalDays }} Days</span></div>
-                    </div>
-                    <!-- Divider -->
-                    <div style="width: 1px; height: 60px; background: #e2e8f0;"></div>
-                    <div style="flex: 2; display: flex; flex-direction: column; gap: 8px; font-size: 0.85rem; color: #334155;">
-                        <div><span style="font-weight: 700; color: #475569; width: 120px; display: inline-block;">Flight Number:</span> <span style="font-weight: 600; color: #0f172a;">{{ request()->input('flight_number', 'N/A') }}</span></div>
-                        <div><span style="font-weight: 700; color: #475569; width: 120px; display: inline-block;">Passengers:</span> <span style="font-weight: 600; color: #0f172a;">{{ $vehicle->passengers ?? 'N/A' }}</span></div>
-                    </div>
-                    <!-- Vehicle Image on the right if base64 encoded -->
-                    @if($imageBase64)
-                    <div style="flex: 1.5; text-align: right;">
-                        <img src="{{ $imageBase64 }}" alt="{{ $vehicle->name }}" style="max-width: 110px; max-height: 70px; object-fit: contain;">
-                    </div>
-                    @endif
-                </div>
-            </div>
-
-            <!-- Section 3: Price Summary -->
-            <div style="border: 1px solid #e2e8f0; border-radius: 6px; overflow: hidden; margin-bottom: 20px; width: 100%;">
-                <div style="background: #f8fafc; padding: 10px 15px; border-bottom: 1px solid #e2e8f0; font-weight: 800; font-size: 0.9rem; color: #0f172a; width: 100%; box-sizing: border-box;">
-                    Price Summary
-                </div>
-                <table width="100%" cellpadding="0" cellspacing="0" style="font-size: 0.85rem; border-collapse: collapse; width: 100%;">
-                    <thead>
-                        <tr style="border-bottom: 1px solid #e2e8f0; background: #f8fafc;">
-                            <th align="left" style="padding: 10px 15px; font-weight: 700; color: #475569;">Description</th>
-                            <th align="right" style="padding: 10px 15px; font-weight: 700; color: #475569; width: 120px;">Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Rental Price -->
-                        <tr style="border-bottom: 1px solid #f1f5f9;">
-                            <td style="padding: 12px 15px; color: #334155;">Rental Price ({{ $rentalDays }} Days @ ${{ number_format($vehicle->base_price, 2) }}/day)</td>
-                            <td align="right" style="padding: 12px 15px; font-weight: 600; color: #0f172a;">${{ number_format($vehicle->total_price, 2) }}</td>
-                        </tr>
-
-                        <!-- Insurance -->
-                        @if($selectedInsurance)
-                        <tr style="border-bottom: 1px solid #f1f5f9;">
-                            <td style="padding: 12px 15px; color: #334155;">Insurance ({{ $selectedInsurance->name }})</td>
-                            <td align="right" style="padding: 12px 15px; font-weight: 600; color: #0f172a;">${{ number_format($insuranceTotal, 2) }}</td>
-                        </tr>
-                        @endif
-
-                        <!-- Extras -->
-                        @if($selectedExtras->count() > 0)
-                            @foreach($selectedExtras as $extra)
-                            <tr style="border-bottom: 1px solid #f1f5f9;">
-                                <td style="padding: 12px 15px; color: #334155;">{{ $extra->name }} (x{{ $extra->qty }} @ ${{ number_format($extra->price, 2) }}/day)</td>
-                                <td align="right" style="padding: 12px 15px; font-weight: 600; color: #0f172a;">${{ number_format($extra->price * $extra->qty * $rentalDays, 2) }}</td>
-                            </tr>
-                            @endforeach
-                        @endif
-
-                        <!-- Totals -->
-                        <tr style="background: rgba(82, 234, 210, 0.05); border-top: 2px solid #e2e8f0; font-weight: 700;">
-                            <td style="padding: 12px 15px; color: #0f172a; font-weight: 800;">Total Amount</td>
-                            <td align="right" style="padding: 12px 15px; color: #00a4e4; font-size: 1rem; font-weight: 800;">${{ number_format($grandTotal, 2) }}</td>
-                        </tr>
-                        @if(request()->input('payment_method') === 'deposit')
-                        <tr style="border-top: 1px solid #e2e8f0;">
-                            <td style="padding: 10px 15px; color: #475569; font-weight: 700;">Paid Now (5% Deposit)</td>
-                            <td align="right" style="padding: 10px 15px; color: #16a34a; font-weight: 700;">${{ number_format($grandTotal * 0.05, 2) }}</td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 10px 15px; color: #475569; font-weight: 700;">Pending on Arrival</td>
-                            <td align="right" style="padding: 10px 15px; color: #dc2626; font-weight: 700;">${{ number_format($grandTotal * 0.95, 2) }}</td>
-                        </tr>
-                        @elseif(request()->input('payment_method') === 'full')
-                        <tr style="border-top: 1px solid #e2e8f0;">
-                            <td style="padding: 10px 15px; color: #475569; font-weight: 700;">Paid Now (Full Payment with 5% Discount)</td>
-                            <td align="right" style="padding: 10px 15px; color: #16a34a; font-weight: 700;">${{ number_format($grandTotal * 0.95, 2) }}</td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 10px 15px; color: #475569; font-weight: 700;">Pending on Arrival</td>
-                            <td align="right" style="padding: 10px 15px; color: #0f172a; font-weight: 700;">$0.00</td>
-                        </tr>
+        
+        @php
+            $logoBase64 = null;
+            $vendor = $vehicle->vendor;
+            if ($vendor && $vendor->company_logo) {
+                $logoPath = storage_path('app/public/' . $vendor->company_logo);
+                if (file_exists($logoPath)) {
+                    $logoData = base64_encode(file_get_contents($logoPath));
+                    $mimeType = mime_content_type($logoPath);
+                    $logoBase64 = 'data:' . $mimeType . ';base64,' . $logoData;
+                }
+            }
+        @endphp
+        
+        @php
+            $logoBase64 = null;
+            $vendor = $vehicle->vendor;
+            if ($vendor && $vendor->company_logo) {
+                $logoPath = storage_path('app/public/' . $vendor->company_logo);
+                if (file_exists($logoPath)) {
+                    $logoData = base64_encode(file_get_contents($logoPath));
+                    $mimeType = mime_content_type($logoPath);
+                    $logoBase64 = 'data:' . $mimeType . ';base64,' . $logoData;
+                }
+            }
+        @endphp
+        <div id="hidden-invoice-template" style="position: absolute; left: -9999px; top: -9999px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background: #ffffff; color: #1e293b; padding: 12px 20px; box-sizing: border-box; width: 750px; opacity: 1; visibility: visible;">
+            
+            <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 8px; border-collapse: collapse; width: 100%;">
+                <tr>
+                    <td valign="middle" style="width: 55%;">
+                        @if($logoBase64)
+                            <img src="{{ $logoBase64 }}" alt="{{ $vendor->company_name ?? $vendor->name }}" style="max-height: 38px; max-width: 170px; object-fit: contain;">
+                        @elseif($vendor && $vendor->company_logo)
+                            <img src="{{ asset('storage/' . $vendor->company_logo) }}" alt="{{ $vendor->company_name ?? $vendor->name }}" style="max-height: 38px; max-width: 170px; object-fit: contain;">
                         @else
-                        <tr style="border-top: 1px solid #e2e8f0;">
-                            <td style="padding: 10px 15px; color: #475569; font-weight: 700;">Paid Now</td>
-                            <td align="right" style="padding: 10px 15px; color: #16a34a; font-weight: 700;">$0.00</td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 10px 15px; color: #475569; font-weight: 700;">Pending on Arrival</td>
-                            <td align="right" style="padding: 10px 15px; color: #00a4e4; font-weight: 700;">${{ number_format($grandTotal, 2) }}</td>
-                        </tr>
+                            <span style="font-size: 1.25rem; font-weight: 800; color: #00a4e4; letter-spacing: -0.5px;">{{ $vendor->company_name ?? $vendor->name ?? 'Car Rental' }}</span>
                         @endif
-                    </tbody>
-                </table>
-            </div>
+                    </td>
+                    <td valign="middle" align="right" style="width: 45%;">
+                        <div style="font-size: 1.1rem; font-weight: 800; color: #0f172a; letter-spacing: 0.5px; white-space: nowrap;">BOOKING CONFIRMATION</div>
+                        <div style="font-size: 0.78rem; color: #64748b; font-weight: 600; margin-top: 1px;">Order #<span id="invoice-order-num">{{ request()->input('reservation_number', 'DCR' . rand(10000, 99999)) }}</span></div>
+                    </td>
+                </tr>
+            </table>
+
+            
+            <div style="height: 2px; background: #00a4e4; margin-bottom: 8px; width: 100%;"></div>
+
+            
+            <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 8px; border-collapse: collapse; width: 100%;">
+                <tr>
+                    
+                    <td valign="top" style="width: 48%;">
+                        <div style="font-size: 0.75rem; font-weight: 800; color: #0f172a; text-transform: uppercase; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px; margin-bottom: 4px;">BOOKING DETAILS</div>
+                        <table width="100%" cellpadding="0" cellspacing="0" style="font-size: 0.75rem; color: #334155; border-collapse: collapse;">
+                            <tr>
+                                <td style="font-weight: 700; color: #475569; width: 1%; white-space: nowrap; padding-right: 12px; padding-top: 1px; padding-bottom: 1px;">Order Number:</td>
+                                <td style="font-weight: 600; color: #0f172a; padding-top: 1px; padding-bottom: 1px;">{{ request()->input('reservation_number', 'DCR' . rand(10000, 99999)) }}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 700; color: #475569; width: 1%; white-space: nowrap; padding-right: 12px; padding-top: 1px; padding-bottom: 1px;">Booking Date:</td>
+                                <td style="font-weight: 600; color: #0f172a; padding-top: 1px; padding-bottom: 1px;">{{ date('M d, Y H:i') }}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 700; color: #475569; width: 1%; white-space: nowrap; padding-right: 12px; padding-top: 1px; padding-bottom: 1px;">Payment Status:</td>
+                                <td style="font-weight: 800; color: #00a4e4; padding-top: 1px; padding-bottom: 1px;">Pending</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 700; color: #475569; width: 1%; white-space: nowrap; padding-right: 12px; padding-top: 1px; padding-bottom: 1px;">Payment Method:</td>
+                                <td style="font-weight: 600; color: #0f172a; text-transform: capitalize; padding-top: 1px; padding-bottom: 1px;">{{ str_replace('_', ' ', request()->input('payment_method', 'Pay On Arrival')) }}</td>
+                            </tr>
+                        </table>
+                    </td>
+                    
+                    <td style="width: 4%;"></td>
+
+                    
+                    <td valign="top" style="width: 48%;">
+                        <div style="font-size: 0.75rem; font-weight: 800; color: #0f172a; text-transform: uppercase; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 2px; margin-bottom: 4px;">CUSTOMER DETAILS</div>
+                        <table width="100%" cellpadding="0" cellspacing="0" style="font-size: 0.75rem; color: #334155; border-collapse: collapse;">
+                            <tr>
+                                <td style="font-weight: 700; color: #475569; width: 1%; white-space: nowrap; padding-right: 12px; padding-top: 1px; padding-bottom: 1px;">Name:</td>
+                                <td style="font-weight: 600; color: #0f172a; padding-top: 1px; padding-bottom: 1px;">{{ request()->input('fname') }} {{ request()->input('lname') }}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 700; color: #475569; width: 1%; white-space: nowrap; padding-right: 12px; padding-top: 1px; padding-bottom: 1px;">Email:</td>
+                                <td style="font-weight: 600; color: #0f172a; word-break: break-all; padding-top: 1px; padding-bottom: 1px;">{{ request()->input('email') }}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 700; color: #475569; width: 1%; white-space: nowrap; padding-right: 12px; padding-top: 1px; padding-bottom: 1px;">Phone:</td>
+                                <td style="font-weight: 600; color: #0f172a; padding-top: 1px; padding-bottom: 1px;">{{ request()->input('phone') }}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+            
+            <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 8px; border: 1px solid #e2e8f0; border-radius: 4px; border-collapse: separate; overflow: hidden; width: 100%;">
+                <tr>
+                    <td style="background: #f8fafc; padding: 4px 8px; border-bottom: 1px solid #e2e8f0; font-weight: 800; font-size: 0.75rem; color: #0f172a;">
+                        Rental Period & Locations
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 6px 8px;">
+                        <table width="100%" cellpadding="0" cellspacing="0" style="width: 100%;">
+                            <tr>
+                                <td valign="top" style="width: 48%;">
+                                    <div style="color: #00a4e4; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1px;">PICKUP</div>
+                                    <div style="font-size: 0.75rem; color: #334155; line-height: 1.3;">
+                                        <div><strong>Date/Time:</strong> {{ $pickupDate ?? 'Today' }} @ {{ $pickupTime }}</div>
+                                        <div><strong>Location:</strong> {{ $pickupLocation ? $pickupLocation->location : 'Selected Location' }}</div>
+                                    </div>
+                                </td>
+                                <td style="width: 4%; text-align: center;">
+                                    <div style="width: 1px; height: 30px; background: #e2e8f0; margin: 0 auto;"></div>
+                                </td>
+                                <td valign="top" style="width: 48%;">
+                                    <div style="color: #00a4e4; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1px;">RETURN</div>
+                                    <div style="font-size: 0.75rem; color: #334155; line-height: 1.3;">
+                                        <div><strong>Date/Time:</strong> {{ $returnDate ?? '+2 Days' }} @ {{ $returnTime }}</div>
+                                        <div><strong>Location:</strong> {{ $returnLocation ? $returnLocation->location : 'Selected Location' }}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+            
+            <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 8px; border: 1px solid #e2e8f0; border-radius: 4px; border-collapse: separate; overflow: hidden; width: 100%;">
+                <tr>
+                    <td style="background: #f8fafc; padding: 4px 8px; border-bottom: 1px solid #e2e8f0; font-weight: 800; font-size: 0.75rem; color: #0f172a;">
+                        Vehicle & Trip Information
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 6px 8px;">
+                        <table width="100%" cellpadding="0" cellspacing="0" style="width: 100%;">
+                            <tr>
+                                <td valign="middle" style="width: 44%;">
+                                    <table width="100%" cellpadding="0" cellspacing="0" style="font-size: 0.75rem; color: #334155; border-collapse: collapse;">
+                                        <tr>
+                                            <td style="font-weight: 700; color: #475569; width: 1%; white-space: nowrap; padding-right: 12px; padding-top: 1px; padding-bottom: 1px;">Vehicle:</td>
+                                            <td style="font-weight: 600; color: #0f172a; padding-top: 1px; padding-bottom: 1px;">{{ $vehicle->name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: 700; color: #475569; width: 1%; white-space: nowrap; padding-right: 12px; padding-top: 1px; padding-bottom: 1px;">Type:</td>
+                                            <td style="font-weight: 600; color: #0f172a; padding-top: 1px; padding-bottom: 1px;">{{ $vehicle->type ?? 'Standard' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: 700; color: #475569; width: 1%; white-space: nowrap; padding-right: 12px; padding-top: 1px; padding-bottom: 1px;">Rental Duration:</td>
+                                            <td style="font-weight: 600; color: #0f172a; padding-top: 1px; padding-bottom: 1px;">{{ $rentalDays }} Days</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td style="width: 4%; text-align: center;">
+                                    <div style="width: 1px; height: 35px; background: #e2e8f0; margin: 0 auto;"></div>
+                                </td>
+                                <td valign="middle" style="width: 34%;">
+                                    <table width="100%" cellpadding="0" cellspacing="0" style="font-size: 0.75rem; color: #334155; border-collapse: collapse;">
+                                        <tr>
+                                            <td style="font-weight: 700; color: #475569; width: 1%; white-space: nowrap; padding-right: 12px; padding-top: 1px; padding-bottom: 1px;">Flight Number:</td>
+                                            <td style="font-weight: 600; color: #0f172a; padding-top: 1px; padding-bottom: 1px;">{{ request()->input('flight_number', 'N/A') }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: 700; color: #475569; width: 1%; white-space: nowrap; padding-right: 12px; padding-top: 1px; padding-bottom: 1px;">Passengers:</td>
+                                            <td style="font-weight: 600; color: #0f172a; padding-top: 1px; padding-bottom: 1px;">{{ $vehicle->passengers ?? 'N/A' }}</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                @if($imageBase64)
+                                <td valign="middle" align="right" style="width: 18%;">
+                                    <img src="{{ $imageBase64 }}" alt="{{ $vehicle->name }}" style="max-width: 80px; max-height: 40px; object-fit: contain;">
+                                </td>
+                                @endif
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+            
+            <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 0px; border: 1px solid #e2e8f0; border-radius: 4px; border-collapse: separate; overflow: hidden; width: 100%;">
+                <tr>
+                    <td style="background: #f8fafc; padding: 4px 8px; border-bottom: 1px solid #e2e8f0; font-weight: 800; font-size: 0.75rem; color: #0f172a;" colspan="2">
+                        Price Summary
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="padding: 0;">
+                        <table width="100%" cellpadding="4" cellspacing="0" style="font-size: 0.75rem; border-collapse: collapse; width: 100%;">
+                            <thead>
+                                <tr style="border-bottom: 1px solid #e2e8f0; background: #f8fafc;">
+                                    <th align="left" style="padding: 4px 8px; font-weight: 700; color: #475569;">Description</th>
+                                    <th align="right" style="padding: 4px 8px; font-weight: 700; color: #475569; width: 100px;">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom: 1px solid #f1f5f9;">
+                                    <td style="padding: 4px 8px; color: #334155;">Rental Price ({{ $rentalDays }} Days @ ${{ number_format($vehicle->base_price, 2) }}/day)</td>
+                                    <td align="right" style="padding: 4px 8px; font-weight: 600; color: #0f172a;">${{ number_format($vehicle->total_price, 2) }}</td>
+                                </tr>
+
+                                @if($selectedInsurance)
+                                <tr style="border-bottom: 1px solid #f1f5f9;">
+                                    <td style="padding: 4px 8px; color: #334155;">Insurance ({{ $selectedInsurance->name }})</td>
+                                    <td align="right" style="padding: 4px 8px; font-weight: 600; color: #0f172a;">${{ number_format($insuranceTotal, 2) }}</td>
+                                </tr>
+                                @endif
+
+                                @if($selectedExtras->count() > 0)
+                                    @foreach($selectedExtras as $extra)
+                                    <tr style="border-bottom: 1px solid #f1f5f9;">
+                                        <td style="padding: 4px 8px; color: #334155;">{{ $extra->name }} (x{{ $extra->qty }} @ ${{ number_format($extra->price, 2) }}/day)</td>
+                                        <td align="right" style="padding: 4px 8px; font-weight: 600; color: #0f172a;">${{ number_format($extra->price * $extra->qty * $rentalDays, 2) }}</td>
+                                    </tr>
+                                    @endforeach
+                                @endif
+
+                                <tr style="background: rgba(0, 164, 228, 0.05); border-top: 1.5px solid #e2e8f0; font-weight: 700;">
+                                    <td style="padding: 4px 8px; color: #0f172a; font-weight: 800; font-size: 0.78rem;">Total Amount</td>
+                                    <td align="right" style="padding: 4px 8px; color: #00a4e4; font-size: 0.9rem; font-weight: 800;">${{ number_format($grandTotal, 2) }}</td>
+                                </tr>
+                                @if(request()->input('payment_method') === 'deposit')
+                                <tr style="border-top: 1px solid #e2e8f0;">
+                                    <td style="padding: 3px 8px; color: #475569; font-weight: 700;">Paid Now (5% Deposit)</td>
+                                    <td align="right" style="padding: 3px 8px; color: #16a34a; font-weight: 700;">${{ number_format($grandTotal * 0.05, 2) }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 3px 8px; color: #475569; font-weight: 700;">Pending on Arrival</td>
+                                    <td align="right" style="padding: 3px 8px; color: #dc2626; font-weight: 700;">${{ number_format($grandTotal * 0.95, 2) }}</td>
+                                </tr>
+                                @elseif(request()->input('payment_method') === 'full')
+                                <tr style="border-top: 1px solid #e2e8f0;">
+                                    <td style="padding: 3px 8px; color: #475569; font-weight: 700;">Paid Now (Full Payment with 5% Discount)</td>
+                                    <td align="right" style="padding: 3px 8px; color: #16a34a; font-weight: 700;">${{ number_format($grandTotal * 0.95, 2) }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 3px 8px; color: #475569; font-weight: 700;">Pending on Arrival</td>
+                                    <td align="right" style="padding: 3px 8px; color: #0f172a; font-weight: 700;">$0.00</td>
+                                </tr>
+                                @else
+                                <tr style="border-top: 1px solid #e2e8f0;">
+                                    <td style="padding: 3px 8px; color: #475569; font-weight: 700;">Paid Now</td>
+                                    <td align="right" style="padding: 3px 8px; color: #16a34a; font-weight: 700;">$0.00</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 3px 8px; color: #475569; font-weight: 700;">Pending on Arrival</td>
+                                    <td align="right" style="padding: 3px 8px; color: #00a4e4; font-weight: 700;">${{ number_format($grandTotal, 2) }}</td>
+                                </tr>
+                                @endif
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </table>
         </div>
 
     </div>
@@ -363,23 +452,110 @@
 @endsection
 
 @section('js')
-<!-- html2pdf -->
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <script>
     function downloadPDF() {
-        const orderNum = document.getElementById('order-number-val').innerText.trim();
+        const orderNumEl = document.getElementById('order-number-val') || document.getElementById('invoice-order-num');
+        const orderNum = orderNumEl ? orderNumEl.innerText.trim() : 'Confirmation';
         const element = document.getElementById('hidden-invoice-template');
-        
-        const opt = {
-            margin:       0.4,
-            filename:     'Order_' + orderNum + '.pdf',
-            image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2.5, useCORS: true, backgroundColor: '#ffffff' },
-            jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
-        };
 
-        html2pdf().set(opt).from(element).save();
+        if (!element) {
+            window.print();
+            return;
+        }
+
+        const pdfLib = window.html2pdf || (typeof html2pdf !== 'undefined' ? html2pdf : null);
+        if (!pdfLib) {
+            window.print();
+            return;
+        }
+
+        // Create an isolated hidden iframe to eliminate parent layout, flexbox offsets, and theme CSS interference
+        const iframe = document.createElement('iframe');
+        iframe.style.position = 'fixed';
+        iframe.style.left = '-9999px';
+        iframe.style.top = '-9999px';
+        iframe.style.width = '750px';
+        iframe.style.height = '1000px';
+        iframe.style.border = 'none';
+        document.body.appendChild(iframe);
+
+        const doc = iframe.contentWindow.document;
+        doc.open();
+        doc.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="utf-8">
+                <title>Booking Confirmation</title>
+                <style>
+                    * {
+                        box-sizing: border-box !important;
+                        -webkit-print-color-adjust: exact !important;
+                        print-color-adjust: exact !important;
+                    }
+                    html, body {
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        background: #ffffff !important;
+                        color: #1e293b !important;
+                        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+                        width: 750px !important;
+                    }
+                    .pdf-container {
+                        width: 750px !important;
+                        padding: 12px 20px !important;
+                        background: #ffffff !important;
+                        margin: 0 auto !important;
+                        box-sizing: border-box !important;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="pdf-container">
+                    ${element.innerHTML}
+                </div>
+            </body>
+            </html>
+        `);
+        doc.close();
+
+        setTimeout(function() {
+            const target = iframe.contentWindow.document.querySelector('.pdf-container');
+            if (!target) {
+                if (document.body.contains(iframe)) document.body.removeChild(iframe);
+                window.print();
+                return;
+            }
+
+            const opt = {
+                margin:       [3, 3, 3, 3],
+                filename:     'Booking_Confirmation_' + orderNum + '.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { 
+                    scale: 2, 
+                    useCORS: true, 
+                    backgroundColor: '#ffffff', 
+                    scrollX: 0, 
+                    scrollY: 0 
+                },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            pdfLib().set(opt).from(target).save().then(function() {
+                if (document.body.contains(iframe)) {
+                    document.body.removeChild(iframe);
+                }
+            }).catch(function(err) {
+                console.error('PDF generation error:', err);
+                if (document.body.contains(iframe)) {
+                    document.body.removeChild(iframe);
+                }
+                window.print();
+            });
+        }, 200);
     }
 </script>
 

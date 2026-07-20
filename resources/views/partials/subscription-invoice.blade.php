@@ -359,8 +359,7 @@
                     <div class="label">Due Date:</div>
                     <div class="val">{{ $subscription->starts_at->format('F d, Y') }}</div>
                     
-                    <!-- <div class="label">PO Number:</div>
-                    <div class="val">PO-{{ str_pad($subscription->id, 5, '0', STR_PAD_LEFT) }}</div> -->
+                    
                 </div>
             </div>
         </div>

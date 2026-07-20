@@ -20,7 +20,7 @@
             <form method="POST" action="{{ route('vendor.availability.store') }}" id="rateForm">
                 @csrf
 
-                {{-- Row 1: Group | Vehicle --}}
+                
                 <div class="row">
                     <div class="col-md-6 mb-4">
                         <label for="group_id" class="loc-label">Vehicle Group <span style="color:#ef4444;">*</span></label>
@@ -52,7 +52,7 @@
                     </div>
                 </div>
 
-                {{-- Row 2: Date Range --}}
+                
                 <div class="row">
                     <div class="col-md-6 mb-4">
                         <label for="pickup_date" class="loc-label">Pickup Date <span style="color:#ef4444;">*</span></label>
@@ -77,7 +77,7 @@
                     </div>
                 </div>
 
-                {{-- Row 3: Rental Period & Price --}}
+                
                 <div class="row">
                     <div class="col-md-4 mb-4">
                         <label for="rental_period_id" class="loc-label">Rental Period (Optional preset)</label>
@@ -128,7 +128,7 @@
                     </div>
                 </div>
 
-                {{-- Row 4: Status --}}
+                
                 <div class="row">
                     <div class="col-md-4 mb-4">
                         <label for="status" class="loc-label">Status <span style="color:#ef4444;">*</span></label>
@@ -142,7 +142,7 @@
                     </div>
                 </div>
 
-                {{-- Submit --}}
+                
                 <div style="display:flex;justify-content:flex-end;padding-top:8px;">
                     <a href="{{ route('vendor.availability.index') }}"
                        style="padding:10px 20px;border:1px solid #d7e0e8;border-radius:var(--radius);color:#64748b;background:#fff;font-size:0.95rem;margin-right:10px;text-decoration:none;">

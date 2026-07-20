@@ -8,7 +8,7 @@
             </div>
         </div>
 
-        {{-- Filter Tabs --}}
+        
         <div class="panel-filter-bar">
             <a href="{{ route('admin.custom-package-requests.index') }}" class="btn btn-sm {{ !request('status') ? 'active' : '' }}">
                 All Requests
@@ -76,15 +76,15 @@
                             </td>
                             <td>
                                 <div class="table-actions" style="display: flex; gap: 8px;">
-                                    {{-- View button --}}
+                                    
                                     <button type="button" class="icon-button view-btn" title="View Details" data-request="{{ json_encode($request) }}" onclick="openViewModal(this)">
                                         <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                                     </button>
-                                    {{-- Reply button --}}
+                                    
                                     <a href="mailto:{{ $request->email }}?subject=Re: Rydaris Custom Package" title="Reply via Email" class="icon-button">
                                         <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;"><polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>
                                     </a>
-                                    {{-- Delete button --}}
+                                    
                                     <form action="{{ route('admin.custom-package-requests.destroy', $request->id) }}" method="POST" style="display: inline;">
                                         @csrf
                                         @method('DELETE')
@@ -117,7 +117,7 @@
 
     </div>
 
-    <!-- View Modal -->
+    
     <div id="viewModal" class="custom-modal">
         <div class="modal-content" style="max-width: 600px; padding: 25px; border-radius: 12px; background: rgba(11, 16, 32, 0.95); border: 1px solid rgba(82, 234, 210, 0.2); box-shadow: 0 24px 80px rgba(0,0,0,0.6);">
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; margin-bottom: 20px;">

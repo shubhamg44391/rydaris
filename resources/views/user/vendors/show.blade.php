@@ -7,7 +7,7 @@
 <div class="admin-panel" style="padding: 20px;">
 
     
-    <!-- Vendor Header -->
+    
     <div class="vendor-header mb-5 p-4" style="background: rgba(11, 16, 32, 0.6); border: 1px solid rgba(82, 234, 210, 0.15); border-radius: 12px; display: flex; align-items: center; gap: 25px;">
         <div class="vendor-avatar" style="width: 80px; height: 80px; background: rgba(82, 234, 210, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--brand); font-weight: bold; font-size: 2rem; overflow: hidden; border: 2px solid rgba(82, 234, 210, 0.3);">
             @if($vendor->company_logo)
@@ -28,10 +28,10 @@
         </div>
     </div>
 
-    <!-- Search Car Widget -->
+    
     <div class="search-widget p-4" style="background: rgba(11, 16, 32, 0.6); border: 1px solid rgba(82, 234, 210, 0.15); border-radius: 16px; margin-bottom: 40px;">
         <form action="#" method="GET">
-            <!-- Branch Filter -->
+            
             @if(isset($branches) && $branches->isNotEmpty())
             <div class="row g-3 mb-4">
                 <div class="col-md-4">
@@ -57,7 +57,7 @@
 
             <div class="row g-3 align-items-end">
                 
-                <!-- Pick-up Location -->
+                
                 <div class="col-md-6">
                     <label style="display: block; margin-bottom: 8px; color: #f8fafc; font-weight: 500; font-size: 0.9rem;">Pick-up Location</label>
                     <div style="position: relative;">
@@ -75,7 +75,7 @@
                         </span>
                     </div>
                 </div>
-            <!-- Pick-up Date & Time -->
+            
                 <div class="col-md-4">
                     <label style="display: block; margin-bottom: 8px; color: #f8fafc; font-weight: 500; font-size: 0.9rem;">Pick-up Date & Time</label>
                     <div class="d-flex gap-2">
@@ -89,7 +89,7 @@
                         </select>
                     </div>
                 </div>
-                <!-- Return Location -->
+                
                 <div class="col-md-6">
                     <label style="display: block; margin-bottom: 8px; color: #f8fafc; font-weight: 500; font-size: 0.9rem;">Return Location</label>
                     <div style="position: relative;">
@@ -108,12 +108,12 @@
                     </div>
                 </div>
 
-                <!-- Rental Type (Hidden) -->
+                
                 <input type="hidden" name="rental_type" value="default">
 
               
 
-                <!-- Return Date & Time -->
+                
                 <div class="col-md-4">
                     <label style="display: block; margin-bottom: 8px; color: #f8fafc; font-weight: 500; font-size: 0.9rem;">Return Date & Time</label>
                     <div class="d-flex gap-2">
@@ -128,7 +128,7 @@
                     </div>
                 </div>
 
-                <!-- Search Button -->
+                
                 <div class="col-md-4">
                     <button type="submit" class="btn" style="width: 100%; padding: 12px; background: var(--brand); color: #0b1020; border: none; border-radius: 8px; font-weight: 700; font-size: 1rem; transition: all 0.2s; box-shadow: 0 4px 15px rgba(82, 234, 210, 0.3);">
                         Search Now
@@ -139,12 +139,12 @@
         </form>
     </div>
 
-    <!-- Vehicles Section -->
+    
     <div class="container-fluid" style="max-width: 1400px; margin: 0 auto;">
     <div class="vehicles-section mt-5">
         <h2 style="font-weight: 700; color: #f8fafc; margin-bottom: 20px;">Our Vehicles</h2>
         
-        <!-- Filters -->
+        
         <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
             <div class="d-flex align-items-center gap-4">
                 <div>
@@ -186,7 +186,7 @@
             </div>
         </div>
 
-        <!-- Vehicle Grid -->
+        
         @if($vehicles->count() > 0)
             @php
                 $groupedVehicles = $vehicles->groupBy(function($v) {
@@ -216,20 +216,18 @@
                                         </div>
                                     @endif
 
-
-                                    <!-- Details Content (Top) -->
+                                    
                                     <div style="padding: 18px 18px 0px; position: relative; z-index: 2;">
                                         <h4 style="font-weight: 800; color: #ffffff; margin-bottom: 2px; font-size: 1.15rem; text-transform: uppercase; padding-right: 65px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ $vehicle->name }}">
                                             {{ $vehicle->name }} 
                                         </h4>
-
 
                                         <p style="color: var(--brand); font-size: 0.7rem; margin-bottom: 12px; font-weight: 600; display: flex; align-items: center; gap: 4px;">
                                             <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
                                             CDW, TP, TPL Insurance
                                         </p>
                                         
-                                        <!-- Specs Grid -->
+                                        
                                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px;">
                                             <div class="d-flex align-items-center gap-2" style="font-size: 0.72rem; color: #cbd5e1; font-weight: 500;">
                                                 <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="var(--brand)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
@@ -250,7 +248,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Image Container (Center) -->
+                                    
                                     <div style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 10px 24px; min-height: 160px; background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 70%); position: relative; z-index: 2;">
                                         @if($vehicle->image)
                                             <img src="{{ asset('storage/' . $vehicle->image) }}" alt="{{ $vehicle->name }}" style="max-width: 100%; max-height: 150px; object-fit: contain; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.5));">
@@ -259,7 +257,7 @@
                                         @endif
                                     </div>
 
-                                    <!-- Footer & Price (Bottom) -->
+                                    
                                     <div style="padding: 18px; border-top: 1px solid rgba(255,255,255,0.06); margin-top: auto; z-index: 2;">
                                         <div class="d-flex justify-content-between align-items-center mb-3">
                                             <div>
@@ -272,7 +270,7 @@
                                             </div>
                                         </div>
 
-                                        <!-- Centered Book Now Button -->
+                                        
                                         <div style="display: flex; justify-content: center; width: 100%; margin-top: 18px;">
                                             <button onclick="bookNow('{{ $vehicle->id }}')" class="btn" 
                                                     style="background: linear-gradient(135deg, #52ead2 0%, #00a4e4 100%); color: #0b1020; font-weight: 800; padding: 10px 28px; border-radius: 8px; border: none; font-size: 0.8rem; text-transform: uppercase; box-shadow: 0 4px 15px rgba(82, 234, 210, 0.2); transition: all 0.2s; width: 100%; max-width: 240px; text-align: center;"
@@ -282,7 +280,7 @@
                                             </button>
                                         </div>
 
-                                        <!-- Centered T&C Link -->
+                                        
                                         <div style="display: flex; justify-content: center; width: 100%; margin-top: 10px;">
                                             @if(!empty($vehicle->terms))
                                                 <a href="{{ route('vehicle.terms.public', $vehicle->id) }}" target="_blank" style="font-size: 0.7rem; color: var(--brand); text-decoration: underline; font-weight: 600;">Terms and Conditions</a>
@@ -294,7 +292,6 @@
                                     </div>
                                 </div>
                             </div>
-
 
                         @endforeach
                     </div>
@@ -314,7 +311,7 @@
 @endsection
 
 @section('js')
-<!-- Flatpickr CSS & JS for modern date picker -->
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
 <style>

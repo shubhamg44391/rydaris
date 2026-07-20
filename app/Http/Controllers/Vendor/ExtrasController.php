@@ -46,13 +46,38 @@ class ExtrasController extends Controller
         return view('vendor.extras.extras', compact('extras'));
     }
 
+    private function getVendorFeatures()
+    {
+        $vendor_features = \App\Models\VendorFeature::where('vendor_id', $this->vendorId())->orderBy('index_no')->get();
+        
+        $hasZeroOrDup = false;
+        $seen = [];
+        foreach ($vendor_features as $vf) {
+            if ($vf->index_no <= 0 || isset($seen[$vf->index_no])) {
+                $hasZeroOrDup = true;
+                break;
+            }
+            $seen[$vf->index_no] = true;
+        }
+
+        if ($hasZeroOrDup) {
+            foreach ($vendor_features as $k => $vf) {
+                $vf->index_no = $k + 1;
+                $vf->save();
+            }
+            $vendor_features = \App\Models\VendorFeature::where('vendor_id', $this->vendorId())->orderBy('index_no')->get();
+        }
+
+        return $vendor_features;
+    }
+
     public function createExtra()
     {
         if (!Auth::user()->canAddExtra()) {
             return redirect()->route('vendor.extras.index')->with('error', 'You have reached your maximum extras capacity based on your current plan. Upgrade your plan to add more extras.');
         }
         $groups = $this->getGroups();
-        $vendor_features = \App\Models\VendorFeature::where('vendor_id', $this->vendorId())->orderBy('index_no')->get();
+        $vendor_features = $this->getVendorFeatures();
         $insurances = VendorExtra::where('vendor_id', $this->vendorId())->where('type', 'insurance')->get();
         return view('vendor.extras.create', ['type' => 'extra', 'groups' => $groups, 'vendor_features' => $vendor_features, 'insurances' => $insurances]);
     }
@@ -61,7 +86,7 @@ class ExtrasController extends Controller
     {
         $item = VendorExtra::where('vendor_id', $this->vendorId())->findOrFail($id);
         $groups = $this->getGroups();
-        $vendor_features = \App\Models\VendorFeature::where('vendor_id', $this->vendorId())->orderBy('index_no')->get();
+        $vendor_features = $this->getVendorFeatures();
         $insurances = VendorExtra::where('vendor_id', $this->vendorId())->where('type', 'insurance')->get();
 
         $existing_mappings = \DB::table('vendor_extra_feature_mappings')
@@ -89,7 +114,7 @@ class ExtrasController extends Controller
             return redirect()->route('vendor.insurance.index')->with('error', 'You have reached your maximum insurance capacity based on your current plan. Upgrade your plan to add more insurances.');
         }
         $groups = $this->getGroups();
-        $vendor_features = \App\Models\VendorFeature::where('vendor_id', $this->vendorId())->orderBy('index_no')->get();
+        $vendor_features = $this->getVendorFeatures();
         $insurances = VendorExtra::where('vendor_id', $this->vendorId())->where('type', 'insurance')->get();
         return view('vendor.extras.create', ['type' => 'insurance', 'groups' => $groups, 'vendor_features' => $vendor_features, 'insurances' => $insurances]);
     }
@@ -98,7 +123,7 @@ class ExtrasController extends Controller
     {
         $item = VendorExtra::where('vendor_id', $this->vendorId())->findOrFail($id);
         $groups = $this->getGroups();
-        $vendor_features = \App\Models\VendorFeature::where('vendor_id', $this->vendorId())->orderBy('index_no')->get();
+        $vendor_features = $this->getVendorFeatures();
         $insurances = VendorExtra::where('vendor_id', $this->vendorId())->where('type', 'insurance')->get();
 
         $existing_mappings = \DB::table('vendor_extra_feature_mappings')
@@ -136,15 +161,13 @@ class ExtrasController extends Controller
         return view('vendor.extras.insurance', compact('insurances'));
     }
 
-
-
     public function rulesIndex()
     {
         $rules = VendorRule::where('vendor_id', $this->vendorId())->get();
         return view('vendor.extras.rules', compact('rules'));
     }
 
-    // --- Extras & Insurance ---
+    
     public function storeExtra(Request $request)
     {
         $type = $request->input('type');
@@ -213,7 +236,7 @@ class ExtrasController extends Controller
 
         $extra->update($request->except('features'));
 
-        // Sync features
+        
         $extra->features()->delete();
         if ($request->has('features')) {
             foreach ($request->features as $idx => $feature_title) {
@@ -244,12 +267,9 @@ class ExtrasController extends Controller
         return response()->json(['status' => 'success', 'new_status' => $extra->status]);
     }
 
-
-
     public function featuresIndex(Request $request)
     {
-        $vendor_id = $this->vendorId();
-        $features = \App\Models\VendorFeature::where('vendor_id', $vendor_id)->orderBy('index_no')->get();
+        $features = $this->getVendorFeatures();
         return view('vendor.extras.features', compact('features'));
     }
 
@@ -273,9 +293,13 @@ class ExtrasController extends Controller
         \App\Models\VendorFeature::where('vendor_id', $vendor_id)->delete();
 
         if ($request->has('features') && is_array($request->features)) {
+            $idx = 1;
             foreach ($request->features as $featureRow) {
                 $title = trim($featureRow['title'] ?? '');
-                $index_no = (int)($featureRow['index_no'] ?? 0);
+                $index_no = (int)($featureRow['index_no'] ?? $idx);
+                if ($index_no <= 0) {
+                    $index_no = $idx;
+                }
 
                 if (!empty($title)) {
                     \App\Models\VendorFeature::create([
@@ -284,6 +308,7 @@ class ExtrasController extends Controller
                         'index_no' => $index_no,
                         'status' => 1
                     ]);
+                    $idx++;
                 }
             }
         }
@@ -291,7 +316,7 @@ class ExtrasController extends Controller
         return redirect()->route('vendor.features.index')->with('success', 'Features updated successfully.');
     }
 
-    // --- Rules ---
+    
     public function storeRule(Request $request)
     {
         if (!Auth::user()->canAddRule()) {
@@ -327,7 +352,7 @@ class ExtrasController extends Controller
 
         $vendor_id = $this->vendorId();
         
-        // Ensure both belong to the logged-in vendor
+        
         $extra = VendorExtra::where('vendor_id', $vendor_id)->find($request->vendor_extra_id);
         $feature = \App\Models\VendorFeature::where('vendor_id', $vendor_id)->find($request->vendor_feature_id);
 

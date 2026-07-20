@@ -1,4 +1,4 @@
-{{-- Shared demo create/form page shell --}}
+
 @php
     $pageTitle = $pageTitle ?? 'Add';
     $backRoute = $backRoute ?? route('demo.dashboard');

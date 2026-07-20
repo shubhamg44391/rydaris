@@ -8,18 +8,16 @@ use App\Models\SiteSetting;
 
 class AdminSettingController extends Controller
 {
-    /**
-     * Show the Razorpay configuration form.
-     */
+    
+
     public function paymentSettings()
     {
         $settings = SiteSetting::firstOrCreate();
         return view('admin.settings.payment', compact('settings'));
     }
 
-    /**
-     * Update the Razorpay configuration.
-     */
+    
+
     public function updatePaymentSettings(Request $request)
     {
         $request->validate([
@@ -39,18 +37,16 @@ class AdminSettingController extends Controller
         return back()->with('success', 'Razorpay settings updated successfully.');
     }
 
-    /**
-     * Show the Mail / SMTP configuration form.
-     */
+    
+
     public function mailSettings()
     {
         $settings = SiteSetting::firstOrCreate();
         return view('admin.settings.mail', compact('settings'));
     }
 
-    /**
-     * Update the Mail / SMTP configuration.
-     */
+    
+
     public function updateMailSettings(Request $request)
     {
         $request->validate([
@@ -77,9 +73,8 @@ class AdminSettingController extends Controller
         return back()->with('success', 'Mail / SMTP settings updated successfully.');
     }
 
-    /**
-     * Send a test mail to verify SMTP settings.
-     */
+    
+
     public function sendTestMail(Request $request)
     {
         $request->validate([
@@ -87,7 +82,7 @@ class AdminSettingController extends Controller
         ]);
 
         try {
-            // Apply config dynamically
+            
             SiteSetting::setMailConfig();
             
             \Illuminate\Support\Facades\Mail::raw('This is a test email from Rydaris to verify your SMTP settings. If you receive this, your settings are correct!', function($message) use ($request) {

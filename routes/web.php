@@ -359,6 +359,7 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     Route::get('/payment', [\App\Http\Controllers\User\UserBookingController::class, 'paymentRedirect'])->name('user.payment.redirect');
     Route::get('/bookings/{id}/payment-page', [\App\Http\Controllers\User\UserBookingController::class, 'paymentPage'])->name('user.bookings.payment-page');
     Route::post('/bookings/{id}/payment-page', [\App\Http\Controllers\User\UserBookingController::class, 'processPaymentPage'])->name('user.bookings.payment-page.submit');
+    Route::post('/bookings/{id}/review', [\App\Http\Controllers\User\UserBookingController::class, 'submitReview'])->name('user.bookings.review.submit');
     // Support Ticket System (User Side)
     Route::get('/support-tickets', [\App\Http\Controllers\User\SupportTicketController::class, 'index'])->name('user.support-tickets.index');
     Route::get('/support-tickets/create', [\App\Http\Controllers\User\SupportTicketController::class, 'create'])->name('user.support-tickets.create');
@@ -522,6 +523,10 @@ Route::middleware(['auth', 'vendor'])->prefix('vendor')->group(function () {
         Route::get('/support-tickets/{id}', [\App\Http\Controllers\Vendor\SupportTicketController::class, 'show'])->name('vendor.support-tickets.show');
         Route::post('/support-tickets/{id}/reply', [\App\Http\Controllers\Vendor\SupportTicketController::class, 'reply'])->name('vendor.support-tickets.reply');
         Route::post('/support-tickets/{id}/close', [\App\Http\Controllers\Vendor\SupportTicketController::class, 'close'])->name('vendor.support-tickets.close');
+
+        // Customer Reviews (Vendor Side)
+        Route::get('/reviews', [\App\Http\Controllers\Vendor\VendorReviewController::class, 'index'])->name('vendor.reviews.index');
+        Route::delete('/reviews/{id}', [\App\Http\Controllers\Vendor\VendorReviewController::class, 'destroy'])->name('vendor.reviews.destroy');
     });
 });
 

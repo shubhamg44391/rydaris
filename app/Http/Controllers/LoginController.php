@@ -9,9 +9,8 @@ use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
-    /**
-     * Show the login form.
-     */
+    
+
     public function showLoginForm()
     {
         return view('frontend.login');
@@ -27,9 +26,8 @@ class LoginController extends Controller
         return view('frontend.admin-login');
     }
 
-    /**
-     * Handle Customer authentication attempt.
-     */
+    
+
     public function customerLogin(Request $request)
     {
         $credentials = $request->validate([
@@ -42,7 +40,7 @@ class LoginController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             $user = Auth::user();
             
-            // Strictly check if the user is a customer/user
+            
             if ($user->role !== 'user') {
                 Auth::logout();
                 throw ValidationException::withMessages([
@@ -64,9 +62,8 @@ class LoginController extends Controller
         ]);
     }
 
-    /**
-     * Handle Vendor authentication attempt.
-     */
+    
+
     public function vendorLogin(Request $request)
     {
         $credentials = $request->validate([
@@ -79,7 +76,7 @@ class LoginController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             $user = Auth::user();
 
-            // Strictly check if the user is a vendor
+            
             if ($user->role !== 'vendor') {
                 Auth::logout();
                 throw ValidationException::withMessages([
@@ -101,9 +98,8 @@ class LoginController extends Controller
         ]);
     }
 
-    /**
-     * Handle Admin authentication attempt.
-     */
+    
+
     public function adminLogin(Request $request)
     {
         $credentials = $request->validate([
@@ -116,7 +112,7 @@ class LoginController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             $user = Auth::user();
 
-            // Strictly check if the user is an admin or super_admin
+            
             if ($user->role !== 'admin' && $user->role !== 'super_admin') {
                 Auth::logout();
                 throw ValidationException::withMessages([
@@ -138,9 +134,8 @@ class LoginController extends Controller
         ]);
     }
 
-    /**
-     * Log user out of the application.
-     */
+    
+
     public function logout(Request $request)
     {
         Auth::logout();

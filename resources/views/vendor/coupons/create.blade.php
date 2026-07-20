@@ -22,7 +22,7 @@
         @csrf
         <input type="hidden" name="type" id="coupon_type" value="fixed">
 
-        <!-- Type Selector -->
+        
         <div class="row mb-5 justify-content-center">
             <div class="col-md-5">
                 <div class="type-selector" id="type-percentage" onclick="selectType('percentage')" style="cursor: pointer; padding: 20px; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 15px; background: rgba(11, 16, 32, 0.6); transition: all 0.3s;">
@@ -48,7 +48,7 @@
             </div>
         </div>
 
-        <!-- Form Card -->
+        
         <div class="card mx-auto" style="max-width: 900px; background: rgba(11, 16, 32, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px;">
             <div class="card-body p-5">
                 <div class="mb-4">

@@ -31,7 +31,7 @@
     @endif
 
     <div class="row">
-        <!-- Conversation Area -->
+        
         <div class="col-lg-8">
             <div style="background: rgba(11, 16, 32, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
                 <div style="padding: 24px; border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(11, 16, 32, 0.8);">
@@ -39,7 +39,7 @@
                 </div>
                 
                 <div style="padding: 24px; max-height: 500px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px;">
-                    <!-- Original Message (Created by Customer) -->
+                    
                     <div style="display: flex; flex-direction: column; align-items: flex-start; width: 100%;">
                         <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px 12px 12px 0; padding: 16px; max-width: 85%;">
                             <span style="font-weight: 700; color: #94a3b8; font-size: 0.8rem; display: block; margin-bottom: 6px;">{{ $ticket->user->first_name ?? $ticket->user->name }} (Customer)</span>
@@ -56,7 +56,7 @@
                         <small style="color: #64748b; margin-top: 4px; padding-left: 4px;">{{ $ticket->created_at->diffForHumans() }}</small>
                     </div>
 
-                    <!-- Replies -->
+                    
                     @foreach($ticket->replies as $reply)
                         @php
                             $isVendor = ($reply->user_id === auth()->id());
@@ -81,7 +81,7 @@
                     @endforeach
                 </div>
 
-                <!-- Submit Reply Box -->
+                
                 <div style="padding: 24px; background: rgba(11, 16, 32, 0.8); border-top: 1px solid rgba(255,255,255,0.05);">
                     <form action="{{ route('vendor.support-tickets.reply', $ticket->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
@@ -104,7 +104,7 @@
             </div>
         </div>
 
-        <!-- Ticket Details Sidebar -->
+        
         <div class="col-lg-4 mt-4 mt-lg-0">
             <div style="background: rgba(11, 16, 32, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
                 <h5 style="color: #f8fafc; font-weight: 700; margin-bottom: 20px; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 10px;">Ticket Details</h5>

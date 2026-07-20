@@ -49,12 +49,12 @@
                                         <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                                     </button>
 
-                                    <!-- Edit Button -->
+                                    
                                     <a href="{{ route('vendor.customers.edit', $customer->id) }}" class="icon-button edit-btn" title="Edit Customer" style="color: var(--brand, #52ead2); background: rgba(82, 234, 210, 0.1); border: 1px solid rgba(82, 234, 210, 0.2); padding: 6px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; text-decoration: none;">
                                         <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                                     </a>
 
-                                    <!-- Delete Button -->
+                                    
                                     <form action="{{ route('vendor.customers.destroy', $customer->id) }}" method="POST" class="delete-form" style="margin: 0;">
                                         @csrf
                                         @method('DELETE')
@@ -74,7 +74,7 @@
             </table>
         </div>
         
-        <!-- Pagination Controls -->
+        
         <div class="d-flex justify-content-between align-items-center px-4 py-3" style="border-top: 1px solid var(--line);">
             <div class="text-muted small">
                 Showing {{ $customers->firstItem() ?? 0 }} to {{ $customers->lastItem() ?? 0 }} of {{ $customers->total() }} entries
@@ -85,7 +85,7 @@
         </div>
     </div>
 
-    <!-- View Modal -->
+    
     <div id="viewModal" class="custom-modal">
         <div class="modal-content" style="max-width: 500px; padding: 25px; border-radius: 12px; background: rgba(11, 16, 32, 0.95); border: 1px solid rgba(82, 234, 210, 0.2); box-shadow: 0 24px 80px rgba(0,0,0,0.6); width: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; margin-bottom: 20px;">

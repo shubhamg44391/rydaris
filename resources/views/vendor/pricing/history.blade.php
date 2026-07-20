@@ -6,7 +6,7 @@
         <span style="color: #aab7cb; font-weight: 300;">Subscription /</span> History
     </h4>
 
-    {{-- Active Plan Banner --}}
+    
     @php $active = $subscriptions->firstWhere('status', 'active'); @endphp
     @if($active && $active->package)
         <div style="background: linear-gradient(135deg, rgba(82,234,210,0.12), rgba(82,234,210,0.04)); border: 1px solid rgba(82,234,210,0.3); border-radius: 16px; padding: 20px 24px; margin-bottom: 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
@@ -47,7 +47,7 @@
         </div>
     @endif
 
-    {{-- History Table --}}
+    
     <div class="admin-panel">
         <div class="panel-head" style="padding: 18px 24px; display: flex; align-items: center; justify-content: space-between;">
             <h2 style="font-size: 1rem; margin: 0; display: flex; align-items: center; gap: 8px;">
@@ -126,20 +126,19 @@
     </div>
 </div>
 
-<!-- Invoice Modal Wrapper -->
 <div id="invoiceModal" style="display: none; position: fixed; inset: 0; z-index: 100000; padding: 16px; box-sizing: border-box; align-items: center; justify-content: center;">
-    <!-- Backdrop -->
+    
     <div style="position: absolute; inset: 0; background: rgba(5, 7, 17, 0.85); backdrop-filter: blur(8px);" onclick="closeInvoiceModal()"></div>
     
-    <!-- Modal content container -->
+    
     <div style="position: relative; z-index: 1; width: 100%; max-width: 900px; height: calc(100vh - 40px); background: #050711; border-radius: 12px; overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,0.7); display: flex; flex-direction: column; border: 1px solid rgba(82, 234, 210, 0.25);">
-        <!-- Modal Header -->
+        
         <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; border-bottom: 1px solid rgba(82, 234, 210, 0.2); background: #0b1020;">
             <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: #ffffff;">Package Invoice</h3>
             <button onclick="closeInvoiceModal()" style="background: none; border: none; font-size: 24px; color: #94a3b8; cursor: pointer; line-height: 1;">&times;</button>
         </div>
         
-        <!-- Modal Body (Iframe) -->
+        
         <iframe id="invoiceIframe" style="width: 100%; height: 100%; border: none; background: #050711;"></iframe>
     </div>
 </div>

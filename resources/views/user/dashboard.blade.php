@@ -16,23 +16,35 @@
                 <table class="table table-borderless" style="color: #94a3b8; margin-bottom: 0;">
                     <thead>
                         <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
-                            <th style="font-weight: 600; color: #cbd5e1; padding-bottom: 15px;">Reservation #</th>
-                            <th style="font-weight: 600; color: #cbd5e1; padding-bottom: 15px;">Vehicle</th>
-                            <th style="font-weight: 600; color: #cbd5e1; padding-bottom: 15px;">Dates</th>
-                            <th style="font-weight: 600; color: #cbd5e1; padding-bottom: 15px;">Payment Method</th>
-                            <th style="font-weight: 600; color: #cbd5e1; padding-bottom: 15px;">Total</th>
-                            <th style="font-weight: 600; color: #cbd5e1; padding-bottom: 15px;">Paid</th>
-                            <th style="font-weight: 600; color: #cbd5e1; padding-bottom: 15px;">Pending</th>
-                            <th style="font-weight: 600; color: #cbd5e1; padding-bottom: 15px;">Status</th>
-                            <th style="font-weight: 600; color: #cbd5e1; padding-bottom: 15px; text-align: right;">Action</th>
+                            <th style="font-weight: 600; color: #cbd5e1; padding-bottom: 15px; white-space: nowrap;">Reservation #</th>
+                            <th style="font-weight: 600; color: #cbd5e1; padding-bottom: 15px; white-space: nowrap;">Vehicle</th>
+                            <th style="font-weight: 600; color: #cbd5e1; padding-bottom: 15px; white-space: nowrap;">Date & Time of Pickup</th>
+                            <th style="font-weight: 600; color: #cbd5e1; padding-bottom: 15px; white-space: nowrap;">Date & Time of Return</th>
+                            <th style="font-weight: 600; color: #cbd5e1; padding-bottom: 15px; white-space: nowrap;">Payment Method</th>
+                            <th style="font-weight: 600; color: #cbd5e1; padding-bottom: 15px; white-space: nowrap;">Total</th>
+                            <th style="font-weight: 600; color: #cbd5e1; padding-bottom: 15px; white-space: nowrap;">Paid</th>
+                            <th style="font-weight: 600; color: #cbd5e1; padding-bottom: 15px; white-space: nowrap;">Pending</th>
+                            <th style="font-weight: 600; color: #cbd5e1; padding-bottom: 15px; white-space: nowrap;">Status</th>
+                            <th style="font-weight: 600; color: #cbd5e1; padding-bottom: 15px; text-align: right; white-space: nowrap;">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($bookings as $booking)
                         <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                            <td style="padding: 15px 10px;">{{ $booking->reservation_number }}</td>
-                            <td style="padding: 15px 10px;">{{ $booking->vehicle ? $booking->vehicle->name : 'N/A' }}</td>
-                            <td style="padding: 15px 10px;">{{ $booking->pickup_date }} - {{ $booking->return_date }}</td>
+                            <td style="padding: 15px 10px; white-space: nowrap;">{{ $booking->reservation_number }}</td>
+                            <td style="padding: 15px 10px; white-space: nowrap;">{{ $booking->vehicle ? $booking->vehicle->name : 'N/A' }}</td>
+                            <td style="padding: 15px 10px; white-space: nowrap; font-size: 0.85rem; color: #4ade80;">
+                                {{ $booking->pickup_date_parsed ? $booking->pickup_date_parsed->format('Y/m/d') : $booking->pickup_date }}
+                                @if($booking->pickup_time)
+                                    <br><span style="font-size: 0.78rem; color: #52ead2;"><i class="fa fa-clock me-1"></i>{{ date('h:i A', strtotime($booking->pickup_time)) }}</span>
+                                @endif
+                            </td>
+                            <td style="padding: 15px 10px; white-space: nowrap; font-size: 0.85rem; color: #f87171;">
+                                {{ $booking->return_date_parsed ? $booking->return_date_parsed->format('Y/m/d') : $booking->return_date }}
+                                @if($booking->return_time)
+                                    <br><span style="font-size: 0.78rem; color: #52ead2;"><i class="fa fa-clock me-1"></i>{{ date('h:i A', strtotime($booking->return_time)) }}</span>
+                                @endif
+                            </td>
                             <td style="padding: 15px 10px; text-transform: capitalize;">{{ $booking->payment_method_label }}</td>
                             <td style="padding: 15px 10px; color: #f8fafc; font-weight: 600;">${{ number_format($booking->total_amount, 2) }}</td>
                             <td style="padding: 15px 10px; color: #52ead2;">${{ number_format($booking->paid_amount, 2) }}</td>
@@ -149,20 +161,19 @@
     }
 </style>
 
-<!-- Invoice Modal Wrapper -->
 <div id="invoiceModal" style="display: none; position: fixed; inset: 0; z-index: 100000; padding: 16px; box-sizing: border-box; align-items: center; justify-content: center;">
-    <!-- Backdrop -->
+    
     <div style="position: absolute; inset: 0; background: rgba(5, 7, 17, 0.85); backdrop-filter: blur(8px);" onclick="closeInvoiceModal()"></div>
     
-    <!-- Modal content container -->
+    
     <div style="position: relative; z-index: 1; width: 100%; max-width: 900px; height: calc(100vh - 40px); background: #050711; border-radius: 12px; overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,0.7); display: flex; flex-direction: column; border: 1px solid rgba(82, 234, 210, 0.25);">
-        <!-- Modal Header -->
+        
         <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; border-bottom: 1px solid rgba(82, 234, 210, 0.2); background: #0b1020;">
             <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: #ffffff;">Booking Invoice</h3>
             <button onclick="closeInvoiceModal()" style="background: none; border: none; font-size: 24px; color: #94a3b8; cursor: pointer; line-height: 1; transition: color 0.2s;" onmouseover="this.style.color='#52ead2'" onmouseout="this.style.color='#94a3b8'">&times;</button>
         </div>
         
-        <!-- Modal Body (Iframe) -->
+        
         <iframe id="invoiceIframe" style="width: 100%; height: 100%; border: none; background: #050711;"></iframe>
     </div>
 </div>

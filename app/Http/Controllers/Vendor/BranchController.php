@@ -16,9 +16,8 @@ class BranchController extends Controller
         return view('vendor.branches.index', compact('limit'));
     }
 
-    /**
-     * Get list of all branches for AJAX table loading.
-     */
+    
+
     public function list()
     {
         $branches = Branch::where('vendor_id', Auth::id())->orderBy('created_at', 'desc')->get();
@@ -34,9 +33,8 @@ class BranchController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created branch in database.
-     */
+    
+
     public function store(Request $request)
     {
         if (!auth()->user()->canAddBranch()) {
@@ -63,9 +61,8 @@ class BranchController extends Controller
         ]);
     }
 
-    /**
-     * Fetch edit data for single branch.
-     */
+    
+
     public function edit($id)
     {
         $branch = Branch::where('vendor_id', Auth::id())->findOrFail($id);
@@ -75,9 +72,8 @@ class BranchController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified branch.
-     */
+    
+
     public function update(Request $request, $id)
     {
         $branch = Branch::where('vendor_id', Auth::id())->findOrFail($id);
@@ -99,9 +95,8 @@ class BranchController extends Controller
         ]);
     }
 
-    /**
-     * Delete the specified branch.
-     */
+    
+
     public function destroy($id)
     {
         $branch = Branch::where('vendor_id', Auth::id())->findOrFail($id);
@@ -113,9 +108,8 @@ class BranchController extends Controller
         ]);
     }
 
-    /**
-     * Set the current active branch for the logged-in vendor.
-     */
+    
+
     public function selectBranch(Request $request)
     {
         $request->validate([
@@ -132,7 +126,7 @@ class BranchController extends Controller
             ]);
         }
 
-        // Verify the branch belongs to this vendor and is active
+        
         $branch = Branch::where('vendor_id', $user->id)
                         ->where('status', true)
                         ->findOrFail($request->branch_id);

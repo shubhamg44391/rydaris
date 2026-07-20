@@ -4,9 +4,9 @@
 <div class="booking-coverage-page" style="padding: 30px; min-height: 100vh;">
     <div class="container-fluid" style="max-width: 1400px; margin: 0 auto;">
         
-        <!-- Top Stepper -->
+        
         <div class="stepper-wrapper mb-5" style="background: rgba(11, 16, 32, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 25px; display: flex; justify-content: space-between; align-items: center; max-width: 800px; margin: 0 auto 40px;">
-            <!-- Step 1 -->
+            
             <div class="step text-center">
                 <div style="width: 35px; height: 35px; border-radius: 50%; background: rgba(82, 234, 210, 0.1); border: 1px solid var(--brand); color: var(--brand); display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-weight: 700;">
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -14,7 +14,7 @@
                 <span style="font-size: 0.75rem; color: var(--brand); font-weight: 600;">Search</span>
             </div>
             <div style="flex: 1; height: 1px; background: rgba(255, 255, 255, 0.1); margin: -20px 15px 0;"></div>
-            <!-- Step 2 -->
+            
             <div class="step text-center">
                 <div style="width: 35px; height: 35px; border-radius: 50%; background: rgba(82, 234, 210, 0.1); border: 1px solid var(--brand); color: var(--brand); display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-weight: 700;">
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -22,7 +22,7 @@
                 <span style="font-size: 0.75rem; color: var(--brand); font-weight: 600;">Car Listing</span>
             </div>
             <div style="flex: 1; height: 1px; background: rgba(255, 255, 255, 0.1); margin: -20px 15px 0;"></div>
-            <!-- Step 3 -->
+            
             <div class="step text-center">
                 <div style="width: 35px; height: 35px; border-radius: 50%; background: rgba(82, 234, 210, 0.1); border: 1px solid var(--brand); color: var(--brand); display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-weight: 700;">
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -30,7 +30,7 @@
                 <span style="font-size: 0.75rem; color: var(--brand); font-weight: 600;">Coverage</span>
             </div>
             <div style="flex: 1; height: 1px; background: rgba(255, 255, 255, 0.1); margin: -20px 15px 0;"></div>
-            <!-- Step 4 (Completed) -->
+            
             <div class="step text-center" id="stepper-step-4">
                 <div style="width: 35px; height: 35px; border-radius: 50%; background: rgba(82, 234, 210, 0.1); border: 1px solid var(--brand); color: var(--brand); display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-weight: 700;">
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -38,7 +38,7 @@
                 <span style="font-size: 0.75rem; color: var(--brand); font-weight: 600;">Information</span>
             </div>
             <div style="flex: 1; height: 1px; background: rgba(255, 255, 255, 0.1); margin: -20px 15px 0;"></div>
-            <!-- Step 5 (Active) -->
+            
             <div class="step text-center" id="stepper-step-5">
                 <div class="stepper-circle" style="width: 35px; height: 35px; border-radius: 50%; background: var(--brand); color: #0b1020; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-weight: 800; box-shadow: 0 4px 15px rgba(82, 234, 210, 0.3);">
                     5
@@ -49,11 +49,11 @@
 
         <div class="row g-4">
             
-            <!-- Left Column: Coverage & Extras -->
+            
             <div class="col-lg-8">
                 
-                <!-- Coverage Packages -->
-                <!-- STEP 5 CONTENT (Payment Options) -->
+                
+                
                 <div id="step-5-content" style="animation: fadeIn 0.4s ease forwards;">
                     <div class="card mb-4" style="background: rgba(11, 16, 32, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; overflow: hidden;">
                         <div class="card-header border-0 p-4 pb-2" style="background: transparent;">
@@ -97,7 +97,7 @@
                             </div>
                             @endif
                             
-                            <!-- Payment Option 1: Pay on Arrival -->
+                            
                             @if($showArrival)
                             <label class="payment-method-card mb-3" style="display: block; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 20px; cursor: pointer; transition: all 0.2s;">
                                 <div class="d-flex align-items-start">
@@ -115,7 +115,7 @@
                             </label>
                             @endif
 
-                            <!-- Payment Option 2: Deposit -->
+                            
                             @if($showDeposit)
                             @php
                                 $depositAmount = $grandTotal * ($depositPercent / 100);
@@ -136,7 +136,7 @@
                             </label>
                             @endif
 
-                            <!-- Payment Option 3: Full Amount -->
+                            
                             @if($showFull)
                             @php
                                 $discountMultiplier = (100 - $fullDiscountPercent) / 100;
@@ -158,13 +158,13 @@
                             </label>
                             @endif
 
-                            <!-- Terms and Conditions -->
+                            
                             <label style="display: inline-flex; align-items: center; gap: 8px; cursor: pointer; margin-bottom: 18px; user-select: none;">
                                 <input type="checkbox" id="termsCheckbox" style="width: 18px; height: 18px; flex-shrink: 0; accent-color: var(--brand); cursor: pointer;">
                                 <span style="color: #f8fafc; font-size: 0.9rem; font-weight: 600; white-space: nowrap;">I agree to the <a href="{{ route('vendor.terms.public', $vehicle->vendor_id) }}" target="_blank" style="color: var(--brand); text-decoration: underline;">Terms &amp; Conditions</a></span>
                             </label>
 
-                            <!-- Warnings & Instructions -->
+                            
                             <div style="background: rgba(245, 184, 92, 0.1); border: 1px solid rgba(245, 184, 92, 0.3); border-radius: 8px; padding: 15px; margin-bottom: 20px;">
                                 <p style="color: #f5b85c; margin: 0; font-size: 0.85rem; font-weight: 700;">Local Test Mode: Google reCAPTCHA validation is bypassed on localhost.</p>
                             </div>
@@ -181,12 +181,12 @@
                                 </div>
                             </div>
 
-                            <!-- Confirm Booking Button -->
+                            
                             <button type="button" onclick="confirmBooking()" class="btn w-100 py-3" style="background: linear-gradient(135deg, #52ead2 0%, #00a4e4 100%); color: #0b1020; font-weight: 800; font-size: 1.1rem; border-radius: 8px; border: none; box-shadow: 0 8px 25px rgba(82, 234, 210, 0.3); text-transform: uppercase; letter-spacing: 1px; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 10px 30px rgba(82, 234, 210, 0.45)'" onmouseout="this.style.transform='none'; this.style.boxShadow='0 8px 25px rgba(82, 234, 210, 0.3)'">
                                 Confirm Booking
                             </button>
                             
-                            <!-- Payment Logos -->
+                            
                             <div class="d-flex justify-content-center align-items-center gap-3 mt-4">
                                 <span style="color: #94a3b8; font-size: 0.85rem; font-weight: 600;">We accept:</span>
                                 <div style="display: flex; align-items: center; gap: 15px;">
@@ -200,28 +200,26 @@
                     </div>
                 </div>
 
-
-
             </div>
 
-            <!-- Right Column: Summary Sidebar -->
+            
             <div class="col-lg-4" id="sidebar-summary-box">
                 <div class="summary-sidebar sticky-top" style="top: 20px;">
                     <div class="card" style="background: rgba(16, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
                         
-                        <!-- Image -->
+                        
                         <div style="background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 70%); height: 160px; display: flex; align-items: center; justify-content: center; padding: 20px;">
                             @if($vehicle->image)
                                 <img src="{{ asset('storage/' . $vehicle->image) }}" alt="{{ $vehicle->name }}" style="max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.5));">
                             @endif
                         </div>
                         
-                        <!-- Vehicle Name -->
+                        
                         <div class="p-4 pb-0">
                             <h3 style="font-weight: 800; color: #ffffff; font-size: 1.4rem;">{{ $vehicle->name }}</h3>
                         </div>
 
-                        <!-- Pick-up / Return Details -->
+                        
                         <div class="p-4">
                             <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 15px; margin-bottom: 25px;">
                                 <div class="mb-3">
@@ -241,7 +239,7 @@
                                 </div>
                             </div>
 
-                            <!-- Cost Breakdown -->
+                            
                             <div class="cost-breakdown">
                                 <h6 style="color: #f8fafc; font-size: 0.9rem; font-weight: 700; margin-bottom: 15px; margin-top: 10px;">Selected Options</h6>
                                 
@@ -276,13 +274,13 @@
                             </div>
                         </div>
 
-                        <!-- Grand Total -->
+                        
                         <div class="p-4" style="background: rgba(82, 234, 210, 0.05); border-top: 1px solid rgba(82, 234, 210, 0.15); display: flex; justify-content: space-between; align-items: center;">
                             <span style="color: #f8fafc; font-weight: 800; font-size: 1.1rem;">Total Amount</span>
                             <span style="color: #52ead2; font-weight: 900; font-size: 1.4rem;">${{ number_format($grandTotal, 2) }}</span>
                         </div>
                         
-                        <!-- Breakdown Additions (Visible in Step 5) -->
+                        
                         <div id="step-5-summary-additions" style="background: rgba(82, 234, 210, 0.02); padding: 15px 24px; border-top: 1px dashed rgba(255,255,255,0.1);">
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <span style="color: #94a3b8; font-size: 0.9rem; font-weight: 600;">Paid Now (5%)</span>
@@ -305,7 +303,7 @@
                         @endphp
 
                         @if(count($activeCoupons) > 0)
-                            <!-- Apply Coupon (Hidden in Step 5) -->
+                            
                             <div id="coupon-box" class="p-4 border-top" style="display: none; border-color: rgba(255,255,255,0.05) !important;">
                                 <label style="color: #f8fafc; font-size: 0.85rem; font-weight: 700; margin-bottom: 8px; display: block;">Apply Coupon</label>
                                 <div class="d-flex gap-2">

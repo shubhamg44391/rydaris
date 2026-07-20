@@ -56,9 +56,9 @@
                 <div class="col-md-4">
                     <label class="form-label-custom" style="font-weight: 600;">Encryption</label>
                     <select name="smtp_encryption" class="form-control-custom w-100" style="background: rgba(11, 16, 32, 0.8); color: #f8fafc; border: 1px solid rgba(82, 234, 210, 0.2); padding: 8px 12px; border-radius: 6px;">
-                        <option value="" style="color: #000;">None</option>
-                        <option value="tls" {{ (old('smtp_encryption', $setting->smtp_encryption ?? '') == 'tls') ? 'selected' : '' }} style="color: #000;">TLS</option>
-                        <option value="ssl" {{ (old('smtp_encryption', $setting->smtp_encryption ?? '') == 'ssl') ? 'selected' : '' }} style="color: #000;">SSL</option>
+                        <option value="" style="background: #0b1020; color: #f8fafc;">None</option>
+                        <option value="tls" {{ (old('smtp_encryption', $setting->smtp_encryption ?? '') == 'tls') ? 'selected' : '' }} style="background: #0b1020; color: #f8fafc;">TLS</option>
+                        <option value="ssl" {{ (old('smtp_encryption', $setting->smtp_encryption ?? '') == 'ssl') ? 'selected' : '' }} style="background: #0b1020; color: #f8fafc;">SSL</option>
                     </select>
                     @error('smtp_encryption') <span style="color: #ef4444; font-size: 0.85rem;">{{ $message }}</span> @enderror
                 </div>

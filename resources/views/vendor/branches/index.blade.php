@@ -16,7 +16,7 @@
         </div>
 
         <div class="panel-body admin-table-wrap" style="position: relative;">
-            <!-- Loading Indicator -->
+            
             <div id="tableLoader" style="position: absolute; inset: 0; background: rgba(5, 7, 17, 0.7); display: flex; align-items: center; justify-content: center; z-index: 10;">
                 <div style="width: 40px; height: 40px; border: 3px solid rgba(255, 255, 255, 0.1); border-top: 3px solid var(--brand, #52ead2); border-radius: 50%; animation: spin 1s linear infinite;"></div>
             </div>
@@ -31,13 +31,13 @@
                     </tr>
                 </thead>
                 <tbody id="branchesTableBody">
-                    <!-- Loaded via AJAX -->
+                    
                 </tbody>
             </table>
         </div>
     </div>
 
-    <!-- Add Branch Modal -->
+    
     <div id="addModal" style="position: fixed; inset: 0; background: rgba(5, 7, 17, 0.85); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 99999;">
         <div style="background: #0b1020; border: 1px solid rgba(82, 234, 210, 0.25); border-radius: 16px; width: 100%; max-width: 500px; padding: 30px; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px;">
@@ -59,7 +59,7 @@
         </div>
     </div>
 
-    <!-- Edit Branch Modal -->
+    
     <div id="editModal" style="position: fixed; inset: 0; background: rgba(5, 7, 17, 0.85); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 99999;">
         <div style="background: #0b1020; border: 1px solid rgba(82, 234, 210, 0.25); border-radius: 16px; width: 100%; max-width: 500px; padding: 30px; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px;">

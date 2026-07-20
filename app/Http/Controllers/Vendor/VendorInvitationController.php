@@ -13,9 +13,8 @@ use Illuminate\Support\Str;
 
 class VendorInvitationController extends Controller
 {
-    /**
-     * Display a listing of invitations.
-     */
+    
+
     public function index()
     {
         $vendorId = auth()->id();
@@ -31,9 +30,8 @@ class VendorInvitationController extends Controller
         return view('vendor.invitations.index', compact('invitations', 'totalCount', 'acceptedCount', 'pendingCount'));
     }
 
-    /**
-     * Show the form for creating a new invitation.
-     */
+    
+
     public function create()
     {
         if (!auth()->user()->canAddInvitation()) {
@@ -42,9 +40,8 @@ class VendorInvitationController extends Controller
         return view('vendor.invitations.create');
     }
 
-    /**
-     * Store a newly created invitation in storage.
-     */
+    
+
     public function store(Request $request)
     {
         $request->validate([
@@ -54,7 +51,7 @@ class VendorInvitationController extends Controller
             'email.unique' => 'A registered user already exists with this email address.',
         ]);
 
-        // Check if there is already a pending invitation for this email from this vendor
+        
         $existing = UserInvitation::where('vendor_id', auth()->id())
             ->where('email', $request->email)
             ->where('status', 'pending')
@@ -64,7 +61,7 @@ class VendorInvitationController extends Controller
             return back()->withInput()->withErrors(['email' => 'A pending invitation has already been sent to this email address.']);
         }
 
-        // Check if vendor has reached user capacity
+        
         $vendor = auth()->user();
         if (!$vendor->canAddInvitation()) {
             return back()->withInput()->withErrors(['email' => 'You have reached your maximum invitation capacity based on your current plan. Upgrade your plan to send more invitations.']);
@@ -88,7 +85,7 @@ class VendorInvitationController extends Controller
             }
         }
 
-        // Create Invitation
+        
         $invitation = UserInvitation::create([
             'vendor_id' => auth()->id(),
             'email'     => $request->email,
@@ -97,13 +94,13 @@ class VendorInvitationController extends Controller
             'status'    => 'pending',
         ]);
 
-        // Set Mail Configuration and send invitation
+        
         VendorSmtpSetting::setMailConfig(auth()->id());
         
         try {
             Mail::to($invitation->email)->send(new InviteUserMail($invitation));
         } catch (\Exception $e) {
-            // If mail fails, delete invitation and return error
+            
             $invitation->delete();
             return back()->withInput()->withErrors(['email' => 'Failed to send invitation email: ' . $e->getMessage()]);
         }
@@ -111,9 +108,8 @@ class VendorInvitationController extends Controller
         return redirect()->route('vendor.invitations.index')->with('success', 'Invitation sent successfully.');
     }
 
-    /**
-     * Show the form for editing the specified invitation.
-     */
+    
+
     public function edit($id)
     {
         $invitation = UserInvitation::where('id', $id)
@@ -124,9 +120,8 @@ class VendorInvitationController extends Controller
         return view('vendor.invitations.edit', compact('invitation'));
     }
 
-    /**
-     * Update the specified invitation in storage.
-     */
+    
+
     public function update(Request $request, $id)
     {
         $invitation = UserInvitation::where('id', $id)
@@ -148,7 +143,7 @@ class VendorInvitationController extends Controller
             'name'  => $request->name,
         ]);
 
-        // If the email has changed, we should automatically resend the invitation
+        
         if ($oldEmail !== $request->email) {
             VendorSmtpSetting::setMailConfig(auth()->id());
             try {
@@ -161,9 +156,8 @@ class VendorInvitationController extends Controller
         return redirect()->route('vendor.invitations.index')->with('success', 'Invitation updated successfully.');
     }
 
-    /**
-     * Remove the specified invitation from storage.
-     */
+    
+
     public function destroy($id)
     {
         $invitation = UserInvitation::where('id', $id)
@@ -175,9 +169,8 @@ class VendorInvitationController extends Controller
         return redirect()->route('vendor.invitations.index')->with('success', 'Invitation deleted successfully.');
     }
 
-    /**
-     * Resend the specified invitation.
-     */
+    
+
     public function resend($id)
     {
         $invitation = UserInvitation::where('id', $id)

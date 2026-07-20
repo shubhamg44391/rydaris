@@ -7,7 +7,7 @@
 </div>
 
 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start;">
-    <!-- Profile Information -->
+    
     <div class="glass-card" style="padding: 30px;">
         <h2 style="font-size: 1.25rem; font-weight: 600; color: #fff; margin: 0 0 20px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05);">Profile Information</h2>
         <form onsubmit="demoProfileSave(event)">
@@ -89,9 +89,9 @@
         </form>
     </div>
 
-    <!-- Right column -->
+    
     <div style="display:flex; flex-direction:column; gap:30px;">
-        <!-- Change Password -->
+        
         <div class="glass-card" style="padding: 30px;">
             <h2 style="font-size: 1.25rem; font-weight: 600; color: #fff; margin: 0 0 20px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05);">Change Password</h2>
             <form onsubmit="demoProfileSave(event)">
@@ -111,7 +111,7 @@
             </form>
         </div>
 
-        <!-- Default Active Branch -->
+        
         <div class="glass-card" style="padding: 30px;">
             <h2 style="font-size: 1.25rem; font-weight: 600; color: #fff; margin: 0 0 20px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05);">Default Active Branch</h2>
             <form onsubmit="demoProfileSave(event)">

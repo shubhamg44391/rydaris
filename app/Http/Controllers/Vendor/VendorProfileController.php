@@ -10,9 +10,8 @@ use Illuminate\Validation\Rules\Password;
 
 class VendorProfileController extends Controller
 {
-    /**
-     * Display the profile page.
-     */
+    
+
     public function index()
     {
         $user = Auth::user();
@@ -23,9 +22,8 @@ class VendorProfileController extends Controller
         return view('vendor.profile.index', compact('user', 'branches'));
     }
 
-    /**
-     * Update profile details.
-     */
+    
+
     public function update(Request $request)
     {
         $user = Auth::user();
@@ -93,9 +91,8 @@ class VendorProfileController extends Controller
         return redirect()->back()->with('success', 'Profile updated successfully.');
     }
 
-    /**
-     * Update password.
-     */
+    
+
     public function updatePassword(Request $request)
     {
         $user = Auth::user();

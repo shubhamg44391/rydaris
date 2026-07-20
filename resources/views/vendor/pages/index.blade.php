@@ -6,7 +6,7 @@
 
 <div style="padding: 0 0 40px 0;">
 
-    {{-- Page Header --}}
+    
     <div style="margin-bottom: 28px;">
         <h1 style="font-size: 1.55rem; font-weight: 800; color: #f1f5f9; margin: 0 0 6px 0; display: flex; align-items: center; gap: 10px;">
             <svg viewBox="0 0 24 24" style="width:22px;height:22px;fill:none;stroke:#52ead2;stroke-width:2;flex-shrink:0;">
@@ -23,7 +23,7 @@
         </p>
     </div>
 
-    {{-- Flash Messages --}}
+    
     @if(session('success'))
         <div style="background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.3); color: #34d399; padding: 13px 18px; border-radius: 10px; margin-bottom: 22px; display: flex; align-items: center; gap: 10px; font-size: 0.92rem;">
             <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;flex-shrink:0;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
@@ -31,13 +31,13 @@
         </div>
     @endif
 
-    {{-- Form Card --}}
+    
     <div style="background: var(--surface, #0f2235); border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; padding: 32px;">
 
         <form action="{{ route('vendor.pages.store') }}" method="POST" id="tc-form">
             @csrf
 
-            {{-- Title --}}
+            
             <div style="margin-bottom: 22px;">
                 <label style="display: block; font-size: 0.84rem; font-weight: 600; color: #94a3b8; margin-bottom: 8px; letter-spacing: 0.03em; text-transform: uppercase;">
                     Title <span style="color: #fb7185; font-size: 1rem;">*</span>
@@ -56,7 +56,7 @@
                 @enderror
             </div>
 
-            {{-- Description / Content with CKEditor 4 --}}
+            
             <div style="margin-bottom: 22px;">
                 <label style="display: block; font-size: 0.84rem; font-weight: 600; color: #94a3b8; margin-bottom: 8px; letter-spacing: 0.03em; text-transform: uppercase;">
                     Content / Description <span style="color: #fb7185; font-size: 1rem;">*</span>
@@ -77,7 +77,7 @@
 
           
 
-            {{-- Footer Buttons --}}
+            
             <div style="display: flex; align-items: center; gap: 12px; padding-top: 8px;">
                 <button type="submit"
                     style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 28px; background: var(--brand, #52ead2); color: #051013; border: none; border-radius: 9px; font-weight: 700; font-size: 0.94rem; cursor: pointer; transition: opacity 0.2s; letter-spacing: 0.01em;"

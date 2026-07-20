@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Booking Invoice - #{{ $booking->reservation_number }}</title>
-    <!-- Fonts -->
+    
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-    <!-- FontAwesome for icons -->
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     
     <style>
@@ -407,7 +407,7 @@
 </head>
 <body>
 
-    <!-- Controls Row -->
+    
     <div class="controls">
         <a href="javascript:void(0);" onclick="window.parent.closeInvoiceModal ? window.parent.closeInvoiceModal() : window.history.back();" class="back-btn">
             <i class="fa fa-arrow-left"></i> Back to Dashboard
@@ -422,7 +422,7 @@
         </div>
     </div>
 
-    <!-- Invoice Sheet -->
+    
     @php
         $logoBase64 = null;
         $vendor = $booking->vehicle->vendor ?? null;
@@ -441,15 +441,13 @@
         $rentalDays = $pDate->diffInDays($rDate);
         $rentalDays = $rentalDays > 0 ? $rentalDays : 1;
         
-        // Calculate GST Tax breakdown (18%)
+        // Calculate Subtotal & Total Amount
         $totalAmount = (float)$booking->total_amount;
-        $subtotal = $totalAmount / 1.18;
-        $cgst = $subtotal * 0.09;
-        $sgst = $subtotal * 0.09;
+        $subtotal = $totalAmount;
     @endphp
     
     <div class="invoice-card">
-        <!-- Logo & Header -->
+        
         <div class="invoice-header">
             <div>
                 @if($logoBase64)
@@ -468,7 +466,7 @@
 
         <div class="separator-line"></div>
 
-        <!-- Details Row -->
+        
         <div class="details-row">
             <div class="details-col">
                 <h4>Booking Details</h4>
@@ -522,7 +520,7 @@
             </div>
         </div>
 
-        <!-- Rental Locations Box -->
+        
         <div class="section-box">
             <div class="section-header">Rental Details</div>
             <div class="section-body" style="display: flex; gap: 20px;">
@@ -540,7 +538,7 @@
             </div>
         </div>
 
-        <!-- Itemized Table -->
+        
         <table class="invoice-table">
             <thead>
                 <tr>
@@ -550,7 +548,7 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Vehicle -->
+                
                 <tr>
                     <td class="vehicle-desc">
                         {{ $booking->vehicle->name }} ({{ $booking->vehicle->type ?? 'Vehicle Rental' }})
@@ -559,7 +557,7 @@
                     <td align="right" style="font-weight: 600;">${{ number_format($booking->total_amount, 2) }}</td>
                 </tr>
                 
-                <!-- Extras if any -->
+                
                 @foreach($booking->extras as $extra)
                 <tr>
                     <td class="extra-desc">
@@ -572,23 +570,15 @@
             </tbody>
         </table>
 
-        <!-- Summary Panel -->
+        
         <div class="summary-wrapper">
             <div class="summary-table">
                 <div class="summary-row">
-                    <span>Subtotal (Excl. Tax):</span>
+                    <span>Subtotal:</span>
                     <span>${{ number_format($subtotal, 2) }}</span>
                 </div>
-                <div class="summary-row">
-                    <span>CGST (9%):</span>
-                    <span>${{ number_format($cgst, 2) }}</span>
-                </div>
-                <div class="summary-row">
-                    <span>SGST (9%):</span>
-                    <span>${{ number_format($sgst, 2) }}</span>
-                </div>
                 <div class="summary-row total">
-                    <span>Total Amount (incl. 18.00% GST):</span>
+                    <span>Total Amount:</span>
                     <span style="color: var(--brand-dark);">${{ number_format($totalAmount, 2) }}</span>
                 </div>
                 <div class="summary-row summary-dashed">
@@ -609,7 +599,7 @@
         </div>
     </div>
 
-    <!-- html2pdf scripts -->
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
         document.getElementById('download-pdf-btn').addEventListener('click', function() {

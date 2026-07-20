@@ -122,9 +122,9 @@
           </div>
         </section>
 
-        <!-- KPI Metrics Section for Vendor -->
+        
         <section class="admin-kpis" aria-label="Vendor KPIs" style="margin-top: 22px; margin-bottom: 22px;">
-          <!-- Monthly Earnings -->
+          
           <article class="kpi-card">
             <div class="kpi-top">
               <span class="admin-icon" style="background: rgba(82,234,210,0.12); border-radius: 10px; display: flex; align-items: center; justify-content: center; width: 42px; height: 42px;">
@@ -138,7 +138,7 @@
             <span>monthly rental earnings</span>
           </article>
 
-          <!-- Total Vehicles -->
+          
           <article class="kpi-card">
             <div class="kpi-top">
               <span class="admin-icon" style="background: rgba(129,140,248,0.12); border-radius: 10px; display: flex; align-items: center; justify-content: center; width: 42px; height: 42px;">
@@ -154,7 +154,7 @@
             <span>total fleet vehicles</span>
           </article>
 
-          <!-- Total Bookings -->
+          
           <article class="kpi-card">
             <div class="kpi-top">
               <span class="admin-icon" style="background: rgba(251,191,36,0.12); border-radius: 10px; display: flex; align-items: center; justify-content: center; width: 42px; height: 42px;">
@@ -170,21 +170,21 @@
             <span>total rental bookings</span>
           </article>
 
-          <!-- Rating -->
-          <article class="kpi-card">
+          
+          <article class="kpi-card" onclick="window.location.href='{{ route('vendor.reviews.index') }}'" style="cursor: pointer;">
             <div class="kpi-top">
-              <span class="admin-icon" style="background: rgba(251,113,133,0.12); border-radius: 10px; display: flex; align-items: center; justify-content: center; width: 42px; height: 42px;">
-                <svg viewBox="0 0 24 24" fill="#fb7185" stroke="#fb7185" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;">
+              <span class="admin-icon" style="background: rgba(251,191,36,0.12); border-radius: 10px; display: flex; align-items: center; justify-content: center; width: 42px; height: 42px;">
+                <svg viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;">
                   <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
                 </svg>
               </span>
             </div>
-            <strong>4.9 ★</strong>
-            <span>customer review score</span>
+            <strong style="color: #fbbf24;">{{ number_format($avgRating, 1) }} ★</strong>
+            <span>customer review score ({{ $totalReviewsCount }} reviews)</span>
           </article>
         </section>
 
-        <!-- Charts Grid Section for Vendor -->
+        
         <section id="analytics" class="admin-grid" style="margin-bottom: 22px;">
           <article class="admin-panel">
             <div class="panel-head" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
@@ -244,7 +244,7 @@
           </article>
         </section>
 
-        <!-- Fleet Health and Activity Lists -->
+        
         <section class="admin-grid" style="margin-bottom: 22px;">
           <article class="admin-panel">
             <div class="panel-head">

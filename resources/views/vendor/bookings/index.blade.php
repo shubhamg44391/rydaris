@@ -71,6 +71,7 @@
                         <th style="white-space: nowrap;">Payment Reference</th>
                         <th style="white-space: nowrap;">Booking Status</th>
                         <th style="white-space: nowrap;">Payment Status</th>
+                        <th style="white-space: nowrap;">Customer Review</th>
                         <th style="white-space: nowrap;">Terms & Conditions</th>
                         <th style="white-space: nowrap;">Action</th>
                     </tr>
@@ -97,13 +98,19 @@
                                 {{ $booking->pickupLocation->name ?? 'N/A' }}
                             </td>
                             <td style="white-space: nowrap;">
-                                {{ $booking->pickup_date }} {{ $booking->pickup_time }}
+                                {{ $booking->pickup_date_parsed ? $booking->pickup_date_parsed->format('Y/m/d') : $booking->pickup_date }}
+                                @if($booking->pickup_time)
+                                    <br><span style="font-size: 0.78rem; color: #52ead2;"><i class="fa fa-clock me-1"></i>{{ date('h:i A', strtotime($booking->pickup_time)) }}</span>
+                                @endif
                             </td>
                             <td style="white-space: nowrap;">
                                 {{ $booking->returnLocation->name ?? 'N/A' }}
                             </td>
                             <td style="white-space: nowrap;">
-                                {{ $booking->return_date }} {{ $booking->return_time }}
+                                {{ $booking->return_date_parsed ? $booking->return_date_parsed->format('Y/m/d') : $booking->return_date }}
+                                @if($booking->return_time)
+                                    <br><span style="font-size: 0.78rem; color: #52ead2;"><i class="fa fa-clock me-1"></i>{{ date('h:i A', strtotime($booking->return_time)) }}</span>
+                                @endif
                             </td>
                             <td style="white-space: nowrap;">
                                 ₹{{ number_format($booking->paid_amount, 2) }}
@@ -121,6 +128,7 @@
                                     <select class="form-select status-dropdown" data-id="{{ $booking->id }}" style="background: rgba(255, 255, 255, 0.05); color: #f8fafc; border: 1px solid rgba(255, 255, 255, 0.2); padding: 5px 10px; border-radius: 4px; width: 140px; {{ $booking->booking_status == 'confirmed' ? 'color: #4ade80;' : ($booking->booking_status == 'pending' ? 'color: #facc15;' : '') }}">
                                         <option value="pending" style="background: #1e293b; color: #f8fafc;" {{ $booking->booking_status == 'pending' ? 'selected' : '' }}>Pending</option>
                                         <option value="confirmed" style="background: #1e293b; color: #f8fafc;" {{ $booking->booking_status == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
+                                        <option value="completed" style="background: #1e293b; color: #4ade80;" {{ $booking->booking_status == 'completed' ? 'selected' : '' }}>Completed</option>
                                         <option value="cancelled" style="background: #1e293b; color: #f8fafc;" {{ $booking->booking_status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
                                         <option value="confirm_request" style="background: #1e293b; color: #f8fafc;" {{ $booking->booking_status == 'confirm_request' ? 'selected' : '' }}>Confirm Request</option>
                                     </select>
@@ -129,6 +137,19 @@
                                     <span class="badge" style="{{ $booking->payment_status == 'paid' ? 'background: rgba(74,222,128,0.1); color: #4ade80; border: 1px solid rgba(74,222,128,0.2);' : 'background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.2);' }} padding: 5px 10px;">
                                         {{ ucfirst($booking->payment_status) }}
                                     </span>
+                                </td>
+                                <td style="padding: 15px 20px; white-space: nowrap;">
+                                    @if($booking->review)
+                                        <a href="{{ route('vendor.reviews.index') }}" class="badge" style="background: rgba(251, 191, 36, 0.15); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.4); text-decoration: none; padding: 5px 10px; font-size: 0.8rem;" title="View Customer Review">
+                                            <i class="fa fa-star me-1"></i> {{ $booking->review->rating }}★ Review
+                                        </a>
+                                    @elseif($booking->is_completed_or_ended)
+                                        <span class="badge" style="background: rgba(255, 255, 255, 0.05); color: #94a3b8; border: 1px solid rgba(255, 255, 255, 0.1); padding: 5px 10px; font-size: 0.78rem;" title="Trip Ended - Awaiting Customer Review">
+                                            <i class="fa fa-star-half-alt me-1" style="color: #fbbf24;"></i> Trip Ended
+                                        </span>
+                                    @else
+                                        <span style="font-size: 0.78rem; color: #64748b;">In Progress</span>
+                                    @endif
                                 </td>
                                 <td style="padding: 15px 20px; white-space: nowrap;">
                                     <a href="{{ route('vendor.terms.public', auth()->id()) }}" target="_blank"
@@ -156,7 +177,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="16" class="text-center" style="padding: 30px; color: #94a3b8;">
+                                <td colspan="17" class="text-center" style="padding: 30px; color: #94a3b8;">
                                     <div class="mb-3">
                                         <svg viewBox="0 0 24 24" style="width:48px;height:48px;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;">
                                             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>

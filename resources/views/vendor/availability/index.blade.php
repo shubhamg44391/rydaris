@@ -164,7 +164,6 @@
     .rate-table th:nth-child(1) { left: 0 !important; z-index: 12 !important; width: 100px; background: #0b1020 !important; }
     .rate-table th:nth-child(2) { left: 100px !important; z-index: 12 !important; width: 180px; background: #0b1020 !important; }
 
-
     .rate-table td {
         padding: 8px 10px;
         border-bottom: 1px solid var(--line);
@@ -369,7 +368,6 @@
     .row-group.alt td.sticky-date,
     .row-group.alt td.sticky-group { background: #121822 !important; color: #7dd3fc !important; }
 
-
     .cell-input {
         background: var(--bg-2) !important;
         color: var(--text) !important;
@@ -384,13 +382,13 @@
 </style>
 
 <div class="admin-panel" style="padding: 20px; background: var(--bg); min-height: 100vh;">
-    <!-- Top Title -->
+    
     <div style="background: var(--bg-2); border-radius: 6px; border: 1px solid var(--line); padding: 15px; margin-bottom: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
         <h2 style="margin: 0; font-size: 1.35rem; color: var(--text); font-weight: 700; text-align: center;">Pricing Management</h2>
         <span style="margin-top: 4px; font-size: 0.85rem; color: var(--muted-2, #a1a1aa); text-align: center; display: block;">Fleet & Rates</span>
     </div>
 
-    <!-- Toolbar Buttons -->
+    
     <div style="background: var(--bg-2); border-radius: 6px; border: 1px solid var(--line); padding: 10px; margin-bottom: 15px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px;">
         <button class="toolbar-btn btn-primary" onclick="openBulkModal()" style="padding: 10px; font-size: 0.9rem;">
             <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
@@ -415,10 +413,10 @@
         </button>
     </div>
 
-    <!-- Filters Section -->
+    
     <div style="display: grid; grid-template-columns: 1fr 1.5fr 2fr; gap: 15px; margin-bottom: 20px;">
         
-        <!-- Year & Date Range Panel -->
+        
         <div style="background: var(--bg-2); border-radius: 6px; border: 1px solid var(--line); padding: 15px;">
             <div class="filter-title" style="margin-bottom: 10px; color: var(--muted-2, #a1a1aa); font-size: 0.75rem;">YEAR</div>
             <div id="yearFilters" style="margin-bottom: 15px;">
@@ -440,7 +438,7 @@
             </div>
         </div>
 
-        <!-- Month Panel -->
+        
         <div style="background: var(--bg-2); border-radius: 6px; border: 1px solid var(--line); padding: 15px;">
             <div class="filter-title" style="margin-bottom: 10px; color: var(--muted-2, #a1a1aa); font-size: 0.75rem;">MONTH</div>
             <div id="monthFilters" style="display: flex; flex-wrap: wrap; gap: 6px;">
@@ -460,7 +458,7 @@
             </div>
         </div>
 
-        <!-- Groups Panel -->
+        
         <div style="background: var(--bg-2); border-radius: 6px; border: 1px solid var(--line); padding: 15px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                 <div class="filter-title" style="margin: 0; color: var(--muted-2, #a1a1aa); font-size: 0.75rem; display: flex; align-items: center; gap: 4px;">
@@ -480,7 +478,7 @@
         </div>
     </div>
 
-    <!-- Status Bar -->
+    
     <div style="background: var(--bg); padding: 14px 20px; border: 1px solid var(--line); border-radius: 8px; font-size: 0.9rem; color: var(--text); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: none;">
         <div>
             <strong style="color: var(--text);">Viewing: <span id="viewingText" style="color: var(--brand); font-weight:600;">Next 30 Days</span> &nbsp;&bull;&nbsp; 
@@ -496,25 +494,24 @@
         </span>
     </div>
 
-    <!-- Rate Table -->
+    
     <div class="rate-table-container">
         <table class="rate-table" id="rateTable">
             <thead>
                 <tr id="tableHeader">
-                    <!-- Headers injected by JS -->
+                    
                 </tr>
             </thead>
             <tbody id="tableBody">
-                <!-- Rows injected by JS -->
+                
             </tbody>
         </table>
     </div>
 </div>
 
-<!-- Bulk Update Modal -->
 <div class="modal-overlay" id="bulkModal">
     <div class="modal-content" style="width: 1000px; max-width: 95%; padding: 0;; background: var(--bg-2) !important;">
-        <!-- Header -->
+        
         <div style="display:flex; justify-content:space-between; align-items:center; padding: 16px 20px; border-bottom: 1px solid var(--line);">
             <h3 style="margin:0; font-size: 1.1rem; color: var(--text); display:flex; align-items:center; gap:10px;">
                 <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg> 
@@ -525,10 +522,10 @@
             </button>
         </div>
         
-        <!-- Body -->
+        
         <div class="custom-table-scrollbar" style="padding: 20px; max-height: calc(100vh - 200px); overflow-y: auto;">
             <div class="row" style="margin-bottom: 24px;">
-                <!-- Date Range -->
+                
                 <div class="col-md-6">
                     <label style="font-size:0.85rem; font-weight:600; color: var(--text); display:block; margin-bottom:8px;">Date Range</label>
                     <div style="display:flex; gap:8px; flex-wrap:wrap;">
@@ -537,7 +534,7 @@
                         <button class="btn btn-sm date-range-btn" onclick="setBulkRange('90')">Next 3 Months</button>
                         <button class="btn btn-sm date-range-btn" onclick="setBulkRange('custom')">Custom</button>
                     </div>
-                    <!-- Custom Date Fields -->
+                    
                     <div id="customDateContainer" style="display:none; gap:10px; margin-top:12px;">
                         <div style="flex:1;">
                             <label style="font-size:0.75rem; color: var(--muted-2, #a1a1aa); margin-bottom:4px; display:block;">Start Date</label>
@@ -550,12 +547,12 @@
                     </div>
                 </div>
                 
-                <!-- Operation -->
+                
                 <div class="col-md-6">
                     <label style="font-size:0.85rem; font-weight:600; color: var(--text); display:block; margin-bottom:8px;">New Price / Operation</label>
                     <input type="text" id="bulkOperation" class="form-control" placeholder="120, +10, -15, +5%, -8%" style="border: 1px solid var(--line); padding:8px; border-radius:4px; width:100%; font-size:0.85rem;">
                     
-                    <!-- Info box -->
+                    
                     <div style="background:rgba(82, 234, 210, 0.05); border:1px solid rgba(82, 234, 210, 0.3); border-radius:4px; padding:10px; margin-top:10px; font-size:0.75rem; color: var(--text); line-height:1.4;">
                         <strong style="color:var(--brand);">Accepted formats:<br>
                         <span style="color:#ef4444;">120</span> set fixed price &bull; <span style="color:#ef4444;">+10</span> add amount &bull; <span style="color:#ef4444;">-5%</span> reduce by percentage
@@ -563,7 +560,7 @@
                 </div>
             </div>
             
-            <!-- Vehicle Groups -->
+            
             <div style="margin-bottom: 24px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid var(--line); padding-bottom:8px; margin-bottom:12px;">
                     <div style="font-size:0.95rem; font-weight:600; color: var(--text); display:flex; align-items:center; gap:8px;">
@@ -580,7 +577,7 @@
                 </div>
             </div>
 
-            <!-- Rental Days -->
+            
             <div style="margin-bottom: 24px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid var(--line); padding-bottom:8px; margin-bottom:12px;">
                     <div style="font-size:0.95rem; font-weight:600; color: var(--text); display:flex; align-items:center; gap:8px;">
@@ -601,14 +598,14 @@
                 </div>
             </div>
 
-            <!-- Preview -->
+            
             <div style="background:#fef3c7; border:1px solid #fde68a; border-radius:6px; padding:12px 16px;">
                 <div style="font-size:0.85rem; font-weight:700; color:#92400e; margin-bottom:2px;">Preview Summary</div>
                 <div style="font-size:0.8rem; color:#b45309;" id="bulkPreviewText">Select a date range to preview.</div>
             </div>
         </div>
         
-        <!-- Footer -->
+        
         <div style="display:flex; justify-content:flex-end; gap:10px; padding: 16px 20px; border-top: 1px solid var(--line); background: var(--bg); border-radius: 0 0 8px 8px;">
             <button class="toolbar-btn btn-ink" style="width:auto;" onclick="closeBulkModal()">Cancel</button>
             <button class="toolbar-btn btn-primary" style="width:auto;" onclick="submitBulkUpdate()">
@@ -619,7 +616,6 @@
     </div>
 </div>
 
-<!-- History Modal -->
 <div class="modal-overlay" id="historyModal">
     <div class="modal-content" style="width: 700px; max-width: 95%; padding: 0;; background: var(--bg-2) !important;">
         <div style="display:flex; justify-content:space-between; align-items:center; padding: 16px 20px; border-bottom: 1px solid var(--line);">

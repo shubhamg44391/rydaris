@@ -38,12 +38,12 @@
                             </td>
                             <td>
                                 <strong style="color: var(--brand, #52ead2);">
-                                    {{ $sub->amount_paid ? '₹' . number_format($sub->amount_paid, 2) : 'N/A' }}
+                                    {{ $sub->amount_paid ? '$' . number_format($sub->amount_paid / 83, 2) : 'N/A' }}
                                 </strong>
                             </td>
                             <td>
-                                <span class="badge" style="background: rgba(82,234,210,0.1); color: #52ead2; padding: 4px 8px; border-radius: 4px; font-weight: 500; font-size: 0.8rem;">
-                                    {{ $sub->payment_method }}
+                                <span class="badge" style="background: rgba(82,234,210,0.1); color: #52ead2; padding: 4px 8px; border-radius: 4px; font-weight: 500; font-size: 0.8rem; text-transform: capitalize;">
+                                    {{ $sub->payment_method ?? 'Unknown' }}
                                 </span>
                             </td>
                             <td>
@@ -98,20 +98,20 @@
         @endif
     </div>
 
-    <!-- Invoice Modal Wrapper -->
+    
     <div id="invoiceModal" style="display: none; position: fixed; inset: 0; z-index: 100000; padding: 16px; box-sizing: border-box; align-items: center; justify-content: center;">
-        <!-- Backdrop -->
+        
         <div style="position: absolute; inset: 0; background: rgba(5, 7, 17, 0.85); backdrop-filter: blur(8px);" onclick="closeInvoiceModal()"></div>
         
-        <!-- Modal content container -->
+        
         <div style="position: relative; z-index: 1; width: 100%; max-width: 900px; height: calc(100vh - 40px); background: #050711; border-radius: 12px; overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,0.7); display: flex; flex-direction: column; border: 1px solid rgba(82, 234, 210, 0.25);">
-            <!-- Modal Header -->
+            
             <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; border-bottom: 1px solid rgba(82, 234, 210, 0.2); background: #0b1020;">
                 <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: #ffffff;">Package Invoice</h3>
                 <button onclick="closeInvoiceModal()" style="background: none; border: none; font-size: 24px; color: #94a3b8; cursor: pointer; line-height: 1;">&times;</button>
             </div>
             
-            <!-- Modal Body (Iframe) -->
+            
             <iframe id="invoiceIframe" style="width: 100%; height: 100%; border: none; background: #050711;"></iframe>
         </div>
     </div>

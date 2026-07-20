@@ -9,9 +9,8 @@ use Illuminate\Support\Facades\Auth;
 
 class LocationController extends Controller
 {
-    /**
-     * Display a paginated listing of this vendor's locations.
-     */
+    
+
     public function index()
     {
         $query = PickupLocation::where('vendor_id', Auth::id());
@@ -30,9 +29,8 @@ class LocationController extends Controller
         return view('vendor.locations.index', compact('locations'));
     }
 
-    /**
-     * Show the form for creating a new location.
-     */
+    
+
     public function create()
     {
         if (!Auth::user()->canAddLocation()) {
@@ -42,9 +40,8 @@ class LocationController extends Controller
         return view('vendor.locations.create', compact('types'));
     }
 
-    /**
-     * Store a newly created location in database.
-     */
+    
+
     public function store(Request $request)
     {
         if (!Auth::user()->canAddLocation()) {
@@ -77,9 +74,8 @@ class LocationController extends Controller
             ->with('success', 'Location added successfully.');
     }
 
-    /**
-     * Show the form for editing the specified location.
-     */
+    
+
     public function edit($id)
     {
         $location = PickupLocation::where('vendor_id', Auth::id())->findOrFail($id);
@@ -88,9 +84,8 @@ class LocationController extends Controller
         return view('vendor.locations.edit', compact('location', 'types'));
     }
 
-    /**
-     * Update the specified location in database.
-     */
+    
+
     public function update(Request $request, $id)
     {
         $location = PickupLocation::where('vendor_id', Auth::id())->findOrFail($id);
@@ -119,9 +114,8 @@ class LocationController extends Controller
             ->with('success', 'Location updated successfully.');
     }
 
-    /**
-     * Remove the specified location from database.
-     */
+    
+
     public function destroy($id)
     {
         $location = PickupLocation::where('vendor_id', Auth::id())->findOrFail($id);
