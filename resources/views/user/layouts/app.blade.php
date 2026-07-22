@@ -74,9 +74,9 @@
       width: 80vw;
     }
     
-    /* Enforce Dark Theme on Sneat Layout elements */
+    /* Enforce Seamless Sidebar Dark Theme Color on Sneat Layout elements */
     body, html, .layout-wrapper, .layout-container, .layout-page, .content-wrapper {
-      background-color: var(--bg) !important;
+      background-color: var(--bg-2, #0b1020) !important;
       color: var(--text) !important;
     }
   </style>
@@ -90,7 +90,7 @@
     <aside class="admin-sidebar" id="adminSidebar" aria-label="Admin navigation">
       <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-bottom: 10px;">
         <a class="brand" href="{{ Auth::check() && (Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin') ? route('dashboard') : (Auth::user()->role === 'user' ? route('user.dashboard') : route('vendor.dashboard')) }}" aria-label="Rydaris home" style="opacity: 0.9; transition: opacity 0.2s ease; display: flex; align-items: center; justify-content: center;">
-          <img class="brand-full" src="{{ asset('assets/logo/rydaris-logo.png') }}" alt="Rydaris Logo" style="height: 32px; width: auto; display: block;">
+          <img class="brand-full" src="{{ asset('assets/logo/rydaris-logo.png') }}" data-dark-logo="{{ asset('assets/logo/rydaris-logo.png') }}" data-light-logo="{{ asset('assets/logo/rydaris-logo-light.png') }}" alt="Rydaris Logo" style="height: 32px; width: auto; display: block;">
           <img class="brand-mini" src="{{ asset('assets/logo/favicon.svg') }}" alt="Rydaris Logo" style="height: 32px; width: auto; display: none;">
         </a>
         <button class="sidebar-close-btn" onclick="closeSidebar()" aria-label="Close menu">
@@ -114,24 +114,43 @@
         </div>
         <div class="admin-toolbar" style="display: flex; align-items: center; gap: 15px;">
           <span class="user-greeting" style="font-weight: 500;">Hello, {{ Auth::user()->name }}</span>
-          
-          @if(Auth::check() && Auth::user()->role === 'vendor')
-         
-          <a href="{{ route('vendor.profile.index') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 5px; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'" title="Vendor Profile">
-            <svg viewBox="0 0 24 24" style="width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:2;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          </a>
-          @elseif(Auth::check() && Auth::user()->role === 'user')
-          <a href="{{ route('user.profile.index') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 5px; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'" title="My Profile">
-            <svg viewBox="0 0 24 24" style="width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:2;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          </a>
-          @endif
-          
-          <form method="POST" action="{{ route('logout') }}" style="margin: 0; display: inline;">
-              @csrf
-              <button type="submit" class="admin-action" style="cursor: pointer; border: none; background: transparent; font-family: inherit; font-size: inherit; display: flex; align-items: center; gap: 5px;">
-                <svg viewBox="0 0 24 24" style="width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:2;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Logout
-              </button>
-          </form>
+
+          <button type="button" class="theme-toggle-btn" onclick="toggleThemeMode()" title="Toggle Light/Dark Theme" aria-label="Toggle Light/Dark Theme" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; color: inherit; transition: all 0.2s;">
+            <svg class="themeSunIcon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+              <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+            <svg class="themeMoonIcon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </button>
+
+          <!-- Profile Dropdown Component -->
+          <div class="profile-dropdown-container" style="position: relative; display: inline-block; line-height: 1;">
+            <button type="button" class="profile-trigger-btn" id="profileDropdownTrigger" style="background: transparent; border: none; padding: 0; margin: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; color: var(--text); border: 1px solid var(--line, rgba(255,255,255,0.1)); transition: all 0.2s; outline: none;">
+              <svg viewBox="0 0 24 24" style="width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:2;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </button>
+            <div class="profile-dropdown-menu" id="profileDropdownMenu" style="display: none; position: absolute; right: 0; top: 45px; width: 220px; background: #0b1020; border: 1px solid var(--line, rgba(255,255,255,0.1)); border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 1000; padding: 6px 0; overflow: hidden;">
+              <!-- User Info Header -->
+              <div style="padding: 12px 16px; border-bottom: 1px solid var(--line, rgba(255,255,255,0.05));">
+                <div style="font-weight: 600; color: var(--text, #f8fafc); font-size: 0.9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: left;">{{ Auth::user()->name }}</div>
+                <div style="font-size: 0.78rem; color: var(--muted, #aab7cb); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: left;">{{ Auth::user()->email }}</div>
+              </div>
+              <!-- Menu Links -->
+              <a href="{{ route('user.profile.index') }}" style="display: flex; align-items: center; gap: 10px; padding: 10px 16px; color: var(--text, #f8fafc); text-decoration: none; font-size: 0.85rem; transition: background 0.15s; text-align: left;" onmouseover="this.style.background='rgba(82, 234, 210, 0.08)';" onmouseout="this.style.background='transparent';">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--brand, #52ead2); flex-shrink: 0;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                My Profile
+              </a>
+              <div style="border-top: 1px solid var(--line, rgba(255,255,255,0.05)); margin-top: 5px; padding-top: 5px;">
+                <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
+                  @csrf
+                  <button type="submit" style="width: 100%; border: none; background: transparent; display: flex; align-items: center; gap: 10px; padding: 10px 16px; color: #f43f5e; text-decoration: none; font-size: 0.85rem; text-align: left; cursor: pointer; transition: background 0.15s; font-family: inherit; outline: none;" onmouseover="this.style.background='rgba(244, 63, 94, 0.08)';" onmouseout="this.style.background='transparent';">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(180deg); flex-shrink: 0;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    Logout
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -217,6 +236,68 @@
     if (localStorage.getItem('sidebar-collapsed') === 'true') {
       document.body.classList.add('sidebar-collapsed');
     }
+
+    // Profile Dropdown Toggle
+    document.addEventListener('DOMContentLoaded', function() {
+      const trigger = document.getElementById('profileDropdownTrigger');
+      const menu = document.getElementById('profileDropdownMenu');
+      if (trigger && menu) {
+        trigger.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const isOpen = menu.style.display === 'block';
+          menu.style.display = isOpen ? 'none' : 'block';
+          trigger.classList.toggle('active', !isOpen);
+        });
+        document.addEventListener('click', function(e) {
+          if (!trigger.contains(e.target) && !menu.contains(e.target)) {
+            menu.style.display = 'none';
+            trigger.classList.remove('active');
+          }
+        });
+      }
+    });
+  </script>
+
+  <!-- Theme Persistence & Switcher Script -->
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('rydaris_theme') || 'dark';
+      if (savedTheme === 'light') {
+        if (document.body) document.body.classList.add('light-mode');
+        document.documentElement.classList.add('light-mode');
+      }
+    })();
+
+    function syncThemeIcons() {
+      const isLight = document.body ? document.body.classList.contains('light-mode') : document.documentElement.classList.contains('light-mode');
+      document.querySelectorAll('.themeSunIcon').forEach(function(el) {
+        el.style.display = isLight ? 'none' : 'block';
+      });
+      document.querySelectorAll('.themeMoonIcon').forEach(function(el) {
+        el.style.display = isLight ? 'block' : 'none';
+      });
+      // Update logo dynamically
+      document.querySelectorAll('.brand-full').forEach(function(img) {
+        const darkLogo = img.getAttribute('data-dark-logo');
+        const lightLogo = img.getAttribute('data-light-logo');
+        if (isLight && lightLogo) {
+          img.src = lightLogo;
+        } else if (!isLight && darkLogo) {
+          img.src = darkLogo;
+        }
+      });
+    }
+
+    function toggleThemeMode() {
+      if (document.body) document.body.classList.toggle('light-mode');
+      document.documentElement.classList.toggle('light-mode');
+      const isLight = document.body ? document.body.classList.contains('light-mode') : document.documentElement.classList.contains('light-mode');
+      localStorage.setItem('rydaris_theme', isLight ? 'light' : 'dark');
+      syncThemeIcons();
+    }
+
+    document.addEventListener('DOMContentLoaded', syncThemeIcons);
+    if (document.body) syncThemeIcons();
   </script>
 </body>
 

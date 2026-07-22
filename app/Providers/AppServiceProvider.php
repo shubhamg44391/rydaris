@@ -72,6 +72,13 @@ class AppServiceProvider extends ServiceProvider
                     $view->with('seo_keyword', $seo->keyword);
                 }
             }
+
+            if (!app()->runningInConsole() && Schema::hasTable('site_settings')) {
+                $site_setting = \Illuminate\Support\Facades\Cache::remember('site_setting_global', 600, function () {
+                    return \App\Models\SiteSetting::first();
+                });
+                $view->with('site_setting', $site_setting);
+            }
         });
     }
 }

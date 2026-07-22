@@ -1,4 +1,5 @@
 :root {
+  /* Core Base Colors */
   --bg: #050711;
   --bg-2: #0b1020;
   --panel: rgba(255, 255, 255, 0.07);
@@ -11,12 +12,36 @@
   --paper: #0b1020;
   --paper-soft: #050711;
   --ink: #f8fafc;
+
+  /* Centralized Brand Colors (Change here to update site-wide!) */
   --brand: #52ead2;
   --brand-2: #80a7ff;
+  --brand-dark: #2bc2a8;
+  --brand-glow: rgba(82, 234, 210, 0.35);
   --accent: #f5b85c;
   --good: #4ade80;
+
+  /* Centralized Card & Glass Design System Tokens */
+  --card-bg-gradient: linear-gradient(135deg, rgba(128, 167, 255, 0.48) 0%, rgba(82, 234, 210, 0.48) 100%), #08121c;
+  --card-border-color: rgba(82, 234, 210, 0.6);
+  --card-box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25), 0 0 25px rgba(82, 234, 210, 0.12);
+  --card-backdrop-blur: blur(16px);
+
+  /* Centralized Button Design System Tokens */
+  --btn-primary-bg: linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 100%);
+  --btn-primary-text: #051013;
+  --btn-primary-shadow: 0 4px 15px rgba(82, 234, 210, 0.25);
+  --btn-secondary-bg: rgba(255, 255, 255, 0.08);
+  --btn-secondary-border: 1px solid rgba(255, 255, 255, 0.18);
+  --btn-secondary-text: #ffffff;
+
+  /* Centralized Icon Box Design System Tokens */
+  --icon-container-bg: linear-gradient(135deg, var(--brand) 0%, #ffffff 100%);
+  --icon-container-stroke: #061218;
+
   --shadow: 0 24px 80px rgba(0, 0, 0, 0.36);
-  --radius: 8px;
+  --radius: 12px;
+  --radius-pill: 9999px;
 }
 
 * {
@@ -59,6 +84,26 @@ body {
 * {
   scrollbar-width: thin;
   scrollbar-color: rgba(82, 234, 210, 0.25) #0b1020;
+}
+
+/* Premium Global Scrollbar Customization in Light Mode */
+body.light-mode ::-webkit-scrollbar-track {
+  background: #f1f5f9 !important;
+}
+
+body.light-mode ::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.15) !important;
+  border: 2px solid #f1f5f9 !important;
+  border-radius: 10px !important;
+}
+
+body.light-mode ::-webkit-scrollbar-thumb:hover {
+  background: rgba(15, 23, 42, 0.3) !important;
+}
+
+/* Firefox compatibility in Light Mode */
+body.light-mode * {
+  scrollbar-color: rgba(15, 23, 42, 0.15) #f1f5f9 !important;
 }
 
 a {
@@ -112,7 +157,7 @@ select:-webkit-autofill:focus {
 }
 
 .nav {
-  width: min(1180px, calc(100% - 32px));
+  width: min(1380px, calc(100% - 40px));
   min-height: 76px;
   margin: 0 auto;
   display: flex;
@@ -166,23 +211,97 @@ select:-webkit-autofill:focus {
 }
 
 .nav-links a {
-  padding: 8px 12px;
+  height: 36px;
+  padding: 0 14px;
   border-radius: 999px;
   color: #cbd5e1;
   font-size: 0.9rem;
   font-weight: 740;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  text-decoration: none;
+  transition: all 0.2s ease;
 }
 
 .nav-links a:hover,
+.nav-links a:focus,
 .nav-links a.active {
   color: #061218 !important;
   background: linear-gradient(135deg, var(--brand-2), var(--brand)) !important;
+  box-shadow: 0 4px 15px rgba(82, 234, 210, 0.35) !important;
+  outline: none;
 }
 
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+  gap: 4px;
+  padding: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.055);
+}
+
+.nav-actions .btn {
+  min-height: 36px;
+  height: 36px;
+  padding: 0 16px;
+  font-size: 0.9rem;
+  font-weight: 740;
+  color: #cbd5e1;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 999px !important;
+  margin-right: 0 !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.nav-actions .btn-nav-demo {
+  color: #cbd5e1;
+  background: transparent;
+  border: 1px solid transparent;
+}
+
+.nav-actions .btn-nav-login {
+  color: #cbd5e1;
+  background: transparent;
+  border: 1px solid transparent;
+}
+
+.nav-actions .btn-nav-register,
+.nav-actions .btn.primary {
+  color: #061218;
+  background: linear-gradient(135deg, var(--brand-2), var(--brand));
+  border: 1px solid transparent;
+}
+
+.nav-actions .btn:hover,
+.nav-actions .btn:focus,
+.nav-actions a:hover,
+.nav-actions a:focus,
+.nav-actions button:hover,
+.nav-actions button:focus,
+.nav-actions .btn-nav-demo:hover,
+.nav-actions .btn-nav-demo:focus,
+.nav-actions .btn-nav-login:hover,
+.nav-actions .btn-nav-login:focus,
+.nav-actions .btn-nav-register:hover,
+.nav-actions .btn-nav-register:focus,
+.nav-actions .btn.primary:hover,
+.nav-actions .btn.secondary:hover {
+  color: #061218 !important;
+  background: linear-gradient(135deg, var(--brand-2), var(--brand)) !important;
+  border-color: transparent !important;
+  box-shadow: 0 4px 15px rgba(82, 234, 210, 0.35) !important;
+  outline: none;
 }
 
 /* ── Hamburger Button ── */
@@ -455,17 +574,16 @@ h3 {
 }
 
 .btn.primary {
-  color: #061218;
-  background: linear-gradient(135deg, var(--brand-2), var(--brand));
-  box-shadow: 0 18px 42px rgba(82, 234, 210, 0.2);
-  transition: all 0.2s ease;
+  color: var(--btn-primary-text);
+  background: var(--btn-primary-bg);
+  box-shadow: var(--btn-primary-shadow);
+  transition: all 0.25s ease;
 }
 
 .btn.primary:hover {
-  color: #061218 !important;
-  background: linear-gradient(135deg, var(--brand-2), var(--brand)) !important;
-  border-color: transparent !important;
-  box-shadow: 0 12px 35px rgba(82, 234, 210, 0.4) !important;
+  opacity: 0.92;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(82, 234, 210, 0.4);
 }
 
 .btn.secondary {
@@ -568,30 +686,64 @@ h3 {
   padding: 18px;
   border-right: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .side-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  min-height: 40px;
-  padding: 10px 12px;
-  border-radius: var(--radius);
-  color: #aab7cb;
+  gap: 12px;
+  min-height: 46px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  color: #cbd5e1;
   font-weight: 700;
   font-size: 0.92rem;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  transition: all 0.25s ease;
 }
 
-.side-item.active {
-  color: #ffffff !important;
-  background: linear-gradient(135deg, var(--brand-2), var(--brand)) !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+.side-item .mini-icon {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px !important;
+  background: linear-gradient(135deg, #52ead2 0%, #ffffff 100%) !important;
+  box-shadow: 0 4px 12px rgba(82, 234, 210, 0.25);
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
 }
 
-.side-item:not(.active):hover {
-  color: #f0fafa !important;
-  background: rgba(60, 212, 160, 0.12) !important;
+.side-item .mini-icon svg {
+  width: 18px;
+  height: 18px;
+  stroke: #061218 !important;
+  fill: none;
+  stroke-width: 2.2;
 }
+
+.side-item.active,
+.side-item:hover {
+  color: #051013 !important;
+  background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%) !important;
+  border: 1.5px solid transparent !important;
+  box-shadow: 0 4px 18px rgba(82, 234, 210, 0.4) !important;
+}
+
+/* .side-item.active .mini-icon,
+.side-item:hover .mini-icon {
+  background: #051013 !important;
+  box-shadow: 0 2px 8px rgba(5, 16, 19, 0.2) !important;
+}
+
+.side-item.active .mini-icon svg,
+.side-item:hover .mini-icon svg {
+  stroke: #52ead2 !important;
+} */
 
 .board {
   padding: 18px;
@@ -615,6 +767,33 @@ h3 {
   background:
     linear-gradient(180deg, rgba(5, 7, 17, 0.08), rgba(5, 7, 17, 0.72)),
     url("rydaris-hero.png") center / cover no-repeat;
+}
+
+body.light-mode .fleet-visual {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.32)),
+    url("rydaris-hero.png") center / cover no-repeat !important;
+}
+
+.video-play-btn {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--brand-2, #80a7ff), var(--brand, #52ead2));
+  border: 4px solid rgba(255, 255, 255, 0.4);
+  color: #051013;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 0 35px rgba(82, 234, 210, 0.6), 0 0 0 10px rgba(82, 234, 210, 0.2);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  outline: none;
+}
+
+.video-play-btn:hover {
+  transform: scale(1.12);
+  box-shadow: 0 0 50px rgba(82, 234, 210, 0.8), 0 0 0 15px rgba(82, 234, 210, 0.3);
 }
 
 .stat-row {
@@ -699,7 +878,7 @@ h3 {
   }
 
   to {
-    transform: translateX(-50%);
+    transform: translateX(-25%);
   }
 }
 
@@ -830,10 +1009,15 @@ h3 {
 
 .table-wrap {
   overflow-x: auto;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: var(--radius);
-  background: radial-gradient(circle at 80% 0%, rgba(128, 167, 255, 0.18), transparent 28rem), radial-gradient(circle at 10% 15%, rgba(82, 234, 210, 0.18), transparent 24rem), #0d2228;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  position: relative;
+  background: linear-gradient(135deg, rgba(128, 167, 255, 0.48) 0%, rgba(82, 234, 210, 0.48) 100%), #08121c !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: var(--text) !important;
+  border: 1.5px solid rgba(82, 234, 210, 0.6) !important;
+  border-radius: 16px;
+  box-shadow: 0 12px 45px rgba(0, 0, 0, 0.35), 0 0 25px rgba(82, 234, 210, 0.15);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 table {
@@ -844,16 +1028,23 @@ table {
 
 th,
 td {
-  padding: 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 18px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   text-align: left;
 }
 
 th {
-  color: var(--muted-2);
-  font-size: 0.76rem;
+  color: #52ead2 !important;
+  font-size: 0.82rem;
+  font-weight: 700;
   letter-spacing: 0.09em;
   text-transform: uppercase;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+td {
+  color: #f1f5f9 !important;
+  font-weight: 500;
 }
 
 .page-hero {
@@ -929,61 +1120,125 @@ th {
   vertical-align: middle;
 }
 
-.feature-card {
+.card,
+.feature-card,
+.pricing-card,
+.info-card,
+.faq-item,
+.contact-panel,
+.flow-step {
   position: relative;
-  background: radial-gradient(circle at 80% 0%, rgba(128, 167, 255, 0.18), transparent 28rem), radial-gradient(circle at 10% 15%, rgba(82, 234, 210, 0.18), transparent 24rem), #0d2228 !important;
+  background: linear-gradient(135deg, rgba(128, 167, 255, 0.48) 0%, rgba(82, 234, 210, 0.48) 100%), #08121c !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   color: var(--text) !important;
-  border: 1.5px solid #52ead2 !important;
+  border: 1.5px solid rgba(82, 234, 210, 0.6) !important;
   border-radius: 16px;
   padding: 32px 28px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 12px 45px rgba(0, 0, 0, 0.35), 0 0 25px rgba(82, 234, 210, 0.15);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.feature-card:hover {
-  transform: translateY(-5px);
-  border-color: rgba(82, 234, 210, 0.8) !important;
-  box-shadow: 0 0 35px rgba(82, 234, 210, 0.15), 0 20px 45px rgba(0, 0, 0, 0.3);
+.card h1,
+.card h2,
+.card h3,
+.card h4,
+.feature-card h1,
+.feature-card h2,
+.feature-card h3,
+.feature-card h4,
+.pricing-card h1,
+.pricing-card h2,
+.pricing-card h3,
+.pricing-card h4,
+.info-card h1,
+.info-card h2,
+.info-card h3,
+.info-card h4,
+.faq-item h1,
+.faq-item h2,
+.faq-item h3,
+.faq-item h4,
+.contact-panel h1,
+.contact-panel h2,
+.contact-panel h3,
+.contact-panel h4,
+.flow-step h1,
+.flow-step h2,
+.flow-step h3,
+.flow-step h4 {
+  color: #ffffff !important;
+  font-weight: 700;
 }
 
-.feature-card h3 {
+.card p,
+.feature-card p,
+.pricing-card p,
+.info-card p,
+.faq-item p,
+.contact-panel p,
+.flow-step p {
+  color: #e2e8f0 !important;
+  font-weight: 400;
+}
+
+.card span,
+.feature-card span,
+.pricing-card span,
+.info-card span,
+.faq-item span,
+.contact-panel span,
+.flow-step span {
   color: #ffffff !important;
 }
 
-.feature-card p {
-  color: #cbd5e1 !important;
+.icon,
+.feature-card .icon,
+.pricing-card .icon,
+.info-card .icon,
+.flow-step .icon {
+  width: 44px;
+  height: 44px;
+  margin-bottom: 18px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px !important;
+  background: linear-gradient(135deg, #52ead2 0%, #ffffff 100%) !important;
+  color: #061218 !important;
+  box-shadow: 0 6px 18px rgba(82, 234, 210, 0.3) !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.info-card {
-  position: relative;
-  background: radial-gradient(circle at 80% 0%, rgba(128, 167, 255, 0.18), transparent 28rem), radial-gradient(circle at 10% 15%, rgba(82, 234, 210, 0.18), transparent 24rem), #0d2228 !important;
-  color: var(--text) !important;
-  border: 1.5px solid #52ead2 !important;
-  border-radius: 16px;
-  padding: 32px 28px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+.icon svg,
+.feature-card .icon svg,
+.pricing-card .icon svg,
+.info-card .icon svg,
+.flow-step .icon svg {
+  stroke: #061218 !important;
+  fill: none;
 }
 
-.info-card:hover {
+.card:hover,
+.feature-card:hover,
+.pricing-card:hover,
+.info-card:hover,
+.faq-item:hover,
+.contact-panel:hover,
+.flow-step:hover {
   transform: translateY(-5px);
-  border-color: rgba(82, 234, 210, 0.8);
-  box-shadow: 0 0 35px rgba(82, 234, 210, 0.15), 0 20px 45px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, rgba(128, 167, 255, 0.65) 0%, rgba(82, 234, 210, 0.65) 100%), #08121c !important;
+  border-color: rgba(82, 234, 210, 0.95) !important;
+  box-shadow: 0 0 40px rgba(82, 234, 210, 0.35), 0 20px 45px rgba(0, 0, 0, 0.45) !important;
 }
 
-.info-card h3 {
-  color: #ffffff !important;
-}
-
-.info-card p {
-  color: #cbd5e1 !important;
+color: #cbd5e1 !important;
 }
 
 .contact-panel {
-  background: radial-gradient(circle at 80% 0%, rgba(128, 167, 255, 0.18), transparent 28rem), radial-gradient(circle at 10% 15%, rgba(82, 234, 210, 0.18), transparent 24rem), #0d2228 !important;
-  border: 1.5px solid #52ead2 !important;
+  background: linear-gradient(135deg, rgba(128, 167, 255, 0.48) 0%, rgba(82, 234, 210, 0.48) 100%), #08121c !important;
+  border: 1.5px solid rgba(82, 234, 210, 0.6) !important;
   border-radius: 16px !important;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 12px 45px rgba(0, 0, 0, 0.35), 0 0 25px rgba(82, 234, 210, 0.15) !important;
 }
 
 .faq-item {
@@ -1331,6 +1586,7 @@ textarea:focus {
   min-height: 100vh;
   display: grid;
   grid-template-columns: 268px minmax(0, 1fr);
+  background: var(--bg-2, #0b1020);
 }
 
 .admin-sidebar {
@@ -1342,8 +1598,8 @@ textarea:focus {
   gap: 18px;
   padding: 18px;
   color: var(--text);
-  background: var(--bg-2);
-  border-right: 1px solid var(--line);
+  background: var(--bg-2, #0b1020);
+  border-right: 1px solid var(--line, rgba(255, 255, 255, 0.1));
 }
 
 .admin-sidebar .brand {
@@ -1368,9 +1624,27 @@ textarea:focus {
 }
 
 .admin-nav a:hover,
-.admin-nav a.active {
-  color: #061218;
-  background: var(--brand);
+.admin-nav a.active,
+.admin-nav button:hover,
+.admin-nav button.active,
+.nav-toggle:hover,
+.nav-toggle.active {
+  color: #051013 !important;
+  background: linear-gradient(135deg, var(--brand, #52ead2) 0%, var(--brand-2, #80a7ff) 100%) !important;
+  box-shadow: 0 4px 15px rgba(82, 234, 210, 0.25) !important;
+}
+
+.admin-nav a:hover svg,
+.admin-nav a.active svg,
+.admin-nav button:hover svg,
+.admin-nav button.active svg,
+.nav-toggle:hover svg,
+.nav-toggle.active svg,
+.admin-nav a:hover .chevron,
+.admin-nav a.active .chevron,
+.nav-toggle:hover .chevron,
+.nav-toggle.active .chevron {
+  stroke: #051013 !important;
 }
 
 .admin-nav svg,
@@ -1401,8 +1675,8 @@ textarea:focus {
 
 .admin-main {
   min-width: 0;
-  background: var(--bg);
-  color: var(--text);
+  background: #090d16;
+  color: #f8fafc;
 }
 
 .admin-topbar {
@@ -1415,20 +1689,20 @@ textarea:focus {
   gap: 18px;
   min-height: 74px;
   padding: 14px 24px;
-  background: var(--bg-2, #0b1020);
-  border-bottom: 1px solid var(--line, rgba(255, 255, 255, 0.14));
+  background: #090d16;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .admin-topbar .user-greeting {
-  color: var(--text, #f8fafc) !important;
+  color: #f8fafc !important;
 }
 
 .admin-topbar .admin-action {
-  color: var(--muted, #a8b3c5) !important;
+  color: #a8b3c5 !important;
 }
 
 .admin-topbar .admin-action:hover {
-  color: var(--text, #f8fafc) !important;
+  color: #f8fafc !important;
 }
 
 .admin-search {
@@ -1504,10 +1778,51 @@ textarea:focus {
   font-weight: 600;
 }
 
-.admin-action.primary {
-  color: #061218;
-  border-color: transparent;
-  background: var(--brand);
+.admin-action.primary,
+.admin-action[style*="var(--brand)"],
+.admin-action[style*="#52ead2"],
+.btn-primary,
+.btn.btn-primary,
+button.btn-primary,
+a.btn-primary,
+button[type="submit"].admin-action,
+button[type="submit"].btn-primary,
+.admin-panel button[style*="var(--brand)"],
+.admin-panel button[style*="#52ead2"],
+.admin-panel a[style*="var(--brand)"],
+.admin-panel a[style*="#52ead2"],
+.vendor-portal button[style*="#3b82f6"],
+.vendor-portal button[style*="background: #3b82f6"] {
+  color: #051013 !important;
+  border: none !important;
+  background: linear-gradient(135deg, var(--brand, #52ead2) 0%, var(--brand-2, #80a7ff) 100%) !important;
+  box-shadow: 0 4px 15px rgba(82, 234, 210, 0.25) !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  border-radius: 999px !important;
+  font-weight: 800 !important;
+}
+
+.admin-action.primary:hover,
+.admin-action[style*="var(--brand)"]:hover,
+.admin-action[style*="#52ead2"]:hover,
+.btn-primary:hover,
+.btn.btn-primary:hover,
+button.btn-primary:hover,
+a.btn-primary:hover,
+button[type="submit"].admin-action:hover,
+button[type="submit"].btn-primary:hover,
+.admin-panel button[style*="var(--brand)"]:hover,
+.admin-panel button[style*="#52ead2"]:hover,
+.admin-panel a[style*="var(--brand)"]:hover,
+.admin-panel a[style*="#52ead2"]:hover {
+  opacity: 0.92 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(82, 234, 210, 0.45) !important;
+  color: #051013 !important;
 }
 
 .admin-content {
@@ -1526,14 +1841,15 @@ textarea:focus {
 .admin-hero h1 {
   max-width: none;
   margin: 0 0 8px;
-  color: var(--text);
+  color: #ffffff;
   font-size: clamp(1.9rem, 4vw, 3.4rem);
+  font-weight: 700;
   line-height: 1;
 }
 
 .admin-hero p {
   margin-bottom: 0;
-  color: var(--muted);
+  color: #8a99ad;
 }
 
 .admin-date-card {
@@ -1551,16 +1867,17 @@ textarea:focus {
 }
 
 .kpi-card,
-.admin-panel {
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
+.admin-panel,
+.admin-date-card {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
   background: var(--panel);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
-  color: var(--text);
+  box-shadow: none;
+  color: #f8fafc;
 }
 
 .kpi-card {
-  padding: 18px;
+  padding: 20px;
 }
 
 .kpi-top {
@@ -1572,38 +1889,76 @@ textarea:focus {
 }
 
 .admin-icon {
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   display: grid;
   place-items: center;
-  border-radius: var(--radius);
-  color: #0f766e;
-  background: #e2fbf6;
+  border-radius: 10px;
+  color: #52ead2;
+  background: rgba(82, 234, 210, 0.12);
+  border: 1px solid rgba(82, 234, 210, 0.25);
+}
+
+.admin-icon svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
 }
 
 .kpi-card strong {
   display: block;
   margin-bottom: 4px;
-  color: var(--text);
+  color: #ffffff;
   font-size: 1.9rem;
+  font-weight: 800;
   line-height: 1;
 }
 
 .kpi-card span,
 .panel-muted {
-  color: var(--muted);
-  font-size: 0.9rem;
+  color: #8a99ad;
+  font-size: 0.85rem;
 }
 
 .delta {
   display: inline-flex;
   align-items: center;
-  padding: 4px 7px;
+  padding: 4px 12px;
   border-radius: 999px;
-  color: #067647;
-  background: #dcfce7;
+  color: #047857;
+  background: #d1fae5;
   font-size: 0.78rem;
-  font-weight: 900;
+  font-weight: 800;
+}
+
+.delta.mint-solid {
+  background: #38e5b4 !important;
+  color: #051013 !important;
+  padding: 4px 10px !important;
+  border-radius: 999px !important;
+  font-weight: 800 !important;
+  font-size: 0.78rem !important;
+}
+
+.delta.mint-subtle {
+  background: #d1fae5 !important;
+  color: #047857 !important;
+  padding: 4px 12px !important;
+  border-radius: 999px !important;
+  font-weight: 800 !important;
+  font-size: 0.78rem !important;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.15) !important;
+}
+
+.delta.pink-solid {
+  background: #f43f5e !important;
+  color: #ffffff !important;
+  padding: 4px 10px !important;
+  border-radius: 999px !important;
+  font-weight: 800 !important;
+  font-size: 0.78rem !important;
 }
 
 .delta.warn {
@@ -1654,22 +2009,22 @@ textarea:focus {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
-  padding: 20px 18px;
-  background: var(--bg-2);
-  border-bottom: 1px solid var(--line);
+  padding: 16px 18px;
+  background: transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   margin-top: 12px;
   margin-bottom: 6px;
 }
 
 .panel-filter-bar .btn,
 .panel-filter-bar a.btn {
-  border-radius: var(--radius);
-  padding: 6px 14px;
-  font-weight: bold;
+  border-radius: 8px;
+  padding: 6px 16px;
+  font-weight: 700;
   font-size: 0.85rem;
-  border: 1px solid var(--line);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.05);
-  color: var(--text);
+  color: #ffffff;
   transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
@@ -1682,12 +2037,12 @@ textarea:focus {
 .panel-filter-bar a.btn:hover {
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.2);
-  color: var(--text);
+  color: #ffffff;
 }
 
 .panel-filter-bar .btn.active,
 .panel-filter-bar a.btn.active {
-  background: linear-gradient(135deg, var(--brand), var(--brand-2)) !important;
+  background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%) !important;
   color: #051013 !important;
   border-color: transparent !important;
   box-shadow: 0 4px 12px rgba(82, 234, 210, 0.15) !important;
@@ -1696,7 +2051,7 @@ textarea:focus {
 .panel-filter-bar .btn span,
 .panel-filter-bar a.btn span {
   background: rgba(255, 255, 255, 0.1);
-  color: var(--muted);
+  color: #a8b3c5;
   padding: 1px 7px;
   border-radius: 99px;
   font-size: 0.75rem;
@@ -1711,16 +2066,54 @@ textarea:focus {
 }
 
 /* Table Action Icon Buttons */
+.admin-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.admin-table thead tr {
+  background: rgba(255, 255, 255, 0.045) !important;
+}
+
+.admin-table th {
+  color: #38e5b4 !important;
+  font-size: 0.75rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  padding: 14px 18px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  background: rgba(255, 255, 255, 0.045) !important;
+}
+
+.admin-table tbody tr {
+  background: transparent !important;
+}
+
+.admin-table td {
+  padding: 14px 18px !important;
+  color: #ffffff !important;
+  font-size: 0.88rem !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+  vertical-align: middle !important;
+  background: transparent !important;
+}
+
+.admin-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.025) !important;
+}
+
 .icon-button {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
   width: 32px !important;
   height: 32px !important;
-  border-radius: var(--radius) !important;
-  background: rgba(255, 255, 255, 0.05) !important;
-  border: 1px solid var(--line) !important;
-  color: var(--brand) !important;
+  border-radius: 8px !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: #38e5b4 !important;
   cursor: pointer !important;
   transition: all 0.2s ease !important;
   padding: 0 !important;
@@ -1728,49 +2121,110 @@ textarea:focus {
 }
 
 .icon-button:hover {
-  background: rgba(82, 234, 210, 0.1) !important;
-  border-color: var(--brand) !important;
-  color: var(--brand) !important;
+  background: rgba(56, 229, 180, 0.15) !important;
+  border-color: #38e5b4 !important;
+  color: #38e5b4 !important;
 }
 
 .icon-button.delete-btn {
   color: #f43f5e !important;
-  border: 1px solid var(--line) !important;
+  border: 1px solid rgba(244, 63, 94, 0.2) !important;
+  background: rgba(244, 63, 94, 0.08) !important;
 }
 
 .icon-button.delete-btn:hover {
-  background: rgba(244, 63, 94, 0.1) !important;
+  background: rgba(244, 63, 94, 0.2) !important;
   border-color: #f43f5e !important;
   color: #f43f5e !important;
 }
 
 /* Status Badges */
 .status-badge-active {
-  background: rgba(82, 234, 210, 0.15) !important;
-  color: var(--brand) !important;
-  border: 1px solid rgba(82, 234, 210, 0.2) !important;
-  padding: 4px 10px !important;
-  border-radius: 12px !important;
-  font-weight: 700 !important;
-  font-size: 0.75rem !important;
+  background: rgba(56, 229, 180, 0.1) !important;
+  color: #38e5b4 !important;
+  border: 1px solid rgba(56, 229, 180, 0.35) !important;
+  padding: 4px 12px !important;
+  border-radius: 999px !important;
+  font-weight: 800 !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
   display: inline-block;
   cursor: pointer;
   text-decoration: none !important;
-  border-style: solid !important;
 }
 
 .status-badge-inactive {
   background: rgba(255, 255, 255, 0.05) !important;
-  color: var(--muted) !important;
-  border: 1px solid var(--line) !important;
-  padding: 4px 10px !important;
-  border-radius: 12px !important;
-  font-weight: 700 !important;
-  font-size: 0.75rem !important;
+  color: #94a3b8 !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  padding: 4px 12px !important;
+  border-radius: 999px !important;
+  font-weight: 800 !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
   display: inline-block;
   cursor: pointer;
   text-decoration: none !important;
-  border-style: solid !important;
+}
+
+.btn-mint {
+  background: linear-gradient(135deg, var(--brand, #52ead2) 0%, var(--brand-2, #80a7ff) 100%) !important;
+  color: #051013 !important;
+  font-weight: 800 !important;
+  border: none !important;
+  border-radius: 999px !important;
+  padding: 8px 18px !important;
+  font-size: 0.85rem !important;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 4px 15px rgba(82, 234, 210, 0.25) !important;
+}
+
+.btn-mint:hover {
+  background: linear-gradient(135deg, var(--brand, #52ead2) 0%, var(--brand-2, #80a7ff) 100%) !important;
+  color: #051013 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(82, 234, 210, 0.45) !important;
+  opacity: 0.92 !important;
+}
+
+.admin-avatar-mint {
+  background: #38e5b4 !important;
+  color: #051013 !important;
+  font-weight: 800 !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 50% !important;
+  width: 34px !important;
+  height: 34px !important;
+  font-size: 0.82rem !important;
+  flex-shrink: 0 !important;
+}
+
+.admin-action-edit {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 8px !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: #38e5b4 !important;
+  transition: all 0.2s ease !important;
+  text-decoration: none !important;
+}
+
+.admin-action-edit:hover {
+  background: rgba(56, 229, 180, 0.15) !important;
+  border-color: #38e5b4 !important;
+  color: #38e5b4 !important;
 }
 
 .chart-bars {
@@ -1882,12 +2336,33 @@ textarea:focus {
 
 .admin-table-wrap {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  max-width: 100%;
+  display: block;
 }
 
 .admin-table {
   width: 100%;
   min-width: 840px;
   border-collapse: collapse;
+}
+
+/* Remove underlines from all listing, pagination, and navigation links */
+.pagination a,
+.pagination a:hover,
+.pagination span,
+nav[role="navigation"] a,
+nav[role="navigation"] a:hover,
+.admin-nav a,
+.admin-nav a:hover,
+.admin-submenu a,
+.admin-submenu a:hover,
+.admin-table a,
+.admin-table a:hover,
+.admin-panel table a,
+.admin-panel table a:hover {
+  text-decoration: none !important;
 }
 
 .admin-panel table th {
@@ -2175,16 +2650,21 @@ td div[style*="#e2e8f0"] {
 
 .btn.btn-primary,
 .btn-primary {
-  color: #061218 !important;
-  background: linear-gradient(135deg, var(--brand), var(--brand-2)) !important;
+  color: #051013 !important;
+  background: linear-gradient(135deg, var(--brand, #52ead2) 0%, var(--brand-2, #80a7ff) 100%) !important;
   border: none !important;
-  box-shadow: 0 4px 14px rgba(82, 234, 210, 0.2) !important;
+  box-shadow: 0 4px 15px rgba(82, 234, 210, 0.25) !important;
+  border-radius: 999px !important;
+  font-weight: 800 !important;
 }
 
 .btn.btn-primary:hover,
 .btn-primary:hover {
-  background: linear-gradient(135deg, var(--brand-2), var(--brand)) !important;
-  transform: translateY(-1px);
+  background: linear-gradient(135deg, var(--brand, #52ead2) 0%, var(--brand-2, #80a7ff) 100%) !important;
+  color: #051013 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(82, 234, 210, 0.45) !important;
+  opacity: 0.92 !important;
 }
 
 .badge[style*="#dcfce7"] {
@@ -2709,6 +3189,48 @@ div.swal2-popup.swal2-toast .swal2-title {
   .admin-topbar .user-greeting {
     display: none;
   }
+
+  /* Keep topbar in one line on mobile and collapse label sizes */
+  .admin-topbar {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+
+  .admin-topbar .admin-toolbar {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+
+  .admin-topbar .visit-website-btn {
+    padding: 8px !important;
+    border-radius: 50% !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  .admin-topbar .visit-website-btn .btn-text {
+    display: none !important;
+  }
+
+  .admin-topbar .branch-display-wrap {
+    padding: 6px 8px !important;
+    font-size: 0.78rem !important;
+    margin-right: 0 !important;
+  }
+
+  .admin-topbar .branch-display-wrap .branch-text-prefix {
+    display: none !important;
+  }
 }
 
 /* Desktop Collapse Mode CSS (Applies only when viewport width > 1180px) */
@@ -2846,89 +3368,54 @@ nav[role="navigation"] a:hover,
   border-color: var(--brand, #52ead2) !important;
 }
 
-/* Global btn-teal styling */
-.btn-teal {
-  background: linear-gradient(135deg, #52ead2 0%, #00a4e4 100%) !important;
-  color: #050b14 !important;
-  font-weight: 700 !important;
-  border: none !important;
-  box-shadow: 0 4px 15px rgba(82, 234, 210, 0.2) !important;
-  transition: all 0.2s ease-in-out !important;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.btn-teal:hover {
-  background: linear-gradient(135deg, #00a4e4 0%, #52ead2 100%) !important;
-  color: #050b14 !important;
-  transform: scale(1.02);
-  box-shadow: 0 6px 20px rgba(82, 234, 210, 0.3) !important;
-}
-
-/* Global btn-primary styling */
+/* Centralized Global Button Utility Overrides */
+.btn-teal,
 .btn-primary {
-  background: linear-gradient(135deg, #52ead2 0%, #00a4e4 100%) !important;
-  color: #050b14 !important;
+  background: var(--btn-primary-bg) !important;
+  color: var(--btn-primary-text) !important;
   font-weight: 700 !important;
   border: none !important;
-  box-shadow: 0 4px 15px rgba(82, 234, 210, 0.2) !important;
-  transition: all 0.2s ease-in-out !important;
+  box-shadow: var(--btn-primary-shadow) !important;
+  transition: all 0.25s ease-in-out !important;
 }
 
+.btn-teal:hover,
 .btn-primary:hover {
-  background: linear-gradient(135deg, #00a4e4 0%, #52ead2 100%) !important;
-  color: #050b14 !important;
+  opacity: 0.92;
   transform: scale(1.02);
-  box-shadow: 0 6px 20px rgba(82, 234, 210, 0.3) !important;
+  box-shadow: 0 6px 20px rgba(82, 234, 210, 0.4) !important;
 }
 
-/* Global btn-secondary and btn-outline styling */
 .btn-secondary,
-.btn-outline {
-  background: rgba(82, 234, 210, 0.05) !important;
-  border: 1px solid rgba(82, 234, 210, 0.25) !important;
+.btn-outline,
+.btn-outline-primary {
+  background: var(--btn-secondary-bg) !important;
+  border: var(--btn-secondary-border) !important;
   color: var(--brand, #52ead2) !important;
   font-weight: 600 !important;
-  transition: all 0.2s ease-in-out !important;
+  transition: all 0.25s ease-in-out !important;
 }
 
 .btn-secondary:hover,
-.btn-outline:hover {
+.btn-outline:hover,
+.btn-outline-primary:hover {
   background: rgba(82, 234, 210, 0.15) !important;
   color: #ffffff !important;
   border-color: var(--brand, #52ead2) !important;
   transform: scale(1.02);
 }
 
-/* Global btn-outline-primary styling */
-.btn-outline-primary {
-  background: rgba(82, 234, 210, 0.03) !important;
-  border: 1px solid rgba(82, 234, 210, 0.25) !important;
-  color: var(--brand, #52ead2) !important;
-  font-weight: 600 !important;
-  transition: all 0.2s ease-in-out !important;
-}
-
-.btn-outline-primary:hover {
-  background: var(--brand, #52ead2) !important;
-  color: #050b14 !important;
-  border-color: var(--brand, #52ead2) !important;
-  transform: scale(1.02);
-}
-
-/* Global btn-blue styling */
 .btn-blue {
-  background: linear-gradient(135deg, #80a7ff 0%, #00a4e4 100%) !important;
+  background: linear-gradient(135deg, var(--brand-2) 0%, var(--brand) 100%) !important;
   color: #050b14 !important;
   font-weight: 700 !important;
   border: none !important;
-  box-shadow: 0 4px 15px rgba(128, 167, 255, 0.2) !important;
-  transition: all 0.2s ease-in-out !important;
+  box-shadow: var(--btn-primary-shadow) !important;
+  transition: all 0.25s ease-in-out !important;
 }
 
 .btn-blue:hover {
-  background: linear-gradient(135deg, #00a4e4 0%, #80a7ff 100%) !important;
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 100%) !important;
   color: #050b14 !important;
   transform: scale(1.02);
   box-shadow: 0 6px 20px rgba(128, 167, 255, 0.3) !important;
@@ -3005,6 +3492,1685 @@ input[type="button"],
   opacity: 0.8;
 }
 
+/* ==========================================================================
+   Light / Dark Mode Theme Overrides
+   ========================================================================== */
+.theme-toggle-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(82, 234, 210, 0.25);
+  color: #52ead2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  padding: 0;
+  outline: none;
+}
+
+.theme-toggle-btn:hover {
+  background: rgba(82, 234, 210, 0.15);
+  transform: scale(1.06);
+  border-color: #52ead2;
+}
+
+.mobile-theme-btn {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  .mobile-theme-btn {
+    display: inline-flex !important;
+  }
+}
+
+body.light-mode {
+  --bg: #f8fafc;
+  --bg-2: #ffffff;
+  --text: #0f172a;
+  --muted: #475569;
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+body.light-mode .site-shell {
+  background: radial-gradient(circle at 50% 0%, rgba(82, 234, 210, 0.18), transparent 36rem), linear-gradient(180deg, #f8fafc 0%, #eef2f6 100%) !important;
+}
+
+body.light-mode .site-header {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+  backdrop-filter: blur(16px) !important;
+}
+
+body.light-mode .brand {
+  color: #0f172a !important;
+}
+
+body.light-mode .brand img {
+  filter: contrast(1.15) brightness(0.9);
+}
+
+body.light-mode .nav-links,
+body.light-mode .nav-actions {
+  background: rgba(15, 23, 42, 0.05) !important;
+  border-color: rgba(15, 23, 42, 0.12) !important;
+}
+
+body.light-mode .desktop-nav a {
+  color: #334155 !important;
+}
+
+/* Ensure active nav pills and primary buttons keep signature periwinkle-cyan gradient in both Light and Dark mode */
+body.light-mode .desktop-nav a:hover,
+body.light-mode .desktop-nav a.active,
+body.light-mode .nav-links a:hover,
+body.light-mode .nav-links a.active,
+body.light-mode .nav-actions .btn-nav-register,
+body.light-mode .btn.primary,
+body.light-mode .btn-primary,
+body.light-mode .btn-teal,
+body.light-mode .btn-blue {
+  color: #051013 !important;
+  background: linear-gradient(135deg, #80a7ff 0%, #52ead2 100%) !important;
+  box-shadow: 0 4px 15px rgba(82, 234, 210, 0.35) !important;
+  border-color: transparent !important;
+}
+
+/* Header buttons in Light Mode */
+body.light-mode .nav-actions .btn-nav-demo,
+body.light-mode .nav-actions .btn-nav-login {
+  color: #0f172a !important;
+  font-weight: 700 !important;
+}
+
+body.light-mode .nav-actions .btn-nav-demo:hover,
+body.light-mode .nav-actions .btn-nav-login:hover {
+  color: #051013 !important;
+  background: linear-gradient(135deg, #80a7ff 0%, #52ead2 100%) !important;
+}
+
+body.light-mode .theme-toggle-btn {
+  background: rgba(15, 23, 42, 0.06);
+  border-color: rgba(2, 132, 199, 0.3);
+  color: #0284c7;
+}
+
+/* Light Mode Mockup Dashboard Styling */
+body.light-mode .product-stage {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 10px 40px rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-mode .app-window {
+  background: #f8fafc !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+body.light-mode .window-bar {
+  background: #ffffff !important;
+  color: #334155 !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+body.light-mode .sidebar {
+  background: #f1f5f9 !important;
+  border-right: 1px solid #e2e8f0 !important;
+}
+
+body.light-mode .side-item {
+  color: #475569 !important;
+}
+
+body.light-mode .side-item.active,
+body.light-mode .side-item:hover {
+  color: #051013 !important;
+  background: linear-gradient(135deg, #80a7ff 0%, #52ead2 100%) !important;
+  border: 1.5px solid transparent !important;
+  box-shadow: 0 4px 18px rgba(82, 234, 210, 0.4) !important;
+}
+
+body.light-mode .glass-card:not(.fleet-visual) {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+}
+
+body.light-mode .app-window h1,
+body.light-mode .app-window h2,
+body.light-mode .app-window h3,
+body.light-mode .app-window h4,
+body.light-mode .app-window h5,
+body.light-mode .app-window strong {
+  color: #0f172a !important;
+}
+
+body.light-mode .app-window p {
+  color: #475569 !important;
+}
+
+body.light-mode .stat {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+body.light-mode .stat strong {
+  color: #0f172a !important;
+}
+
+body.light-mode .stat span {
+  color: #64748b !important;
+}
+
+/* Light Mode Mockup Table Overrides */
+body.light-mode .td-num {
+  color: #64748b !important;
+}
+
+body.light-mode .td-id {
+  color: #0284c7 !important;
+}
+
+body.light-mode .td-cust {
+  color: #0f172a !important;
+  font-weight: 600 !important;
+}
+
+body.light-mode .td-veh {
+  color: #334155 !important;
+}
+
+body.light-mode .td-dates {
+  color: #475569 !important;
+}
+
+body.light-mode .td-amt {
+  color: #0284c7 !important;
+  font-weight: 700 !important;
+}
+
+body.light-mode #res-table th,
+body.light-mode #panel-reports th {
+  background: #e2e8f0 !important;
+  color: #1e293b !important;
+  border-bottom: 1px solid #cbd5e1 !important;
+}
+
+body.light-mode #res-table tr:hover td,
+body.light-mode #panel-reports table tr:hover td {
+  background: rgba(2, 132, 199, 0.06) !important;
+}
+
+body.light-mode .status-confirmed {
+  background: #dcfce7 !important;
+  color: #15803d !important;
+}
+
+body.light-mode .status-pending {
+  background: #fef9c3 !important;
+  color: #a16207 !important;
+}
+
+body.light-mode .status-cancelled {
+  background: #fee2e2 !important;
+  color: #b91c1c !important;
+}
+
+body.light-mode #res-info {
+  color: #475569 !important;
+}
+
+body.light-mode .pg-btn {
+  background: #ffffff !important;
+  color: #334155 !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+body.light-mode .pg-btn.active-pg {
+  background: #0284c7 !important;
+  color: #ffffff !important;
+  border-color: #0284c7 !important;
+}
+
+/* Master Agreement Component Base & Theme Styles */
+.master-agreement-box {
+  background: rgba(11, 16, 32, 0.7);
+  border: 1px solid rgba(82, 234, 210, 0.25);
+  color: #cbd5e1;
+}
+
+.agr-title {
+  color: #52ead2;
+}
+
+.agr-ref {
+  color: #94a3b8;
+}
+
+.agr-badge {
+  background: rgba(82, 234, 210, 0.1);
+  border: 1px solid rgba(82, 234, 210, 0.3);
+  color: #52ead2;
+}
+
+.agr-parties-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.agr-party-head {
+  color: #ffffff;
+}
+
+.agr-party-head svg {
+  stroke: #52ead2;
+}
+
+.agr-strong {
+  color: #94a3b8;
+}
+
+.agr-val {
+  color: #f1f5f9;
+  font-weight: 600;
+}
+
+.agr-section-head {
+  color: #ffffff;
+}
+
+.agr-terms-list {
+  color: #cbd5e1;
+}
+
+.agr-term-num {
+  color: #52ead2;
+}
+
+.agr-sig {
+  color: #52ead2;
+}
+
+.agr-hash {
+  color: #64748b;
+}
+
+.agr-hash span {
+  color: #94a3b8;
+}
+
+body.light-mode .master-agreement-box {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #334155 !important;
+  box-shadow: 0 4px 25px rgba(15, 23, 42, 0.06) !important;
+}
+
+body.light-mode .agr-title {
+  color: #0284c7 !important;
+}
+
+body.light-mode .agr-ref {
+  color: #64748b !important;
+}
+
+body.light-mode .agr-badge {
+  background: #e0f2fe !important;
+  border: 1px solid #0284c7 !important;
+  color: #0284c7 !important;
+}
+
+body.light-mode .agr-parties-card {
+  background: #f8fafc !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+body.light-mode .agr-party-head {
+  color: #0f172a !important;
+}
+
+body.light-mode .agr-party-head svg {
+  stroke: #0284c7 !important;
+}
+
+body.light-mode .agr-strong {
+  color: #475569 !important;
+}
+
+body.light-mode .agr-val {
+  color: #0f172a !important;
+  font-weight: 700 !important;
+}
+
+body.light-mode .agr-section-head {
+  color: #0f172a !important;
+}
+
+body.light-mode .agr-terms-list {
+  color: #334155 !important;
+}
+
+body.light-mode .agr-term-num {
+  color: #0284c7 !important;
+  font-weight: 700 !important;
+}
+
+body.light-mode .agr-sig {
+  color: #0284c7 !important;
+}
+
+body.light-mode .agr-hash {
+  color: #64748b !important;
+}
+
+body.light-mode .agr-hash span {
+  color: #0f172a !important;
+  font-weight: 600 !important;
+}
+
+body.light-mode .page-hero {
+  background: radial-gradient(circle at 80% 0%, rgba(128, 167, 255, 0.12), transparent 28rem), radial-gradient(circle at 10% 15%, rgba(82, 234, 210, 0.12), transparent 24rem), #f8fafc !important;
+  color: #0f172a !important;
+}
+
+/* Light Mode Footer Overrides */
+body.light-mode .footer {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border-top: 1px solid rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-mode .footer h3 {
+  color: #0f172a !important;
+}
+
+body.light-mode .footer p,
+body.light-mode .footer-links a,
+body.light-mode .footer-bottom {
+  color: #475569 !important;
+}
+
+body.light-mode .footer-links a:hover {
+  color: #0284c7 !important;
+}
+
+body.light-mode .footer-bottom {
+  border-top: 1px solid rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-mode .socials a {
+  background: rgba(15, 23, 42, 0.04) !important;
+  border-color: rgba(15, 23, 42, 0.12) !important;
+  color: #334155 !important;
+}
+
+body.light-mode .socials a:hover {
+  background: rgba(2, 132, 199, 0.1) !important;
+  color: #0284c7 !important;
+}
+
+body.light-mode .section.dark,
+body.light-mode .section.light,
+body.light-mode .section.soft {
+  background: transparent !important;
+  color: #0f172a !important;
+}
+
+/* Page headings and text in Light Mode */
+body.light-mode h1,
+body.light-mode h2,
+body.light-mode h3:not(.card h3):not(.pricing-card h3):not(.feature-card h3):not(.info-card h3),
+body.light-mode .page-title,
+body.light-mode .hero h1 {
+  color: #0f172a !important;
+}
+
+body.light-mode .lead,
+body.light-mode p:not(.card p):not(.pricing-card p):not(.feature-card p):not(.info-card p):not(.contact-panel p):not(.flow-step p) {
+  color: #475569 !important;
+}
+
+/* ==========================================================================
+   Common Light Mode Styling for Modals & Popups
+   ========================================================================== */
+body.light-mode .demo-inquiry-modal-backdrop,
+body.light-mode .modal-backdrop,
+body.light-mode .xp-overlay {
+  background: rgba(15, 23, 42, 0.5) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+body.light-mode .demo-inquiry-modal-content,
+body.light-mode .modal-content,
+body.light-mode .xp-modal,
+body.light-mode .custom-modal-box,
+body.light-mode .swal2-popup {
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.12) !important;
+  color: #0f172a !important;
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.18) !important;
+  border-radius: 16px !important;
+}
+
+body.light-mode .demo-inquiry-modal-header,
+body.light-mode .modal-header,
+body.light-mode .xp-modal-head {
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-mode .demo-inquiry-modal-header h3,
+body.light-mode .modal-title,
+body.light-mode .xp-modal-title,
+body.light-mode .swal2-title {
+  color: #0f172a !important;
+}
+
+body.light-mode .demo-inquiry-close-btn,
+body.light-mode .modal-header .btn-close,
+body.light-mode .xp-modal-x,
+body.light-mode .close-btn {
+  color: #64748b !important;
+}
+
+body.light-mode .demo-inquiry-close-btn:hover,
+body.light-mode .xp-modal-x:hover {
+  color: #0f172a !important;
+}
+
+body.light-mode .demo-form-group label,
+body.light-mode .modal-body label,
+body.light-mode .xp-fg label {
+  color: #0f172a !important;
+}
+
+body.light-mode .demo-modal-input,
+body.light-mode .modal-body input,
+body.light-mode .modal-body select,
+body.light-mode .modal-body textarea,
+body.light-mode .xp-fg input,
+body.light-mode .xp-fg select {
+  background: #f8fafc !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+body.light-mode .demo-modal-input:focus,
+body.light-mode .modal-body input:focus,
+body.light-mode .modal-body select:focus,
+body.light-mode .modal-body textarea:focus {
+  border-color: #0284c7 !important;
+  background: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15) !important;
+}
+
+body.light-mode .swal2-html-container {
+  color: #334155 !important;
+}
+
+/* Admin & Vendor Panel Light Mode Overrides */
+body.light-mode {
+  --bg: #f1f5f9;
+  --bg-2: #ffffff;
+  --text: #0f172a;
+  --muted: #475569;
+  --panel: #ffffff;
+  --panel-strong: #f8fafc;
+  --line: rgba(15, 23, 42, 0.14);
+  --line-dark: rgba(15, 23, 42, 0.08);
+  --paper: #ffffff;
+  --paper-soft: #f8fafc;
+  --ink: #0f172a;
+}
+
+/* ── Admin & Vendor Listing Panel Cards & Tables in Light Mode ── */
+body.light-mode .admin-panel,
+body.light-mode .kpi-card,
+body.light-mode .admin-date-card,
+body.light-mode .dashboard-table-wrap {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+  color: #0f172a !important;
+  overflow: hidden !important;
+}
+
+body.light-mode .admin-panel .panel-head {
+  border-bottom: none !important;
+  background: #ffffff !important;
+}
+
+body.light-mode .admin-panel .panel-head h2,
+body.light-mode .admin-panel .panel-head h3 {
+  color: #0f172a !important;
+}
+
+body.light-mode .admin-table-wrap {
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+
+body.light-mode .admin-table,
+body.light-mode .admin-panel table {
+  background: #ffffff !important;
+}
+
+body.light-mode .admin-table th,
+body.light-mode .admin-panel table th {
+  background: #f8fafc !important;
+  color: #475569 !important;
+  border-bottom: 1.5px solid #cbd5e1 !important;
+}
+
+body.light-mode .admin-table td,
+body.light-mode .admin-panel table td,
+body.light-mode .admin-table tr,
+body.light-mode .admin-panel table tr {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border-bottom: 1px solid #cbd5e1 !important;
+}
+
+body.light-mode .admin-table tbody tr:last-child td,
+body.light-mode .admin-panel table tbody tr:last-child td,
+body.light-mode .admin-table tbody tr:last-child,
+body.light-mode .admin-panel table tbody tr:last-child {
+  border-bottom: none !important;
+}
+
+body.light-mode .admin-table tbody tr:hover td,
+body.light-mode .admin-panel table tbody tr:hover td {
+  background-color: #f8fafc !important;
+}
+
+/* Light Mode Global Form Controls & Dropdown Overrides */
+body.light-mode select,
+body.light-mode .form-select {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+body.light-mode select option,
+body.light-mode .form-select option {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+}
+
+/* Light Mode Feature Tables & Add/Delete Row Buttons (Common CSS) */
+body.light-mode .feature-row {
+  background: #ffffff !important;
+}
+
+body.light-mode .feature-row td {
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+body.light-mode .feature-input {
+  color: #0f172a !important;
+}
+
+body.light-mode .feature-input::placeholder {
+  color: #64748b !important;
+}
+
+body.light-mode .btn-add {
+  background: #f8fafc !important;
+  border: 1px dashed #cbd5e1 !important;
+  color: #0f766e !important;
+  font-weight: 700 !important;
+}
+
+body.light-mode .btn-add i {
+  color: #0f766e !important;
+}
+
+body.light-mode .btn-add:hover {
+  background: rgba(15, 118, 110, 0.08) !important;
+  border-color: #0f766e !important;
+  color: #0f766e !important;
+}
+
+body.light-mode .btn-delete {
+  background: rgba(239, 68, 68, 0.1) !important;
+  color: #dc2626 !important;
+}
+
+body.light-mode .btn-delete:hover {
+  background: #dc2626 !important;
+  color: #ffffff !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   GLOBAL LIGHT MODE CREATE / EDIT FORM & CONTROL OVERRIDES
+═══════════════════════════════════════════════════════════════════ */
+
+/* Card Containers & Type Selectors on Create/Edit Pages */
+body.light-mode .card,
+body.light-mode .card[style*="background"],
+body.light-mode .type-selector,
+body.light-mode .type-selector[style*="background"] {
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Headings & White text on Create/Edit pages */
+body.light-mode .text-white,
+body.light-mode .card h1,
+body.light-mode .card h2,
+body.light-mode .card h3,
+body.light-mode .card h4,
+body.light-mode .card h5,
+body.light-mode .card h6,
+body.light-mode .card .title-text,
+body.light-mode h6[style*="color: #f8fafc"],
+body.light-mode h6[style*="color:#f8fafc"],
+body.light-mode h4[style*="color: #ffffff"],
+body.light-mode h4[style*="color:#ffffff"],
+body.light-mode h3[style*="color: #ffffff"],
+body.light-mode h3[style*="color:#ffffff"] {
+  color: #0f172a !important;
+}
+
+/* Form labels & subtitles in Light Mode */
+body.light-mode label,
+body.light-mode .form-label,
+body.light-mode .form-label-custom,
+body.light-mode label[style*="color"],
+body.light-mode p[style*="color: #94a3b8"],
+body.light-mode p[style*="color:#94a3b8"],
+body.light-mode span[style*="color: #94a3b8"],
+body.light-mode span[style*="color:#94a3b8"],
+body.light-mode small.text-muted {
+  color: #334155 !important;
+}
+
+/* Form Inputs, Selects, Textareas & Custom Inputs in Light Mode */
+body.light-mode input.form-control,
+body.light-mode select.form-control,
+body.light-mode textarea.form-control,
+body.light-mode .form-control,
+body.light-mode .form-select,
+body.light-mode .form-input-custom,
+body.light-mode input[type="text"],
+body.light-mode input[type="number"],
+body.light-mode input[type="email"],
+body.light-mode input[type="password"],
+body.light-mode input[type="date"],
+body.light-mode input[type="month"],
+body.light-mode input[type="datetime-local"],
+body.light-mode textarea,
+body.light-mode select {
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+  color-scheme: light !important;
+}
+
+/* Form controls focus state in Light Mode */
+body.light-mode .form-control:focus,
+body.light-mode .form-select:focus,
+body.light-mode .form-input-custom:focus,
+body.light-mode input:focus,
+body.light-mode select:focus,
+body.light-mode textarea:focus {
+  background-color: #ffffff !important;
+  border-color: #0f766e !important;
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.15) !important;
+  color: #0f172a !important;
+}
+
+/* Placeholders in Light Mode */
+body.light-mode .form-control::placeholder,
+body.light-mode .form-input-custom::placeholder,
+body.light-mode input::placeholder,
+body.light-mode textarea::placeholder {
+  color: #64748b !important;
+}
+
+/* Horizontal lines in forms */
+body.light-mode hr,
+body.light-mode hr[style*="border-color"] {
+  border-color: #e2e8f0 !important;
+}
+
+/* Type Selector Card Active State (Coupons, etc.) */
+body.light-mode .type-selector.active {
+  background-color: rgba(239, 68, 68, 0.06) !important;
+  border: 1px solid #ef4444 !important;
+}
+
+body.light-mode .type-selector:not(.active):hover {
+  background-color: #f8fafc !important;
+  border-color: #94a3b8 !important;
+}
+
+/* Alert error messages in Light Mode */
+body.light-mode .alert-danger,
+body.light-mode .alert-danger[style*="background"] {
+  background-color: rgba(239, 68, 68, 0.08) !important;
+  color: #dc2626 !important;
+  border-color: rgba(239, 68, 68, 0.2) !important;
+}
+
+body.light-mode .alert-danger li {
+  color: #dc2626 !important;
+}
+
+body.light-mode .admin-body,
+body.light-mode .admin-main {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+body.light-mode .admin-sidebar {
+  background: #ffffff !important;
+  border-right: 1px solid rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-mode .admin-nav a,
+body.light-mode .admin-nav button,
+body.light-mode .nav-toggle {
+  color: #475569 !important;
+  background: transparent !important;
+}
+
+body.light-mode .admin-nav a:hover,
+body.light-mode .admin-nav a.active,
+body.light-mode .admin-nav button:hover,
+body.light-mode .admin-nav button.active,
+body.light-mode .nav-toggle:hover,
+body.light-mode .nav-toggle.active {
+  color: #051013 !important;
+  background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%) !important;
+  box-shadow: 0 4px 15px rgba(82, 234, 210, 0.25) !important;
+}
+
+body.light-mode .admin-nav a:hover svg,
+body.light-mode .admin-nav a.active svg,
+body.light-mode .admin-nav button:hover svg,
+body.light-mode .admin-nav button.active svg,
+body.light-mode .nav-toggle:hover svg,
+body.light-mode .nav-toggle.active svg {
+  stroke: #051013 !important;
+}
+
+body.light-mode .admin-submenu {
+  background: transparent !important;
+}
+
+body.light-mode .admin-submenu .submenu-item {
+  color: #475569 !important;
+  background: transparent !important;
+}
+
+body.light-mode .admin-submenu .submenu-item:hover,
+body.light-mode .admin-submenu .submenu-item.active {
+  color: #0284c7 !important;
+  background: rgba(15, 23, 42, 0.04) !important;
+}
+
+body.light-mode .admin-submenu .submenu-item .dot {
+  background: #cbd5e1 !important;
+}
+
+body.light-mode .admin-submenu .submenu-item:hover .dot,
+body.light-mode .admin-submenu .submenu-item.active .dot {
+  background: #0284c7 !important;
+}
+
+body.light-mode .admin-topbar {
+  background: #ffffff !important;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-mode .admin-topbar .user-greeting {
+  color: #0f172a !important;
+}
+
+body.light-mode .admin-topbar .admin-action {
+  color: #475569 !important;
+}
+
+body.light-mode .admin-topbar .admin-action:hover {
+  color: #0f172a !important;
+}
+
+/* ── Global Light Mode: All dark table containers ── */
+body.light-mode .table-responsive[style*="background: rgba(11, 16, 32"],
+body.light-mode .table-responsive[style*="background:rgba(11,16,32"] {
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04) !important;
+}
+
+body.light-mode .table-responsive .table,
+body.light-mode .table-responsive .table-borderless {
+  color: #475569 !important;
+}
+
+body.light-mode .table-responsive th[style*="color: #cbd5e1"],
+body.light-mode .table-responsive th[style*="color:#cbd5e1"] {
+  color: #64748b !important;
+  background: #f8fafc !important;
+  font-size: 0.78rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.07em !important;
+}
+
+body.light-mode .table-responsive tr[style*="border-bottom: 1px solid rgba(255,255,255,0.1)"],
+body.light-mode .table-responsive tr[style*="border-bottom:1px solid rgba(255,255,255,0.1)"] {
+  border-bottom: 1.5px solid #cbd5e1 !important;
+}
+
+body.light-mode .table-responsive tr[style*="border-bottom: 1px solid rgba(255,255,255,0.05)"],
+body.light-mode .table-responsive tr[style*="border-bottom:1px solid rgba(255,255,255,0.05)"],
+body.light-mode .table-responsive td,
+body.light-mode .table-responsive tr {
+  border-bottom: 1px solid #cbd5e1 !important;
+}
+
+body.light-mode .table-responsive tbody tr:last-child,
+body.light-mode .table-responsive tbody tr:last-child td {
+  border-bottom: none !important;
+}
+
+body.light-mode .table-responsive td[style*="padding: 15px"] {
+  color: #0f172a !important;
+}
+
+body.light-mode .table-responsive strong[style*="color: #f8fafc"],
+body.light-mode .table-responsive strong[style*="color:#f8fafc"] {
+  color: #0f172a !important;
+}
+
+body.light-mode .table-responsive td[style*="color: #f8fafc"],
+body.light-mode .table-responsive td[style*="color:#f8fafc"] {
+  color: #0f172a !important;
+}
+
+body.light-mode .table-responsive td[style*="color: #cbd5e1"],
+body.light-mode .table-responsive td[style*="color:#cbd5e1"] {
+  color: #475569 !important;
+}
+
+body.light-mode .table-responsive td[style*="color: #94a3b8"],
+body.light-mode .table-responsive td[style*="color:#94a3b8"] {
+  color: #64748b !important;
+}
+
+body.light-mode .table-responsive td[style*="color: #52ead2"],
+body.light-mode .table-responsive td[style*="color:#52ead2"] {
+  color: #0f766e !important;
+}
+
+body.light-mode .table-responsive span[style*="color: #52ead2"],
+body.light-mode .table-responsive span[style*="color:#52ead2"] {
+  color: #0f766e !important;
+}
+
+body.light-mode .table-responsive a[style*="color: #52ead2"],
+body.light-mode .table-responsive a[style*="color:#52ead2"] {
+  color: #0f766e !important;
+}
+
+body.light-mode .table-responsive td[style*="color: #4ade80"],
+body.light-mode .table-responsive td[style*="color:#4ade80"] {
+  color: #16a34a !important;
+}
+
+body.light-mode .table-responsive td[style*="color: #f87171"],
+body.light-mode .table-responsive td[style*="color:#f87171"] {
+  color: #dc2626 !important;
+}
+
+body.light-mode .table-responsive td[style*="color: #ef4444"],
+body.light-mode .table-responsive td[style*="color:#ef4444"] {
+  color: #dc2626 !important;
+}
+
+body.light-mode .table-responsive td>small[style*="color: #64748b"],
+body.light-mode .table-responsive span[style*="color: #64748b"],
+body.light-mode .table-responsive small[style*="color: #64748b"] {
+  color: #94a3b8 !important;
+}
+
+/* Global light mode badge overrides (all pages) */
+body.light-mode .badge[style*="color: #4ade80"] {
+  background: rgba(21, 128, 61, 0.08) !important;
+  color: #15803d !important;
+  border-color: rgba(21, 128, 61, 0.18) !important;
+}
+
+body.light-mode .badge[style*="color: #facc15"],
+body.light-mode .badge[style*="color:#facc15"] {
+  background: rgba(161, 98, 7, 0.08) !important;
+  color: #a16207 !important;
+  border-color: rgba(161, 98, 7, 0.18) !important;
+}
+
+body.light-mode .badge[style*="color: #f87171"],
+body.light-mode .badge[style*="color:#f87171"] {
+  background: rgba(220, 38, 38, 0.08) !important;
+  color: #dc2626 !important;
+  border-color: rgba(220, 38, 38, 0.18) !important;
+}
+
+body.light-mode .badge[style*="color: #93c5fd"],
+body.light-mode .badge[style*="color:#93c5fd"] {
+  background: rgba(37, 99, 235, 0.08) !important;
+  color: #2563eb !important;
+  border-color: rgba(37, 99, 235, 0.18) !important;
+}
+
+body.light-mode .badge[style*="color: #94a3b8"],
+body.light-mode .badge[style*="color:#94a3b8"] {
+  background: rgba(71, 85, 105, 0.08) !important;
+  color: #475569 !important;
+  border-color: rgba(71, 85, 105, 0.18) !important;
+}
+
+/* Teal action buttons in tables (Reply, View etc.) */
+body.light-mode .table-responsive a.btn[style*="rgba(82, 234, 210, 0.1)"],
+body.light-mode .table-responsive a.btn[style*="rgba(82,234,210,0.1)"] {
+  background: rgba(15, 118, 110, 0.08) !important;
+  color: #0f766e !important;
+  border-color: rgba(15, 118, 110, 0.2) !important;
+}
+
+body.light-mode .table-responsive a.btn[style*="rgba(82, 234, 210, 0.1)"]:hover,
+body.light-mode .table-responsive a.btn[style*="rgba(82,234,210,0.1)"]:hover {
+  background: rgba(15, 118, 110, 0.15) !important;
+  border-color: rgba(15, 118, 110, 0.35) !important;
+}
+
+/* ══════════════════════════════════════════════════════
+   GLOBAL LIGHT MODE: USER SITE FORM ELEMENTS
+   Covers: glass-input, dark-input, glass-label, dark-label,
+   dark-card, form containers, btn-teal, btn-blue, etc.
+══════════════════════════════════════════════════════ */
+
+/* Form card/container backgrounds */
+body.light-mode div[style*="background: rgba(11, 16, 32, 0.6)"],
+body.light-mode div[style*="background:rgba(11,16,32,0.6)"],
+body.light-mode div[style*="background: rgba(11, 16, 32, 0.8)"],
+body.light-mode div[style*="background:rgba(11,16,32,0.8)"] {
+  background: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* dark-card class */
+body.light-mode .dark-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* glass-input & dark-input — text inputs, selects, textareas */
+body.light-mode .glass-input,
+body.light-mode .dark-input {
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.15) !important;
+  color: #0f172a !important;
+}
+
+body.light-mode .glass-input:focus,
+body.light-mode .dark-input:focus {
+  background: #f8fafc !important;
+  border-color: #0f766e !important;
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.12) !important;
+  color: #0f172a !important;
+}
+
+body.light-mode .glass-input::placeholder,
+body.light-mode .dark-input::placeholder {
+  color: #94a3b8 !important;
+}
+
+body.light-mode .glass-input option,
+body.light-mode .dark-input option {
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+
+body.light-mode .dark-input[readonly],
+body.light-mode .dark-input:disabled {
+  background: #f1f5f9 !important;
+  color: #64748b !important;
+  cursor: not-allowed !important;
+}
+
+/* glass-label & dark-label */
+body.light-mode .glass-label,
+body.light-mode .dark-label {
+  color: #475569 !important;
+}
+
+/* section headings inside forms */
+body.light-mode .section-heading {
+  color: #0f172a !important;
+  border-bottom-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-mode .section-heading svg {
+  color: #0f766e !important;
+  stroke: #0f766e !important;
+}
+
+/* price-row inside forms */
+body.light-mode .price-row {
+  color: #475569 !important;
+  border-bottom-color: rgba(15, 23, 42, 0.07) !important;
+}
+
+body.light-mode .price-row.total {
+  color: #0f172a !important;
+}
+
+/* extra-item cards */
+body.light-mode .extra-item {
+  background: #f8fafc !important;
+  border-color: rgba(15, 23, 42, 0.07) !important;
+}
+
+body.light-mode .extra-item:hover {
+  background: #f1f5f9 !important;
+}
+
+/* radio-label */
+body.light-mode .radio-label {
+  color: #334155 !important;
+}
+
+/* btn-teal: override to frontend gradient */
+body.light-mode .btn-teal,
+body.light-mode button.btn-teal,
+body.light-mode a.btn-teal {
+  background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%) !important;
+  color: #051013 !important;
+  border: none !important;
+  border-radius: 999px !important;
+  font-weight: 800 !important;
+  box-shadow: 0 4px 15px rgba(82, 234, 210, 0.25) !important;
+}
+
+body.light-mode .btn-teal:hover,
+body.light-mode button.btn-teal:hover,
+body.light-mode a.btn-teal:hover {
+  opacity: 0.92 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(82, 234, 210, 0.45) !important;
+  color: #051013 !important;
+}
+
+/* btn-blue: replace hardcoded blue with gradient */
+body.light-mode .btn-blue,
+body.light-mode button.btn-blue {
+  background: linear-gradient(135deg, #80a7ff 0%, #52ead2 100%) !important;
+  color: #051013 !important;
+  border: none !important;
+  border-radius: 999px !important;
+  font-weight: 800 !important;
+  box-shadow: 0 4px 15px rgba(82, 234, 210, 0.25) !important;
+}
+
+body.light-mode .btn-blue:hover {
+  opacity: 0.92 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(82, 234, 210, 0.45) !important;
+}
+
+/* info-alert (blue info box) */
+body.light-mode .info-alert {
+  background: rgba(37, 99, 235, 0.06) !important;
+  border-color: rgba(37, 99, 235, 0.15) !important;
+  color: #1d4ed8 !important;
+}
+
+/* Back button / outline button */
+body.light-mode a.btn-outline[style*="rgba(255,255,255,0.1)"],
+body.light-mode a.btn-outline[style*="rgba(255, 255, 255, 0.1)"],
+body.light-mode a.btn[style*="border: 1px solid rgba(255,255,255,0.1)"],
+body.light-mode a.btn[style*="border: 1px solid rgba(255, 255, 255, 0.1)"] {
+  border-color: rgba(15, 23, 42, 0.15) !important;
+  color: #475569 !important;
+  background: #f8fafc !important;
+}
+
+body.light-mode a.btn-outline:hover,
+body.light-mode a.btn-outline[style*="rgba(255,255,255,0.1)"]:hover {
+  border-color: rgba(15, 23, 42, 0.25) !important;
+  color: #0f172a !important;
+  background: #f1f5f9 !important;
+}
+
+/* File input light mode */
+body.light-mode input[type="file"].glass-input,
+body.light-mode input[type="file"].dark-input {
+  background: #f8fafc !important;
+  color: #475569 !important;
+  border: 1px dashed rgba(15, 23, 42, 0.2) !important;
+}
+
+/* Helper/hint text below inputs */
+body.light-mode span[style*="color: #64748b"],
+body.light-mode small[style*="color: #64748b"] {
+  color: #94a3b8 !important;
+}
+
+/* Error alert */
+body.light-mode .alert[style*="color: #f87171"] {
+  background: rgba(220, 38, 38, 0.06) !important;
+  border-color: rgba(220, 38, 38, 0.15) !important;
+  color: #dc2626 !important;
+}
+
+/* Page heading inline white */
+body.light-mode h2[style*="color: #f8fafc"],
+body.light-mode h4[style*="color: #f8fafc"],
+body.light-mode h3[style*="color: #f8fafc"],
+body.light-mode h5[style*="color: #f8fafc"] {
+  color: #0f172a !important;
+}
+
+body.light-mode span[style*="color: #94a3b8"],
+body.light-mode p[style*="color: #94a3b8"] {
+  color: #64748b !important;
+}
+
+body.light-mode strong[style*="color: #cbd5e1"],
+body.light-mode span[style*="color: #cbd5e1"] {
+  color: #475569 !important;
+}
+
+body.light-mode .kpi-card,
+body.light-mode .admin-panel {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03) !important;
+  background: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-mode input,
+body.light-mode select,
+body.light-mode textarea {
+  border: 1px solid rgba(15, 23, 42, 0.15) !important;
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+
+body.light-mode input:focus,
+body.light-mode select:focus,
+body.light-mode textarea:focus {
+  border-color: #0284c7 !important;
+  outline: 3px solid rgba(2, 132, 199, 0.15) !important;
+  background: #ffffff !important;
+}
+
+/* Light Mode specific table legibility overrides (only applied under body.light-mode) */
+body.light-mode .admin-panel .admin-table,
+body.light-mode .admin-panel table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+}
+
+body.light-mode .admin-panel .admin-table th,
+body.light-mode .admin-panel table th {
+  padding: 14px 18px !important;
+  color: #475569 !important;
+  font-size: 0.8rem !important;
+  font-weight: 780 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  background: #f8fafc !important;
+  border-bottom: 1.5px solid rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-mode .admin-panel .admin-table td,
+body.light-mode .admin-panel table td {
+  padding: 16px 18px !important;
+  font-size: 0.92rem !important;
+  border-bottom: none !important;
+  color: #0f172a !important;
+}
+
+body.light-mode .admin-panel .admin-table td div,
+body.light-mode .admin-panel table td div {
+  color: #0f172a !important;
+}
+
+body.light-mode .admin-panel .admin-table tbody tr:hover td,
+body.light-mode .admin-panel table tbody tr:hover td {
+  background-color: rgba(15, 23, 42, 0.02) !important;
+}
+
+body.light-mode .customer-cell strong,
+body.light-mode .admin-table strong {
+  color: #0f172a !important;
+}
+
+/* Light Mode specific table links, white text overrides, and badges */
+body.light-mode .admin-panel .admin-table td a,
+body.light-mode .admin-panel table td a,
+body.light-mode .admin-table td a {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+body.light-mode .admin-panel .admin-table td a:hover,
+body.light-mode .admin-panel table td a:hover,
+body.light-mode .admin-table td a:hover {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+/* Force dark text for inline styled white/light cells/spans/labels in light mode */
+body.light-mode td[style*="color: #ffffff"],
+body.light-mode td[style*="color:#ffffff"],
+body.light-mode td[style*="color: #fff"],
+body.light-mode td[style*="color:#fff"],
+body.light-mode td[style*="color: #f8fafc"],
+body.light-mode td[style*="color:#f8fafc"],
+body.light-mode td[style*="color: #e2e8f0"],
+body.light-mode td[style*="color:#e2e8f0"],
+body.light-mode td[style*="color: #cbd5e1"],
+body.light-mode td[style*="color:#cbd5e1"],
+body.light-mode td [style*="color: #ffffff"],
+body.light-mode td [style*="color:#ffffff"],
+body.light-mode td [style*="color: #fff"],
+body.light-mode td [style*="color:#fff"],
+body.light-mode td [style*="color: #f8fafc"],
+body.light-mode td [style*="color:#f8fafc"],
+body.light-mode td [style*="color: #e2e8f0"],
+body.light-mode td [style*="color:#e2e8f0"],
+body.light-mode td [style*="color: #cbd5e1"],
+body.light-mode td [style*="color:#cbd5e1"],
+body.light-mode td [style*="color: rgb(255, 255, 255)"],
+body.light-mode td [style*="color:rgb(255,255,255)"] {
+  color: #0f172a !important;
+}
+
+/* Force dark text for standard elements inside table cells in light mode */
+body.light-mode td span:not([class*="badge"]):not([class*="status"]):not([class*="btn"]):not([class*="button"]):not([style*="color:"]),
+body.light-mode td strong:not([style*="color:"]),
+body.light-mode td div:not([class*="badge"]):not([class*="status"]):not([style*="color:"]),
+body.light-mode td small:not([style*="color:"]),
+body.light-mode td p:not([style*="color:"]),
+body.light-mode td b:not([style*="color:"]) {
+  color: #0f172a !important;
+}
+
+/* Map light turquoise brand color to highly readable dark teal in light mode globally */
+body.light-mode td [style*="#52ead2"],
+body.light-mode td [style*="var(--brand)"],
+body.light-mode td span[style*="#52ead2"],
+body.light-mode td span[style*="var(--brand)"],
+body.light-mode td strong[style*="#52ead2"],
+body.light-mode td strong[style*="var(--brand)"],
+body.light-mode td a[style*="#52ead2"],
+body.light-mode td a[style*="var(--brand)"] {
+  color: #0f766e !important;
+}
+
+body.light-mode td a[style*="rgba(82,234,210,"],
+body.light-mode td a[style*="rgba(82, 234, 210,"] {
+  border-color: rgba(15, 118, 110, 0.3) !important;
+  background: rgba(15, 118, 110, 0.06) !important;
+  color: #0f766e !important;
+}
+
+body.light-mode td a[style*="rgba(82,234,210,"]:hover,
+body.light-mode td a[style*="rgba(82, 234, 210,"]:hover {
+  background: rgba(15, 118, 110, 0.12) !important;
+  border-color: rgba(15, 118, 110, 0.5) !important;
+}
+
+/* Force dark text on table row hover to prevent text from turning white */
+body.light-mode .admin-panel .admin-table tbody tr:hover td,
+body.light-mode .admin-panel .admin-table tbody tr:hover td span,
+body.light-mode .admin-panel .admin-table tbody tr:hover td a:not([class*="btn"]):not([class*="button"]),
+body.light-mode .admin-panel .admin-table tbody tr:hover td div,
+body.light-mode .admin-panel table tbody tr:hover td,
+body.light-mode .admin-panel table tbody tr:hover td span,
+body.light-mode .admin-panel table tbody tr:hover td a:not([class*="btn"]):not([class*="button"]),
+body.light-mode .admin-panel table tbody tr:hover td div,
+body.light-mode .admin-table tbody tr:hover td,
+body.light-mode .admin-table tbody tr:hover td span,
+body.light-mode .admin-table tbody tr:hover td a:not([class*="btn"]):not([class*="button"]),
+body.light-mode .admin-table tbody tr:hover td div {
+  color: #0f172a !important;
+}
+
+/* Status badge styles overrides for light mode */
+body.light-mode .status-badge-active {
+  background: #dcfce7 !important;
+  color: #15803d !important;
+  border-color: rgba(21, 128, 61, 0.2) !important;
+}
+
+body.light-mode .status-badge-inactive {
+  background: #f1f5f9 !important;
+  color: #475569 !important;
+  border-color: rgba(71, 85, 105, 0.2) !important;
+}
+
+/* Redesign package/brand color inline badges inside td for light mode readability */
+body.light-mode .admin-panel table td span[style*="color: var(--brand)"],
+body.light-mode .admin-panel table td span[style*="color:var(--brand)"],
+body.light-mode .admin-table td span[style*="color: var(--brand)"],
+body.light-mode .admin-table td span[style*="color:var(--brand)"] {
+  color: #0f766e !important;
+  background-color: rgba(15, 118, 110, 0.1) !important;
+  border-color: rgba(15, 118, 110, 0.2) !important;
+}
+
+/* Light Mode specific pagination overrides */
+body.light-mode nav[role="navigation"] a,
+body.light-mode nav[role="navigation"] span>span,
+body.light-mode .pagination .page-link,
+body.light-mode .pagination .page-item a,
+body.light-mode .pagination .page-item span {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #475569 !important;
+}
+
+body.light-mode nav[role="navigation"] a:hover,
+body.light-mode .pagination .page-link:hover,
+body.light-mode .pagination .page-item a:hover {
+  background-color: #f1f5f9 !important;
+  color: #0284c7 !important;
+  border-color: #0284c7 !important;
+}
+
+body.light-mode nav[role="navigation"] span[aria-current="page"]>span,
+body.light-mode nav[role="navigation"] .active>.page-link,
+body.light-mode .pagination .active>.page-link,
+body.light-mode .pagination .active>span {
+  background: linear-gradient(135deg, #80a7ff 0%, #52ead2 100%) !important;
+  border-color: transparent !important;
+  color: #051013 !important;
+  box-shadow: 0 4px 12px rgba(82, 234, 210, 0.35) !important;
+}
+
+/* CKEditor Light Mode UI Styling Overrides */
+body.light-mode .cke_chrome {
+  border-color: rgba(15, 23, 42, 0.15) !important;
+  background-color: #f8fafc !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02) !important;
+}
+
+body.light-mode .cke_top {
+  background: #f1f5f9 !important;
+  border-bottom-color: rgba(15, 23, 42, 0.1) !important;
+}
+
+body.light-mode .cke_bottom {
+  background: #f1f5f9 !important;
+  border-top-color: rgba(15, 23, 42, 0.1) !important;
+}
+
+body.light-mode .cke_toolgroup {
+  background: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.15) !important;
+  box-shadow: none !important;
+}
+
+body.light-mode .cke_button_off:hover,
+body.light-mode .cke_button_on {
+  background: #e2e8f0 !important;
+}
+
+body.light-mode .cke_combo_button {
+  background: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.15) !important;
+  box-shadow: none !important;
+}
+
+body.light-mode .cke_combo_button:hover {
+  background: #e2e8f0 !important;
+}
+
+body.light-mode .cke_path_item,
+body.light-mode .cke_path_empty {
+  color: #475569 !important;
+}
+
+/* Light Mode specific ticker overrides (keep background transparent, change text/border for visibility) */
+body.light-mode .ticker {
+  background-color: rgba(255, 255, 255, 0.035) !important;
+  border-block: 1px solid rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-mode .ticker span {
+  color: #475569 !important;
+}
+
+/* Custom Profile Dropdown Styles */
+.profile-dropdown-container {
+  z-index: 1001;
+}
+
+.profile-trigger-btn.active {
+  border-color: var(--brand, #52ead2) !important;
+  color: var(--brand, #52ead2) !important;
+  box-shadow: 0 0 10px rgba(82, 234, 210, 0.15);
+}
+
+.profile-dropdown-menu {
+  display: none;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  background: #0b1020 !important;
+  /* Force solid, opaque background to prevent overlapping text */
+}
+
+@keyframes dropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.profile-dropdown-menu[style*="display: block"] {
+  display: block !important;
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  animation: dropdownFade 0.2s ease-out forwards;
+}
+
+body.light-mode .profile-dropdown-menu {
+  background: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
+}
+
+body.light-mode .profile-dropdown-menu a {
+  color: #334155 !important;
+}
+
+body.light-mode .profile-dropdown-menu a:hover {
+  background: rgba(82, 234, 210, 0.06) !important;
+}
+
+body.light-mode .profile-dropdown-menu button:hover {
+  background: rgba(244, 63, 94, 0.05) !important;
+}
+
+/* Vendor Pricing Light Mode Overrides */
+body.light-mode .container-p-y h4.fw-bold {
+  color: var(--text, #0f172a) !important;
+}
+
+body.light-mode .container-p-y h4.fw-bold span {
+  color: var(--muted, #475569) !important;
+}
+
+body.light-mode .card {
+  background: var(--panel, #ffffff) !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+}
+
+body.light-mode .card .card-title {
+  color: var(--text, #0f172a) !important;
+}
+
+body.light-mode .card .card-text {
+  color: var(--muted, #475569) !important;
+}
+
+body.light-mode .card .display-5 {
+  color: var(--text, #0f172a) !important;
+}
+
+body.light-mode .card span[style*="color: #aab7cb"],
+body.light-mode .card span[style*="color:#aab7cb"] {
+  color: var(--muted, #475569) !important;
+}
+
+body.light-mode .card ul.list-unstyled {
+  color: var(--text, #334155) !important;
+}
+
+body.light-mode .card ul.list-unstyled li span {
+  color: var(--muted, #475569) !important;
+}
+
+body.light-mode .card ul.list-unstyled li {
+  color: var(--text, #334155) !important;
+}
+
+body.light-mode .card ul[style*="color: #e2e8f0"],
+body.light-mode .card ul[style*="color:#e2e8f0"] {
+  color: var(--text, #334155) !important;
+}
+
+/* Pricing Modals Light Mode Overrides */
+body.light-mode #customPackageModal,
+body.light-mode #confirmDetailsModal {
+  background-color: rgba(15, 23, 42, 0.45) !important;
+}
+
+body.light-mode #customPackageModal>div,
+body.light-mode #confirmDetailsModal>div {
+  background: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+  color: #0f172a !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08) !important;
+}
+
+body.light-mode #customPackageModal h3,
+body.light-mode #confirmDetailsModal h3 {
+  color: #0f172a !important;
+}
+
+body.light-mode #customPackageModal label,
+body.light-mode #confirmDetailsModal label {
+  color: #475569 !important;
+}
+
+body.light-mode #customPackageModal input,
+body.light-mode #customPackageModal textarea,
+body.light-mode #confirmDetailsModal input,
+body.light-mode #confirmDetailsModal select {
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.12) !important;
+  color: #0f172a !important;
+  border-color: rgba(15, 23, 42, 0.12) !important;
+}
+
+body.light-mode #confirmDetailsModal div[style*="background: rgba(255, 255, 255, 0.03)"],
+body.light-mode #confirmDetailsModal div[style*="background:rgba(255,255,255,0.03)"] {
+  background: #f8fafc !important;
+  border: 1px dashed rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-mode #confirmDetailsModal div[style*="background: rgba(255, 255, 255, 0.03)"] strong,
+body.light-mode #confirmDetailsModal div[style*="background: rgba(255, 255, 255, 0.03)"] span,
+body.light-mode #confirmDetailsModal div[style*="background:rgba(255,255,255,0.03)"] strong,
+body.light-mode #confirmDetailsModal div[style*="background:rgba(255,255,255,0.03)"] span {
+  color: #334155 !important;
+}
+
+body.light-mode #confirmDetailsModal #modalTotalPrice {
+  color: #ff5429 !important;
+}
+
+body.light-mode #addrSuggestions {
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.15) !important;
+  color: #0f172a !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+}
+
+body.light-mode #customPackageModal button[onclick*="Cancel"],
+body.light-mode #confirmDetailsModal button[onclick*="closeDetailsModal"] {
+  border: 1px solid rgba(15, 23, 42, 0.15) !important;
+  color: #475569 !important;
+}
+
+body.light-mode #customPackageModal button[onclick*="Cancel"]:hover,
+body.light-mode #confirmDetailsModal button[onclick*="closeDetailsModal"]:hover {
+  background: #f1f5f9 !important;
+}
+
+/* ── Light Mode: Force gradient on ALL vendor site action buttons ── */
+body.light-mode .btn-primary,
+body.light-mode button.btn-primary,
+body.light-mode a.btn-primary,
+body.light-mode .btn.btn-primary,
+body.light-mode button[type="submit"].btn-primary,
+body.light-mode button.btn.w-100[style*="linear-gradient(135deg, var(--brand"],
+body.light-mode button.btn.w-100[style*="linear-gradient(135deg, #52ead2"],
+body.light-mode button.btn.w-100[style*="background: linear-gradient"],
+body.light-mode button.btn[style*="background: linear-gradient(135deg, var(--brand"],
+body.light-mode button.btn[style*="linear-gradient(135deg, #52ead2"] {
+  background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%) !important;
+  color: #051013 !important;
+  border: none !important;
+  box-shadow: 0 4px 15px rgba(82, 234, 210, 0.3) !important;
+  border-radius: 999px !important;
+  font-weight: 800 !important;
+}
+
+body.light-mode .btn-primary:hover,
+body.light-mode button.btn-primary:hover,
+body.light-mode a.btn-primary:hover,
+body.light-mode .btn.btn-primary:hover,
+body.light-mode button[type="submit"].btn-primary:hover {
+  opacity: 0.92 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(82, 234, 210, 0.45) !important;
+  color: #051013 !important;
+}
+
+/* ── Light Mode: "Current Package" disabled button ── */
+body.light-mode .current-pkg-btn,
+body.light-mode button[disabled].btn.w-100,
+body.light-mode button:disabled.btn {
+  background: #e2e8f0 !important;
+  color: #64748b !important;
+  border: 1px solid #cbd5e1 !important;
+  opacity: 1 !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+}
+
 @keyframes preloader-spin {
   0% {
     transform: rotate(0deg);
@@ -3013,4 +5179,1000 @@ input[type="button"],
   100% {
     transform: rotate(360deg);
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   ██████  GLOBAL LIGHT MODE — UNIVERSAL TEXT COLOR OVERRIDES ██████
+   Covers ALL sites: User | Vendor | Admin | Frontend | Demo
+   Converts white/near-white/light-grey inline text → dark readable
+═══════════════════════════════════════════════════════════════════ */
+
+/* ── #f8fafc (near-white headings & body text) ── */
+body.light-mode *[style*="color: #f8fafc"],
+body.light-mode *[style*="color:#f8fafc"] {
+  color: #0f172a !important;
+}
+
+/* ── #ffffff white text ── */
+body.light-mode *[style*="color: #ffffff"],
+body.light-mode *[style*="color:#ffffff"],
+body.light-mode *[style*="color: white"],
+body.light-mode *[style*="color:white"] {
+  color: #0f172a !important;
+}
+
+/* ── #cbd5e1 light-grey (labels, subheadings) ── */
+body.light-mode *[style*="color: #cbd5e1"],
+body.light-mode *[style*="color:#cbd5e1"] {
+  color: #475569 !important;
+}
+
+/* ── #94a3b8 muted grey ── */
+body.light-mode *[style*="color: #94a3b8"],
+body.light-mode *[style*="color:#94a3b8"] {
+  color: #64748b !important;
+}
+
+/* ── #e2e8f0 very light grey ── */
+body.light-mode *[style*="color: #e2e8f0"],
+body.light-mode *[style*="color:#e2e8f0"] {
+  color: #334155 !important;
+}
+
+/* ── #aab7cb, #b0bec5 muted light ── */
+body.light-mode *[style*="color: #aab7cb"],
+body.light-mode *[style*="color:#aab7cb"],
+body.light-mode *[style*="color: #b0bec5"],
+body.light-mode *[style*="color:#b0bec5"] {
+  color: #64748b !important;
+}
+
+/* ── #64748b already readable, keep for contrast ── */
+body.light-mode *[style*="color: #64748b"],
+body.light-mode *[style*="color:#64748b"] {
+  color: #475569 !important;
+}
+
+/* ── rgba(255,255,255, …) white with opacity ── */
+body.light-mode *[style*="color: rgba(255, 255, 255"] {
+  color: #334155 !important;
+}
+
+body.light-mode *[style*="color: rgba(255,255,255"] {
+  color: #334155 !important;
+}
+
+/* ── Dark backgrounds that make white text necessary — flip them white ── */
+/* Any div/section/article with near-black background → light bg */
+body.light-mode div[style*="background: rgba(11, 16, 32"],
+body.light-mode div[style*="background:rgba(11,16,32"],
+body.light-mode section[style*="background: rgba(11, 16, 32"],
+body.light-mode section[style*="background:rgba(11,16,32"] {
+  background: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-mode div[style*="background: #0b1020"],
+body.light-mode div[style*="background:#0b1020"],
+body.light-mode section[style*="background: #0b1020"],
+body.light-mode section[style*="background:#0b1020"] {
+  background: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-mode div[style*="background: #0d1b2e"],
+body.light-mode div[style*="background:#0d1b2e"],
+body.light-mode div[style*="background: #0f172a"],
+body.light-mode div[style*="background:#0f172a"] {
+  background: #f8fafc !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+/* ── Profile dropdown in light mode ── */
+body.light-mode .profile-dropdown-menu {
+  background: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.1) !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
+}
+
+body.light-mode .profile-dropdown-menu div[style*="color: var(--text"],
+body.light-mode .profile-dropdown-menu a[style*="color: var(--text"] {
+  color: #0f172a !important;
+}
+
+body.light-mode .profile-dropdown-menu div[style*="color: var(--muted"] {
+  color: #64748b !important;
+}
+
+/* ── var(--text) / var(--muted) CSS vars ── */
+body.light-mode {
+  --text: #0f172a;
+  --muted: #64748b;
+  --line: rgba(15, 23, 42, 0.1);
+  --surface: #ffffff;
+  --surface2: #f8fafc;
+}
+
+/* ── Table cells with dark inline text colors ── */
+body.light-mode td[style*="color: #f8fafc"],
+body.light-mode td[style*="color:#f8fafc"],
+body.light-mode th[style*="color: #f8fafc"],
+body.light-mode th[style*="color:#f8fafc"] {
+  color: #0f172a !important;
+}
+
+body.light-mode td[style*="color: #ffffff"],
+body.light-mode th[style*="color: #ffffff"] {
+  color: #0f172a !important;
+}
+
+/* ── Vendor show page — vehicle card text ── */
+body.light-mode .vehicle-card {
+  background: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-mode .vehicle-card h4[style*="color: #ffffff"],
+body.light-mode .vehicle-card h4[style*="color:#ffffff"],
+body.light-mode .vehicle-card *[style*="color: #ffffff"] {
+  color: #0f172a !important;
+}
+
+body.light-mode .vehicle-card *[style*="color: #94a3b8"] {
+  color: #64748b !important;
+}
+
+body.light-mode .vehicle-card *[style*="color: #cbd5e1"] {
+  color: #475569 !important;
+}
+
+/* ── Vendor/admin search widget ── */
+body.light-mode .search-widget {
+  background: #f8fafc !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-mode .search-widget label[style*="color: #f8fafc"],
+body.light-mode .search-widget label[style*="color: #ffffff"] {
+  color: #0f172a !important;
+}
+
+body.light-mode .search-widget select {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border-color: rgba(15, 23, 42, 0.15) !important;
+}
+
+body.light-mode .search-widget input {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border-color: rgba(15, 23, 42, 0.15) !important;
+}
+
+body.light-mode .search-widget input::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* ── Vendor header banner ── */
+body.light-mode .vendor-header {
+  background: #f0f9ff !important;
+  border-color: rgba(15, 118, 110, 0.15) !important;
+}
+
+body.light-mode .vendor-header h2[style*="color: #f8fafc"],
+body.light-mode .vendor-header h2[style*="color:#f8fafc"] {
+  color: #0f172a !important;
+}
+
+body.light-mode .vendor-avatar {
+  background: rgba(15, 118, 110, 0.1) !important;
+  border-color: rgba(15, 118, 110, 0.3) !important;
+}
+
+/* ── Left filter panel in light mode ── */
+body.light-mode .vehicles-section div[style*="background: rgba(11,16,32"],
+body.light-mode .vehicles-section div[style*="position: sticky"] {
+  background: #f8fafc !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+/* ── Group headings inside vehicle grid ── */
+body.light-mode h3[style*="color: #f8fafc"],
+body.light-mode h3[style*="color:#f8fafc"] {
+  color: #0f172a !important;
+}
+
+/* ── "No Vehicles Found" empty state ── */
+body.light-mode div[style*="text-align: center"][style*="border-radius"] h4[style*="color: #f8fafc"] {
+  color: #0f172a !important;
+}
+
+/* ── Teal/brand-colored text — PRESERVE these ── */
+body.light-mode *[style*="color: #52ead2"],
+body.light-mode *[style*="color:#52ead2"],
+body.light-mode *[style*="color: var(--brand)"] {
+  color: #0f766e !important;
+}
+
+body.light-mode *[style*="color: #4ade80"],
+body.light-mode *[style*="color:#4ade80"] {
+  color: #15803d !important;
+}
+
+body.light-mode *[style*="color: #f87171"],
+body.light-mode *[style*="color:#f87171"],
+body.light-mode *[style*="color: #ef4444"],
+body.light-mode *[style*="color:#ef4444"] {
+  color: #dc2626 !important;
+}
+
+body.light-mode *[style*="color: #fbbf24"],
+body.light-mode *[style*="color:#fbbf24"],
+body.light-mode *[style*="color: #facc15"],
+body.light-mode *[style*="color:#facc15"] {
+  color: #a16207 !important;
+}
+
+body.light-mode *[style*="color: #93c5fd"],
+body.light-mode *[style*="color:#93c5fd"],
+body.light-mode *[style*="color: #3b82f6"],
+body.light-mode *[style*="color:#3b82f6"] {
+  color: #1d4ed8 !important;
+}
+
+body.light-mode *[style*="color: #f43f5e"],
+body.light-mode *[style*="color:#f43f5e"] {
+  color: #e11d48 !important;
+}
+
+/* ── Light mode body background ── */
+body.light-mode,
+body.light-mode .admin-body {
+  background-color: #f0f4f8 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   FRONTEND CARDS IN LIGHT MODE — PRESERVE DARK MODE CARD STYLING
+   As requested: frontend cards retain their dark mode gradient,
+   colors, white headings, and sleek aesthetic even in light mode.
+═══════════════════════════════════════════════════════════════════ */
+
+body.light-mode .card,
+body.light-mode .feature-card,
+body.light-mode .pricing-card,
+body.light-mode .info-card,
+body.light-mode .faq-item,
+body.light-mode .contact-panel,
+body.light-mode .flow-step {
+  background: linear-gradient(135deg, rgba(128, 167, 255, 0.48) 0%, rgba(82, 234, 210, 0.48) 100%), #08121c !important;
+  border: 1.5px solid rgba(82, 234, 210, 0.6) !important;
+  box-shadow: 0 12px 45px rgba(0, 0, 0, 0.35), 0 0 25px rgba(82, 234, 210, 0.15) !important;
+  color: #ffffff !important;
+}
+
+/* Headings inside frontend cards retain crisp white text */
+body.light-mode .card h1,
+body.light-mode .card h2,
+body.light-mode .card h3,
+body.light-mode .card h4,
+body.light-mode .feature-card h1,
+body.light-mode .feature-card h2,
+body.light-mode .feature-card h3,
+body.light-mode .feature-card h4,
+body.light-mode .pricing-card h1,
+body.light-mode .pricing-card h2,
+body.light-mode .pricing-card h3,
+body.light-mode .pricing-card h4,
+body.light-mode .info-card h1,
+body.light-mode .info-card h2,
+body.light-mode .info-card h3,
+body.light-mode .info-card h4,
+body.light-mode .faq-item h1,
+body.light-mode .faq-item h2,
+body.light-mode .faq-item h3,
+body.light-mode .faq-item h4,
+body.light-mode .contact-panel h1,
+body.light-mode .contact-panel h2,
+body.light-mode .contact-panel h3,
+body.light-mode .contact-panel h4,
+body.light-mode .flow-step h1,
+body.light-mode .flow-step h2,
+body.light-mode .flow-step h3,
+body.light-mode .flow-step h4 {
+  color: #ffffff !important;
+}
+
+/* Paragraphs & spans inside frontend cards retain light readable text */
+body.light-mode .card p,
+body.light-mode .feature-card p,
+body.light-mode .pricing-card p,
+body.light-mode .info-card p,
+body.light-mode .faq-item p,
+body.light-mode .contact-panel p,
+body.light-mode .flow-step p {
+  color: #e2e8f0 !important;
+}
+
+body.light-mode .card span,
+body.light-mode .feature-card span,
+body.light-mode .pricing-card span,
+body.light-mode .info-card span,
+body.light-mode .faq-item span,
+body.light-mode .contact-panel span,
+body.light-mode .flow-step span {
+  color: #ffffff !important;
+}
+
+body.light-mode .contact-panel .list li,
+body.light-mode .contact-panel .list li span {
+  color: #e2e8f0 !important;
+}
+
+body.light-mode .pricing-card .list li,
+body.light-mode .pricing-card .list li span:not(.check) {
+  color: #e2e8f0 !important;
+}
+
+body.light-mode .pricing-card .price strong,
+body.light-mode .pricing-card .price strong[id^="pkg-price"] {
+  color: #ffffff !important;
+}
+
+body.light-mode .pricing-card .price span {
+  color: #cbd5e1 !important;
+}
+
+body.light-mode .eyebrow {
+  color: #52ead2 !important;
+}
+
+body.light-mode .check {
+  color: #52ead2 !important;
+}
+
+/* ── Contact Form in Light Mode (White Inputs + White Labels) ── */
+body.light-mode .contact-form label {
+  color: #ffffff !important;
+}
+
+body.light-mode .contact-form input,
+body.light-mode .contact-form select,
+body.light-mode .contact-form textarea,
+body.light-mode .contact-form .form-control,
+body.light-mode .contact-form .form-select {
+  background: #ffffff !important;
+  border: 1px solid rgba(82, 234, 210, 0.4) !important;
+  color: #0f172a !important;
+}
+
+body.light-mode .contact-form input::placeholder,
+body.light-mode .contact-form textarea::placeholder,
+body.light-mode .contact-form .form-control::placeholder {
+  color: #64748b !important;
+}
+
+body.light-mode .contact-form select option,
+body.light-mode .contact-form .form-select option {
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+
+body.light-mode .contact-form input:focus,
+body.light-mode .contact-form select:focus,
+body.light-mode .contact-form textarea:focus,
+body.light-mode .contact-form .form-control:focus,
+body.light-mode .contact-form .form-select:focus {
+  background: #ffffff !important;
+  border-color: #52ead2 !important;
+  box-shadow: 0 0 0 3px rgba(82, 234, 210, 0.25) !important;
+  color: #0f172a !important;
+  outline: none !important;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   PRICING CARD — BUTTON ALWAYS AT BOTTOM (flex column layout)
+═══════════════════════════════════════════════════════════════════ */
+.pricing-card {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+}
+
+.pricing-card .list {
+  flex: 1 !important;
+}
+
+.pricing-card .actions {
+  margin-top: auto !important;
+  padding-top: 24px !important;
+  display: flex !important;
+  justify-content: center !important;
+  width: 100% !important;
+}
+
+.grid.cols-3 article.pricing-card {
+  height: 100% !important;
+}
+
+.section.light .grid.cols-3 {
+  align-items: stretch !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   FRONTEND HEADER & NAV — LIGHT MODE OVERRIDES
+═══════════════════════════════════════════════════════════════════ */
+body.light-mode .site-header {
+  background: #ffffff !important;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.03) !important;
+}
+
+body.light-mode .nav-links,
+body.light-mode .nav-actions {
+  background: rgba(15, 23, 42, 0.04) !important;
+  border: 1px solid rgba(15, 23, 42, 0.12) !important;
+}
+
+body.light-mode .nav-links a {
+  color: #475569 !important;
+}
+
+body.light-mode .nav-links a:hover,
+body.light-mode .nav-links a:focus,
+body.light-mode .nav-links a.active {
+  color: #051013 !important;
+  background: linear-gradient(135deg, #80a7ff 0%, #52ead2 100%) !important;
+  box-shadow: 0 4px 15px rgba(82, 234, 210, 0.35) !important;
+}
+
+body.light-mode .nav-actions .btn-nav-demo,
+body.light-mode .nav-actions .btn-nav-login {
+  color: #0f172a !important;
+}
+
+body.light-mode .nav-actions .btn-nav-demo:hover,
+body.light-mode .nav-actions .btn-nav-login:hover {
+  color: #051013 !important;
+  background: linear-gradient(135deg, #80a7ff 0%, #52ead2 100%) !important;
+}
+
+body.light-mode .user-avatar-wrap {
+  border: 1px solid rgba(15, 23, 42, 0.12) !important;
+  background: rgba(15, 23, 42, 0.04) !important;
+}
+
+body.light-mode .user-avatar-wrap .user-name-text,
+body.light-mode .user-avatar-wrap span {
+  color: #0f172a !important;
+}
+
+body.light-mode .user-avatar-wrap #userChevron {
+  color: #475569 !important;
+  stroke: #475569 !important;
+}
+
+body.light-mode #userDropdownMenu {
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.12) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08) !important;
+}
+
+body.light-mode #userDropdownMenu div[style*="color: #ffffff"],
+body.light-mode #userDropdownMenu div[style*="color:#ffffff"] {
+  color: #0f172a !important;
+}
+
+body.light-mode #userDropdownMenu div[style*="color: #7a8a9a"] {
+  color: #64748b !important;
+}
+
+body.light-mode #userDropdownMenu a {
+  color: #334155 !important;
+}
+
+body.light-mode #userDropdownMenu a:hover {
+  background: rgba(82, 234, 210, 0.12) !important;
+  color: #0f766e !important;
+}
+
+body.light-mode #headerThemeToggleBtn,
+body.light-mode .mobile-theme-btn,
+body.light-mode .hamburger {
+  background: rgba(15, 23, 42, 0.04) !important;
+  border: 1px solid rgba(15, 23, 42, 0.12) !important;
+  color: #0f172a !important;
+}
+
+body.light-mode #headerThemeToggleBtn:hover,
+body.light-mode .mobile-theme-btn:hover,
+body.light-mode .hamburger:hover {
+  background: rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-mode .mobile-menu {
+  background: #ffffff !important;
+  border-top: 1px solid rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-mode .mobile-nav-links a {
+  color: #475569 !important;
+}
+
+body.light-mode .mobile-nav-links a.active,
+body.light-mode .mobile-nav-links a:hover {
+  color: #0f766e !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   THEME TOGGLE & PROFILE BUTTONS — BRAND BORDER & GLOW (VENDOR-PARITY)
+═══════════════════════════════════════════════════════════════════ */
+.theme-toggle-btn {
+  background: rgba(82, 234, 210, 0.08) !important;
+  border: 1px solid rgba(82, 234, 210, 0.35) !important;
+  border-radius: 8px !important;
+  width: 36px !important;
+  height: 36px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  color: #52ead2 !important;
+  transition: all 0.2s ease !important;
+}
+
+.theme-toggle-btn:hover {
+  background: rgba(82, 234, 210, 0.18) !important;
+  border-color: #52ead2 !important;
+  box-shadow: 0 0 12px rgba(82, 234, 210, 0.3) !important;
+  transform: translateY(-1px);
+}
+
+body.light-mode .theme-toggle-btn {
+  background: rgba(15, 118, 110, 0.08) !important;
+  border: 1px solid rgba(15, 118, 110, 0.3) !important;
+  color: #0f766e !important;
+  border-radius: 8px !important;
+}
+
+body.light-mode .theme-toggle-btn:hover {
+  background: rgba(15, 118, 110, 0.16) !important;
+  border-color: #0f766e !important;
+  box-shadow: 0 0 10px rgba(15, 118, 110, 0.2) !important;
+}
+
+.mobile-theme-btn {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  .mobile-theme-btn {
+    display: inline-flex !important;
+  }
+}
+
+
+.profile-trigger-btn {
+  background: rgba(82, 234, 210, 0.08) !important;
+  border: 1px solid rgba(82, 234, 210, 0.35) !important;
+  border-radius: 50% !important;
+  width: 36px !important;
+  height: 36px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #52ead2 !important;
+  transition: all 0.2s ease !important;
+}
+
+.profile-trigger-btn:hover {
+  background: rgba(82, 234, 210, 0.18) !important;
+  border-color: #52ead2 !important;
+  box-shadow: 0 0 12px rgba(82, 234, 210, 0.3) !important;
+}
+
+body.light-mode .profile-trigger-btn {
+  background: rgba(15, 118, 110, 0.08) !important;
+  border: 1px solid rgba(15, 118, 110, 0.3) !important;
+  color: #0f766e !important;
+}
+
+body.light-mode .profile-trigger-btn:hover {
+  background: rgba(15, 118, 110, 0.16) !important;
+  border-color: #0f766e !important;
+}
+
+/* ── Terms and Conditions link styling (No background pill) ── */
+.terms-link,
+a.terms-link {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  color: var(--brand, #52ead2) !important;
+  text-decoration: underline !important;
+}
+
+body.light-mode .terms-link,
+body.light-mode a.terms-link {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  color: #0f766e !important;
+  text-decoration: underline !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   CUSTOM DATEPICKER INPUT & FLATPICKR POPUP — LIGHT / DARK MODE STYLES
+═══════════════════════════════════════════════════════════════════ */
+
+/* Base / Dark Mode custom-datepicker input */
+.custom-datepicker,
+input.custom-datepicker {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+}
+
+.custom-datepicker::placeholder,
+input.custom-datepicker::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* Light Mode custom-datepicker input */
+body.light-mode .custom-datepicker,
+body.light-mode input.custom-datepicker {
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.15) !important;
+  color: #0f172a !important;
+}
+
+body.light-mode .custom-datepicker::placeholder,
+body.light-mode input.custom-datepicker::placeholder {
+  color: #64748b !important;
+}
+
+/* Light Mode Flatpickr Calendar Popup */
+body.light-mode .flatpickr-calendar {
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.12) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+}
+
+body.light-mode .flatpickr-months .flatpickr-month {
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+
+body.light-mode .flatpickr-current-month .numInputWrapper span.arrowUp:after {
+  border-bottom-color: #0f766e !important;
+}
+
+body.light-mode .flatpickr-current-month .numInputWrapper span.arrowDown:after {
+  border-top-color: #0f766e !important;
+}
+
+body.light-mode .flatpickr-months .flatpickr-prev-month,
+body.light-mode .flatpickr-months .flatpickr-next-month {
+  color: #0f766e !important;
+  fill: #0f766e !important;
+}
+
+body.light-mode .flatpickr-months .flatpickr-prev-month:hover,
+body.light-mode .flatpickr-months .flatpickr-next-month:hover {
+  color: #0f172a !important;
+}
+
+body.light-mode .flatpickr-weekdays,
+body.light-mode .flatpickr-weekdaycontainer,
+body.light-mode span.flatpickr-weekday {
+  background: #f1f5f9 !important;
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+  font-weight: 700 !important;
+}
+
+body.light-mode .flatpickr-day {
+  color: #0f172a !important;
+}
+
+body.light-mode .flatpickr-day.prevMonthDay,
+body.light-mode .flatpickr-day.nextMonthDay {
+  color: #94a3b8 !important;
+}
+
+body.light-mode .flatpickr-day.today {
+  border-color: #0f766e !important;
+}
+
+body.light-mode .flatpickr-day.today:hover {
+  background: rgba(15, 118, 110, 0.12) !important;
+}
+
+body.light-mode .flatpickr-day.selected,
+body.light-mode .flatpickr-day.startRange,
+body.light-mode .flatpickr-day.endRange,
+body.light-mode .flatpickr-day.selected.inRange,
+body.light-mode .flatpickr-day.startRange.inRange,
+body.light-mode .flatpickr-day.endRange.inRange,
+body.light-mode .flatpickr-day.selected:focus,
+body.light-mode .flatpickr-day.startRange:focus,
+body.light-mode .flatpickr-day.endRange:focus,
+body.light-mode .flatpickr-day.selected:hover,
+body.light-mode .flatpickr-day.startRange:hover,
+body.light-mode .flatpickr-day.endRange:hover,
+body.light-mode .flatpickr-day.prevMonthDay.selected,
+body.light-mode .flatpickr-day.nextMonthDay.selected {
+  background: linear-gradient(135deg, #80a7ff 0%, #52ead2 100%) !important;
+  border-color: transparent !important;
+  color: #051013 !important;
+  font-weight: 800 !important;
+}
+
+body.light-mode .flatpickr-day:hover {
+  background: rgba(15, 23, 42, 0.06) !important;
+}
+
+body.light-mode .flatpickr-calendar select.flatpickr-monthDropdown-months,
+body.light-mode .flatpickr-calendar .numInputWrapper input.cur-year {
+  color: #0f172a !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   SELECT OPTION DROPDOWN STYLES — DARK & LIGHT MODE
+═══════════════════════════════════════════════════════════════════ */
+
+/* Dark Mode Option Popups (Default) */
+option,
+select option {
+  background-color: #0b1020 !important;
+  background: #0b1020 !important;
+  color: #ffffff !important;
+}
+
+/* Light Mode Select & Options */
+body.light-mode select,
+body.light-mode select.form-select,
+body.light-mode select.form-control {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid rgba(15, 23, 42, 0.15) !important;
+}
+
+body.light-mode option,
+body.light-mode select option {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+
+body.light-mode option:hover,
+body.light-mode option:focus,
+body.light-mode option:checked {
+  background: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   USER DASHBOARD & BOOKINGS LISTING TABLE — LIGHT MODE OVERRIDES
+═══════════════════════════════════════════════════════════════════ */
+body.light-mode .dashboard-section-title {
+  color: #0f172a !important;
+}
+
+body.light-mode .dashboard-table-wrap {
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+  color: #0f172a !important;
+}
+
+body.light-mode .dashboard-table {
+  color: #0f172a !important;
+}
+
+body.light-mode .dashboard-table th {
+  color: #64748b !important;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-mode .dashboard-table td,
+body.light-mode .dashboard-table td.pickup-date-cell,
+body.light-mode .dashboard-table td.pickup-date-cell span,
+body.light-mode .dashboard-table td.return-date-cell,
+body.light-mode .dashboard-table td.return-date-cell span,
+body.light-mode .dashboard-table td.total-cell,
+body.light-mode .dashboard-table td.paid-cell,
+body.light-mode .dashboard-table td.pending-cell {
+  color: #0f172a !important;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.05) !important;
+}
+
+body.light-mode .dashboard-table tr {
+  border-bottom-color: rgba(15, 23, 42, 0.05) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   BOOKING CHECKOUT FLOW (COVERAGE, INFORMATION, PAYMENT) — LIGHT MODE
+═══════════════════════════════════════════════════════════════════ */
+body.light-mode .booking-coverage-page {
+  background: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+/* Stepper Bar */
+body.light-mode .stepper-wrapper {
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+}
+
+body.light-mode .stepper-wrapper div[style*="background: rgba(255, 255, 255, 0.1)"] {
+  background: rgba(15, 23, 42, 0.1) !important;
+}
+
+body.light-mode .stepper-wrapper .step span {
+  color: #64748b !important;
+}
+
+body.light-mode .stepper-wrapper .step span[style*="color: var(--brand)"],
+body.light-mode .stepper-wrapper .step span[style*="color: #52ead2"] {
+  color: #0f766e !important;
+}
+
+body.light-mode .stepper-wrapper div[style*="border: 1px solid rgba(255, 255, 255, 0.2)"] {
+  border-color: rgba(15, 23, 42, 0.2) !important;
+  color: #64748b !important;
+}
+
+/* Cards (Coverage, Equipment, Summary, Information, Payment) */
+body.light-mode .booking-coverage-page .card,
+body.light-mode .booking-coverage-page div[style*="background: rgba(11, 16, 32"],
+body.light-mode .booking-coverage-page div[style*="background: rgba(16, 23, 42"] {
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+  color: #0f172a !important;
+}
+
+/* Headings */
+body.light-mode .booking-coverage-page h3,
+body.light-mode .booking-coverage-page h4,
+body.light-mode .booking-coverage-page h5,
+body.light-mode .booking-coverage-page h6,
+body.light-mode .booking-coverage-page h3[style*="color"],
+body.light-mode .booking-coverage-page h4[style*="color"],
+body.light-mode .booking-coverage-page h5[style*="color"],
+body.light-mode .booking-coverage-page h6[style*="color"] {
+  color: #0f172a !important;
+}
+
+/* Table in Coverage */
+body.light-mode .booking-coverage-page table {
+  color: #0f172a !important;
+}
+
+body.light-mode .booking-coverage-page th {
+  color: #64748b !important;
+  border-bottom-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-mode .booking-coverage-page td {
+  color: #0f172a !important;
+  border-bottom-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-mode .booking-coverage-page td[style*="color: #cbd5e1"] {
+  color: #334155 !important;
+}
+
+body.light-mode .insurance-btn.btn-outline-light {
+  border-color: rgba(15, 23, 42, 0.2) !important;
+  color: #0f172a !important;
+  background: transparent !important;
+}
+
+body.light-mode .insurance-btn.btn-outline-light:hover {
+  background: rgba(15, 23, 42, 0.05) !important;
+  border-color: #0f766e !important;
+}
+
+/* Equipment items */
+body.light-mode .equipment-item {
+  border-bottom-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-mode .equipment-item div[style*="color: #94a3b8"] {
+  color: #64748b !important;
+}
+
+body.light-mode .equipment-item div[style*="background: rgba(255,255,255,0.05)"] {
+  background: #f1f5f9 !important;
+  border-color: rgba(15, 23, 42, 0.1) !important;
+}
+
+body.light-mode .equipment-item button {
+  color: #0f172a !important;
+}
+
+body.light-mode .equipment-item span[id^="extra-qty-"] {
+  color: #0f172a !important;
+}
+
+/* Summary Sidebar details */
+body.light-mode .summary-sidebar div[style*="background: radial-gradient"] {
+  background: radial-gradient(circle, rgba(15, 23, 42, 0.03) 0%, rgba(0, 0, 0, 0) 70%) !important;
+}
+
+body.light-mode .summary-sidebar div[style*="background: rgba(255,255,255,0.03)"] {
+  background: #f8fafc !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-mode .summary-sidebar span[style*="color: #94a3b8"] {
+  color: #64748b !important;
+}
+
+body.light-mode .summary-sidebar span[style*="color: #cbd5e1"],
+body.light-mode .summary-sidebar span[style*="color: #f8fafc"] {
+  color: #0f172a !important;
+}
+
+body.light-mode .summary-sidebar div[style*="background: rgba(82, 234, 210, 0.05)"] {
+  background: rgba(15, 118, 110, 0.06) !important;
+  border-top-color: rgba(15, 118, 110, 0.15) !important;
+}
+
+body.light-mode .summary-sidebar span[id="grand-total"] {
+  color: #0f766e !important;
+}
+
+/* Inputs & Form Labels in Booking Pages */
+body.light-mode .booking-coverage-page label {
+  color: #0f172a !important;
+}
+
+body.light-mode .booking-coverage-page input,
+body.light-mode .booking-coverage-page select,
+body.light-mode .booking-coverage-page textarea {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid rgba(15, 23, 42, 0.15) !important;
+}
+
+body.light-mode .booking-coverage-page input::placeholder,
+body.light-mode .booking-coverage-page textarea::placeholder {
+  color: #64748b !important;
+}
+
+body.light-mode .booking-coverage-page h1,
+body.light-mode .booking-coverage-page h2,
+body.light-mode .booking-coverage-page h3,
+body.light-mode .booking-coverage-page h4,
+body.light-mode .booking-coverage-page h5,
+body.light-mode .booking-coverage-page h6,
+body.light-mode .booking-coverage-page h1[style*="color"],
+body.light-mode .booking-coverage-page h2[style*="color"],
+body.light-mode .booking-coverage-page h3[style*="color"],
+body.light-mode .booking-coverage-page h4[style*="color"],
+body.light-mode .booking-coverage-page h5[style*="color"],
+body.light-mode .booking-coverage-page h6[style*="color"] {
+  color: #0f172a !important;
+}
+
+body.light-mode .booking-coverage-page p[style*="color: #94a3b8"],
+body.light-mode .booking-coverage-page p[style*="color: #cbd5e1"],
+body.light-mode .booking-coverage-page span[style*="color: #94a3b8"],
+body.light-mode .booking-coverage-page div[style*="color: #94a3b8"] {
+  color: #64748b !important;
+}
+
+body.light-mode .booking-coverage-page span[style*="color: #fff"],
+body.light-mode .booking-coverage-page span[style*="color: #ffffff"] {
+  color: #0f172a !important;
 }

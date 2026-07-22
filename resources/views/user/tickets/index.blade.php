@@ -1,6 +1,144 @@
 @extends('user.layouts.app')
 
 @section('main-content')
+<style>
+    /* ── btn-teal matches frontend gradient ── */
+    .btn-teal {
+        background: linear-gradient(135deg, #80a7ff 0%, #52ead2 100%);
+        color: #051013;
+        border: none;
+        box-shadow: 0 4px 15px rgba(82, 234, 210, 0.25);
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 999px !important;
+        font-weight: 800;
+    }
+    .btn-teal:hover {
+        opacity: 0.92;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(82, 234, 210, 0.45);
+        color: #051013;
+    }
+
+    /* ═══════════════════════════════════════════════
+       LIGHT MODE — SUPPORT TICKETS TABLE
+    ═══════════════════════════════════════════════ */
+    body.light-mode h2[style*="color: #f8fafc"] {
+        color: #0f172a !important;
+    }
+
+    /* Table container */
+    body.light-mode .table-responsive[style*="background: rgba(11, 16, 32"] {
+        background: #ffffff !important;
+        border: 1px solid rgba(15, 23, 42, 0.08) !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03) !important;
+    }
+
+    /* Table base text */
+    body.light-mode .table.table-borderless {
+        color: #475569 !important;
+    }
+
+    /* Thead border */
+    body.light-mode tr[style*="border-bottom: 1px solid rgba(255,255,255,0.1)"] {
+        border-bottom: 1px solid rgba(15, 23, 42, 0.1) !important;
+    }
+
+    /* Thead cells */
+    body.light-mode th[style*="color: #cbd5e1"] {
+        color: #64748b !important;
+        font-size: 0.78rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.07em !important;
+        font-weight: 700 !important;
+        background: #f8fafc !important;
+    }
+
+    /* Tbody row borders */
+    body.light-mode tr[style*="border-bottom: 1px solid rgba(255,255,255,0.05)"],
+    body.light-mode table tbody tr {
+        border-bottom: 1px solid #cbd5e1 !important;
+    }
+
+    /* Ticket number (white → dark) */
+    body.light-mode strong[style*="color: #f8fafc"] {
+        color: #0f172a !important;
+    }
+
+    /* Subject / muted text */
+    body.light-mode span[style*="color: #64748b"],
+    body.light-mode small[style*="color: #64748b"],
+    body.light-mode td[style*="color: #64748b"] {
+        color: #94a3b8 !important;
+    }
+
+    /* Category text */
+    body.light-mode td[style*="color: #cbd5e1"] {
+        color: #475569 !important;
+    }
+
+    /* Attachment link (teal) */
+    body.light-mode a[style*="color: #52ead2"] {
+        color: #0f766e !important;
+    }
+
+    /* No Attachment span */
+    body.light-mode span[style*="color: #64748b"] {
+        color: #94a3b8 !important;
+    }
+
+    /* Empty state */
+    body.light-mode td[style*="color: #64748b; font-style: italic"] {
+        color: #94a3b8 !important;
+    }
+
+    /* Priority badges */
+    body.light-mode .badge[style*="color: #f87171"] {
+        background: rgba(220, 38, 38, 0.08) !important;
+        color: #dc2626 !important;
+        border-color: rgba(220, 38, 38, 0.18) !important;
+    }
+    body.light-mode .badge[style*="color: #facc15"] {
+        background: rgba(161, 98, 7, 0.08) !important;
+        color: #a16207 !important;
+        border-color: rgba(161, 98, 7, 0.18) !important;
+    }
+    body.light-mode .badge[style*="color: #93c5fd"] {
+        background: rgba(37, 99, 235, 0.08) !important;
+        color: #2563eb !important;
+        border-color: rgba(37, 99, 235, 0.18) !important;
+    }
+
+    /* Status badges */
+    body.light-mode .badge[style*="color: #4ade80"] {
+        background: rgba(21, 128, 61, 0.08) !important;
+        color: #15803d !important;
+        border-color: rgba(21, 128, 61, 0.18) !important;
+    }
+    body.light-mode .badge[style*="color: #94a3b8"] {
+        background: rgba(71, 85, 105, 0.08) !important;
+        color: #475569 !important;
+        border-color: rgba(71, 85, 105, 0.18) !important;
+    }
+
+    /* Action "Reply" button */
+    body.light-mode a.btn.btn-sm[style*="rgba(82, 234, 210, 0.1)"] {
+        background: rgba(15, 118, 110, 0.08) !important;
+        color: #0f766e !important;
+        border-color: rgba(15, 118, 110, 0.2) !important;
+    }
+    body.light-mode a.btn.btn-sm[style*="rgba(82, 234, 210, 0.1)"]:hover {
+        background: rgba(15, 118, 110, 0.15) !important;
+        color: #0f766e !important;
+        border-color: rgba(15, 118, 110, 0.35) !important;
+    }
+
+    /* Success alert */
+    body.light-mode .alert[style*="color: #4ade80"] {
+        background: rgba(21, 128, 61, 0.06) !important;
+        border-color: rgba(21, 128, 61, 0.2) !important;
+        color: #15803d !important;
+    }
+</style>
 <div class="admin-panel" style="padding: 20px;">
     
     <div class="d-flex justify-content-between align-items-center mb-4">

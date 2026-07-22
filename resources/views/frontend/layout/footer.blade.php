@@ -2,7 +2,7 @@
       <div class="wrap footer-main">
         <div>
           <a class="brand" href="{{ route('home') }}" aria-label="Rydaris home" style="opacity: 0.9; transition: opacity 0.2s ease;">
-            <img src="{{ asset('assets/logo/rydaris-logo.png') }}" alt="Rydaris Logo" style="height: 32px; width: auto; display: block;">
+            <img class="brand-full" src="{{ !empty($site_setting->site_logo) ? asset('storage/' . $site_setting->site_logo) : asset('assets/logo/rydaris-logo.png') }}" data-dark-logo="{{ !empty($site_setting->site_logo) ? asset('storage/' . $site_setting->site_logo) : asset('assets/logo/rydaris-logo.png') }}" data-light-logo="{{ !empty($site_setting->site_logo_light) ? asset('storage/' . $site_setting->site_logo_light) : asset('assets/logo/rydaris-logo-light.png') }}" alt="Rydaris Logo" style="height: 32px; width: auto; display: block;">
           </a>
           <p>Rydaris is an all-in-one car rental management platform built for modern fleet operators. Streamline reservations, manage vehicles, automate billing, and grow your rental business — all from one powerful dashboard.</p>
         </div>
@@ -18,7 +18,7 @@
             $privacyPolicyPage = \App\Models\Page::where('slug', 'privacy-policy')->first();
         @endphp
         <div><h3>Resources</h3><ul class="footer-links"><li><a href="{{ $helpCenterPage ? route('frontend.page', 'help-center') : route('faq') }}">Help center</a></li><li><a href="{{ $roiGuidePage ? route('frontend.page', 'roi-guide') : route('pricing') }}">ROI guide</a></li><li><a href="{{ $fleetPlaybookPage ? route('frontend.page', 'fleet-playbook') : route('about') }}">Fleet playbook</a></li><li><a href="{{ $supportDeskPage ? route('frontend.page', 'support-desk') : route('contact') }}">Support desk</a></li><li><a href="{{ $sitemapPage ? route('frontend.page', 'sitemap') : route('sitemap.html') }}">Sitemap</a></li></ul></div>
-        <div><h3>Legal</h3><ul class="footer-links"><li><a href="{{ $securityPage ? route('frontend.page', 'security') : route('faq') }}">Security</a></li><li><a href="{{ $privacyPolicyPage ? route('frontend.page', 'privacy-policy') : route('faq') }}">Privacy policy</a></li><li><a href="{{ route('terms') }}">Terms of service</a></li><li><a href="mailto:sales@rydaris.com">sales@rydaris.com</a></li></ul></div>
+        <div><h3>Legal</h3><ul class="footer-links"><li><a href="{{ $securityPage ? route('frontend.page', 'security') : route('faq') }}">Security</a></li><li><a href="{{ $privacyPolicyPage ? route('frontend.page', 'privacy-policy') : route('faq') }}">Privacy policy</a></li><li><a href="{{ route('terms') }}">Terms of service</a></li><li><a href="mailto:{{ $site_setting->contact_email ?? 'support@rydaris.com' }}">{{ $site_setting->contact_email ?? 'support@rydaris.com' }}</a></li></ul></div>
       </div>
       <div class="wrap footer-bottom">
         <span>Copyright © 2026 Rydaris. All rights reserved.</span>

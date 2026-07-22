@@ -193,12 +193,12 @@
                 </table>
 
                 <button type="button" onclick="addFeatureRow()" class="btn-action btn-add">
-                    <i class="fas fa-plus-circle" style="color: var(--text-muted);"></i> Add another feature
+                    <i class="fas fa-plus-circle me-1"></i> Add another feature
                 </button>
             </div>
 
             <div class="d-flex align-items-center gap-3" style="display: flex; gap: 16px; align-items: center; margin-top: 24px;">
-                <button type="submit" class="btn btn-primary rounded-pill px-4" style="min-height: 40px; font-weight: 800; font-size: 0.9rem; background: var(--brand, #2563eb); border: none; color: #fff; cursor: pointer;">Save Changes</button>
+                <button type="submit" class="btn btn-primary rounded-pill px-4" style="min-height: 40px; font-weight: 800; font-size: 0.9rem; background: linear-gradient(135deg, #80a7ff 0%, #52ead2 100%); border: none; color: #051013; cursor: pointer;">Save Changes</button>
             </div>
         </form>
     </div>

@@ -110,6 +110,23 @@
                 outline: none;
                 color-scheme: dark;
             }
+
+            /* Light mode overrides for rangeSelect dropdown & date pickers */
+            body.light-mode #rangeSelect {
+                background: #ffffff !important;
+                border: 1px solid #cbd5e1 !important;
+                color: #0f172a !important;
+            }
+            body.light-mode #rangeSelect option {
+                background: #ffffff !important;
+                color: #0f172a !important;
+            }
+            body.light-mode .filter-controls input[type="month"] {
+                background: #ffffff !important;
+                border: 1px solid #cbd5e1 !important;
+                color: #0f172a !important;
+                color-scheme: light !important;
+            }
         </style>
 
         <section id="overview" class="admin-hero">

@@ -167,6 +167,10 @@
             <svg class="chevron" viewBox="0 0 24 24" style="width: 14px; height: 14px; transition: transform 0.2s ease; {{ Request::is('admin/settings*') ? 'transform: rotate(180deg);' : '' }}"><path d="m6 9 6 6 6-6"/></svg>
         </a>
         <div class="admin-submenu" style="{{ Request::is('admin/settings*') ? 'display: flex;' : 'display: none;' }} padding-left: 20px; margin-top: 4px; flex-direction: column; gap: 4px;">
+            <a href="{{ route('admin.settings.general') }}" class="submenu-item {{ Request::is('admin/settings/general*') ? 'active' : '' }}" style="{{ Request::is('admin/settings/general*') ? 'color: var(--brand, #52ead2) !important; font-weight: bold; background: rgba(255, 255, 255, 0.04) !important;' : '' }} text-decoration: none;">
+                <span class="dot" style="{{ Request::is('admin/settings/general*') ? 'background: var(--brand, #52ead2) !important;' : '' }}"></span>
+                General Contact
+            </a>
             <a href="{{ route('admin.settings.payment') }}" class="submenu-item {{ Request::is('admin/settings/payment*') ? 'active' : '' }}" style="{{ Request::is('admin/settings/payment*') ? 'color: var(--brand, #52ead2) !important; font-weight: bold; background: rgba(255, 255, 255, 0.04) !important;' : '' }} text-decoration: none;">
                 <span class="dot" style="{{ Request::is('admin/settings/payment*') ? 'background: var(--brand, #52ead2) !important;' : '' }}"></span>
                 Payment Gateway

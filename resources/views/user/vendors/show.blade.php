@@ -40,10 +40,10 @@
                         <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--brand);">
                             <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--brand);"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>
                         </span>
-                        <select name="branch_id" onchange="this.form.submit()"style="width: 100%; padding: 12px 12px 12px 40px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background: rgba(255, 255, 255, 0.05); appearance: none; color: #ffffff;">
-                            <option value="" style="background: #0f172a;">All Branches</option>
+                        <select name="branch_id" onchange="this.form.submit()" style="width: 100%; padding: 12px 12px 12px 40px; border-radius: 8px; appearance: none;">
+                            <option value="">All Branches</option>
                             @foreach($branches as $b)
-                                <option value="{{ $b->id }}" style="background: #0f172a;" {{ (isset($selectedBranchId) && $selectedBranchId == $b->id) ? 'selected' : '' }}>{{ $b->name }}</option>
+                                <option value="{{ $b->id }}" {{ (isset($selectedBranchId) && $selectedBranchId == $b->id) ? 'selected' : '' }}>{{ $b->name }}</option>
                             @endforeach
                         </select>
                         
@@ -59,15 +59,15 @@
                 
                 
                 <div class="col-md-6">
-                    <label style="display: block; margin-bottom: 8px; color: #f8fafc; font-weight: 500; font-size: 0.9rem;">Pick-up Location</label>
+                    <label style="display: block; margin-bottom: 8px; color: inherit; font-weight: 500; font-size: 0.9rem;">Pick-up Location</label>
                     <div style="position: relative;">
                         <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--brand);">
                             <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                         </span>
-                        <select name="pickup_location" id="pickup_location" style="width: 100%; padding: 12px 12px 12px 40px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background: rgba(255, 255, 255, 0.05); appearance: none; color: #ffffff;">
-                            <option value="" style="background: #0f172a;">Select Pick-up Location</option>
+                        <select name="pickup_location" id="pickup_location" style="width: 100%; padding: 12px 12px 12px 40px; border-radius: 8px; appearance: none;">
+                            <option value="">Select Pick-up Location</option>
                             @foreach($locations as $location)
-                               <option value="{{ $location->id }}" style="background: #0f172a;" {{ request('pickup_location') == $location->id ? 'selected' : '' }}>{{ $location->location }}</option>
+                               <option value="{{ $location->id }}" {{ request('pickup_location') == $location->id ? 'selected' : '' }}>{{ $location->location }}</option>
                             @endforeach
                         </select>
                         <span style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--brand); pointer-events: none;">
@@ -77,29 +77,29 @@
                 </div>
             
                 <div class="col-md-4">
-                    <label style="display: block; margin-bottom: 8px; color: #f8fafc; font-weight: 500; font-size: 0.9rem;">Pick-up Date & Time</label>
+                    <label style="display: block; margin-bottom: 8px; color: inherit; font-weight: 500; font-size: 0.9rem;">Pick-up Date & Time</label>
                     <div class="d-flex gap-2">
-                        <input type="text" name="pickup_date" class="custom-datepicker" placeholder="Select Date" style="flex: 2; padding: 12px; border: 1px solid rgba(255, 255, 255, 0.1) !important; border-radius: 8px; color: #ffffff !important; background: rgba(255, 255, 255, 0.05) !important; outline: none;">
-                        <select name="pickup_time" style="flex: 1; min-width: 90px; padding: 12px 8px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background: #0b1020; color: #ffffff;">
+                        <input type="text" name="pickup_date" class="custom-datepicker" placeholder="Select Date" style="flex: 2; padding: 12px; border-radius: 8px; outline: none;">
+                        <select name="pickup_time" style="flex: 1; min-width: 90px; padding: 12px 8px; border-radius: 8px;">
                             @for($i = 0; $i < 24; $i++)
                                 @php $hr = str_pad($i, 2, '0', STR_PAD_LEFT); @endphp
-                                <option value="{{$hr}}:00" {{ (request('pickup_time') == $hr.':00' || (!request('pickup_time') && $hr == '00')) ? 'selected' : '' }} style="background: #0f172a;">{{$hr}}:00</option>
-                                <option value="{{$hr}}:30" {{ request('pickup_time') == $hr.':30' ? 'selected' : '' }} style="background: #0f172a;">{{$hr}}:30</option>
+                                <option value="{{$hr}}:00" {{ (request('pickup_time') == $hr.':00' || (!request('pickup_time') && $hr == '00')) ? 'selected' : '' }}>{{$hr}}:00</option>
+                                <option value="{{$hr}}:30" {{ request('pickup_time') == $hr.':30' ? 'selected' : '' }}>{{$hr}}:30</option>
                             @endfor
                         </select>
                     </div>
                 </div>
                 
                 <div class="col-md-6">
-                    <label style="display: block; margin-bottom: 8px; color: #f8fafc; font-weight: 500; font-size: 0.9rem;">Return Location</label>
+                    <label style="display: block; margin-bottom: 8px; color: inherit; font-weight: 500; font-size: 0.9rem;">Return Location</label>
                     <div style="position: relative;">
                         <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--brand);">
                             <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                         </span>
-                        <select name="return_location" id="return_location" style="width: 100%; padding: 12px 12px 12px 40px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background: rgba(255, 255, 255, 0.05); appearance: none; color: #ffffff;">
-                            <option value="" style="background: #0f172a;">Select Return Location</option>
+                        <select name="return_location" id="return_location" style="width: 100%; padding: 12px 12px 12px 40px; border-radius: 8px; appearance: none;">
+                            <option value="">Select Return Location</option>
                             @foreach($locations as $location)
-                                <option value="{{ $location->id }}" style="background: #0f172a;" {{ request('return_location') == $location->id ? 'selected' : '' }}>{{ $location->location }}</option>
+                                <option value="{{ $location->id }}" {{ request('return_location') == $location->id ? 'selected' : '' }}>{{ $location->location }}</option>
                             @endforeach
                         </select>
                         <span style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--brand); pointer-events: none;">
@@ -115,14 +115,14 @@
 
                 
                 <div class="col-md-4">
-                    <label style="display: block; margin-bottom: 8px; color: #f8fafc; font-weight: 500; font-size: 0.9rem;">Return Date & Time</label>
+                    <label style="display: block; margin-bottom: 8px; color: inherit; font-weight: 500; font-size: 0.9rem;">Return Date & Time</label>
                     <div class="d-flex gap-2">
-                        <input type="text" name="return_date" class="custom-datepicker" placeholder="Select Date" style="flex: 2; padding: 12px; border: 1px solid rgba(255, 255, 255, 0.1) !important; border-radius: 8px; color: #ffffff !important; background: rgba(255, 255, 255, 0.05) !important; outline: none;">
-                        <select name="return_time" style="flex: 1; min-width: 90px; padding: 12px 8px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background: #0b1020; color: #ffffff;">
+                        <input type="text" name="return_date" class="custom-datepicker" placeholder="Select Date" style="flex: 2; padding: 12px; border-radius: 8px; outline: none;">
+                        <select name="return_time" style="flex: 1; min-width: 90px; padding: 12px 8px; border-radius: 8px;">
                             @for($i = 0; $i < 24; $i++)
                                 @php $hr = str_pad($i, 2, '0', STR_PAD_LEFT); @endphp
-                                <option value="{{$hr}}:00" {{ (request('return_time') == $hr.':00' || (!request('return_time') && $hr == '00')) ? 'selected' : '' }} style="background: #0f172a;">{{$hr}}:00</option>
-                                <option value="{{$hr}}:30" {{ request('return_time') == $hr.':30' ? 'selected' : '' }} style="background: #0f172a;">{{$hr}}:30</option>
+                                <option value="{{$hr}}:00" {{ (request('return_time') == $hr.':00' || (!request('return_time') && $hr == '00')) ? 'selected' : '' }}>{{$hr}}:00</option>
+                                <option value="{{$hr}}:30" {{ request('return_time') == $hr.':30' ? 'selected' : '' }}>{{$hr}}:30</option>
                             @endfor
                         </select>
                     </div>
@@ -139,8 +139,9 @@
         </form>
     </div>
 
-    
-    <div class="container-fluid" style="max-width: 1400px; margin: 0 auto;">
+
+    <!-- ── Vehicles Section ─────────────────────────────── -->
+    <div id="vehicles" class="container-fluid" style="max-width: 1400px; margin: 0 auto;">
     <div class="vehicles-section mt-5">
         <h2 style="font-weight: 700; color: #f8fafc; margin-bottom: 20px;">Our Vehicles</h2>
         
@@ -283,9 +284,9 @@
                                         
                                         <div style="display: flex; justify-content: center; width: 100%; margin-top: 10px;">
                                             @if(!empty($vehicle->terms))
-                                                <a href="{{ route('vehicle.terms.public', $vehicle->id) }}" target="_blank" style="font-size: 0.7rem; color: var(--brand); text-decoration: underline; font-weight: 600;">Terms and Conditions</a>
+                                                <a href="{{ route('vehicle.terms.public', $vehicle->id) }}" target="_blank" class="terms-link" style="background: transparent !important; border: none !important; box-shadow: none !important; padding: 0 !important; border-radius: 0 !important; font-size: 0.75rem; color: var(--brand, #52ead2) !important; text-decoration: underline !important; font-weight: 600;">Terms and Conditions</a>
                                             @elseif($vendorTC && !empty($vendorTC->description))
-                                                <a href="{{ route('vendor.terms.public', $vehicle->vendor_id) }}" target="_blank" style="font-size: 0.7rem; color: var(--brand); text-decoration: underline; font-weight: 600;">Terms and Conditions</a>
+                                                <a href="{{ route('vendor.terms.public', $vehicle->vendor_id) }}" target="_blank" class="terms-link" style="background: transparent !important; border: none !important; box-shadow: none !important; padding: 0 !important; border-radius: 0 !important; font-size: 0.75rem; color: var(--brand, #52ead2) !important; text-decoration: underline !important; font-weight: 600;">Terms and Conditions</a>
                                             @endif
                                         </div>
 
@@ -305,7 +306,6 @@
             </div>
         @endif
     </div>
-
     </div>
 </div>
 @endsection
@@ -315,16 +315,73 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
 <style>
-    /* Custom Flatpickr Teal Highlight styling */
-    .flatpickr-calendar {
+    /* ── Dark Mode Flatpickr Styling ── */
+    body:not(.light-mode) .flatpickr-calendar {
         background: #0b1020 !important;
         border: 1px solid rgba(82, 234, 210, 0.25) !important;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
     }
-    .flatpickr-months .flatpickr-month {
+    body:not(.light-mode) .flatpickr-months .flatpickr-month {
         background: #0b1020 !important;
         color: #f8fafc !important;
     }
+    body:not(.light-mode) .flatpickr-day {
+        color: #e2e8f0 !important;
+    }
+    body:not(.light-mode) span.flatpickr-weekday {
+        color: #cbd5e1 !important;
+    }
+
+    /* ── Light Mode Flatpickr Styling ── */
+    body.light-mode .flatpickr-calendar {
+        background: #ffffff !important;
+        border: 1px solid rgba(15, 23, 42, 0.15) !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+    }
+    body.light-mode .flatpickr-months .flatpickr-month {
+        background: #ffffff !important;
+        color: #0f172a !important;
+    }
+    body.light-mode .flatpickr-weekdays,
+    body.light-mode .flatpickr-weekdaycontainer,
+    body.light-mode span.flatpickr-weekday {
+        background: #f1f5f9 !important;
+        background-color: #f1f5f9 !important;
+        color: #0f172a !important;
+        font-weight: 700 !important;
+    }
+    body.light-mode .flatpickr-day {
+        color: #0f172a !important;
+        font-weight: 600 !important;
+    }
+    body.light-mode .flatpickr-day.prevMonthDay,
+    body.light-mode .flatpickr-day.nextMonthDay {
+        color: #94a3b8 !important;
+    }
+    body.light-mode .flatpickr-day.today {
+        border-color: #0f766e !important;
+    }
+    body.light-mode .flatpickr-day.selected,
+    body.light-mode .flatpickr-day.startRange,
+    body.light-mode .flatpickr-day.endRange {
+        background: linear-gradient(135deg, #80a7ff 0%, #52ead2 100%) !important;
+        color: #051013 !important;
+        font-weight: 800 !important;
+        border-color: transparent !important;
+    }
+    body.light-mode .flatpickr-day:hover {
+        background: rgba(15, 23, 42, 0.08) !important;
+    }
+    body.light-mode .flatpickr-calendar select.flatpickr-monthDropdown-months,
+    body.light-mode .flatpickr-calendar .numInputWrapper input.cur-year {
+        color: #0f172a !important;
+    }
+    body.light-mode .flatpickr-months .flatpickr-prev-month,
+    body.light-mode .flatpickr-months .flatpickr-next-month {
+        color: #0f766e !important;
+        fill: #0f766e !important;
+    }
+
     .flatpickr-current-month .numInputWrapper span.arrowUp:after {
         border-bottom-color: var(--brand, #52ead2) !important;
     }
@@ -337,9 +394,6 @@
     }
     .flatpickr-months .flatpickr-prev-month:hover, .flatpickr-months .flatpickr-next-month:hover {
         color: #ffffff !important;
-    }
-    .flatpickr-day {
-        color: #e2e8f0 !important;
     }
     .flatpickr-day.today {
         border-color: rgba(82, 234, 210, 0.4) !important;
@@ -376,7 +430,7 @@
         padding: 2px 6px !important;
         height: auto !important;
         line-height: normal !important;
-        color: #f8fafc !important;
+        color: inherit !important;
         font-size: 1.05rem !important;
         font-weight: 600 !important;
         display: inline-block !important;
@@ -392,7 +446,7 @@
         padding: 0 !important;
         height: auto !important;
         line-height: normal !important;
-        color: #f8fafc !important;
+        color: inherit !important;
         font-size: 1.05rem !important;
         font-weight: 600 !important;
         display: inline-block !important;
@@ -402,7 +456,7 @@
     .flatpickr-calendar .flatpickr-current-month {
         font-size: 1.05rem !important;
         font-weight: 600 !important;
-        color: #f8fafc !important;
+        color: inherit !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;

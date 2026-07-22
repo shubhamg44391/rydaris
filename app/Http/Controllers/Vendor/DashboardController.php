@@ -12,6 +12,9 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         if (!auth()->user()->activeSubscription) {
+            if ($request->session()->has('login_success_preloader')) {
+                $request->session()->keep('login_success_preloader');
+            }
             return redirect()->route('vendor.pricing')->with('error', 'Please subscribe to a package to access the dashboard.');
         }
 

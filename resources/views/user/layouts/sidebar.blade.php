@@ -2,7 +2,7 @@
     
      @if(auth()->user()->hasMenuAccess('vehicles'))
         @if(auth()->check() && auth()->user()->vendor_id)
-            <a class="{{ Request::is('user/vendor/*') ? 'active' : '' }}" href="{{ route('user.vendors.show', auth()->user()->vendor_id) }}">
+            <a class="{{ Request::is('user/vendor/*') ? 'active' : '' }}" href="{{ route('user.vendors.show', auth()->user()->vendor_id) }}#vehicles">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="11" cy="11" r="8"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>

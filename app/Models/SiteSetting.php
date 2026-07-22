@@ -21,6 +21,12 @@ class SiteSetting extends Model
         'smtp_encryption',
         'from_email',
         'from_name',
+        'contact_email',
+        'sales_email',
+        'contact_phone',
+        'site_logo',
+        'site_logo_light',
+        'favicon',
     ];
 
     protected $casts = [

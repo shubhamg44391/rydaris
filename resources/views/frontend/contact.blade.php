@@ -25,8 +25,8 @@
             <li><span class="check">✓</span><span>Response within one business day</span></li>
           </ul>
           <div class="grid cols-2 contact-details">
-            <div><h3>Email</h3><p>sales@rydaris.com<br>support@rydaris.com</p></div>
-            <div><h3>Hours</h3><p>Monday to Friday<br>9:00 AM to 6:00 PM</p></div>
+            <div><h3>Email</h3><p>{{ $site_setting->contact_email ?? 'support@rydaris.com' }}</p></div>
+            <div><h3>Phone & Hours</h3><p>{{ $site_setting->contact_phone ?? '+918882688646' }}<br>Monday to Friday: 9:00 AM to 6:00 PM</p></div>
           </div>
         </aside>
 

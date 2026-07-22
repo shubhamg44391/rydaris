@@ -49,6 +49,7 @@ class LoginController extends Controller
             }
 
             $request->session()->regenerate();
+            $request->session()->flash('login_success_preloader', true);
 
             if ($request->filled('redirect_to')) {
                 return redirect($request->input('redirect_to'));
@@ -85,6 +86,7 @@ class LoginController extends Controller
             }
 
             $request->session()->regenerate();
+            $request->session()->flash('login_success_preloader', true);
 
             if ($request->filled('redirect_to')) {
                 return redirect($request->input('redirect_to'));
@@ -121,6 +123,7 @@ class LoginController extends Controller
             }
 
             $request->session()->regenerate();
+            $request->session()->flash('login_success_preloader', true);
 
             if ($request->filled('redirect_to')) {
                 return redirect($request->input('redirect_to'));

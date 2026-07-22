@@ -37,34 +37,20 @@
                   <span class="mini-icon"><svg viewBox="0 0 24 24"><path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg></span>Reports
                 </div>
               </aside>
-
-              
-              <section class="board" id="panel-fleet" style="display:flex;">
-                <div class="board-grid">
-                  <div>
-                    <div class="glass-card fleet-visual">
-                      <h3>Airport branch utilization</h3>
-                      <p>Pickup flow, ready vehicles, late returns, and service holds in one view.</p>
-                    </div>
-                    <div class="stat-row">
-                      <div class="stat">86%<span>utilization</span></div>
-                      <div class="stat">42<span>active rentals</span></div>
-                      <div class="stat">7<span>returns due</span></div>
-                    </div>
-                  </div>
-                  <div class="glass-card">
-                    <h3>Today</h3>
-                    <div class="rental-list">
-                      <div class="rental-item"><div>Executive SUV<br><span>Corporate weekly</span></div><b class="status">Out</b></div>
-                      <div class="rental-item"><div>City Sedan<br><span>Airport pickup</span></div><b class="status">Ready</b></div>
-                      <div class="rental-item"><div>Compact Auto<br><span>Walk-in hold</span></div><b class="status">Hold</b></div>
-                      <div class="rental-item"><div>Premium Van<br><span>Service inspection</span></div><b class="status">Queue</b></div>
-                    </div>
+              <!-- Fleet Board Panel -->
+              <section class="board" id="panel-fleet" style="display:flex; flex-direction:column; height:100%;">
+                <div class="glass-card fleet-visual" style="position:relative; flex:1; min-height: 420px; display:flex; align-items:center; justify-content:center; overflow:hidden; border-radius:14px; padding:0;">
+                  <!-- Center Video Play Button Overlay -->
+                  <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:3; background: rgba(5,7,17,0.22);">
+                    <button type="button" onclick="openDemoInquiryModal()" class="video-play-btn" title="Play Video Demo" aria-label="Play Video Demo">
+                      <svg viewBox="0 0 24 24" width="28" height="28" fill="#051013" stroke="currentColor" stroke-width="0">
+                        <polygon points="6 3 20 12 6 21 6 3"></polygon>
+                      </svg>
+                    </button>
                   </div>
                 </div>
               </section>
 
-              
               <section class="board" id="panel-reservations" style="display:none; flex-direction:column; padding:14px;">
                 
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
@@ -107,28 +93,10 @@
               </section>
 
               
-              <section class="board" id="panel-agreements" style="display:none; padding:14px; align-items:center; justify-content:center; height:100%; min-height:280px; width:100%;">
-                <div style="width:100%; max-width:400px; padding:24px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:16px; border:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.04); border-radius:12px; margin:auto;">
-                  <div style="width: 50px; height: 50px; background: rgba(82, 234, 210, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                    <svg viewBox="0 0 24 24" style="width:24px; height:24px; fill:none; stroke:#52ead2; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;">
-                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                      <polyline points="14 2 14 8 20 8"></polyline>
-                      <line x1="16" y1="13" x2="8" y2="13"></line>
-                      <line x1="16" y1="17" x2="8" y2="17"></line>
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 style="margin:0 0 6px 0; font-size:0.95rem; font-weight:700; color:#f1f5f9;">Terms &amp; Conditions</h3>
-                    <p style="margin:0; font-size:0.72rem; color:#94a3b8; line-height:1.4;">
-                      Platform Rental Agreement policies, safety regulations, and rules set by the Admin.
-                    </p>
-                  </div>
-                  <a href="{{ route('terms') }}" target="_blank"
-                     style="display:inline-flex; align-items:center; gap:6px; padding:8px 20px; background:linear-gradient(135deg, var(--brand-2, #80a7ff), var(--brand, #52ead2)); color:#051013; border-radius:8px; font-weight:700; font-size:0.75rem; text-decoration:none; box-shadow:0 2px 10px rgba(82,234,210,0.15); transition:opacity 0.2s;"
-                     onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
-                    <svg viewBox="0 0 24 24" style="width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2.5;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                    View Terms &amp; Conditions
-                  </a>
+              <!-- Agreements Board Panel -->
+              <section class="board" id="panel-agreements" style="display:none; flex-direction:column; padding:12px; width:100%; height:100%; overflow-y:auto; max-height:100%;">
+                <div style="margin-top:-20px;">
+                  @include('partials.static-agreement')
                 </div>
               </section>
  
@@ -233,12 +201,12 @@
           /* Status badge HTML */
           function statusBadge(s) {
             var map = {
-              confirmed: ['rgba(74,222,128,0.15)','#4ade80','Confirmed'],
-              pending:   ['rgba(250,204,21,0.15)', '#facc15','Pending'],
-              cancelled: ['rgba(239,68,68,0.15)',  '#f87171','Cancelled']
+              confirmed: ['rgba(74,222,128,0.15)','#4ade80','Confirmed','status-confirmed'],
+              pending:   ['rgba(250,204,21,0.15)', '#facc15','Pending','status-pending'],
+              cancelled: ['rgba(239,68,68,0.15)',  '#f87171','Cancelled','status-cancelled']
             };
             var m = map[s] || map['pending'];
-            return '<span style="background:'+m[0]+';color:'+m[1]+';padding:2px 8px;border-radius:12px;font-size:0.6rem;font-weight:700;white-space:nowrap;">'+m[2]+'</span>';
+            return '<span class="'+m[3]+'" style="background:'+m[0]+';color:'+m[1]+';padding:2px 8px;border-radius:12px;font-size:0.6rem;font-weight:700;white-space:nowrap;">'+m[2]+'</span>';
           }
 
           function renderResTable(page) {
@@ -259,12 +227,12 @@
               var d = resData[i];
               var odd = (i % 2 === 0) ? 'rgba(255,255,255,0.015)' : 'transparent';
               html += '<tr>' +
-                '<td style="padding:7px 12px; color:#64748b; background:'+odd+';">' + (i+1) + '</td>' +
-                '<td style="padding:7px 12px; font-weight:700; color:#52ead2; background:'+odd+'; white-space:nowrap;">' + d.id + '</td>' +
-                '<td style="padding:7px 12px; color:#f1f5f9; background:'+odd+';">' + d.customer + '</td>' +
-                '<td style="padding:7px 12px; color:#94a3b8; background:'+odd+';">' + d.vehicle + '</td>' +
-                '<td style="padding:7px 12px; color:#94a3b8; font-size:0.65rem; background:'+odd+'; white-space:nowrap;">' + d.dates + '</td>' +
-                '<td style="padding:7px 12px; color:#52ead2; font-weight:700; background:'+odd+'; white-space:nowrap;">' + d.amount + '</td>' +
+                '<td class="td-num" style="padding:7px 12px; color:#64748b; background:'+odd+';">' + (i+1) + '</td>' +
+                '<td class="td-id" style="padding:7px 12px; font-weight:700; color:#52ead2; background:'+odd+'; white-space:nowrap;">' + d.id + '</td>' +
+                '<td class="td-cust" style="padding:7px 12px; color:#f1f5f9; background:'+odd+';">' + d.customer + '</td>' +
+                '<td class="td-veh" style="padding:7px 12px; color:#94a3b8; background:'+odd+';">' + d.vehicle + '</td>' +
+                '<td class="td-dates" style="padding:7px 12px; color:#94a3b8; font-size:0.65rem; background:'+odd+'; white-space:nowrap;">' + d.dates + '</td>' +
+                '<td class="td-amt" style="padding:7px 12px; color:#52ead2; font-weight:700; background:'+odd+'; white-space:nowrap;">' + d.amount + '</td>' +
                 '<td style="padding:7px 12px; background:'+odd+';">' + statusBadge(d.status) + '</td>' +
                 '<td style="padding:7px 12px; text-align:right; background:'+odd+';">' + tcBtn + '</td>' +
               '</tr>';
@@ -289,8 +257,6 @@
             pgDiv.innerHTML = pgHtml;
           }
 
-        
-
           function renderReportTable() {
             var tbody = document.getElementById('rep-tbody');
             if (!tbody) return;
@@ -298,12 +264,12 @@
             resData.forEach(function(d, i) {
               var odd = (i % 2 === 0) ? 'rgba(255,255,255,0.015)' : 'transparent';
               html += '<tr>' +
-                '<td style="padding:7px 12px; color:#64748b; background:'+odd+';">' + (i+1) + '</td>' +
-                '<td style="padding:7px 12px; font-weight:700; color:#52ead2; background:'+odd+'; white-space:nowrap;">' + d.id + '</td>' +
-                '<td style="padding:7px 12px; color:#f1f5f9; background:'+odd+';">' + d.customer + '</td>' +
-                '<td style="padding:7px 12px; color:#94a3b8; background:'+odd+';">' + d.vehicle + '</td>' +
-                '<td style="padding:7px 12px; color:#94a3b8; font-size:0.65rem; background:'+odd+'; white-space:nowrap;">' + d.dates + '</td>' +
-                '<td style="padding:7px 12px; color:#52ead2; font-weight:700; background:'+odd+'; white-space:nowrap;">' + d.amount + '</td>' +
+                '<td class="td-num" style="padding:7px 12px; color:#64748b; background:'+odd+';">' + (i+1) + '</td>' +
+                '<td class="td-id" style="padding:7px 12px; font-weight:700; color:#52ead2; background:'+odd+'; white-space:nowrap;">' + d.id + '</td>' +
+                '<td class="td-cust" style="padding:7px 12px; color:#f1f5f9; background:'+odd+';">' + d.customer + '</td>' +
+                '<td class="td-veh" style="padding:7px 12px; color:#94a3b8; background:'+odd+';">' + d.vehicle + '</td>' +
+                '<td class="td-dates" style="padding:7px 12px; color:#94a3b8; font-size:0.65rem; background:'+odd+'; white-space:nowrap;">' + d.dates + '</td>' +
+                '<td class="td-amt" style="padding:7px 12px; color:#52ead2; font-weight:700; background:'+odd+'; white-space:nowrap;">' + d.amount + '</td>' +
                 '<td style="padding:7px 12px; text-align:right; background:'+odd+';">' + statusBadge(d.status) + '</td>' +
               '</tr>';
             });
@@ -363,6 +329,8 @@
 
       <div class="ticker" aria-label="Rydaris capabilities">
         <div class="ticker-track">
+          <span>Reservations</span><span>Fleet Board</span><span>Contracts</span><span>Deposits</span><span>Inspections</span><span>Maintenance</span><span>Branch Transfers</span><span>Revenue Reports</span>
+          <span>Reservations</span><span>Fleet Board</span><span>Contracts</span><span>Deposits</span><span>Inspections</span><span>Maintenance</span><span>Branch Transfers</span><span>Revenue Reports</span>
           <span>Reservations</span><span>Fleet Board</span><span>Contracts</span><span>Deposits</span><span>Inspections</span><span>Maintenance</span><span>Branch Transfers</span><span>Revenue Reports</span>
           <span>Reservations</span><span>Fleet Board</span><span>Contracts</span><span>Deposits</span><span>Inspections</span><span>Maintenance</span><span>Branch Transfers</span><span>Revenue Reports</span>
         </div>

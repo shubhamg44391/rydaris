@@ -61,14 +61,14 @@
         </div>
 
         <div class="nav-actions desktop-nav">
-          <button type="button" class="btn primary" onclick="openDemoInquiryModal()" style="margin-right: 10px; border: none; cursor: pointer; font-family: inherit;">Site Demo</button>
-          @auth
+          <button type="button" class="btn btn-nav-demo" onclick="openDemoInquiryModal()" style="cursor: pointer; font-family: inherit;">Site Demo</button>
+          @if(Auth::check() && Auth::user()->role !== 'admin' && Auth::user()->role !== 'super_admin')
             {{-- User Avatar Dropdown --}}
-            <div class="user-avatar-wrap" id="userAvatarWrap" style="position: relative; display: flex; align-items: center; cursor: pointer; user-select: none;" onclick="toggleUserDropdown()">
-              <div class="user-avatar-circle" style="width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, #52ead2, #3bb8a0); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.95rem; color: #0b1020; letter-spacing: 0.5px; box-shadow: 0 0 0 2px rgba(82,234,210,0.25); flex-shrink: 0;">
+            <div class="user-avatar-wrap" id="userAvatarWrap" style="position: relative; display: flex; align-items: center; cursor: pointer; user-select: none; padding: 2px 10px 2px 4px; border-radius: 999px; height: 36px; box-sizing: border-box;" onclick="toggleUserDropdown()">
+              <div class="user-avatar-circle" style="width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, #52ead2, #3bb8a0); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; color: #0b1020; letter-spacing: 0.5px; box-shadow: 0 0 0 2px rgba(82,234,210,0.25); flex-shrink: 0;">
                 {{ strtoupper(substr(Auth::user()->first_name ?? Auth::user()->name, 0, 1)) }}
               </div>
-              <span style="margin-left: 9px; font-weight: 500; font-size: 0.92rem; color: #f0f4f8;">{{ Auth::user()->first_name ?? Auth::user()->name }}</span>
+              <span style="margin-left: 8px; font-weight: 500; font-size: 0.88rem; color: #f0f4f8;">{{ Auth::user()->first_name ?? Auth::user()->name }}</span>
               <svg style="margin-left: 6px; width: 14px; height: 14px; color: #a0aec0; transition: transform 0.2s;" id="userChevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
 
               {{-- Dropdown Menu --}}
@@ -77,7 +77,7 @@
                   <div style="font-weight: 600; color: #ffffff; font-size: 0.9rem;">{{ Auth::user()->first_name ?? Auth::user()->name }}</div>
                   <div style="color: #7a8a9a; font-size: 0.78rem; margin-top: 2px;">{{ Auth::user()->email }}</div>
                 </div>
-                <a href="{{ (Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin') ? route('dashboard') : (Auth::user()->role === 'user' ? route('user.dashboard') : route('vendor.dashboard')) }}" style="display: flex; align-items: center; gap: 10px; padding: 10px 16px; color: #c4cdd8; font-size: 0.88rem; text-decoration: none; transition: background 0.15s;" onmouseover="this.style.background='rgba(82,234,210,0.08)';this.style.color='#52ead2';" onmouseout="this.style.background='transparent';this.style.color='#c4cdd8';">
+                <a href="{{ Auth::user()->role === 'user' ? route('user.dashboard') : route('vendor.dashboard') }}" style="display: flex; align-items: center; gap: 10px; padding: 10px 16px; color: #c4cdd8; font-size: 0.88rem; text-decoration: none; transition: background 0.15s;" onmouseover="this.style.background='rgba(82,234,210,0.08)';this.style.color='#52ead2';" onmouseout="this.style.background='transparent';this.style.color='#c4cdd8';">
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
                   Dashboard
                 </a>
@@ -116,9 +116,9 @@
               });
             </script>
           @else
-            <a class="btn secondary" href="{{ route('login') }}" style="margin-right: 10px;">Login</a>
-            <a class="btn primary" href="{{ route('vendor.register') }}">Register</a>
-          @endauth
+            <a class="btn btn-nav-login" href="{{ route('login') }}">Login</a>
+            <a class="btn btn-nav-register" href="{{ route('vendor.register') }}">Register</a>
+          @endif
         </div>
       </nav>
 
@@ -133,7 +133,7 @@
         </div>
         <div class="mobile-nav-actions">
           <button type="button" class="btn primary" onclick="openDemoInquiryModal()" style="width: 100%; text-align: center; margin-bottom: 10px; border: none; cursor: pointer; font-family: inherit;">Site Demo</button>
-          @auth
+          @if(Auth::check() && Auth::user()->role !== 'admin' && Auth::user()->role !== 'super_admin')
             <div style="display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 10px;">
               <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #52ead2, #3bb8a0); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; color: #0b1020; flex-shrink: 0;">
                 {{ strtoupper(substr(Auth::user()->first_name ?? Auth::user()->name, 0, 1)) }}
@@ -143,7 +143,7 @@
                 <div style="color: #7a8a9a; font-size: 0.75rem;">{{ Auth::user()->email }}</div>
               </div>
             </div>
-            <a class="btn primary" href="{{ (Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin') ? route('dashboard') : (Auth::user()->role === 'user' ? route('user.dashboard') : route('vendor.dashboard')) }}" style="text-decoration: none; width: 100%; text-align: center;">Dashboard</a>
+            <a class="btn primary" href="{{ Auth::user()->role === 'user' ? route('user.dashboard') : route('vendor.dashboard') }}" style="text-decoration: none; width: 100%; text-align: center;">Dashboard</a>
             @if(Auth::user()->role === 'vendor')
             <a class="btn secondary" href="{{ route('vendor.profile.index') }}" style="text-decoration: none; width: 100%; text-align: center; margin-top: 8px;">My Profile</a>
             @endif
@@ -154,7 +154,7 @@
           @else
             <a class="btn secondary" href="{{ route('login') }}" style="width: 100%; text-align: center;">Login</a>
             <a class="btn primary" href="{{ route('vendor.register') }}" style="width: 100%; text-align: center;">Register</a>
-          @endauth
+          @endif
         </div>
       </div>
 

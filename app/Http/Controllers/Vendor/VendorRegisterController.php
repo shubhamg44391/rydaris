@@ -166,6 +166,7 @@ class VendorRegisterController extends Controller
         }
 
         Auth::login($user);
+        $request->session()->flash('login_success_preloader', true);
 
         if ($request->role === 'vendor') {
             if ($request->filled('package_id')) {

@@ -204,7 +204,7 @@
 
                     <div class="mt-auto pt-3">
                         @if(strtolower($pkg->price) === 'custom')
-                            <button type="button" onclick="document.getElementById('customPackageModal').style.display='flex'" class="btn w-100" style="padding: 12px; font-weight: 600; border-radius: var(--radius); background: linear-gradient(135deg, var(--brand, #52ead2), #2bc2a8); color: #050711; border: none;">
+                            <button type="button" onclick="document.getElementById('customPackageModal').style.display='flex'" class="btn w-100" style="padding: 12px; font-weight: 700; border-radius: 999px; background: linear-gradient(135deg, #80a7ff 0%, #52ead2 100%); color: #051013; border: none; box-shadow: 0 4px 15px rgba(82, 234, 210, 0.25); transition: all 0.25s ease;">
                                 {{ $pkg->button_text ?? 'Request Custom Package' }}
                             </button>
                         @else
@@ -237,11 +237,11 @@
                                 }
                             @endphp
                             @if($isActive)
-                                <button type="button" class="btn w-100" disabled style="padding: 12px; font-weight: 600; border-radius: var(--radius); background: rgba(255,255,255,0.1); color: #aab7cb; border: 1px solid rgba(255,255,255,0.2);">
+                                <button type="button" class="btn w-100 current-pkg-btn" disabled style="padding: 12px; font-weight: 600; border-radius: 999px; background: rgba(255,255,255,0.1); color: #aab7cb; border: 1px solid rgba(255,255,255,0.2);">
                                     Current Package
                                 </button>
                             @else
-                                <button type="button" onclick="openDetailsModal({{ $pkg->id }}, '{{ $pkg->name }}', '{{ $pkg->price }}', '{{ $pkg->billing_period }}')" class="btn w-100" style="padding: 12px; font-weight: 600; border-radius: var(--radius); background: linear-gradient(135deg, var(--brand, #52ead2), #2bc2a8); color: #050711; border: none;">
+                                <button type="button" onclick="openDetailsModal({{ $pkg->id }}, '{{ $pkg->name }}', '{{ $pkg->price }}', '{{ $pkg->billing_period }}')" class="btn w-100" style="padding: 12px; font-weight: 700; border-radius: 999px; background: linear-gradient(135deg, #80a7ff 0%, #52ead2 100%); color: #051013; border: none; box-shadow: 0 4px 15px rgba(82, 234, 210, 0.25); transition: all 0.25s ease;">
                                     {{ $isUpgrade ? 'Upgrade' : ($pkg->button_text ?? 'Subscribe') }}
                                 </button>
                             @endif
@@ -319,7 +319,7 @@
 
     
     <div id="confirmDetailsModal" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.85); align-items: center; justify-content: center; backdrop-filter: blur(8px);">
-        <div style="background: #111620; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; padding: 25px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); position: relative; font-family: 'Inter', sans-serif; color: #f8fafc; text-align: left; box-sizing: border-box;">
+        <div style="background: #111620; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; width: 100%; max-width: 680px; max-height: 95vh; overflow-y: auto; padding: 28px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); position: relative; font-family: 'Inter', sans-serif; color: #f8fafc; text-align: left; box-sizing: border-box;">
             
             
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
@@ -335,44 +335,44 @@
             </div>
 
             
-            <div style="display: flex; flex-direction: column; gap: 15px;">
-                <div>
+            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px;">
+                <div style="grid-column: span 1;">
                     <label style="display: block; margin-bottom: 6px; color: #a0aec0; font-size: 0.85rem; font-weight: 500;">Full Name <span style="color: #ff4d4d;">*</span></label>
                     <input type="text" id="custName" value="{{ auth()->check() ? (auth()->user()->first_name . ' ' . auth()->user()->name) : '' }}" readonly style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: #ffffff; font-size: 0.95rem; outline: none; border-color: rgba(255, 255, 255, 0.12);" />
                 </div>
 
-                <div>
-                    <label style="display: block; margin-bottom: 6px; color: #a0aec0; font-size: 0.85rem; font-weight: 500;">Email Address <span style="color: #ff4d4d;">*</span></label>
-                    <input type="email" id="custEmail" value="{{ auth()->check() ? auth()->user()->email : '' }}" readonly style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: #ffffff; font-size: 0.95rem; outline: none; border-color: rgba(255, 255, 255, 0.12);" />
-                </div>
-
-                <div>
-                    <label style="display: block; margin-bottom: 6px; color: #a0aec0; font-size: 0.85rem; font-weight: 500;">Confirm Email Address <span style="color: #ff4d4d;">*</span></label>
-                    <input type="email" id="custConfirmEmail" value="{{ auth()->check() ? auth()->user()->email : '' }}" readonly style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: #ffffff; font-size: 0.95rem; outline: none; border-color: rgba(255, 255, 255, 0.12);" />
-                </div>
-
-                <div>
+                <div style="grid-column: span 1;">
                     <label style="display: block; margin-bottom: 6px; color: #a0aec0; font-size: 0.85rem; font-weight: 500;">WhatsApp Contact Number <span style="color: #ff4d4d;">*</span></label>
                     <div style="display: flex; gap: 10px;">
-                        <select id="custCountryCode" disabled style="padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: #ffffff; font-size: 0.95rem; outline: none; width: 110px; cursor: not-allowed; appearance: none; border-color: rgba(255, 255, 255, 0.12);">
+                        <select id="custCountryCode" disabled style="padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: #ffffff; font-size: 0.95rem; outline: none; width: 80px; cursor: not-allowed; appearance: none; border-color: rgba(255, 255, 255, 0.12); text-align: center; display: inline-block;">
                             <option value="{{ auth()->check() ? auth()->user()->country_code : 'IN' }}">{{ auth()->check() ? (auth()->user()->country_code ?? 'IN') : 'IN' }}</option>
                         </select>
                         <input type="text" id="custPhone" value="{{ auth()->check() ? auth()->user()->contact_number : '' }}" readonly style="flex: 1; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: #ffffff; font-size: 0.95rem; outline: none; border-color: rgba(255, 255, 255, 0.12);" />
                     </div>
                 </div>
 
-                <div style="position: relative;">
+                <div style="grid-column: span 1;">
+                    <label style="display: block; margin-bottom: 6px; color: #a0aec0; font-size: 0.85rem; font-weight: 500;">Email Address <span style="color: #ff4d4d;">*</span></label>
+                    <input type="email" id="custEmail" value="{{ auth()->check() ? auth()->user()->email : '' }}" readonly style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: #ffffff; font-size: 0.95rem; outline: none; border-color: rgba(255, 255, 255, 0.12);" />
+                </div>
+
+                <div style="grid-column: span 1;">
+                    <label style="display: block; margin-bottom: 6px; color: #a0aec0; font-size: 0.85rem; font-weight: 500;">Confirm Email Address <span style="color: #ff4d4d;">*</span></label>
+                    <input type="email" id="custConfirmEmail" value="{{ auth()->check() ? auth()->user()->email : '' }}" readonly style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: #ffffff; font-size: 0.95rem; outline: none; border-color: rgba(255, 255, 255, 0.12);" />
+                </div>
+
+                <div style="grid-column: span 1; position: relative;">
                     <label style="display: block; margin-bottom: 6px; color: #a0aec0; font-size: 0.85rem; font-weight: 500;">Street Address <span style="color: #ff4d4d;">*</span></label>
                     <input type="text" id="custStreetAddress" value="{{ auth()->check() && auth()->user()->subscription ? auth()->user()->subscription->street_address : '' }}" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: #ffffff; font-size: 0.95rem; outline: none; border-color: rgba(255, 255, 255, 0.12);" placeholder="Start typing your street address..." autocomplete="off" />
                     <div id="addrSuggestions" style="display: none; position: absolute; left: 0; right: 0; top: 100%; background: #111620; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 8px; margin-top: 4px; max-height: 200px; overflow-y: auto; z-index: 10000; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);"></div>
                 </div>
 
-                <div>
+                <div style="grid-column: span 1;">
                     <label style="display: block; margin-bottom: 6px; color: #a0aec0; font-size: 0.85rem; font-weight: 500;">Landmark <span style="color: #ff4d4d;">*</span></label>
                     <input type="text" id="custLandmark" value="{{ auth()->check() && auth()->user()->subscription ? auth()->user()->subscription->landmark : '' }}" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: #ffffff; font-size: 0.95rem; outline: none; border-color: rgba(255, 255, 255, 0.12);" placeholder="Landmark (e.g. near metro station)" />
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                <div style="grid-column: span 2; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
                     <div>
                         <label style="display: block; margin-bottom: 6px; color: #a0aec0; font-size: 0.85rem; font-weight: 500;">Pincode <span style="color: #ff4d4d;">*</span></label>
                         <input type="text" id="custPincode" value="{{ auth()->check() && auth()->user()->subscription ? auth()->user()->subscription->pincode : '' }}" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: #ffffff; font-size: 0.95rem; outline: none; border-color: rgba(255, 255, 255, 0.12);" placeholder="Pincode" />
@@ -387,11 +387,15 @@
                     </div>
                 </div>
 
-                <button onclick="proceedToPay()" id="proceedPayBtn" style="width: 100%; margin-top: 10px; padding: 14px; background: #ff5429; color: #ffffff; border: none; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                    <span id="btnText">Proceed to Pay</span>
-                    <span id="btnLoader" style="display: none; width: 18px; height: 18px; border: 2px solid #ffffff; border-top: 2px solid transparent; border-radius: 50%; animation: spin 0.8s linear infinite;"></span>
-                </button>
+                <div style="grid-column: span 2;">
+                    <button onclick="proceedToPay()" id="proceedPayBtn" style="width: 100%; margin-top: 10px; padding: 14px; background: #ff5429; color: #ffffff; border: none; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <span id="btnText">Proceed to Pay</span>
+                        <span id="btnLoader" style="display: none; width: 18px; height: 18px; border: 2px solid #ffffff; border-top: 2px solid transparent; border-radius: 50%; animation: spin 0.8s linear infinite;"></span>
+                    </button>
+                </div>
             </div>
+        </div>
+    </div>
         </div>
     </div>
 
@@ -402,6 +406,54 @@
     }
     #proceedPayBtn:hover {
         background: #e0441d;
+    }
+
+    /* Modal Inputs Light Mode Overrides */
+    body.light-mode #customPackageModal input,
+    body.light-mode #customPackageModal textarea,
+    body.light-mode #confirmDetailsModal input,
+    body.light-mode #confirmDetailsModal select {
+        background: #ffffff !important;
+        border: 1px solid rgba(15, 23, 42, 0.15) !important;
+        color: #0f172a !important;
+        border-color: rgba(15, 23, 42, 0.15) !important;
+    }
+    
+    body.light-mode #confirmDetailsModal input:read-only,
+    body.light-mode #confirmDetailsModal select:disabled {
+        background: #f1f5f9 !important;
+        color: #475569 !important;
+        border-color: rgba(15, 23, 42, 0.1) !important;
+    }
+
+    /* Override browser autofill text and background color in light mode */
+    body.light-mode #confirmDetailsModal input:-webkit-autofill,
+    body.light-mode #confirmDetailsModal input:-webkit-autofill:hover, 
+    body.light-mode #confirmDetailsModal input:-webkit-autofill:focus {
+        -webkit-text-fill-color: #0f172a !important;
+        -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+        transition: background-color 5000s ease-in-out 0s !important;
+    }
+
+    /* Address Suggestion Items styling */
+    .suggestion-item {
+        padding: 10px 15px;
+        cursor: pointer;
+        color: #ffffff;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        font-size: 0.9rem;
+        transition: background 0.15s;
+        text-align: left;
+    }
+    .suggestion-item:hover {
+        background: rgba(82, 234, 210, 0.15);
+    }
+    body.light-mode .suggestion-item {
+        color: #0f172a !important;
+        border-bottom: 1px solid rgba(15, 23, 42, 0.05) !important;
+    }
+    body.light-mode .suggestion-item:hover {
+        background: rgba(82, 234, 210, 0.08) !important;
     }
     </style>
 
@@ -615,20 +667,8 @@
                                         const fullText = parts.join(', ');
                                         
                                         const item = document.createElement('div');
-                                        item.style.padding = '10px 15px';
-                                        item.style.cursor = 'pointer';
-                                        item.style.color = '#fff';
-                                        item.style.borderBottom = '1px solid rgba(255, 255, 255, 0.05)';
-                                        item.style.fontSize = '0.9rem';
+                                        item.className = 'suggestion-item';
                                         item.innerText = fullText;
-                                        
-                                        // Hover effect
-                                        item.addEventListener('mouseenter', function() {
-                                            this.style.background = 'rgba(82, 234, 210, 0.15)';
-                                        });
-                                        item.addEventListener('mouseleave', function() {
-                                            this.style.background = 'transparent';
-                                        });
                                         
                                         // Select suggestion click handler
                                         item.addEventListener('click', function () {

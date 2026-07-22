@@ -216,6 +216,208 @@
         background: rgba(255,255,255,0.1);
         border-radius: 3px;
     }
+
+    /* ═══════════════════════════════════════════════
+       LIGHT MODE OVERRIDES FOR CHECKIN PAGE
+    ═══════════════════════════════════════════════ */
+    body.light-mode .dark-card {
+        background: #ffffff !important;
+        border: 1px solid rgba(15, 23, 42, 0.08) !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+    }
+
+    body.light-mode .dark-input {
+        background: #ffffff !important;
+        border: 1px solid rgba(15, 23, 42, 0.15) !important;
+        color: #0f172a !important;
+    }
+
+    body.light-mode .dark-input:focus {
+        background: #f8fafc !important;
+        border-color: #0f766e !important;
+        box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.12) !important;
+        color: #0f172a !important;
+    }
+
+    body.light-mode .dark-input::placeholder {
+        color: #94a3b8 !important;
+    }
+
+    body.light-mode .dark-input:disabled,
+    body.light-mode .dark-input[readonly] {
+        background: #f1f5f9 !important;
+        color: #64748b !important;
+        cursor: not-allowed !important;
+    }
+
+    body.light-mode .dark-label {
+        color: #475569 !important;
+    }
+
+    body.light-mode .section-heading {
+        color: #0f172a !important;
+        border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+    }
+
+    body.light-mode .section-heading svg {
+        color: #0f766e !important;
+    }
+
+    body.light-mode .price-row {
+        color: #475569 !important;
+        border-bottom: 1px dashed rgba(15, 23, 42, 0.08) !important;
+    }
+
+    body.light-mode .price-row.total {
+        color: #0f172a !important;
+    }
+
+    body.light-mode .btn-teal {
+        background: linear-gradient(135deg, #80a7ff 0%, #52ead2 100%) !important;
+        color: #051013 !important;
+        border-radius: 999px !important;
+        font-weight: 800 !important;
+    }
+
+    body.light-mode .upload-box {
+        border-color: rgba(15, 118, 110, 0.3) !important;
+        background: rgba(15, 118, 110, 0.03) !important;
+    }
+
+    body.light-mode .upload-box:hover {
+        border-color: #0f766e !important;
+        background: rgba(15, 118, 110, 0.07) !important;
+    }
+
+    body.light-mode .upload-box p,
+    body.light-mode .upload-box span,
+    body.light-mode .upload-box small {
+        color: #475569 !important;
+    }
+
+    body.light-mode .upload-box svg {
+        stroke: #0f766e !important;
+    }
+
+    /* Page title and ref number in light mode */
+    body.light-mode h4[style*="color: #f8fafc"],
+    body.light-mode h4[style*="color:#f8fafc"] {
+        color: #0f172a !important;
+    }
+
+    body.light-mode strong[style*="color: #52ead2"],
+    body.light-mode strong[style*="color:#52ead2"],
+    body.light-mode span[style*="color: #52ead2"],
+    body.light-mode span[style*="color:#52ead2"] {
+        color: #0f766e !important;
+    }
+
+    body.light-mode span[style*="color: #94a3b8"],
+    body.light-mode span[style*="color:#94a3b8"],
+    body.light-mode p[style*="color: #94a3b8"],
+    body.light-mode p[style*="color:#94a3b8"],
+    body.light-mode div[style*="color: #94a3b8"],
+    body.light-mode div[style*="color:#94a3b8"],
+    body.light-mode label[style*="color: #94a3b8"] {
+        color: #475569 !important;
+    }
+
+    body.light-mode span[style*="color: #f8fafc"],
+    body.light-mode span[style*="color:#f8fafc"],
+    body.light-mode p[style*="color: #f8fafc"],
+    body.light-mode div[style*="color: #f8fafc"],
+    body.light-mode strong[style*="color: #f8fafc"],
+    body.light-mode li[style*="color: #f8fafc"] {
+        color: #0f172a !important;
+    }
+
+    body.light-mode div[style*="color: #cbd5e1"],
+    body.light-mode span[style*="color: #cbd5e1"],
+    body.light-mode p[style*="color: #cbd5e1"] {
+        color: #475569 !important;
+    }
+
+    body.light-mode div[style*="background: rgba(11, 16, 32"],
+    body.light-mode div[style*="background:rgba(11,16,32"],
+    body.light-mode div[style*="background: rgba(255, 255, 255, 0.03)"],
+    body.light-mode div[style*="background: rgba(255, 255, 255, 0.05)"],
+    body.light-mode div[style*="background:rgba(255,255,255,0.03)"],
+    body.light-mode div[style*="background:rgba(255,255,255,0.05)"] {
+        background: #f8fafc !important;
+        border-color: rgba(15, 23, 42, 0.08) !important;
+        color: #0f172a !important;
+    }
+
+    body.light-mode div[style*="border: 1px solid rgba(255, 255, 255, 0.05)"],
+    body.light-mode div[style*="border:1px solid rgba(255,255,255,0.05)"],
+    body.light-mode div[style*="border: 1px solid rgba(255, 255, 255, 0.08)"] {
+        border-color: rgba(15, 23, 42, 0.08) !important;
+    }
+
+    /* Flatpickr calendar light mode */
+    body.light-mode .flatpickr-calendar {
+        background: #ffffff !important;
+        border: 1px solid rgba(15, 23, 42, 0.12) !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+    }
+    body.light-mode .flatpickr-months,
+    body.light-mode .flatpickr-months .flatpickr-month {
+        background: #f8fafc !important;
+        color: #0f172a !important;
+    }
+    body.light-mode .flatpickr-current-month select.flatpickr-monthDropdown-months,
+    body.light-mode .flatpickr-current-month .numInputWrapper input.cur-year {
+        color: #0f172a !important;
+    }
+    body.light-mode .flatpickr-weekday {
+        color: #475569 !important;
+        background: #f8fafc !important;
+    }
+    body.light-mode .flatpickr-day {
+        color: #0f172a !important;
+    }
+    body.light-mode .flatpickr-day:hover {
+        background: rgba(15, 118, 110, 0.08) !important;
+        border-color: rgba(15, 118, 110, 0.3) !important;
+    }
+    body.light-mode .flatpickr-day.selected,
+    body.light-mode .flatpickr-day.selected:hover {
+        background: #0f766e !important;
+        border-color: #0f766e !important;
+        color: #ffffff !important;
+    }
+    body.light-mode .flatpickr-day.today {
+        border-color: #0f766e !important;
+    }
+    body.light-mode .flatpickr-months .flatpickr-prev-month,
+    body.light-mode .flatpickr-months .flatpickr-next-month {
+        color: #0f766e !important;
+        fill: #0f766e !important;
+    }
+    body.light-mode .flatpickr-months .flatpickr-prev-month:hover svg,
+    body.light-mode .flatpickr-months .flatpickr-next-month:hover svg {
+        fill: #0f766e !important;
+    }
+
+    /* Checkbox light mode */
+    body.light-mode .checkbox-custom {
+        border-color: #0f766e !important;
+        background: #ffffff !important;
+    }
+    body.light-mode .checkbox-container input[type="checkbox"]:checked + .checkbox-custom {
+        background-color: #0f766e !important;
+    }
+    body.light-mode .checkbox-container input[type="checkbox"]:checked + .checkbox-custom::after {
+        color: #ffffff !important;
+    }
+
+    /* Light mode scrollbar */
+    body.light-mode .custom-scroll::-webkit-scrollbar-track {
+        background: #f1f5f9 !important;
+    }
+    body.light-mode .custom-scroll::-webkit-scrollbar-thumb {
+        background: rgba(15, 23, 42, 0.15) !important;
+    }
 </style>
 
 <div class="container-fluid p-4" style="min-width: 0; max-width: 100%; overflow-x: hidden;">

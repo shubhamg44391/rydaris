@@ -41,6 +41,7 @@ class UserRegisterController extends Controller
         ]);
 
         Auth::login($user);
+        $request->session()->flash('login_success_preloader', true);
 
         return redirect()->route('user.dashboard')->with('success', 'Registration successful!');
     }

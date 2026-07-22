@@ -21,6 +21,130 @@
         .custom-table-scrollbar::-webkit-scrollbar-thumb:hover {
             background: rgba(82, 234, 210, 0.4);
         }
+
+        /* Force light mode styles for bookings listing table */
+        body.light-mode .admin-panel {
+            background-color: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 12px !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+            color: #0f172a !important;
+            overflow: hidden !important;
+        }
+
+        body.light-mode .admin-panel .panel-head {
+            border-bottom: none !important;
+        }
+
+        body.light-mode .admin-table-wrap {
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+        }
+
+        body.light-mode .admin-table {
+            background-color: #ffffff !important;
+        }
+
+        body.light-mode .admin-table th {
+            background-color: #f8fafc !important;
+            color: #475569 !important;
+            border-bottom: 1.5px solid #cbd5e1 !important;
+        }
+
+        body.light-mode .admin-table td,
+        body.light-mode .admin-table tr {
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+            border-bottom: 1px solid #cbd5e1 !important;
+        }
+
+        body.light-mode .admin-table tbody tr:last-child td,
+        body.light-mode .admin-table tbody tr:last-child {
+            border-bottom: none !important;
+        }
+
+        body.light-mode .admin-table td p,
+        body.light-mode .admin-table td span:not([class*="badge"]):not([class*="status"]):not([style*="#52ead2"]):not([style*="var(--brand)"]),
+        body.light-mode .admin-table td div:not([class*="badge"]):not([class*="status"]):not([style*="#52ead2"]):not([style*="var(--brand)"]),
+        body.light-mode .admin-table td strong:not([style*="#52ead2"]):not([style*="var(--brand)"]) {
+            color: #0f172a !important;
+        }
+
+        /* Map light turquoise brand color to highly readable dark teal in light mode */
+        body.light-mode .admin-table td[style*="#52ead2"],
+        body.light-mode .admin-table td[style*="var(--brand)"],
+        body.light-mode .admin-table td span[style*="#52ead2"],
+        body.light-mode .admin-table td span[style*="var(--brand)"],
+        body.light-mode .admin-table td strong[style*="#52ead2"],
+        body.light-mode .admin-table td strong[style*="var(--brand)"],
+        body.light-mode .admin-table td a[style*="#52ead2"],
+        body.light-mode .admin-table td a[style*="var(--brand)"] {
+            color: #0f766e !important;
+        }
+
+        body.light-mode .admin-table td a[style*="rgba(82,234,210,"],
+        body.light-mode .admin-table td a[style*="rgba(82, 234, 210,"] {
+            border-color: rgba(15, 118, 110, 0.3) !important;
+            background: rgba(15, 118, 110, 0.06) !important;
+            color: #0f766e !important;
+        }
+        body.light-mode .admin-table td a[style*="rgba(82,234,210,"]:hover,
+        body.light-mode .admin-table td a[style*="rgba(82, 234, 210,"]:hover {
+            background: rgba(15, 118, 110, 0.12) !important;
+            border-color: rgba(15, 118, 110, 0.5) !important;
+        }
+
+        body.light-mode .admin-table td svg {
+            stroke: #475569 !important;
+        }
+
+        body.light-mode .admin-table tbody tr:hover td {
+            background-color: #f8fafc !important;
+        }
+
+        /* Light Mode scrollbars overrides */
+        body.light-mode .custom-table-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9 !important;
+        }
+        body.light-mode .custom-table-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(15, 23, 42, 0.15) !important;
+            border-color: #f1f5f9 !important;
+        }
+        body.light-mode .custom-table-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(15, 23, 42, 0.3) !important;
+        }
+
+        /* Light Mode: status dropdown */
+        body.light-mode .admin-table td select.status-dropdown,
+        body.light-mode select.status-dropdown {
+            background: #ffffff !important;
+            color: #0f172a !important;
+            border: 1px solid rgba(15, 23, 42, 0.15) !important;
+        }
+        body.light-mode select.status-dropdown option {
+            background: #ffffff !important;
+            color: #0f172a !important;
+        }
+
+        /* Light Mode: action icon edit button in table */
+        body.light-mode .admin-table td a.btn.btn-sm[style*="rgba(255,255,255,0.05)"],
+        body.light-mode .admin-table td a.btn.btn-sm {
+            background: #f1f5f9 !important;
+            color: #475569 !important;
+            border: 1px solid rgba(15, 23, 42, 0.12) !important;
+        }
+        body.light-mode .admin-table td a.btn.btn-sm:hover {
+            background: rgba(15, 118, 110, 0.08) !important;
+            color: #0f766e !important;
+            border-color: rgba(15, 118, 110, 0.25) !important;
+        }
+
+        /* Light Mode: Trip Ended / In Progress status spans */
+        body.light-mode .admin-table td span.badge[style*="rgba(255, 255, 255, 0.05)"] {
+            background: #f1f5f9 !important;
+            color: #475569 !important;
+            border-color: rgba(15, 23, 42, 0.12) !important;
+        }
     </style>
     <div class="panel-head d-flex justify-content-between align-items-center" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
         <div>

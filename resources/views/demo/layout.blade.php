@@ -510,6 +510,189 @@
                 opacity: 1;
             }
         }
+
+        /* Demo Layout Light Mode CSS Overrides */
+        body.light-mode {
+            --bg-1: #f1f5f9;
+            --bg-2: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+        }
+
+        body.light-mode .sidebar {
+            border-right: 1px solid rgba(15, 23, 42, 0.08) !important;
+        }
+
+        body.light-mode .sidebar-logo,
+        body.light-mode .sidebar-menu {
+            border-color: rgba(15, 23, 42, 0.08) !important;
+        }
+
+        body.light-mode .logo-text {
+            color: #0f172a !important;
+        }
+
+        body.light-mode .topbar {
+            background: #ffffff !important;
+            border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+        }
+
+        body.light-mode .topbar-left a {
+            background: rgba(15, 118, 110, 0.06) !important;
+            border-color: rgba(15, 118, 110, 0.2) !important;
+            color: #0f766e !important;
+        }
+
+        body.light-mode .topbar-left a i {
+            color: #0f766e !important;
+        }
+
+        body.light-mode .topbar-right .profile-trigger-btn {
+            border-color: rgba(15, 23, 42, 0.15) !important;
+            color: #0f172a !important;
+        }
+
+        body.light-mode .btn-collapse-sidebar {
+            background: #ffffff !important;
+            border-color: rgba(15, 23, 42, 0.15) !important;
+            color: #475569 !important;
+        }
+
+        body.light-mode .btn-collapse-sidebar:hover {
+            background: #f1f5f9 !important;
+        }
+
+        body.light-mode .branch-display-wrap {
+            background: rgba(15, 118, 110, 0.06) !important;
+            border-color: rgba(15, 118, 110, 0.18) !important;
+            color: #0f766e !important;
+        }
+
+        body.light-mode .branch-display-wrap span {
+            color: #0f766e !important;
+        }
+
+        body.light-mode .glass-card {
+            background: #ffffff !important;
+            border-color: rgba(15, 23, 42, 0.08) !important;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.03) !important;
+        }
+
+        body.light-mode .demo-table-wrap {
+            background: #ffffff !important;
+            border-color: rgba(15, 23, 42, 0.08) !important;
+        }
+
+        body.light-mode .demo-table th {
+            background: #f8fafc !important;
+            border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+            color: #475569 !important;
+        }
+
+        body.light-mode .demo-table td {
+            border-bottom: 1px solid rgba(15, 23, 42, 0.06) !important;
+            color: #0f172a !important;
+        }
+
+        body.light-mode .badge-active {
+            background: rgba(15, 118, 110, 0.1) !important;
+            color: #0f766e !important;
+        }
+
+        body.light-mode .badge-inactive {
+            background: #f1f5f9 !important;
+            color: #475569 !important;
+        }
+
+        body.light-mode .btn-close-sidebar {
+            color: #475569 !important;
+        }
+
+        /* Global Demo Site Inputs & Elements Light Mode Overrides */
+        body.light-mode .content input,
+        body.light-mode .content select,
+        body.light-mode .content textarea,
+        body.light-mode .xp-modal input,
+        body.light-mode .xp-modal select,
+        body.light-mode .xp-modal textarea {
+            background-color: #ffffff !important;
+            border: 1px solid rgba(15, 23, 42, 0.15) !important;
+            color: #0f172a !important;
+        }
+
+        body.light-mode .content input[disabled],
+        body.light-mode .content input:disabled,
+        body.light-mode .content textarea[disabled],
+        body.light-mode .content textarea:disabled {
+            background-color: #f1f5f9 !important;
+            color: #64748b !important;
+            border-color: rgba(15, 23, 42, 0.08) !important;
+        }
+
+        body.light-mode .content h2,
+        body.light-mode .content h3,
+        body.light-mode .content h4,
+        body.light-mode .content h1 {
+            color: #0f172a !important;
+            border-color: rgba(15, 23, 42, 0.08) !important;
+        }
+
+        body.light-mode .content label {
+            color: #475569 !important;
+        }
+
+        body.light-mode .content button[type="submit"],
+        body.light-mode .content .xp-btn-save,
+        body.light-mode .content .btn-primary,
+        body.light-mode .xp-modal button[type="submit"],
+        body.light-mode .xp-modal .xp-btn-save {
+            background: linear-gradient(135deg, #0f766e, #0d9488) !important;
+            color: #ffffff !important;
+            border: none !important;
+            box-shadow: 0 4px 12px rgba(15, 118, 110, 0.18) !important;
+        }
+        body.light-mode .content button[type="submit"]:hover,
+        body.light-mode .content .xp-btn-save:hover,
+        body.light-mode .content .btn-primary:hover,
+        body.light-mode .xp-modal button[type="submit"]:hover,
+        body.light-mode .xp-modal .xp-btn-save:hover {
+            opacity: 0.9 !important;
+        }
+
+        body.light-mode .menu-link.active {
+            color: #051013 !important;
+        }
+
+        body.light-mode .menu-link:hover {
+            color: #0f766e !important;
+            background: rgba(15, 118, 110, 0.05) !important;
+        }
+
+        body.light-mode .submenu-link.active {
+            color: #0f766e !important;
+        }
+
+        body.light-mode .submenu-link.active::before {
+            color: #0f766e !important;
+        }
+
+        body.light-mode .logo-text span {
+            color: #0f766e !important;
+        }
+
+        body.light-mode .demo-badge {
+            background: rgba(15, 118, 110, 0.08) !important;
+            border-color: rgba(15, 118, 110, 0.2) !important;
+            color: #0f766e !important;
+        }
+
+        /* Map light turquoise brand color to highly readable dark teal in light mode globally */
+        body.light-mode [style*="var(--brand)"],
+        body.light-mode [style*="#52ead2"],
+        body.light-mode [style*="color: var(--brand)"],
+        body.light-mode [style*="color:#52ead2"] {
+            color: #0f766e !important;
+        }
     </style>
     <link rel="stylesheet" href="{{ asset('assets/styles.css') }}?v={{ time() }}" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -568,11 +751,20 @@
     </script>
 </head>
 <body>
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('rydaris_demo_theme') || 'dark';
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-mode');
+                document.documentElement.classList.add('light-mode');
+            }
+        })();
+    </script>
 
     
     <aside class="sidebar">
         <div class="sidebar-logo" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-          <img class="brand-full" src="{{ asset('assets/logo/rydaris-logo.png') }}" alt="Rydaris Logo" style="height: 32px; width: auto; display: block;">
+          <img class="brand-full" src="{{ asset('assets/logo/rydaris-logo.png') }}" data-dark-logo="{{ asset('assets/logo/rydaris-logo.png') }}" data-light-logo="{{ asset('assets/logo/rydaris-logo-light.png') }}" alt="Rydaris Logo" style="height: 32px; width: auto; display: block;">
           <img class="brand-mini" src="{{ asset('assets/logo/favicon.svg') }}" alt="Rydaris Logo" style="height: 32px; width: auto; display: none;">
             <button class="btn-close-sidebar" onclick="toggleSidebarCollapse()" style="display: none; background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; padding: 4px; line-height: 1;">
                 <i class="fa-solid fa-xmark"></i>
@@ -690,17 +882,41 @@
 
             
             <div class="topbar-right" style="gap: 25px; display: flex; align-items: center;">
+                <!-- Theme Toggle Button -->
+                <button type="button" class="theme-toggle-btn" onclick="toggleThemeMode()" title="Toggle Light/Dark Theme" aria-label="Toggle Light/Dark Theme" style="background: transparent; border: none; padding: 0; cursor: pointer; color: var(--text, #f8fafc); display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line, rgba(255,255,255,0.1)); transition: all 0.2s; outline: none;">
+                    <svg class="themeSunIcon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+                        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                    <svg class="themeMoonIcon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
                 <div class="branch-display-wrap" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(82, 234, 210, 0.08); border: 1px solid rgba(82, 234, 210, 0.2); border-radius: 8px; padding: 6px 12px; font-size: 0.85rem; font-weight: 600; color: #f8fafc;">
                     <i class="fa-solid fa-house-chimney" style="color: var(--brand, #52ead2); font-size: 0.85rem;"></i>
                     <span>Branch: Delhi</span>
                 </div>
-                <a href="{{ route('demo.profile') }}" style="font-weight: 600; font-size: 0.9rem; color: #fff; display: inline-flex; align-items: center; gap: 8px; text-decoration: none;">
-                    Hello, Demo  
-                    <i class="fa-regular fa-circle-user" style="color: var(--brand); font-size: 1.1rem;"></i>
-                </a>
-                <a href="{{ route('home') }}" style="border: none; background: transparent; padding: 0; color: #ef4444; font-size: 0.9rem; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; transition: color 0.2s;">
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
-                </a>
+                <!-- Profile Dropdown -->
+                <div style="position: relative; display: flex; align-items: center;">
+                  <button type="button" class="profile-trigger-btn" id="profileDropdownTrigger" style="background: transparent; border: none; padding: 0; margin: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; color: var(--text, #f8fafc); border: 1px solid var(--line, rgba(255,255,255,0.1)); transition: all 0.2s; outline: none;">
+                      <svg viewBox="0 0 24 24" style="width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:2;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  </button>
+                  <div class="profile-dropdown-menu" id="profileDropdownMenu" style="display: none; position: absolute; right: 0; top: 45px; width: 220px; background: #0b1020; border: 1px solid var(--line, rgba(255,255,255,0.1)); border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 1000; padding: 6px 0; overflow: hidden;">
+                      <!-- User Info Header -->
+                      <div style="padding: 12px 16px; border-bottom: 1px solid var(--line, rgba(255,255,255,0.05));">
+                          <div style="font-weight: 600; color: var(--text, #f8fafc); font-size: 0.9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: left;">Demo Account</div>
+                          <div style="font-size: 0.78rem; color: var(--muted, #aab7cb); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: left;">demo@rydaris.com</div>
+                      </div>
+                      <!-- Menu Links -->
+                      <a href="{{ route('demo.profile') }}" style="display: flex; align-items: center; gap: 10px; padding: 10px 16px; color: var(--text, #f8fafc); text-decoration: none; font-size: 0.85rem; transition: background 0.15s; text-align: left;" onmouseover="this.style.background='rgba(82, 234, 210, 0.08)';" onmouseout="this.style.background='transparent';">
+                          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--brand, #52ead2); flex-shrink: 0;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                          My Profile
+                      </a>
+                      <a href="{{ route('home') }}" style="display: flex; align-items: center; gap: 10px; padding: 10px 16px; color: #ef4444; text-decoration: none; font-size: 0.85rem; transition: background 0.15s; border-top: 1px solid var(--line, rgba(255,255,255,0.05)); text-align: left;" onmouseover="this.style.background='rgba(239, 68, 68, 0.05)';" onmouseout="this.style.background='transparent';">
+                          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                          Logout
+                      </a>
+                  </div>
+                </div>
             </div>
         </header>
 
@@ -720,6 +936,62 @@
         .demo-pagination button.active { background: var(--brand); color:#051013; border-color: var(--brand); }
         .demo-pagination button:disabled { opacity:0.4; cursor:not-allowed; }
     </style>
+    <script>
+        // Theme Switcher Functions
+        function syncThemeIcons() {
+            const isLight = document.body ? document.body.classList.contains('light-mode') : document.documentElement.classList.contains('light-mode');
+            document.querySelectorAll('.themeSunIcon').forEach(function(el) {
+                el.style.display = isLight ? 'none' : 'block';
+            });
+            document.querySelectorAll('.themeMoonIcon').forEach(function(el) {
+                el.style.display = isLight ? 'block' : 'none';
+            });
+            
+            // Update logo dynamically
+            document.querySelectorAll('.brand-full').forEach(function(img) {
+                const darkLogo = img.getAttribute('data-dark-logo');
+                const lightLogo = img.getAttribute('data-light-logo');
+                if (isLight && lightLogo) {
+                    img.src = lightLogo;
+                } else if (!isLight && darkLogo) {
+                    img.src = darkLogo;
+                }
+            });
+        }
+
+        function toggleThemeMode() {
+            if (document.body) document.body.classList.toggle('light-mode');
+            document.documentElement.classList.toggle('light-mode');
+            const isLight = document.body ? document.body.classList.contains('light-mode') : document.documentElement.classList.contains('light-mode');
+            localStorage.setItem('rydaris_demo_theme', isLight ? 'light' : 'dark');
+            syncThemeIcons();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            syncThemeIcons();
+
+            // Profile Dropdown Toggle Logic
+            const trigger = document.getElementById('profileDropdownTrigger');
+            const menu = document.getElementById('profileDropdownMenu');
+            
+            if (trigger && menu) {
+                trigger.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const isOpen = menu.style.display === 'block';
+                    menu.style.display = isOpen ? 'none' : 'block';
+                    trigger.classList.toggle('active', !isOpen);
+                });
+                
+                document.addEventListener('click', function(e) {
+                    if (!trigger.contains(e.target) && !menu.contains(e.target)) {
+                        menu.style.display = 'none';
+                        trigger.classList.remove('active');
+                    }
+                });
+            }
+        });
+        if (document.body) syncThemeIcons();
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // Vendor-style success alert after a demo "save"

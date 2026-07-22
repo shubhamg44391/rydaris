@@ -38,6 +38,66 @@
     .iti__country-list::-webkit-scrollbar-thumb:hover {
         background: var(--brand, #52ead2) !important;
     }
+
+    /* ===== Light Mode Overrides for intl-tel-input ===== */
+    body.light-mode .iti__dropdown-content {
+        background: #ffffff !important;
+        border: 1px solid rgba(15, 23, 42, 0.12) !important;
+        color: #0f172a !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+    }
+    body.light-mode .iti__country-list {
+        background: #ffffff !important;
+        color: #0f172a !important;
+    }
+    body.light-mode .iti__country-list .iti__country:hover,
+    body.light-mode .iti__country-list .iti__country.iti__highlight {
+        background: rgba(15, 118, 110, 0.08) !important;
+    }
+    body.light-mode .iti__selected-flag {
+        border-right: 1px solid rgba(15, 23, 42, 0.12) !important;
+    }
+    body.light-mode .iti__selected-dial-code {
+        color: #0f172a !important;
+    }
+    body.light-mode .iti__arrow {
+        border-top-color: #475569 !important;
+    }
+    body.light-mode .iti__arrow--up {
+        border-bottom-color: #475569 !important;
+    }
+    body.light-mode .iti__search-input-container {
+        background: #f8fafc !important;
+        border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+    }
+    body.light-mode .iti__search-input {
+        background: #ffffff !important;
+        border: 1px solid rgba(15, 23, 42, 0.15) !important;
+        color: #0f172a !important;
+    }
+    body.light-mode .iti__search-input:focus {
+        border-color: #0f766e !important;
+        background: #ffffff !important;
+    }
+    body.light-mode .iti__search-input::placeholder {
+        color: #94a3b8 !important;
+    }
+    body.light-mode .iti__dial-code {
+        color: #0f172a !important;
+    }
+    body.light-mode .iti__divider {
+        border-bottom-color: rgba(15, 23, 42, 0.08) !important;
+    }
+    /* Light scrollbar for dropdown */
+    body.light-mode .iti__country-list::-webkit-scrollbar-track {
+        background: #f1f5f9 !important;
+    }
+    body.light-mode .iti__country-list::-webkit-scrollbar-thumb {
+        background: rgba(15, 23, 42, 0.15) !important;
+    }
+    body.light-mode .iti__country-list::-webkit-scrollbar-thumb:hover {
+        background: #0f766e !important;
+    }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/19.2.16/js/intlTelInput.min.js"></script>
 <script>

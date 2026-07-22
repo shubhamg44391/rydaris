@@ -196,7 +196,7 @@
         
         <div class="footer">
             <p>Thank you for choosing Rydaris</p>
-            <p>Email: support@rydaris.com</p>
+            <p>Email: {{ $site_setting->contact_email ?? 'support@rydaris.com' }}</p>
         </div>
     </div>
 </body>

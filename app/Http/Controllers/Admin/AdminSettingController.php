@@ -95,4 +95,66 @@ class AdminSettingController extends Controller
             return back()->with('error', 'Failed to send test email: ' . $e->getMessage());
         }
     }
+
+    public function generalSettings()
+    {
+        $settings = SiteSetting::firstOrCreate();
+        return view('admin.settings.general', compact('settings'));
+    }
+
+    public function updateGeneralSettings(Request $request)
+    {
+        $request->validate([
+            'contact_email' => 'nullable|email|max:255',
+            'contact_phone' => 'nullable|string|max:255',
+            'site_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'site_logo_light' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'favicon' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,ico,webp|max:1024',
+        ]);
+
+        $settings = SiteSetting::firstOrCreate();
+
+        $data = [
+            'contact_email' => $request->input('contact_email'),
+            'contact_phone' => $request->input('contact_phone'),
+        ];
+
+        if ($request->hasFile('site_logo')) {
+            if ($settings->site_logo && \Illuminate\Support\Facades\Storage::disk('public')->exists($settings->site_logo)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($settings->site_logo);
+            }
+            $data['site_logo'] = $request->file('site_logo')->store('site', 'public');
+        }
+
+        if ($request->hasFile('site_logo_light')) {
+            if ($settings->site_logo_light && \Illuminate\Support\Facades\Storage::disk('public')->exists($settings->site_logo_light)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($settings->site_logo_light);
+            }
+            $data['site_logo_light'] = $request->file('site_logo_light')->store('site', 'public');
+        }
+
+        if ($request->hasFile('favicon')) {
+            if ($settings->favicon && \Illuminate\Support\Facades\Storage::disk('public')->exists($settings->favicon)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($settings->favicon);
+            }
+            $data['favicon'] = $request->file('favicon')->store('site', 'public');
+        }
+
+        $settings->update($data);
+
+        \Illuminate\Support\Facades\Cache::forget('site_setting_global');
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'General contact and branding settings updated successfully.',
+                'settings' => $settings,
+                'site_logo_url' => $settings->site_logo ? asset('storage/' . $settings->site_logo) : null,
+                'site_logo_light_url' => $settings->site_logo_light ? asset('storage/' . $settings->site_logo_light) : null,
+                'favicon_url' => $settings->favicon ? asset('storage/' . $settings->favicon) : null
+            ]);
+        }
+
+        return back()->with('success', 'General contact and branding settings updated successfully.');
+    }
 }

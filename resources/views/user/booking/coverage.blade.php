@@ -24,7 +24,7 @@
             <div style="flex: 1; height: 1px; background: rgba(255, 255, 255, 0.1); margin: -20px 15px 0;"></div>
             
             <div class="step text-center">
-                <div style="width: 35px; height: 35px; border-radius: 50%; background: #52ead2; color: #0b1020; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-weight: 800; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);">
+                <div style="width: 35px; height: 35px; border-radius: 50%; background: #52ead2; color: #0b1020; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-weight: 800; box-shadow: 0 4px 15px rgba(82, 234, 210, 0.4);">
                     3
                 </div>
                 <span style="font-size: 0.75rem; color: #52ead2; font-weight: 800;">Coverage</span>
@@ -53,7 +53,7 @@
             <div class="col-lg-8">
                 
                 
-                <div class="card mb-4" style="background: rgba(11, 16, 32, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; overflow: hidden;">
+                <div class="card dark-card mb-4" style="background: linear-gradient(135deg, rgba(128, 167, 255, 0.15) 0%, rgba(82, 234, 210, 0.15) 100%), #08121c; border: 1px solid rgba(82, 234, 210, 0.35); border-radius: 16px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25), 0 0 25px rgba(82, 234, 210, 0.12); overflow: hidden; backdrop-filter: blur(16px);">
                     <div class="card-header border-0 p-4 pb-0" style="background: transparent;">
                         <h4 style="color: #f8fafc; font-weight: 800; font-size: 1.25rem;">Coverage</h4>
                     </div>
@@ -63,12 +63,12 @@
                                 <table class="table text-light" style="border-collapse: separate; border-spacing: 0;">
                                     <thead>
                                         <tr>
-                                            <th style="border-bottom: 1px solid rgba(255,255,255,0.05); padding: 15px; font-weight: 600; color: #94a3b8; font-size: 0.85rem; width: 40%;">Coverage</th>
+                                            <th style="border-bottom: 1px solid rgba(82, 234, 210, 0.2); padding: 15px; font-weight: 600; color: #52ead2; font-size: 0.85rem; width: 40%; text-transform: uppercase;">Coverage</th>
                                             @foreach($insurances as $pkg)
-                                                <th class="text-center" style="border-bottom: 1px solid rgba(255,255,255,0.05); padding: 15px;">
-                                                    <div style="font-weight: 800; color: #f8fafc; font-size: 0.95rem;">{{ $pkg->name }}</div>
-                                                    <div style="font-weight: 600; color: var(--brand); font-size: 0.8rem; margin-top: 5px;">
-                                                        {{ $pkg->price > 0 ? '$' . number_format($pkg->price, 2) . ' / Day' : 'Included' }}
+                                                <th class="text-center" style="border-bottom: 1px solid rgba(82, 234, 210, 0.2); padding: 15px;">
+                                                    <div style="font-weight: 800; color: #ffffff; font-size: 0.95rem; text-transform: uppercase;">{{ $pkg->name }}</div>
+                                                    <div style="font-weight: 600; color: #52ead2; font-size: 0.8rem; margin-top: 5px;">
+                                                        {{ $pkg->price > 0 ? '$' . number_format($pkg->price, 2) . ' / DAY' : 'Included' }}
                                                     </div>
                                                 </th>
                                             @endforeach
@@ -89,7 +89,7 @@
                                                     @endphp
                                                     <td class="text-center" style="border-bottom: 1px solid rgba(255,255,255,0.05); padding: 15px;">
                                                         @if($hasFeature)
-                                                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#52ead2" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
                                                         @else
                                                             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#ef4444" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                                                         @endif
@@ -107,7 +107,7 @@
                                                         data-id="{{ $pkg->id }}"
                                                         data-price="{{ $pkg->price }}" 
                                                         onclick="selectInsurance(this)"
-                                                        style="{{ $loop->first ? 'background: var(--brand); color: #0b1020; border: none;' : 'border-color: rgba(255,255,255,0.2); background: transparent; color: #fff;' }} font-weight: 700; border-radius: 8px; transition: all 0.3s;">
+                                                        style="{{ $loop->first ? 'background: linear-gradient(135deg, #80a7ff 0%, #52ead2 100%); color: #051013; border: none; border-radius: 20px; box-shadow: 0 4px 15px rgba(82, 234, 210, 0.4);' : 'border: 1px solid rgba(82, 234, 210, 0.4); background: rgba(82, 234, 210, 0.05); color: #ffffff; border-radius: 12px;' }} font-weight: 800; padding: 10px 24px; transition: all 0.3s;">
                                                         {{ $loop->first ? 'Selected' : 'Select' }}
                                                     </button>
                                                 </td>
@@ -131,7 +131,7 @@
                 </div>
 
                 
-                <div class="card" style="background: rgba(11, 16, 32, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; overflow: hidden;">
+                <div class="card dark-card" style="background: linear-gradient(135deg, rgba(128, 167, 255, 0.15) 0%, rgba(82, 234, 210, 0.15) 100%), #08121c; border: 1px solid rgba(82, 234, 210, 0.35); border-radius: 16px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25), 0 0 25px rgba(82, 234, 210, 0.12); overflow: hidden; backdrop-filter: blur(16px);">
                     <div class="card-header border-0 p-4 pb-2" style="background: transparent;">
                         <h4 style="color: #f8fafc; font-weight: 800; font-size: 1.25rem;">Rental Car Equipment</h4>
                     </div>
@@ -150,15 +150,15 @@
                                     <div>
                                         <h6 style="color: #f8fafc; font-weight: 700; margin-bottom: 4px; font-size: 0.95rem;">{{ $extra->name }}</h6>
                                         <div style="color: #94a3b8; font-size: 0.75rem;">{{ $extra->description ?? 'Optional equipment for your rental' }}</div>
-                                        <div style="color: var(--brand); font-weight: 600; font-size: 0.8rem; margin-top: 4px;">${{ number_format($extra->price, 2) }} / Day</div>
+                                        <div style="color: #52ead2; font-weight: 600; font-size: 0.8rem; margin-top: 4px;">${{ number_format($extra->price, 2) }} / Day</div>
                                     </div>
                                 </div>
                                 
                                 
-                                <div class="d-flex align-items-center gap-3" style="background: rgba(255,255,255,0.05); padding: 5px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);">
-                                    <button type="button" onclick="updateExtraQty('{{ $extra->id }}', -1, {{ $extra->price }})" class="btn btn-sm" style="color: #f8fafc; padding: 2px 10px; font-weight: bold; border-radius: 50%; hover: background: rgba(255,255,255,0.1);">-</button>
+                                <div class="d-flex align-items-center gap-3" style="background: rgba(82, 234, 210, 0.05); padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(82, 234, 210, 0.3);">
+                                    <button type="button" onclick="updateExtraQty('{{ $extra->id }}', -1, {{ $extra->price }})" class="btn btn-sm" style="color: #f8fafc; padding: 2px 8px; font-weight: bold; border: none; background: transparent;">-</button>
                                     <span id="extra-qty-{{ $extra->id }}" style="color: #fff; font-weight: 700; font-size: 0.9rem; min-width: 15px; text-align: center;">0</span>
-                                    <button type="button" onclick="updateExtraQty('{{ $extra->id }}', 1, {{ $extra->price }})" class="btn btn-sm" style="color: #f8fafc; padding: 2px 10px; font-weight: bold; border-radius: 50%;">+</button>
+                                    <button type="button" onclick="updateExtraQty('{{ $extra->id }}', 1, {{ $extra->price }})" class="btn btn-sm" style="color: #f8fafc; padding: 2px 8px; font-weight: bold; border: none; background: transparent;">+</button>
                                 </div>
                             </div>
                         @empty
@@ -170,8 +170,8 @@
                 
                 
                 <div class="d-flex justify-content-between align-items-center mt-5 mb-5">
-                    <a href="javascript:history.back()" class="btn px-5 py-3" style="background: linear-gradient(135deg, #52ead2 0%, #00a4e4 100%); color: #0b1020; border-radius: 8px; font-weight: 800; box-shadow: 0 4px 15px rgba(82, 234, 210, 0.3); text-decoration: none;">Back</a>
-                    <button onclick="continueToPayment()" class="btn px-5 py-3" style="background: linear-gradient(135deg, #52ead2 0%, #00a4e4 100%); color: #0b1020; border-radius: 8px; font-weight: 800; box-shadow: 0 4px 15px rgba(82, 234, 210, 0.3); border: none;">Continue</button>
+                    <a href="javascript:history.back()" class="btn px-5 py-3" style="background: linear-gradient(135deg, #52ead2 0%, #00a4e4 100%); color: #0b1020; border-radius: 12px; font-weight: 800; box-shadow: 0 4px 15px rgba(82, 234, 210, 0.35); text-decoration: none;">Back</a>
+                    <button onclick="continueToPayment()" class="btn px-5 py-3" style="background: linear-gradient(135deg, #52ead2 0%, #00a4e4 100%); color: #0b1020; border-radius: 12px; font-weight: 800; box-shadow: 0 4px 15px rgba(82, 234, 210, 0.35); border: none;">Continue</button>
                 </div>
 
             </div>
@@ -179,7 +179,7 @@
             
             <div class="col-lg-4">
                 <div class="summary-sidebar sticky-top" style="top: 20px;">
-                    <div class="card" style="background: rgba(16, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                    <div class="card dark-card" style="background: linear-gradient(135deg, rgba(128, 167, 255, 0.15) 0%, rgba(82, 234, 210, 0.15) 100%), #08121c; border: 1px solid rgba(82, 234, 210, 0.35); border-radius: 16px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.25), 0 0 25px rgba(82, 234, 210, 0.12); backdrop-filter: blur(16px);">
                         
                         
                         <div style="background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 70%); height: 160px; display: flex; align-items: center; justify-content: center; padding: 20px;">
@@ -195,7 +195,7 @@
 
                         
                         <div class="p-4">
-                            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+                            <div style="background: rgba(5, 11, 25, 0.4); border: 1px solid rgba(82, 234, 210, 0.2); border-radius: 12px; padding: 15px; margin-bottom: 25px;">
                                 <div class="mb-3">
                                     <h6 style="color: #f8fafc; font-size: 0.8rem; font-weight: 700; margin-bottom: 5px;">Pick up</h6>
                                     <div class="d-flex justify-content-between align-items-start">
@@ -239,9 +239,9 @@
                         </div>
 
                         
-                        <div class="p-4" style="background: rgba(82, 234, 210, 0.05); border-top: 1px solid rgba(82, 234, 210, 0.15); display: flex; justify-content: space-between; align-items: center;">
-                            <span style="color: #f8fafc; font-weight: 800; font-size: 1.1rem;">Total</span>
-                            <span style="color: var(--brand); font-weight: 900; font-size: 1.6rem;" id="grand-total">${{ number_format($vehicle->total_price, 2) }}</span>
+                        <div class="p-4" style="background: linear-gradient(135deg, rgba(82, 234, 210, 0.25) 0%, rgba(0, 164, 228, 0.25) 100%); border-top: 1px solid rgba(82, 234, 210, 0.35); display: flex; justify-content: space-between; align-items: center;">
+                            <span style="color: #ffffff; font-weight: 800; font-size: 1.25rem;">Total</span>
+                            <span style="color: #ffffff; font-weight: 900; font-size: 1.8rem;" id="grand-total">${{ number_format($vehicle->total_price, 2) }}</span>
                         </div>
                     </div>
                 </div>
@@ -273,22 +273,27 @@
     let selectedInsuranceId = null;
 
     function selectInsurance(btn) {
+        const isLight = document.body.classList.contains('light-mode');
         // Reset all buttons
         document.querySelectorAll('.insurance-btn').forEach(b => {
             b.classList.remove('btn-primary');
             b.classList.add('btn-outline-light');
-            b.style.background = 'transparent';
-            b.style.color = '#fff';
-            b.style.border = '1px solid rgba(255,255,255,0.2)';
+            b.style.background = isLight ? 'transparent' : 'rgba(82, 234, 210, 0.05)';
+            b.style.color = isLight ? '#0f172a' : '#ffffff';
+            b.style.border = isLight ? '1px solid rgba(15,23,42,0.2)' : '1px solid rgba(82, 234, 210, 0.4)';
+            b.style.borderRadius = '12px';
+            b.style.boxShadow = 'none';
             b.innerText = 'Select';
         });
 
         // Set active button
         btn.classList.remove('btn-outline-light');
         btn.classList.add('btn-primary');
-        btn.style.background = 'var(--brand)';
-        btn.style.color = '#0b1020';
+        btn.style.background = isLight ? '#0f766e' : 'linear-gradient(135deg, #80a7ff 0%, #52ead2 100%)';
+        btn.style.color = isLight ? '#ffffff' : '#051013';
         btn.style.border = 'none';
+        btn.style.borderRadius = '20px';
+        btn.style.boxShadow = '0 4px 15px rgba(82, 234, 210, 0.4)';
         btn.innerText = 'Selected';
 
         // Update price and tracking

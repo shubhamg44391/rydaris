@@ -1,46 +1,58 @@
+<style>
+    #preloaderVideo {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+        z-index: 2;
+        object-position: center;
+        object-fit: contain; /* Mobile: shows the entire video, preventing cropping */
+    }
+    @media (min-width: 992px) {
+        #preloaderVideo {
+            object-fit: cover; /* Desktop: covers the full screen */
+        }
+    }
+</style>
 
-<div id="sitePreloader" class="site-preloader" style="display:none; opacity:0;">
-    
+<div id="sitePreloader" class="site-preloader" style="display:none; opacity:0; position:fixed; top:0; left:0; right:0; bottom:0; width:100vw; height:100vh; height:100dvh; background:#050711; z-index:999999; overflow:hidden;">
     <div class="preloader-spinner">
         <div class="spinner-circle"></div>
         <span>Loading</span>
     </div>
-    <video id="preloaderVideo" src="{{ asset('assets/loader/loader.mp4') }}" playsinline webkit-playsinline preload="auto" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:contain; object-position:center; display:block; z-index: 2;"></video>
+    <video id="preloaderVideo" src="{{ asset('assets/loader/loader.mp4') }}" playsinline webkit-playsinline preload="auto"></video>
 </div>
 
 <script>
   (function() {
-    var STORAGE_KEY = 'rydaris_loader_shown';
+    var SHOULD_PLAY_LOGIN_VIDEO = @json(session()->has('login_success_preloader'));
 
-    window.__rydarisShowLoader = function(navigateTo) {
-      // Mark as shown for this session
-      try { sessionStorage.setItem(STORAGE_KEY, '1'); } catch(e) {}
+    // Video loader only plays AFTER successful Login or Register
+    if (!SHOULD_PLAY_LOGIN_VIDEO) return;
 
+    function playLoaderVideo() {
       var loader = document.getElementById('sitePreloader');
       var video  = document.getElementById('preloaderVideo');
 
-      if (!loader || !video) {
-        window.location.href = navigateTo;
-        return;
+      if (!loader || !video) return;
+
+      loader.style.cssText = 'display:block !important; opacity:1 !important; position:fixed; top:0; left:0; right:0; bottom:0; width:100vw; height:100vh; height:100dvh; z-index:999999; background:#050711; overflow:hidden; transition:opacity 0.5s ease;';
+
+      var finished = false;
+      function hideLoader() {
+        if (finished) return;
+        finished = true;
+        loader.style.opacity = '0';
+        setTimeout(function() {
+          loader.style.display = 'none';
+        }, 500);
       }
 
-      // Show loader fullscreen
-      loader.style.cssText = 'display:block !important; opacity:0; position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:999999; background:#050711; overflow:hidden; transition:opacity 0.3s ease;';
+      // Hide preloader ONLY when video plays completely to the end
+      video.addEventListener('ended', hideLoader);
 
-      requestAnimationFrame(function() {
-        requestAnimationFrame(function() {
-          loader.style.opacity = '1';
-        });
-      });
-
-      var navigated = false;
-      function doNavigate() {
-        if (navigated) return;
-        navigated = true;
-        window.location.href = navigateTo;
-      }
-
-      // Play video with sound
       video.currentTime = 0;
       video.muted = false;
       var playPromise = video.play();
@@ -49,59 +61,20 @@
           console.warn("Video preloader unmuted play blocked. Trying muted.", error);
           video.muted = true;
           video.play().catch(function(err) {
-            console.error("Muted video play failed. Navigating.", err);
-            doNavigate();
+            console.error("Muted video play failed.", err);
+            hideLoader();
           });
         });
       }
 
-      video.addEventListener('ended', doNavigate);
-      setTimeout(doNavigate, 10000);
-    };
+      // Safety net only (25 seconds) in case of network loading failure
+      setTimeout(function() {
+        if (!finished) hideLoader();
+      }, 25000);
+    }
 
-    // Intercept ALL internal anchor clicks — first time per session only
     document.addEventListener('DOMContentLoaded', function() {
-      document.body.addEventListener('click', function(e) {
-
-        // Already shown this session? Skip
-        var alreadyShown = false;
-        try { alreadyShown = !!sessionStorage.getItem(STORAGE_KEY); } catch(ex) {}
-        if (alreadyShown) return;
-
-        // Find the clicked anchor
-        var target = e.target.closest('a');
-        if (!target) return;
-
-        var href = target.getAttribute('href');
-        if (!href || href.trim() === '') return;
-
-        // Skip hash, mailto, tel, javascript, new-tab
-        if (
-          href === '#' ||
-          href.startsWith('#') ||
-          href.startsWith('mailto:') ||
-          href.startsWith('tel:') ||
-          href.startsWith('javascript:') ||
-          target.getAttribute('target') === '_blank'
-        ) return;
-
-        // *** KEY FIX: Check if it's the SAME hostname (Laravel route() generates full URLs) ***
-        try {
-          var linkUrl = new URL(href, window.location.href);
-          // If different hostname = truly external, skip
-          if (linkUrl.hostname !== window.location.hostname) return;
-          // Same hostname = internal link, use full URL
-          href = linkUrl.href;
-        } catch(err) {
-          return; // invalid URL
-        }
-
-        // Valid internal link — intercept and show loader!
-        e.preventDefault();
-        e.stopPropagation();
-
-        window.__rydarisShowLoader(href);
-      }, true);
+      playLoaderVideo();
     });
   })();
 </script>

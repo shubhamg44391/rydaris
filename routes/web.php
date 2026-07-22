@@ -70,7 +70,9 @@ Route::get('/pricing', [HomeController::class, 'pricing'])->name('pricing');
 Route::get('/faq', [HomeController::class, 'faq'])->name('faq');
 Route::get('/terms-of-service', [HomeController::class, 'terms'])->name('terms');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
-Route::get('/page/{slug}', [HomeController::class, 'showPage'])->name('frontend.page');
+Route::get('/page/{slug}', function($slug) {
+    return redirect()->to('/' . $slug, 301);
+});
 Route::get('/sitemap', function() {
     return view('frontend.sitemap');
 })->name('sitemap.html');
@@ -80,10 +82,15 @@ Route::get('/sitemap.xml', function() {
     if (!file_exists($path)) {
         $path = base_path('sitemap.xml');
     }
-    return response()->file($path, [
-        'Content-Type' => 'application/xml'
-    ]);
+    if (file_exists($path)) {
+        return response()->file($path, [
+            'Content-Type' => 'application/xml'
+        ]);
+    }
+    abort(404);
 })->name('sitemap.xml');
+
+Route::get('/{slug}', [HomeController::class, 'showPage'])->name('frontend.page');
 
 Route::get('/test-loader', function() {
     $videoUrl = asset('assets/loader/loader.mp4');
@@ -237,7 +244,7 @@ Route::post('/vendor/login', [LoginController::class, 'vendorLogin'])->name('ven
 Route::get('/admin/login', [LoginController::class, 'showAdminLoginForm'])->name('admin.login')->middleware('guest');
 Route::post('/admin/login', [LoginController::class, 'adminLogin'])->middleware('guest');
 
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::match(['get', 'post'], '/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Admin Routes (Auth + Admin Middleware)
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
@@ -294,6 +301,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::post('custom-package-requests/{id}/toggle-status', [\App\Http\Controllers\Admin\AdminCustomPackageRequestController::class, 'toggleStatus'])->name('admin.custom-package-requests.toggle-status');
 
     // Site Settings
+    Route::get('/settings/general', [\App\Http\Controllers\Admin\AdminSettingController::class, 'generalSettings'])->name('admin.settings.general');
+    Route::post('/settings/general', [\App\Http\Controllers\Admin\AdminSettingController::class, 'updateGeneralSettings'])->name('admin.settings.general.update');
     Route::get('/settings/payment', [\App\Http\Controllers\Admin\AdminSettingController::class, 'paymentSettings'])->name('admin.settings.payment');
     Route::post('/settings/payment', [\App\Http\Controllers\Admin\AdminSettingController::class, 'updatePaymentSettings'])->name('admin.settings.payment.update');
 

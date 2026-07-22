@@ -306,7 +306,7 @@
             e.preventDefault();
             Swal.fire({
                 title: 'Forgot Password?',
-                html: '<p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.5; margin: 0;">To reset your vendor account password, please contact our administrator at <a href="mailto:sales@rydaris.com" style="color: #52ead2; font-weight: 600;">sales@rydaris.com</a>.</p>',
+                html: '<p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.5; margin: 0;">To reset your vendor account password, please contact our administrator at <a href="mailto:{{ $site_setting->contact_email ?? 'support@rydaris.com' }}" style="color: #52ead2; font-weight: 600;">{{ $site_setting->contact_email ?? 'support@rydaris.com' }}</a> or call {{ $site_setting->contact_phone ?? '+918882688646' }}.</p>',
                 background: '#0b1020',
                 color: '#f8fafc',
                 confirmButtonColor: '#52ead2',
@@ -338,67 +338,6 @@
     
     <script async defer src="https://buttons.github.io/buttons.js"></script>
 
-    
-    <div id="loginPreloader" class="site-preloader" style="display:none; opacity:0; position:fixed; top:0; left:0; width:100vw; height:100vh; background:#050711; z-index:999999; overflow:hidden; transition:opacity 0.3s ease;">
-        
-        <div class="preloader-spinner">
-            <div class="spinner-circle"></div>
-            <span>Logging in</span>
-        </div>
-        <video id="loginPreloaderVideo" src="{{ asset('assets/loader/loader.mp4') }}" playsinline webkit-playsinline preload="auto" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:contain; object-position:center; display:block; z-index: 2;"></video>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var loginForm = document.querySelector('form');
-            if (!loginForm) return;
-
-            loginForm.addEventListener('submit', function (e) {
-                var loader = document.getElementById('loginPreloader');
-                var video  = document.getElementById('loginPreloaderVideo');
-                if (!loader || !video) return;
-
-                // Prevent immediate submit — wait for full video
-                e.preventDefault();
-
-                // Show loader
-                loader.style.display = 'block';
-                requestAnimationFrame(function () {
-                    requestAnimationFrame(function () {
-                        loader.style.opacity = '1';
-                    });
-                });
-
-                var submitted = false;
-                function submitNow() {
-                    if (submitted) return;
-                    submitted = true;
-                    loginForm.submit();
-                }
-
-                // Play video with sound
-                video.muted = false;
-                video.currentTime = 0;
-                var playPromise = video.play();
-                if (playPromise !== undefined) {
-                    playPromise.catch(function (error) {
-                        console.warn("Video login preloader unmuted play blocked. Trying muted.", error);
-                        video.muted = true;
-                        video.play().catch(function (err) {
-                            console.error("Muted video login preloader play failed. Submitting.", err);
-                            submitNow();
-                        });
-                    });
-                }
-
-                // Submit after video ends
-                video.addEventListener('ended', submitNow);
-
-                // Safety fallback — max 10 seconds
-                setTimeout(submitNow, 10000);
-            });
-        });
-    </script>
     
 </body>
 

@@ -244,7 +244,7 @@
                
 
                 <div class="d-flex align-items-center gap-3" style="display: flex; gap: 16px; align-items: center; margin-top: 24px;">
-                    <button type="submit" class="btn btn-primary rounded-pill px-4" style="min-height: 40px; font-weight: 800; font-size: 0.9rem; background: var(--brand, #2563eb); border: none; color: #fff; cursor: pointer;">{{ $type === 'extra' ? 'Create Extra' : 'Create Insurance' }}</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4" style="min-height: 40px; font-weight: 800; font-size: 0.9rem; background: linear-gradient(135deg, #80a7ff 0%, #52ead2 100%); border: none; color: #051013; cursor: pointer;">{{ $type === 'extra' ? 'Create Extra' : 'Create Insurance' }}</button>
                     <a href="{{ $type === 'extra' ? route('vendor.extras.index') : route('vendor.insurance.index') }}" class="btn btn-link text-muted cancel-link">Cancel</a>
                 </div>
             </form>

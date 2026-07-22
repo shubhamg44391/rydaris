@@ -110,6 +110,71 @@
                 background: #050711 !important;
                 color: #ffffff !important;
             }
+
+            /* Dashboard Widgets Light Mode Overrides */
+            body.light-mode .mini-metric {
+                background: #ffffff !important;
+                border: 1px solid rgba(15, 23, 42, 0.08) !important;
+            }
+            body.light-mode .mini-metric:hover {
+                border-color: rgba(15, 118, 110, 0.2) !important;
+                background: #f8fafc !important;
+            }
+            body.light-mode .mini-metric strong {
+                color: #0f172a !important;
+            }
+            body.light-mode .mini-metric .panel-muted {
+                color: #475569 !important;
+            }
+
+            body.light-mode .donut-inner {
+                background: #ffffff !important;
+            }
+            body.light-mode .donut-inner strong {
+                color: #0f172a !important;
+            }
+            body.light-mode .donut-inner .panel-muted {
+                color: #475569 !important;
+            }
+
+            body.light-mode .activity-item {
+                background: #ffffff !important;
+                border: 1px solid rgba(15, 23, 42, 0.08) !important;
+            }
+            body.light-mode .activity-item:hover {
+                border-color: rgba(15, 118, 110, 0.2) !important;
+                background: #f8fafc !important;
+            }
+            body.light-mode .activity-item p {
+                color: #334155 !important;
+            }
+            body.light-mode .activity-item strong {
+                color: #0f172a !important;
+            }
+            body.light-mode .activity-item small {
+                color: #64748b !important;
+            }
+
+            body.light-mode .health-row strong {
+                color: #475569 !important;
+            }
+            body.light-mode .health-row span {
+                color: #0f172a !important;
+            }
+
+            body.light-mode #rangeSelect {
+                background: #ffffff !important;
+                border-color: rgba(15, 23, 42, 0.15) !important;
+                color: #0f172a !important;
+            }
+            body.light-mode #rangeSelect option {
+                background: #ffffff !important;
+                color: #0f172a !important;
+            }
+            
+            body.light-mode .bar::after {
+                color: #475569 !important;
+            }
         </style>
 
         <section id="overview" class="admin-hero">

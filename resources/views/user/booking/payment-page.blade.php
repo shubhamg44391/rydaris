@@ -112,6 +112,114 @@
     .payment-option-card.selected .radio-circle::after {
         display: block;
     }
+
+    /* ═══════════════════════════════════════════════
+       LIGHT MODE OVERRIDES — PAYMENT PAGE
+    ═══════════════════════════════════════════════ */
+    body.light-mode .dark-card {
+        background: #ffffff !important;
+        border: 1px solid rgba(15, 23, 42, 0.08) !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+    }
+
+    body.light-mode .dark-input {
+        background: #ffffff !important;
+        border: 1px solid rgba(15, 23, 42, 0.15) !important;
+        color: #0f172a !important;
+    }
+
+    body.light-mode .section-heading {
+        color: #0f172a !important;
+        border-bottom-color: rgba(15, 23, 42, 0.08) !important;
+    }
+
+    body.light-mode .section-heading svg {
+        color: #0f766e !important;
+        stroke: #0f766e !important;
+    }
+
+    body.light-mode .price-row {
+        color: #475569 !important;
+        border-bottom-color: rgba(15, 23, 42, 0.07) !important;
+    }
+
+    body.light-mode .price-row.total {
+        color: #0f172a !important;
+    }
+
+    body.light-mode .btn-teal {
+        background: linear-gradient(135deg, #80a7ff 0%, #52ead2 100%) !important;
+        color: #051013 !important;
+        border-radius: 999px !important;
+        font-weight: 800 !important;
+        box-shadow: 0 4px 15px rgba(82, 234, 210, 0.3) !important;
+    }
+
+    body.light-mode .btn-teal:hover {
+        opacity: 0.92 !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 8px 25px rgba(82, 234, 210, 0.45) !important;
+    }
+
+    body.light-mode .payment-option-card {
+        border-color: rgba(15, 23, 42, 0.1) !important;
+        background: #f8fafc !important;
+    }
+
+    body.light-mode .payment-option-card:hover {
+        border-color: rgba(15, 118, 110, 0.3) !important;
+        background: rgba(15, 118, 110, 0.04) !important;
+    }
+
+    body.light-mode .payment-option-card.selected {
+        border-color: #0f766e !important;
+        background: rgba(15, 118, 110, 0.06) !important;
+    }
+
+    body.light-mode .radio-circle {
+        border-color: #cbd5e1 !important;
+    }
+
+    body.light-mode .payment-option-card.selected .radio-circle {
+        border-color: #0f766e !important;
+    }
+
+    body.light-mode .radio-circle::after {
+        background-color: #0f766e !important;
+    }
+
+    /* Inline white text → dark */
+    body.light-mode h4[style*="color: #f8fafc"],
+    body.light-mode span[style*="color: #f8fafc"],
+    body.light-mode strong[style*="color: #f8fafc"],
+    body.light-mode div[style*="color: #f8fafc"],
+    body.light-mode p[style*="color: #f8fafc"] {
+        color: #0f172a !important;
+    }
+
+    body.light-mode span[style*="color: #94a3b8"],
+    body.light-mode p[style*="color: #94a3b8"],
+    body.light-mode div[style*="color: #94a3b8"] {
+        color: #64748b !important;
+    }
+
+    body.light-mode span[style*="color: #52ead2"],
+    body.light-mode strong[style*="color: #52ead2"],
+    body.light-mode a[style*="color: #52ead2"] {
+        color: #0f766e !important;
+    }
+
+    body.light-mode span[style*="color: #cbd5e1"],
+    body.light-mode div[style*="color: #cbd5e1"] {
+        color: #475569 !important;
+    }
+
+    /* Form container divs with dark bg */
+    body.light-mode div[style*="background: rgba(11, 16, 32"],
+    body.light-mode div[style*="background:rgba(11,16,32"] {
+        background: #ffffff !important;
+        border-color: rgba(15, 23, 42, 0.08) !important;
+    }
 </style>
 
 <div class="container-fluid p-4" style="min-width: 0; max-width: 100%; overflow-x: hidden;">

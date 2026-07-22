@@ -307,10 +307,10 @@
                             <div id="coupon-box" class="p-4 border-top" style="display: none; border-color: rgba(255,255,255,0.05) !important;">
                                 <label style="color: #f8fafc; font-size: 0.85rem; font-weight: 700; margin-bottom: 8px; display: block;">Apply Coupon</label>
                                 <div class="d-flex gap-2">
-                                    <select class="form-select form-select-sm" id="coupon_code_select" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; max-width: 200px;">
-                                        <option value="" style="background: #0f172a;">Select a coupon</option>
+                                    <select class="form-select form-select-sm" id="coupon_code_select" style="max-width: 200px;">
+                                        <option value="">Select a coupon</option>
                                         @foreach($activeCoupons as $coupon)
-                                            <option value="{{ $coupon->code }}" style="background: #0f172a;" data-discount="{{ $coupon->discount }}" data-type="{{ $coupon->type }}">
+                                            <option value="{{ $coupon->code }}" data-discount="{{ $coupon->discount }}" data-type="{{ $coupon->type }}">
                                                 {{ $coupon->code }} - {{ $coupon->type == 'percentage' ? $coupon->discount.'%' : '$'.$coupon->discount }} off
                                             </option>
                                         @endforeach

@@ -94,7 +94,7 @@
                                 <input type="file" name="attachment" class="form-control" style="background: rgba(11, 16, 32, 0.6); border: 1px solid rgba(255,255,255,0.1); color: #cbd5e1; border-radius: 4px; padding: 6px;">
                             </div>
                             <div class="col-md-5 text-end">
-                                <button type="submit" class="btn btn-primary" style="background: #3b82f6; border-color: #3b82f6; font-weight: 600; padding: 10px 24px; border-radius: 6px; width: 100%;">
+                                <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, #80a7ff 0%, #52ead2 100%); border: none; color: #051013; font-weight: 700; padding: 10px 24px; border-radius: 999px; width: 100%;">
                                     Send Reply
                                 </button>
                             </div>

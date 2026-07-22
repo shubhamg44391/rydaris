@@ -324,8 +324,8 @@
             <div class="company-details">
                 <h3>Rydaris Operations</h3>
                 <p>
-                    support@rydaris.com<br>
-                    +91 88826 88646
+                    {{ $site_setting->contact_email ?? 'support@rydaris.com' }}<br>
+                    {{ $site_setting->contact_phone ?? '+918882688646' }}
                 </p>
             </div>
         </div>

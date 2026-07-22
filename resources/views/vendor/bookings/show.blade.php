@@ -258,7 +258,7 @@
 
         <div class="card mb-4" style="background: rgba(11, 16, 32, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
             <div class="card-footer text-end" style="background: rgba(11, 16, 32, 0.8); border-top: 1px solid rgba(255, 255, 255, 0.05); padding: 15px 20px;">
-                <button type="submit" class="btn btn-primary" style="background: #3b82f6; border-color: #3b82f6; font-weight: 500; padding: 8px 24px;">Update</button>
+                <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, #80a7ff 0%, #52ead2 100%); border: none; color: #051013; font-weight: 700; padding: 8px 24px; border-radius: 999px;">Update</button>
             </div>
         </div>
         
@@ -286,6 +286,18 @@
     .iti__country-name { display: none !important; }
     .iti__dial-code { margin-left: 8px; font-weight: 600; color: #fff; }
     .iti__country { display: flex; align-items: center; padding: 8px 12px; gap: 4px; }
+
+    /* ===== Light Mode Overrides ===== */
+    body.light-mode .iti__dropdown-content { background: #ffffff !important; border: 1px solid rgba(15, 23, 42, 0.12) !important; box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important; }
+    body.light-mode .iti__country-list { background: #ffffff !important; color: #0f172a !important; border: none !important; }
+    body.light-mode .iti__country-list .iti__country:hover, body.light-mode .iti__country-list .iti__country.iti__highlight { background: rgba(15,118,110,0.08) !important; }
+    body.light-mode .iti__selected-flag { border-right: 1px solid rgba(15,23,42,0.12) !important; }
+    body.light-mode .iti__selected-dial-code { color: #0f172a !important; }
+    body.light-mode .iti__arrow { border-top-color: #475569 !important; }
+    body.light-mode .iti__arrow--up { border-bottom-color: #475569 !important; }
+    body.light-mode .iti__search-input { background: #ffffff !important; border: 1px solid rgba(15,23,42,0.15) !important; color: #0f172a !important; }
+    body.light-mode .iti__dial-code { color: #0f172a !important; }
+    body.light-mode .iti__divider { border-bottom-color: rgba(15,23,42,0.08) !important; }
 </style>
 <script>
     document.addEventListener("DOMContentLoaded", function() {

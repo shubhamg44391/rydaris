@@ -157,7 +157,7 @@
                     <tr>
                         <td style="background:#2c3e50;color:white;text-align:center;padding:25px;font-size:14px;line-height:1.6;">
                             If you have any questions, please contact us:<br><br>
-                            Email: support@rydaris.com<br><br>
+                            Email: {{ $site_setting->contact_email ?? 'support@rydaris.com' }}<br><br>
                             We look forward to serving you!<br><br>
                             <strong>Rydaris Team</strong>
                         </td>

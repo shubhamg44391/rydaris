@@ -238,7 +238,7 @@ line-height:1.6;
 
                             <br><br>
 
-                            Email: support@rydaris.com
+                            Email: {{ $site_setting->contact_email ?? 'support@rydaris.com' }}
 
                             <br><br>
 

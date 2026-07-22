@@ -210,7 +210,7 @@
                         <div id="coupon-box" class="p-4 border-top" style="border-color: rgba(255,255,255,0.05) !important;">
                             <label style="color: #f8fafc; font-size: 0.85rem; font-weight: 700; margin-bottom: 8px; display: block;">Apply Coupon</label>
                             <select class="form-select border-0" style="background: rgba(255,255,255,0.05); color: #fff; padding: 10px 15px;">
-                                <option value="" style="background: #0f172a;">Select a coupon</option>
+                                <option value="">Select a coupon</option>
                             </select>
                         </div>
                     </div>

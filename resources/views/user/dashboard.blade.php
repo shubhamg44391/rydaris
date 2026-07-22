@@ -11,21 +11,21 @@
     @if(isset($bookings) && count($bookings) > 0)
     <div class="row">
         <div class="col-12">
-            <h4 style="color: #f8fafc; font-weight: 700; margin-bottom: 20px;">My Bookings & Payment History</h4>
-            <div class="table-responsive" style="background: rgba(11, 16, 32, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 20px;">
-                <table class="table table-borderless" style="color: #94a3b8; margin-bottom: 0;">
+            <h4 class="dashboard-section-title" style="font-weight: 700; margin-bottom: 20px;">My Bookings & Payment History</h4>
+            <div class="table-responsive dashboard-table-wrap" style="background: rgba(11, 16, 32, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 20px;">
+                <table class="table table-borderless dashboard-table" style="margin-bottom: 0;">
                     <thead>
                         <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
-                            <th style="font-weight: 600; color: #cbd5e1; padding-bottom: 15px; white-space: nowrap;">Reservation #</th>
-                            <th style="font-weight: 600; color: #cbd5e1; padding-bottom: 15px; white-space: nowrap;">Vehicle</th>
-                            <th style="font-weight: 600; color: #cbd5e1; padding-bottom: 15px; white-space: nowrap;">Date & Time of Pickup</th>
-                            <th style="font-weight: 600; color: #cbd5e1; padding-bottom: 15px; white-space: nowrap;">Date & Time of Return</th>
-                            <th style="font-weight: 600; color: #cbd5e1; padding-bottom: 15px; white-space: nowrap;">Payment Method</th>
-                            <th style="font-weight: 600; color: #cbd5e1; padding-bottom: 15px; white-space: nowrap;">Total</th>
-                            <th style="font-weight: 600; color: #cbd5e1; padding-bottom: 15px; white-space: nowrap;">Paid</th>
-                            <th style="font-weight: 600; color: #cbd5e1; padding-bottom: 15px; white-space: nowrap;">Pending</th>
-                            <th style="font-weight: 600; color: #cbd5e1; padding-bottom: 15px; white-space: nowrap;">Status</th>
-                            <th style="font-weight: 600; color: #cbd5e1; padding-bottom: 15px; text-align: right; white-space: nowrap;">Action</th>
+                            <th style="font-weight: 600; padding-bottom: 15px; white-space: nowrap;">Reservation #</th>
+                            <th style="font-weight: 600; padding-bottom: 15px; white-space: nowrap;">Vehicle</th>
+                            <th style="font-weight: 600; padding-bottom: 15px; white-space: nowrap;">Date & Time of Pickup</th>
+                            <th style="font-weight: 600; padding-bottom: 15px; white-space: nowrap;">Date & Time of Return</th>
+                            <th style="font-weight: 600; padding-bottom: 15px; white-space: nowrap;">Payment Method</th>
+                            <th style="font-weight: 600; padding-bottom: 15px; white-space: nowrap;">Total</th>
+                            <th style="font-weight: 600; padding-bottom: 15px; white-space: nowrap;">Paid</th>
+                            <th style="font-weight: 600; padding-bottom: 15px; white-space: nowrap;">Pending</th>
+                            <th style="font-weight: 600; padding-bottom: 15px; white-space: nowrap;">Status</th>
+                            <th style="font-weight: 600; padding-bottom: 15px; text-align: right; white-space: nowrap;">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -33,22 +33,22 @@
                         <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
                             <td style="padding: 15px 10px; white-space: nowrap;">{{ $booking->reservation_number }}</td>
                             <td style="padding: 15px 10px; white-space: nowrap;">{{ $booking->vehicle ? $booking->vehicle->name : 'N/A' }}</td>
-                            <td style="padding: 15px 10px; white-space: nowrap; font-size: 0.85rem; color: #4ade80;">
+                            <td class="pickup-date-cell" style="padding: 15px 10px; white-space: nowrap; font-size: 0.85rem; color: #4ade80;">
                                 {{ $booking->pickup_date_parsed ? $booking->pickup_date_parsed->format('Y/m/d') : $booking->pickup_date }}
                                 @if($booking->pickup_time)
                                     <br><span style="font-size: 0.78rem; color: #52ead2;"><i class="fa fa-clock me-1"></i>{{ date('h:i A', strtotime($booking->pickup_time)) }}</span>
                                 @endif
                             </td>
-                            <td style="padding: 15px 10px; white-space: nowrap; font-size: 0.85rem; color: #f87171;">
+                            <td class="return-date-cell" style="padding: 15px 10px; white-space: nowrap; font-size: 0.85rem; color: #f87171;">
                                 {{ $booking->return_date_parsed ? $booking->return_date_parsed->format('Y/m/d') : $booking->return_date }}
                                 @if($booking->return_time)
                                     <br><span style="font-size: 0.78rem; color: #52ead2;"><i class="fa fa-clock me-1"></i>{{ date('h:i A', strtotime($booking->return_time)) }}</span>
                                 @endif
                             </td>
                             <td style="padding: 15px 10px; text-transform: capitalize;">{{ $booking->payment_method_label }}</td>
-                            <td style="padding: 15px 10px; color: #f8fafc; font-weight: 600;">${{ number_format($booking->total_amount, 2) }}</td>
-                            <td style="padding: 15px 10px; color: #52ead2;">${{ number_format($booking->paid_amount, 2) }}</td>
-                            <td style="padding: 15px 10px; color: #ef4444;">${{ number_format($booking->pending_amount, 2) }}</td>
+                            <td class="total-cell" style="padding: 15px 10px; color: #f8fafc; font-weight: 600;">${{ number_format($booking->total_amount, 2) }}</td>
+                            <td class="paid-cell" style="padding: 15px 10px; color: #52ead2;">${{ number_format($booking->paid_amount, 2) }}</td>
+                            <td class="pending-cell" style="padding: 15px 10px; color: #ef4444;">${{ number_format($booking->pending_amount, 2) }}</td>
                             <td style="padding: 15px 10px;">
                                 @if($booking->payment_status == 'paid')
                                     <span class="badge" style="background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3);">Paid</span>
@@ -158,6 +158,182 @@
         background: #f59e0b !important;
         color: #0f172a !important;
         border-color: #f59e0b !important;
+    }
+
+    /* ═══════════════════════════════════════════════
+       LIGHT MODE OVERRIDES — USER BOOKINGS LISTING
+    ═══════════════════════════════════════════════ */
+
+    /* Page headings */
+    body.light-mode h2[style*="color: #f8fafc"],
+    body.light-mode h4[style*="color: #f8fafc"],
+    body.light-mode h2[style*="color:#f8fafc"],
+    body.light-mode h4[style*="color:#f8fafc"] {
+        color: #0f172a !important;
+    }
+
+    /* Table container */
+    body.light-mode .table-responsive[style*="background: rgba(11, 16, 32"] {
+        background: #ffffff !important;
+        border: 1px solid rgba(15, 23, 42, 0.08) !important;
+    }
+
+    /* Table base */
+    body.light-mode .table.table-borderless {
+        color: #475569 !important;
+    }
+
+    /* Table header row border */
+    body.light-mode tr[style*="border-bottom: 1px solid rgba(255,255,255,0.1)"],
+    body.light-mode tr[style*="border-bottom:1px solid rgba(255,255,255,0.1)"] {
+        border-bottom: 1.5px solid #cbd5e1 !important;
+    }
+
+    /* Table header cells */
+    body.light-mode th[style*="color: #cbd5e1"],
+    body.light-mode th[style*="color:#cbd5e1"] {
+        color: #475569 !important;
+        font-size: 0.82rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.05em !important;
+    }
+
+    /* Table body rows */
+    body.light-mode tr[style*="border-bottom: 1px solid rgba(255,255,255,0.05)"],
+    body.light-mode tr[style*="border-bottom:1px solid rgba(255,255,255,0.05)"],
+    body.light-mode .dashboard-table-wrap tbody tr {
+        border-bottom: 1px solid #cbd5e1 !important;
+    }
+
+    /* Reservation# and Vehicle name cell */
+    body.light-mode td[style*="padding: 15px 10px; white-space: nowrap"] {
+        color: #0f172a !important;
+    }
+
+    /* Pickup date (green) */
+    body.light-mode td[style*="color: #4ade80"] {
+        color: #16a34a !important;
+    }
+
+    /* Return date (red) */
+    body.light-mode td[style*="color: #f87171"] {
+        color: #dc2626 !important;
+    }
+
+    /* Time spans (teal) inside date cells */
+    body.light-mode span[style*="color: #52ead2"],
+    body.light-mode span[style*="color:#52ead2"] {
+        color: #0f766e !important;
+    }
+
+    /* Total amount (white) */
+    body.light-mode td[style*="color: #f8fafc"] {
+        color: #0f172a !important;
+    }
+
+    /* Paid amount (teal) */
+    body.light-mode td[style*="color: #52ead2"],
+    body.light-mode td[style*="color:#52ead2"] {
+        color: #0f766e !important;
+    }
+
+    /* Pending amount (red) */
+    body.light-mode td[style*="color: #ef4444"],
+    body.light-mode td[style*="color:#ef4444"] {
+        color: #dc2626 !important;
+    }
+
+    /* Payment reference div */
+    body.light-mode div[style*="color: #64748b"] {
+        color: #64748b !important;
+    }
+
+    /* Status badges */
+    body.light-mode .badge[style*="color: #4ade80"],
+    body.light-mode .badge[style*="color:#4ade80"] {
+        background: rgba(21, 128, 61, 0.1) !important;
+        color: #15803d !important;
+        border-color: rgba(21, 128, 61, 0.2) !important;
+    }
+
+    body.light-mode .badge[style*="color: #facc15"],
+    body.light-mode .badge[style*="color:#facc15"] {
+        background: rgba(161, 98, 7, 0.1) !important;
+        color: #a16207 !important;
+        border-color: rgba(161, 98, 7, 0.2) !important;
+    }
+
+    body.light-mode .badge[style*="color: #f87171"],
+    body.light-mode .badge[style*="color:#f87171"] {
+        background: rgba(220, 38, 38, 0.1) !important;
+        color: #dc2626 !important;
+        border-color: rgba(220, 38, 38, 0.2) !important;
+    }
+
+    /* Action icon buttons — default (pending) state */
+    body.light-mode .action-btn-item[style*="rgba(255,255,255,0.05)"],
+    body.light-mode a.btn.btn-sm.action-btn-item.btn-pay-pending,
+    body.light-mode a.btn.btn-sm.action-btn-item.btn-checkin-pending,
+    body.light-mode a.btn.btn-sm.action-btn-item.btn-edit {
+        background: #f1f5f9 !important;
+        color: #475569 !important;
+        border: 1px solid rgba(15, 23, 42, 0.12) !important;
+    }
+
+    /* Action icon buttons — completed state */
+    body.light-mode a.btn.btn-sm.action-btn-item.btn-pay-completed,
+    body.light-mode a.btn.btn-sm.action-btn-item.btn-checkin-completed {
+        background: rgba(15, 118, 110, 0.08) !important;
+        color: #0f766e !important;
+        border: 1px solid rgba(15, 118, 110, 0.2) !important;
+    }
+
+    /* Action icon buttons — invoice (amber) */
+    body.light-mode a.btn.btn-sm.action-btn-item.btn-invoice {
+        background: rgba(245, 158, 11, 0.08) !important;
+        color: #b45309 !important;
+        border: 1px solid rgba(245, 158, 11, 0.2) !important;
+    }
+
+    /* Action btn hover light mode */
+    body.light-mode .action-btn-item:hover {
+        box-shadow: 0 4px 12px rgba(15, 118, 110, 0.12) !important;
+    }
+    body.light-mode .action-btn-item.btn-pay-pending:hover,
+    body.light-mode .action-btn-item.btn-checkin-pending:hover,
+    body.light-mode .action-btn-item.btn-edit:hover {
+        background: #e2e8f0 !important;
+        color: #334155 !important;
+        border-color: rgba(15, 23, 42, 0.2) !important;
+    }
+    body.light-mode .action-btn-item.btn-pay-completed:hover,
+    body.light-mode .action-btn-item.btn-checkin-completed:hover {
+        background: rgba(15, 118, 110, 0.15) !important;
+        color: #0f766e !important;
+        border-color: rgba(15, 118, 110, 0.35) !important;
+    }
+    body.light-mode .action-btn-item.btn-invoice:hover {
+        background: rgba(245, 158, 11, 0.15) !important;
+        color: #92400e !important;
+        border-color: rgba(245, 158, 11, 0.35) !important;
+    }
+
+    /* KPI / info card */
+    body.light-mode .kpi-card[style*="background: rgba(11, 16, 32"] {
+        background: #ffffff !important;
+        border-color: rgba(15, 118, 110, 0.15) !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+    }
+    body.light-mode .kpi-card h4[style*="color: #f8fafc"] {
+        color: #0f172a !important;
+    }
+    body.light-mode .kpi-card div[style*="color: var(--brand)"] svg {
+        stroke: #0f766e !important;
+    }
+
+    /* Invoice modal backdrop */
+    body.light-mode #invoiceModal > div:first-child {
+        background: rgba(15, 23, 42, 0.5) !important;
     }
 </style>
 
