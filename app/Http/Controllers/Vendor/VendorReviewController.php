@@ -19,8 +19,8 @@ class VendorReviewController extends Controller
             ->latest()
             ->paginate(15);
 
-        $avgRating = Review::where('vendor_id', $vendorId)->avg('rating') ?: 5.0;
         $totalReviews = Review::where('vendor_id', $vendorId)->count();
+        $avgRating = $totalReviews > 0 ? (float)Review::where('vendor_id', $vendorId)->avg('rating') : 0.0;
 
         return view('vendor.reviews.index', compact('reviews', 'avgRating', 'totalReviews'));
     }

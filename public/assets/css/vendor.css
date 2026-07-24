@@ -1,0 +1,635 @@
+/* ==========================================================================
+   RYDARIS VENDOR / FLEET OWNER PORTAL CSS
+   ========================================================================== */
+@import url('common.css');
+
+.mini-metric {
+  padding: 12px;
+  border: 1px solid #d7e0e8;
+  border-radius: var(--radius);
+  background: #f8fafc;
+}
+
+.mini-metric strong {
+  display: block;
+  color: var(--text, #f8fafc);
+  font-size: 1.15rem;
+}
+
+.donut {
+  width: 190px;
+  height: 190px;
+  display: grid;
+  place-items: center;
+  margin: 12px auto 24px;
+  border-radius: 999px;
+  background: conic-gradient(#52ead2 0 62%, #80a7ff 62% 84%, #f5b85c 84% 94%, #e2e8f0 94% 100%);
+}
+
+.donut-inner {
+  width: 118px;
+  height: 118px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: #ffffff;
+  text-align: center;
+}
+
+.donut-inner strong {
+  display: block;
+  font-size: 1.8rem;
+}
+
+.legend {
+  display: grid;
+  gap: 10px;
+}
+
+.legend span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #475569;
+  font-size: 0.9rem;
+}
+
+.legend i {
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  margin-right: 8px;
+  border-radius: 999px;
+  background: var(--brand);
+}
+
+.legend span:nth-child(2) i {
+  background: var(--brand-2);
+}
+
+.legend span:nth-child(3) i {
+  background: var(--accent);
+}
+
+.legend span:nth-child(4) i {
+  background: #cbd5e1;
+}
+
+.admin-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  max-width: 100%;
+  display: block;
+}
+
+.admin-table {
+  width: 100%;
+  min-width: 840px;
+  border-collapse: collapse;
+}
+
+/* Remove underlines from all listing, pagination, and navigation links */
+.pagination a,
+.pagination a:hover,
+.pagination span,
+nav[role="navigation"] a,
+nav[role="navigation"] a:hover,
+.admin-nav a,
+.admin-nav a:hover,
+.admin-submenu a,
+.admin-submenu a:hover,
+.admin-table a,
+.admin-table a:hover,
+.admin-panel table a,
+.admin-panel table a:hover {
+  text-decoration: none !important;
+}
+
+.admin-panel table th {
+  padding: 14px 18px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 780;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: var(--panel-strong);
+  border-bottom: 1px solid var(--line);
+}
+
+.admin-panel table td {
+  padding: 16px 18px;
+  font-size: 0.92rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--text);
+}
+
+.customer-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  color: #061218;
+  background: #c8fff6;
+  font-weight: 900;
+}
+
+.customer-cell strong,
+.admin-table strong {
+  color: var(--text, #f8fafc);
+}
+
+.customer-cell span,
+.admin-table small {
+  display: block;
+  color: #64748b;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 8px;
+  border-radius: 999px;
+  color: #0f766e;
+  background: #dffcf6;
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+.badge.blue {
+  color: #3154c7;
+  background: #e7edff;
+}
+
+.badge.orange {
+  color: #9a4b00;
+  background: #fff2d8;
+}
+
+.badge.red {
+  color: #b91c1c;
+  background: #fee2e2;
+}
+
+.badge.gray {
+  color: #475569;
+  background: #e2e8f0;
+}
+
+.table-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.icon-button {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #d7e0e8;
+  border-radius: var(--radius);
+  color: #475569;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.icon-button svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.section-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.section-tabs button {
+  min-height: 36px;
+  padding: 8px 12px;
+  border: 1px solid #d7e0e8;
+  border-radius: 999px;
+  color: #475569;
+  background: #ffffff;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.section-tabs button.active {
+  color: #061218;
+  border-color: transparent;
+  background: var(--brand);
+}
+
+.payment-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.payment-card {
+  padding: 16px;
+  border: 1px solid #d7e0e8;
+  border-radius: var(--radius);
+  background: #f8fafc;
+}
+
+.payment-card strong {
+  display: block;
+  color: var(--text, #f8fafc);
+  font-size: 1.45rem;
+}
+
+.activity-list {
+  display: grid;
+  gap: 12px;
+}
+
+.activity-item {
+  display: grid;
+  grid-template-columns: 38px 1fr auto;
+  gap: 12px;
+  align-items: start;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius);
+  background: #ffffff;
+}
+
+.activity-item p {
+  margin: 0;
+  color: #334155;
+}
+
+.activity-item small {
+  color: #64748b;
+}
+
+.health-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.health-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: center;
+}
+
+.progress {
+  height: 9px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e2e8f0;
+}
+
+.progress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #0f766e, var(--brand));
+}
+
+@media (max-width: 1180px) {
+/* Vendor Pricing Light Mode Overrides */
+body.light-mode .container-p-y h4.fw-bold {
+  color: var(--text, #0f172a) !important;
+}
+
+body.light-mode .container-p-y h4.fw-bold span {
+  color: var(--muted, #475569) !important;
+}
+
+body.light-mode .card {
+  background: var(--panel, #ffffff) !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+}
+
+body.light-mode .card .card-title {
+  color: var(--text, #0f172a) !important;
+}
+
+body.light-mode .card .card-text {
+  color: var(--muted, #475569) !important;
+}
+
+body.light-mode .card .display-5 {
+  color: var(--text, #0f172a) !important;
+}
+
+body.light-mode .card span[style*="color: #aab7cb"],
+body.light-mode .card span[style*="color:#aab7cb"] {
+  color: var(--muted, #475569) !important;
+}
+
+body.light-mode .card ul.list-unstyled {
+  color: var(--text, #334155) !important;
+}
+
+body.light-mode .card ul.list-unstyled li span {
+  color: var(--muted, #475569) !important;
+}
+
+body.light-mode .card ul.list-unstyled li {
+  color: var(--text, #334155) !important;
+}
+
+body.light-mode .card ul[style*="color: #e2e8f0"],
+body.light-mode .card ul[style*="color:#e2e8f0"] {
+  color: var(--text, #334155) !important;
+}
+
+/* Pricing Modals Light Mode Overrides */
+body.light-mode .mini-metric strong {
+  color: #0f172a !important;
+}
+
+body.light-mode .kpi-card span,
+body.light-mode .mini-metric span,
+body.light-mode .mini-metric .panel-muted {
+  color: #1e293b !important;
+  font-weight: 700 !important;
+  opacity: 1 !important;
+}
+
+body.light-mode .admin-hero h1,
+body.light-mode .admin-panel h2,
+body.light-mode .admin-panel h3 {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+body.light-mode .text-muted,
+body.light-mode .panel-muted,
+body.light-mode small {
+  color: #334155 !important;
+  opacity: 1 !important;
+}
+
+/* ── #f8fafc (near-white headings & body text) ── */
+body.light-mode *[style*="color: #f8fafc"],
+body.light-mode *[style*="color:#f8fafc"] {
+  color: #0f172a !important;
+}
+
+/* ── #ffffff white text ── */
+body.light-mode *[style*="color: #ffffff"],
+body.light-mode *[style*="color:#ffffff"],
+body.light-mode *[style*="color: white"],
+body.light-mode *[style*="color:white"] {
+  color: #0f172a !important;
+}
+
+/* ── #cbd5e1 light-grey (labels, subheadings) ── */
+body.light-mode *[style*="color: #cbd5e1"],
+body.light-mode *[style*="color:#cbd5e1"] {
+  color: #1e293b !important;
+}
+
+/* ── #94a3b8 muted grey ── */
+body.light-mode *[style*="color: #94a3b8"],
+body.light-mode *[style*="color:#94a3b8"] {
+  color: #334155 !important;
+}
+
+/* ── #e2e8f0 very light grey ── */
+body.light-mode *[style*="color: #e2e8f0"],
+body.light-mode *[style*="color:#e2e8f0"] {
+  color: #1e293b !important;
+}
+
+/* ── #aab7cb, #b0bec5 muted light ── */
+body.light-mode *[style*="color: #aab7cb"],
+body.light-mode *[style*="color:#aab7cb"],
+body.light-mode *[style*="color: #b0bec5"],
+body.light-mode *[style*="color:#b0bec5"] {
+  color: #334155 !important;
+}
+
+/* ── #64748b already readable, keep for contrast ── */
+body.light-mode *[style*="color: #64748b"],
+body.light-mode *[style*="color:#64748b"] {
+  color: #334155 !important;
+}
+
+/* ── rgba(255,255,255, …) white with opacity ── */
+body.light-mode *[style*="color: rgba(255, 255, 255"],
+body.light-mode *[style*="color: rgba(255,255,255"] {
+  color: #334155 !important;
+}
+
+/* ── Dark backgrounds that make white text necessary — flip them white ── */
+/* Any div/section/article with near-black background → light bg */
+body.light-mode div[style*="background: rgba(11, 16, 32"],
+body.light-mode div[style*="background:rgba(11,16,32"],
+body.light-mode section[style*="background: rgba(11, 16, 32"],
+body.light-mode section[style*="background:rgba(11,16,32"] {
+  background: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-mode div[style*="background: #0b1020"],
+body.light-mode div[style*="background:#0b1020"],
+body.light-mode section[style*="background: #0b1020"],
+body.light-mode section[style*="background:#0b1020"] {
+  background: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-mode div[style*="background: #0d1b2e"],
+body.light-mode div[style*="background:#0d1b2e"],
+body.light-mode div[style*="background: #0f172a"],
+body.light-mode div[style*="background:#0f172a"] {
+  background: #f8fafc !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+/* ── Profile dropdown in light mode ── */
+body.light-mode .profile-dropdown-menu {
+  background: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.1) !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
+}
+
+body.light-mode .profile-dropdown-menu div[style*="color: var(--text"],
+body.light-mode .profile-dropdown-menu a[style*="color: var(--text"] {
+  color: #0f172a !important;
+}
+
+body.light-mode .profile-dropdown-menu div[style*="color: var(--muted"] {
+  color: #64748b !important;
+}
+
+/* ── var(--text) / var(--muted) CSS vars ── */
+body.light-mode {
+  --text: #0f172a;
+  --muted: #64748b;
+  --line: rgba(15, 23, 42, 0.1);
+  --surface: #ffffff;
+  --surface2: #f8fafc;
+}
+
+/* ── Table cells with dark inline text colors ── */
+body.light-mode td[style*="color: #f8fafc"],
+body.light-mode td[style*="color:#f8fafc"],
+body.light-mode th[style*="color: #f8fafc"],
+body.light-mode th[style*="color:#f8fafc"] {
+  color: #0f172a !important;
+}
+
+body.light-mode td[style*="color: #ffffff"],
+body.light-mode th[style*="color: #ffffff"] {
+  color: #0f172a !important;
+}
+
+/* ── Vendor show page — vehicle card text ── */
+body.light-mode .vehicle-card {
+  background: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-mode .vehicle-card h4[style*="color: #ffffff"],
+body.light-mode .vehicle-card h4[style*="color:#ffffff"],
+body.light-mode .vehicle-card *[style*="color: #ffffff"] {
+  color: #0f172a !important;
+}
+
+body.light-mode .vehicle-card *[style*="color: #94a3b8"] {
+  color: #64748b !important;
+}
+
+body.light-mode .vehicle-card *[style*="color: #cbd5e1"] {
+  color: #475569 !important;
+}
+
+/* ── Vendor/admin search widget ── */
+body.light-mode .search-widget {
+  background: #f8fafc !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-mode .search-widget label[style*="color: #f8fafc"],
+body.light-mode .search-widget label[style*="color: #ffffff"] {
+  color: #0f172a !important;
+}
+
+body.light-mode .search-widget select {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border-color: rgba(15, 23, 42, 0.15) !important;
+}
+
+body.light-mode .search-widget input {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border-color: rgba(15, 23, 42, 0.15) !important;
+}
+
+body.light-mode .search-widget input::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* ── Vendor header banner ── */
+body.light-mode .vendor-header {
+  background: #f0f9ff !important;
+  border-color: rgba(15, 118, 110, 0.15) !important;
+}
+
+body.light-mode .vendor-header h2[style*="color: #f8fafc"],
+body.light-mode .vendor-header h2[style*="color:#f8fafc"] {
+  color: #0f172a !important;
+}
+
+body.light-mode .vendor-avatar {
+  background: rgba(15, 118, 110, 0.1) !important;
+  border-color: rgba(15, 118, 110, 0.3) !important;
+}
+
+/* ── Left filter panel in light mode ── */
+body.light-mode .vehicles-section div[style*="background: rgba(11,16,32"],
+body.light-mode .vehicles-section div[style*="position: sticky"] {
+  background: #f8fafc !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+/* ── Group headings inside vehicle grid ── */
+body.light-mode h3[style*="color: #f8fafc"],
+body.light-mode h3[style*="color:#f8fafc"] {
+  color: #0f172a !important;
+}
+
+/* ── "No Vehicles Found" empty state ── */
+body.light-mode div[style*="text-align: center"][style*="border-radius"] h4[style*="color: #f8fafc"] {
+  color: #0f172a !important;
+}
+
+/* ── Teal/brand-colored text — PRESERVE these ── */
+body.light-mode *[style*="color: #52ead2"],
+body.light-mode *[style*="color:#52ead2"],
+body.light-mode *[style*="color: var(--brand)"] {
+  color: #0f766e !important;
+}
+
+body.light-mode *[style*="color: #4ade80"],
+body.light-mode *[style*="color:#4ade80"] {
+  color: #15803d !important;
+}
+
+body.light-mode *[style*="color: #f87171"],
+body.light-mode *[style*="color:#f87171"],
+body.light-mode *[style*="color: #ef4444"],
+body.light-mode *[style*="color:#ef4444"] {
+  color: #dc2626 !important;
+}
+
+body.light-mode *[style*="color: #fbbf24"],
+body.light-mode *[style*="color:#fbbf24"],
+body.light-mode *[style*="color: #facc15"],
+body.light-mode *[style*="color:#facc15"] {
+  color: #a16207 !important;
+}
+
+body.light-mode *[style*="color: #93c5fd"],
+body.light-mode *[style*="color:#93c5fd"],
+body.light-mode *[style*="color: #3b82f6"],
+body.light-mode *[style*="color:#3b82f6"] {
+  color: #1d4ed8 !important;
+}
+
+body.light-mode *[style*="color: #f43f5e"],
+body.light-mode *[style*="color:#f43f5e"] {
+  color: #e11d48 !important;
+}
+
+/* ── Light mode body background ── */
+body.light-mode,
+body.light-mode .admin-body {
+  background-color: #f0f4f8 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   FRONTEND CARDS IN LIGHT MODE — PRESERVE DARK MODE CARD STYLING
+   As requested: frontend cards retain their dark mode gradient,
+   colors, white headings, and sleek aesthetic even in light mode.
+═══════════════════════════════════════════════════════════════════ */
+
+body.light-mode .card,
+body.light-mode .feature-card,
+body.light-mode .pricing-card,
+body.light-mode .info-card,

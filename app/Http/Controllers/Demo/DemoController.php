@@ -22,6 +22,13 @@ class DemoController extends Controller
         return view('demo.bookings.payment', ['items' => DemoData::bookings()]);
     }
 
+    public function groups()
+    {
+        return view('demo.groups', [
+            'items' => DemoData::groups()
+        ]);
+    }
+
     public function vehicles()
     {
         return view('demo.vehicles.index', ['items' => DemoData::vehicles()]);
@@ -30,6 +37,13 @@ class DemoController extends Controller
     public function vehiclesCreate()
     {
         return view('demo.vehicles.create');
+    }
+
+    public function branches()
+    {
+        return view('demo.branches', [
+            'items' => DemoData::branches()
+        ]);
     }
 
     public function locations()

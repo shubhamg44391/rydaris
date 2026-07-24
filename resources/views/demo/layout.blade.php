@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Rydaris | Vendor Workspace</title>
     
     
@@ -106,15 +107,20 @@
             text-align: center;
         }
 
-        .menu-link:hover {
-            color: var(--brand);
-            background: rgba(82, 234, 210, 0.05);
+        .menu-link:hover,
+        .menu-link.active {
+            color: #051013 !important;
+            background: linear-gradient(135deg, var(--brand, #52ead2) 0%, #80a7ff 100%) !important;
+            box-shadow: 0 4px 15px rgba(82, 234, 210, 0.25) !important;
         }
 
-        .menu-link.active {
-            color: var(--bg-1);
-            background: var(--brand);
-            box-shadow: 0 4px 12px rgba(82, 234, 210, 0.2);
+        .menu-link:hover i,
+        .menu-link.active i,
+        .menu-link:hover span,
+        .menu-link.active span,
+        .menu-link:hover .arrow,
+        .menu-link.active .arrow {
+            color: #051013 !important;
         }
 
         .submenu {
@@ -144,11 +150,14 @@
         }
 
         .submenu-link:hover, .submenu-link.active {
-            color: var(--brand);
+            color: #52ead2 !important;
+            background: rgba(82, 234, 210, 0.1) !important;
+            font-weight: 700 !important;
         }
 
-        .submenu-link.active::before {
-            color: var(--brand);
+        .submenu-link.active::before,
+        .submenu-link:hover::before {
+            color: #52ead2 !important;
         }
 
         /* Main Viewport */
@@ -523,6 +532,34 @@
             border-right: 1px solid rgba(15, 23, 42, 0.08) !important;
         }
 
+        body.light-mode .menu-link:hover,
+        body.light-mode .menu-link.active {
+            color: #051013 !important;
+            background: linear-gradient(135deg, #80a7ff 0%, #52ead2 100%) !important;
+            box-shadow: 0 4px 15px rgba(82, 234, 210, 0.35) !important;
+        }
+
+        body.light-mode .menu-link:hover i,
+        body.light-mode .menu-link.active i,
+        body.light-mode .menu-link:hover span,
+        body.light-mode .menu-link.active span,
+        body.light-mode .menu-link:hover .arrow,
+        body.light-mode .menu-link.active .arrow {
+            color: #051013 !important;
+        }
+
+        body.light-mode .submenu-link:hover,
+        body.light-mode .submenu-link.active {
+            color: #0f766e !important;
+            background: rgba(15, 118, 110, 0.1) !important;
+            font-weight: 700 !important;
+        }
+
+        body.light-mode .submenu-link.active::before,
+        body.light-mode .submenu-link:hover::before {
+            color: #0f766e !important;
+        }
+
         body.light-mode .sidebar-logo,
         body.light-mode .sidebar-menu {
             border-color: rgba(15, 23, 42, 0.08) !important;
@@ -786,21 +823,23 @@
             </div>
 
             <div class="menu-item-with-submenu">
-                <a class="menu-link {{ request()->routeIs('demo.vehicles*') ? 'active' : '' }}" onclick="toggleSubmenu(this)">
-                    <i class="fa-solid fa-car"></i> <span>Vehicles</span> <i class="fa-solid fa-chevron-down arrow" style="margin-left:auto; font-size:0.75rem; transition: transform 0.2s; {{ request()->routeIs('demo.vehicles*') ? 'transform: rotate(180deg);' : '' }}"></i>
+                <a class="menu-link {{ request()->routeIs('demo.vehicles*') || request()->routeIs('demo.groups*') ? 'active' : '' }}" onclick="toggleSubmenu(this)">
+                    <i class="fa-solid fa-car"></i> <span>Vehicles</span> <i class="fa-solid fa-chevron-down arrow" style="margin-left:auto; font-size:0.75rem; transition: transform 0.2s; {{ request()->routeIs('demo.vehicles*') || request()->routeIs('demo.groups*') ? 'transform: rotate(180deg);' : '' }}"></i>
                 </a>
-                <div class="submenu" style="{{ request()->routeIs('demo.vehicles*') ? 'display: flex;' : 'display: none;' }} background: rgba(255,255,255,0.02); border-left: 1px solid rgba(82, 234, 210, 0.15); margin: 0; padding: 6px 12px 10px 36px; flex-direction: column; gap: 4px;">
-                    <a href="{{ route('demo.vehicles') }}" class="submenu-link {{ request()->routeIs('demo.vehicles') ? 'active' : '' }}">Vehicle List</a>
+                <div class="submenu" style="{{ request()->routeIs('demo.vehicles*') || request()->routeIs('demo.groups*') ? 'display: flex;' : 'display: none;' }} background: rgba(255,255,255,0.02); border-left: 1px solid rgba(82, 234, 210, 0.15); margin: 0; padding: 6px 12px 10px 36px; flex-direction: column; gap: 4px;">
+                    <a href="{{ route('demo.groups') }}" class="submenu-link {{ request()->routeIs('demo.groups') ? 'active' : '' }}">Vehicle Group / Acriss Code</a>
+                    <a href="{{ route('demo.vehicles') }}" class="submenu-link {{ request()->routeIs('demo.vehicles') && !request()->routeIs('demo.vehicles.create') ? 'active' : '' }}">Vehicle List</a>
                     <a href="{{ route('demo.vehicles.create') }}" class="submenu-link {{ request()->routeIs('demo.vehicles.create') ? 'active' : '' }}">Add Vehicle</a>
                 </div>
             </div>
 
             <div class="menu-item-with-submenu">
-                <a class="menu-link {{ request()->routeIs('demo.locations*') ? 'active' : '' }}" onclick="toggleSubmenu(this)">
-                    <i class="fa-solid fa-map-pin"></i> <span>Locations</span> <i class="fa-solid fa-chevron-down arrow" style="margin-left:auto; font-size:0.75rem; transition: transform 0.2s; {{ request()->routeIs('demo.locations*') ? 'transform: rotate(180deg);' : '' }}"></i>
+                <a class="menu-link {{ request()->routeIs('demo.locations*') || request()->routeIs('demo.branches*') ? 'active' : '' }}" onclick="toggleSubmenu(this)">
+                    <i class="fa-solid fa-map-pin"></i> <span>Locations</span> <i class="fa-solid fa-chevron-down arrow" style="margin-left:auto; font-size:0.75rem; transition: transform 0.2s; {{ request()->routeIs('demo.locations*') || request()->routeIs('demo.branches*') ? 'transform: rotate(180deg);' : '' }}"></i>
                 </a>
-                <div class="submenu" style="{{ request()->routeIs('demo.locations*') ? 'display: flex;' : 'display: none;' }} background: rgba(255,255,255,0.02); border-left: 1px solid rgba(82, 234, 210, 0.15); margin: 0; padding: 6px 12px 10px 36px; flex-direction: column; gap: 4px;">
-                    <a href="{{ route('demo.locations') }}" class="submenu-link {{ request()->routeIs('demo.locations') ? 'active' : '' }}">Location List</a>
+                <div class="submenu" style="{{ request()->routeIs('demo.locations*') || request()->routeIs('demo.branches*') ? 'display: flex;' : 'display: none;' }} background: rgba(255,255,255,0.02); border-left: 1px solid rgba(82, 234, 210, 0.15); margin: 0; padding: 6px 12px 10px 36px; flex-direction: column; gap: 4px;">
+                    <a href="{{ route('demo.branches') }}" class="submenu-link {{ request()->routeIs('demo.branches') ? 'active' : '' }}">Branch List</a>
+                    <a href="{{ route('demo.locations') }}" class="submenu-link {{ request()->routeIs('demo.locations') && !request()->routeIs('demo.locations.create') ? 'active' : '' }}">Location List</a>
                     <a href="{{ route('demo.locations.create') }}" class="submenu-link {{ request()->routeIs('demo.locations.create') ? 'active' : '' }}">Add Location</a>
                 </div>
             </div>
@@ -881,9 +920,45 @@
             </div>
 
             
-            <div class="topbar-right" style="gap: 25px; display: flex; align-items: center;">
-                <!-- Theme Toggle Button -->
-                <button type="button" class="theme-toggle-btn" onclick="toggleThemeMode()" title="Toggle Light/Dark Theme" aria-label="Toggle Light/Dark Theme" style="background: transparent; border: none; padding: 0; cursor: pointer; color: var(--text, #f8fafc); display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line, rgba(255,255,255,0.1)); transition: all 0.2s; outline: none;">
+            <div class="topbar-right" style="gap: 15px; display: flex; align-items: center;">
+                @php
+                    $demoUser = Auth::user();
+                    $currentBranchId = 1;
+                    // Demo site always uses dummy branches — never pull from real DB
+                    $vendorBranches = collect([
+                        (object)['id' => 1, 'name' => 'Main Branch - Delhi'],
+                        (object)['id' => 2, 'name' => 'Airport Branch - Mumbai'],
+                        (object)['id' => 3, 'name' => 'Udhana Branch - Surat'],
+                        (object)['id' => 4, 'name' => 'Central Branch - Ahmedabad'],
+                        (object)['id' => 5, 'name' => 'Vesu Hub - Surat'],
+                        (object)['id' => 6, 'name' => 'Connaught Place - Delhi'],
+                        (object)['id' => 7, 'name' => 'BKC Center - Mumbai'],
+                        (object)['id' => 8, 'name' => 'MG Road Depot - Bengaluru'],
+                        (object)['id' => 9, 'name' => 'Hi-Tech City - Hyderabad'],
+                        (object)['id' => 10, 'name' => 'Airport Counter - Goa'],
+                    ]);
+                @endphp
+
+                <!-- 1. Branch Selector -->
+                <div class="branch-selector-wrap" style="position: relative; display: inline-flex; align-items: center; gap: 6px;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="branch-icon" style="width: 15px; height: 15px; color: #52ead2; flex-shrink: 0;">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                        <polyline points="9 22 9 12 15 12 15 22" />
+                    </svg>
+                    <span class="branch-label" style="font-size: 0.82rem; font-weight: 700; color: #94a3b8;">Branch:</span>
+                    <select id="headerBranchSelect" class="header-branch-select" onchange="switchVendorBranch(this.value)" style="background: rgba(82, 234, 210, 0.08); color: #f8fafc; border: 1px solid rgba(82, 234, 210, 0.25); border-radius: 8px; padding: 5px 28px 5px 10px; font-size: 0.83rem; font-weight: 700; cursor: pointer; outline: none; appearance: none; -webkit-appearance: none; -moz-appearance: none; transition: all 0.2s;">
+                        <option value="">All Branches</option>
+                        @foreach($vendorBranches as $b)
+                            <option value="{{ $b->id }}" {{ $currentBranchId == $b->id ? 'selected' : '' }}>{{ $b->name }}</option>
+                        @endforeach
+                    </select>
+                    <svg class="branch-arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 12px; height: 12px; position: absolute; right: 10px; pointer-events: none; color: #52ead2;">
+                        <polyline points="6 9 12 15 18 9"/>
+                    </svg>
+                </div>
+
+                <!-- 2. Theme Toggle Button -->
+                <button type="button" class="theme-toggle-btn" onclick="toggleThemeMode()" title="Toggle Light/Dark Theme" aria-label="Toggle Light/Dark Theme">
                     <svg class="themeSunIcon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
                         <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
                     </svg>
@@ -891,31 +966,34 @@
                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
                     </svg>
                 </button>
-                <div class="branch-display-wrap" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(82, 234, 210, 0.08); border: 1px solid rgba(82, 234, 210, 0.2); border-radius: 8px; padding: 6px 12px; font-size: 0.85rem; font-weight: 600; color: #f8fafc;">
-                    <i class="fa-solid fa-house-chimney" style="color: var(--brand, #52ead2); font-size: 0.85rem;"></i>
-                    <span>Branch: Delhi</span>
-                </div>
-                <!-- Profile Dropdown -->
-                <div style="position: relative; display: flex; align-items: center;">
-                  <button type="button" class="profile-trigger-btn" id="profileDropdownTrigger" style="background: transparent; border: none; padding: 0; margin: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; color: var(--text, #f8fafc); border: 1px solid var(--line, rgba(255,255,255,0.1)); transition: all 0.2s; outline: none;">
-                      <svg viewBox="0 0 24 24" style="width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:2;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                  </button>
-                  <div class="profile-dropdown-menu" id="profileDropdownMenu" style="display: none; position: absolute; right: 0; top: 45px; width: 220px; background: #0b1020; border: 1px solid var(--line, rgba(255,255,255,0.1)); border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 1000; padding: 6px 0; overflow: hidden;">
-                      <!-- User Info Header -->
-                      <div style="padding: 12px 16px; border-bottom: 1px solid var(--line, rgba(255,255,255,0.05));">
-                          <div style="font-weight: 600; color: var(--text, #f8fafc); font-size: 0.9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: left;">Demo Account</div>
-                          <div style="font-size: 0.78rem; color: var(--muted, #aab7cb); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: left;">demo@rydaris.com</div>
-                      </div>
-                      <!-- Menu Links -->
-                      <a href="{{ route('demo.profile') }}" style="display: flex; align-items: center; gap: 10px; padding: 10px 16px; color: var(--text, #f8fafc); text-decoration: none; font-size: 0.85rem; transition: background 0.15s; text-align: left;" onmouseover="this.style.background='rgba(82, 234, 210, 0.08)';" onmouseout="this.style.background='transparent';">
-                          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--brand, #52ead2); flex-shrink: 0;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                          My Profile
-                      </a>
-                      <a href="{{ route('home') }}" style="display: flex; align-items: center; gap: 10px; padding: 10px 16px; color: #ef4444; text-decoration: none; font-size: 0.85rem; transition: background 0.15s; border-top: 1px solid var(--line, rgba(255,255,255,0.05)); text-align: left;" onmouseover="this.style.background='rgba(239, 68, 68, 0.05)';" onmouseout="this.style.background='transparent';">
-                          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                          Logout
-                      </a>
-                  </div>
+
+                <!-- 3. Profile Dropdown Component with Vendor Name -->
+                <div class="profile-dropdown-container" style="position: relative; display: inline-block; line-height: 1;">
+                    <button type="button" class="profile-trigger-btn" id="profileDropdownTrigger" style="background: rgba(82, 234, 210, 0.08); border: 1px solid rgba(82, 234, 210, 0.25); padding: 4px 12px 4px 6px; border-radius: 999px; cursor: pointer; display: flex; align-items: center; gap: 8px; color: var(--text, #f8fafc); transition: all 0.2s; outline: none;">
+                        <span class="user-avatar-circle" style="width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #52ead2, #80a7ff); color: #051013; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.82rem; flex-shrink: 0;">
+                            {{ strtoupper(substr(Auth::user()->name ?? 'D', 0, 1)) }}
+                        </span>
+                        <span class="header-user-name" style="font-size: 0.85rem; font-weight: 700; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                            {{ Auth::user()->name ?? 'Demo Account' }}
+                        </span>
+                        <svg viewBox="0 0 24 24" class="profile-arrow-icon" style="width:12px; height:12px; fill:none; stroke:currentColor; stroke-width:2.5; flex-shrink: 0; color: #52ead2;"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="profile-dropdown-menu" id="profileDropdownMenu" style="display: none; position: absolute; right: 0; top: 45px; width: 220px; background: #0b1020; border: 1px solid var(--line, rgba(255,255,255,0.1)); border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 1000; padding: 6px 0; overflow: hidden;">
+                        <!-- User Info Header -->
+                        <div style="padding: 12px 16px; border-bottom: 1px solid var(--line, rgba(255,255,255,0.05));">
+                            <div style="font-weight: 600; color: var(--text, #f8fafc); font-size: 0.9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: left;">{{ Auth::user()->name ?? 'Demo Account' }}</div>
+                            <div style="font-size: 0.78rem; color: var(--muted, #aab7cb); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: left;">{{ Auth::user()->email ?? 'demo@rydaris.com' }}</div>
+                        </div>
+                        <!-- Menu Links -->
+                        <a href="{{ route('demo.profile') }}" style="display: flex; align-items: center; gap: 10px; padding: 10px 16px; color: var(--text, #f8fafc); text-decoration: none; font-size: 0.85rem; transition: background 0.15s; text-align: left;" onmouseover="this.style.background='rgba(82, 234, 210, 0.08)';" onmouseout="this.style.background='transparent';">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--brand, #52ead2); flex-shrink: 0;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            My Profile
+                        </a>
+                        <a href="{{ route('home') }}" style="display: flex; align-items: center; gap: 10px; padding: 10px 16px; color: #ef4444; text-decoration: none; font-size: 0.85rem; transition: background 0.15s; border-top: 1px solid var(--line, rgba(255,255,255,0.05)); text-align: left;" onmouseover="this.style.background='rgba(239, 68, 68, 0.05)';" onmouseout="this.style.background='transparent';">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                            Logout
+                        </a>
+                    </div>
                 </div>
             </div>
         </header>
@@ -965,6 +1043,55 @@
             const isLight = document.body ? document.body.classList.contains('light-mode') : document.documentElement.classList.contains('light-mode');
             localStorage.setItem('rydaris_demo_theme', isLight ? 'light' : 'dark');
             syncThemeIcons();
+
+            // Dynamically update active CKEditor instances background & text color
+            if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances) {
+                for (let name in CKEDITOR.instances) {
+                    const inst = CKEDITOR.instances[name];
+                    if (inst && inst.document && inst.document.getBody()) {
+                        const body = inst.document.getBody();
+                        if (isLight) {
+                            body.setStyle('background-color', '#ffffff');
+                            body.setStyle('color', '#0f172a');
+                        } else {
+                            body.setStyle('background-color', '#050711');
+                            body.setStyle('color', '#f8fafc');
+                        }
+                    }
+                }
+            }
+        }
+
+        function switchVendorBranch(branchId) {
+            localStorage.setItem('rydaris_demo_branch', branchId);
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            
+            if (csrfToken) {
+                fetch("{{ route('vendor.branches.select') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ branch_id: branchId })
+                })
+                .then(res => {
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({ title: 'Branch Switched!', text: 'Active branch changed successfully.', icon: 'success', timer: 1500, showConfirmButton: false });
+                    }
+                })
+                .catch(err => {
+                    console.warn('Demo branch switch:', err);
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({ title: 'Branch Switched!', text: 'Active branch changed successfully.', icon: 'success', timer: 1500, showConfirmButton: false });
+                    }
+                });
+            } else {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({ title: 'Branch Switched!', text: 'Active branch changed successfully.', icon: 'success', timer: 1500, showConfirmButton: false });
+                }
+            }
         }
 
         document.addEventListener('DOMContentLoaded', function() {

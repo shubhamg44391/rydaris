@@ -101,8 +101,8 @@ class DashboardController extends Controller
         $manualPercent = $totalGear > 0 ? round(($manualCount / $totalGear) * 100) : 50;
 
         
-        $avgRating = \App\Models\Review::where('vendor_id', $vendorId)->avg('rating') ?: 5.0;
         $totalReviewsCount = \App\Models\Review::where('vendor_id', $vendorId)->count();
+        $avgRating = $totalReviewsCount > 0 ? (float)\App\Models\Review::where('vendor_id', $vendorId)->avg('rating') : 0.0;
         $recentReviews = \App\Models\Review::with(['user', 'vehicle', 'booking'])
             ->where('vendor_id', $vendorId)
             ->latest()

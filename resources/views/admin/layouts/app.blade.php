@@ -201,6 +201,29 @@
           </a>
         </div>
         <div class="admin-toolbar" style="display: flex; align-items: center; gap: 15px;">
+          @if(Auth::check() && Auth::user()->role === 'vendor')
+              @php
+                  $vendorBranches = Auth::user()->branches()->where('status', true)->get();
+                  $currentBranchId = Auth::user()->current_branch_id;
+              @endphp
+              <div class="branch-selector-wrap" style="position: relative; display: inline-flex; align-items: center; gap: 6px;">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="branch-icon" style="width: 15px; height: 15px; color: #52ead2; flex-shrink: 0;">
+                      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                      <polyline points="9 22 9 12 15 12 15 22" />
+                  </svg>
+                  <span class="branch-label" style="font-size: 0.82rem; font-weight: 700; color: #94a3b8;">Branch:</span>
+                  <select id="headerBranchSelect" class="header-branch-select" onchange="switchVendorBranch(this.value)" style="background: rgba(82, 234, 210, 0.08); color: #f8fafc; border: 1px solid rgba(82, 234, 210, 0.25); border-radius: 8px; padding: 5px 28px 5px 10px; font-size: 0.83rem; font-weight: 700; cursor: pointer; outline: none; appearance: none; -webkit-appearance: none; -moz-appearance: none; transition: all 0.2s;">
+                      <option value="" {{ is_null($currentBranchId) ? 'selected' : '' }}>All Branches</option>
+                      @foreach($vendorBranches as $b)
+                          <option value="{{ $b->id }}" {{ $currentBranchId == $b->id ? 'selected' : '' }}>{{ $b->name }}</option>
+                      @endforeach
+                  </select>
+                  <svg class="branch-arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 12px; height: 12px; position: absolute; right: 10px; pointer-events: none; color: #52ead2;">
+                      <polyline points="6 9 12 15 18 9"/>
+                  </svg>
+              </div>
+          @endif
+
           <!-- Theme Toggle Button -->
           <button type="button" class="theme-toggle-btn" onclick="toggleThemeMode()" title="Toggle Light/Dark Theme" aria-label="Toggle Light/Dark Theme">
             <svg class="themeSunIcon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
@@ -210,23 +233,17 @@
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
             </svg>
           </button>
-          @if(Auth::check() && Auth::user()->role === 'vendor')
-              @php
-                  $currentBranch = Auth::user()->currentBranch;
-              @endphp
-              <div class="branch-display-wrap" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(82, 234, 210, 0.08); border: 1px solid rgba(82, 234, 210, 0.2); border-radius: 8px; padding: 6px 12px; font-size: 0.85rem; font-weight: 600; color: var(--text, #f8fafc); transition: all 0.2s;">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 14px; height: 14px; color: var(--brand, #52ead2); flex-shrink: 0;">
-                      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                      <polyline points="9 22 9 12 15 12 15 22" />
-                  </svg>
-                  <span><span class="branch-text-prefix">Branch:</span> <span class="branch-text-name">{{ $currentBranch ? $currentBranch->name : 'All Branches' }}</span></span>
-              </div>
-          @endif
 
           <!-- Profile Dropdown Component -->
           <div class="profile-dropdown-container" style="position: relative; display: inline-block; line-height: 1;">
-              <button type="button" class="profile-trigger-btn" id="profileDropdownTrigger" style="background: transparent; border: none; padding: 0; margin: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; color: var(--text); border: 1px solid var(--line, rgba(255,255,255,0.1)); transition: all 0.2s; outline: none;">
-                  <svg viewBox="0 0 24 24" style="width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:2;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <button type="button" class="profile-trigger-btn" id="profileDropdownTrigger" style="background: rgba(82, 234, 210, 0.08); border: 1px solid rgba(82, 234, 210, 0.25); padding: 4px 12px 4px 6px; border-radius: 999px; cursor: pointer; display: flex; align-items: center; gap: 8px; color: var(--text, #f8fafc); transition: all 0.2s; outline: none;">
+                  <span class="user-avatar-circle" style="width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #52ead2, #80a7ff); color: #051013; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.82rem; flex-shrink: 0;">
+                      {{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 1)) }}
+                  </span>
+                  <span class="header-user-name" style="font-size: 0.85rem; font-weight: 700; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                      {{ explode(' ', Auth::user()->name ?? '')[0] }}
+                  </span>
+                  <svg viewBox="0 0 24 24" class="profile-arrow-icon" style="width:12px; height:12px; fill:none; stroke:currentColor; stroke-width:2.5; flex-shrink: 0; color: #52ead2;"><polyline points="6 9 12 15 18 9"/></svg>
               </button>
               <div class="profile-dropdown-menu" id="profileDropdownMenu" style="display: none; position: absolute; right: 0; top: 45px; width: 220px; background: #0b1020; border: 1px solid var(--line, rgba(255,255,255,0.1)); border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 1000; padding: 6px 0; overflow: hidden;">
                   <!-- User Info Header -->
@@ -340,6 +357,23 @@
       const isLight = document.body ? document.body.classList.contains('light-mode') : document.documentElement.classList.contains('light-mode');
       localStorage.setItem('rydaris_theme', isLight ? 'light' : 'dark');
       syncThemeIcons();
+
+      // Dynamically update active CKEditor instances background & text color
+      if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances) {
+        for (let name in CKEDITOR.instances) {
+          const inst = CKEDITOR.instances[name];
+          if (inst && inst.document && inst.document.getBody()) {
+            const body = inst.document.getBody();
+            if (isLight) {
+              body.setStyle('background-color', '#ffffff');
+              body.setStyle('color', '#0f172a');
+            } else {
+              body.setStyle('background-color', '#050711');
+              body.setStyle('color', '#f8fafc');
+            }
+          }
+        }
+      }
     }
 
     document.addEventListener('DOMContentLoaded', syncThemeIcons);
@@ -393,6 +427,31 @@
         });
       }
     });
+
+    function switchVendorBranch(branchId) {
+      const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+      fetch("{{ route('vendor.branches.select') }}", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': csrfToken,
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({ branch_id: branchId })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if(data.status === 'success') {
+          window.location.reload();
+        } else {
+          alert(data.message || 'Error switching branch.');
+        }
+      })
+      .catch(err => {
+        console.error('Error switching branch:', err);
+        window.location.reload();
+      });
+    }
   </script>
 </body>
 

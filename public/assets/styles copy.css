@@ -474,7 +474,7 @@ select:-webkit-autofill:focus {
 }
 
 .hero-copy {
-  /* width: min(940px, 100%); */
+  width: min(940px, 100%);
   margin: 0 auto;
 }
 
@@ -880,12 +880,10 @@ body.light-mode .fleet-visual {
 .grid {
   display: grid;
   gap: 18px;
-  margin-top: 70px;
 }
 
 .grid.cols-2 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  align-items: start;
 }
 
 .grid.cols-3 {
@@ -3928,7 +3926,7 @@ body.light-mode .hero h1 {
 }
 
 body.light-mode .lead,
-body.light-mode p:not(.card p):not(.pricing-card p):not(.feature-card p):not(.info-card p):not(.contact-panel p):not(.flow-step p):not(.faq-item p) {
+body.light-mode p:not(.card p):not(.pricing-card p):not(.feature-card p):not(.info-card p):not(.contact-panel p):not(.flow-step p) {
   color: #475569 !important;
 }
 
@@ -4304,8 +4302,24 @@ body.light-mode .admin-submenu {
   background: transparent !important;
 }
 
+body.light-mode .admin-submenu .submenu-item {
+  color: #475569 !important;
+  background: transparent !important;
+}
+
+body.light-mode .admin-submenu .submenu-item:hover,
+body.light-mode .admin-submenu .submenu-item.active {
+  color: #0284c7 !important;
+  background: rgba(15, 23, 42, 0.04) !important;
+}
+
 body.light-mode .admin-submenu .submenu-item .dot {
   background: #cbd5e1 !important;
+}
+
+body.light-mode .admin-submenu .submenu-item:hover .dot,
+body.light-mode .admin-submenu .submenu-item.active .dot {
+  background: #0284c7 !important;
 }
 
 body.light-mode .admin-topbar {
@@ -5005,23 +5019,21 @@ body.light-mode .container-p-y h4.fw-bold span {
    VENDOR PRICING PAGE — DARK MODE (DEFAULT) & LIGHT MODE OVERRIDES
 ═══════════════════════════════════════════════════════════════════ */
 
-/* ── Dark Mode Base Styles (Vivid Teal Gradient — matches hover look) ── */
+/* ── Dark Mode Base Styles (Default Theme: Dark Teal Radial Gradient) ── */
 .vendor-pricing-card {
   position: relative !important;
-  background: linear-gradient(170deg, #1a7a8a 0%, #0f4a5a 40%, #0a2535 100%) !important;
-  border: 1.5px solid rgba(82, 234, 210, 0.5) !important;
+  background: radial-gradient(circle at 80% 0%, rgba(128, 167, 255, 0.18), transparent 28rem), radial-gradient(circle at 10% 15%, rgba(82, 234, 210, 0.18), transparent 24rem), #0d2228 !important;
+  border: 1.5px solid #52ead2 !important;
   border-radius: 16px !important;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25) !important;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease !important;
   color: #ffffff !important;
-  overflow: hidden !important;
 }
 
 .vendor-pricing-card:hover {
-  transform: translateY(-6px) !important;
+  transform: translateY(-5px) !important;
   border-color: #52ead2 !important;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), 0 0 35px rgba(82, 234, 210, 0.25) !important;
-  background: linear-gradient(170deg, #22909f 0%, #135565 40%, #0d2e40 100%) !important;
+  box-shadow: 0 20px 45px rgba(82, 234, 210, 0.2), 0 0 35px rgba(82, 234, 210, 0.15) !important;
 }
 
 .pricing-eyebrow {
@@ -5078,7 +5090,7 @@ body.light-mode .container-p-y h4.fw-bold span {
 }
 
 .feature-text-off {
-  color: #cbd5e1 !important;
+  color: #94a3b8 !important;
   font-weight: 500 !important;
 }
 
@@ -5117,96 +5129,383 @@ button.current-pkg-btn[disabled],
   cursor: default !important;
 }
 
-/* ── Light Mode Overrides — Pricing Cards always use dark teal style ── */
+/* ── Light Mode Overrides (Strictly when body.light-mode or html.light-mode is toggled) ── */
 body.light-mode .vendor-pricing-card,
-html.light-mode .vendor-pricing-card,
-.light-mode .vendor-pricing-card {
-  background: linear-gradient(160deg, #1a4a5a 0%, #0f3545 50%, #0a2535 100%) !important;
-  border: 1px solid rgba(82, 234, 210, 0.22) !important;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
-  color: #e2f5f3 !important;
+html.light-mode .vendor-pricing-card {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08) !important;
+  color: #0f172a !important;
 }
 
 body.light-mode .vendor-pricing-card:hover,
-html.light-mode .vendor-pricing-card:hover,
-.light-mode .vendor-pricing-card:hover {
-  transform: translateY(-6px) !important;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), 0 0 30px rgba(82, 234, 210, 0.12) !important;
-  border-color: rgba(82, 234, 210, 0.45) !important;
+html.light-mode .vendor-pricing-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12) !important;
+  border-color: #0891b2 !important;
 }
 
-body.light-mode .vendor-pricing-card .pricing-eyebrow,
-html.light-mode .vendor-pricing-card .pricing-eyebrow,
-.light-mode .vendor-pricing-card .pricing-eyebrow {
-  color: #52ead2 !important;
+body.light-mode .pricing-eyebrow,
+html.light-mode .pricing-eyebrow {
+  color: #0891b2 !important;
   font-weight: 800 !important;
 }
 
-body.light-mode .vendor-pricing-card .pricing-title,
-html.light-mode .vendor-pricing-card .pricing-title,
-.light-mode .vendor-pricing-card .pricing-title {
-  color: #ffffff !important;
+body.light-mode .pricing-title,
+html.light-mode .pricing-title {
+  color: #0f172a !important;
   font-weight: 800 !important;
 }
 
-body.light-mode .vendor-pricing-card .pricing-desc,
-html.light-mode .vendor-pricing-card .pricing-desc,
-.light-mode .vendor-pricing-card .pricing-desc {
-  color: #a8d8d0 !important;
-  font-weight: 400 !important;
-}
-
-body.light-mode .vendor-pricing-card .pricing-amount,
-html.light-mode .vendor-pricing-card .pricing-amount,
-.light-mode .vendor-pricing-card .pricing-amount {
-  color: #ffffff !important;
-  font-weight: 900 !important;
-}
-
-body.light-mode .vendor-pricing-card .pricing-period,
-html.light-mode .vendor-pricing-card .pricing-period,
-.light-mode .vendor-pricing-card .pricing-period {
-  color: #7ecdc4 !important;
-  font-weight: 600 !important;
-}
-
-body.light-mode .vendor-pricing-card .pricing-features,
-html.light-mode .vendor-pricing-card .pricing-features,
-.light-mode .vendor-pricing-card .pricing-features {
-  color: #d0eeea !important;
-}
-
-body.light-mode .vendor-pricing-card .pricing-features li,
-html.light-mode .vendor-pricing-card .pricing-features li,
-.light-mode .vendor-pricing-card .pricing-features li {
-  color: #d0eeea !important;
-  font-weight: 400 !important;
-}
-
-body.light-mode .vendor-pricing-card .feature-text-on,
-html.light-mode .vendor-pricing-card .feature-text-on,
-.light-mode .vendor-pricing-card .feature-text-on {
-  color: #cdf0eb !important;
+body.light-mode .pricing-desc,
+html.light-mode .pricing-desc {
+  color: #475569 !important;
   font-weight: 500 !important;
 }
 
-body.light-mode .vendor-pricing-card .feature-icon-on,
-html.light-mode .vendor-pricing-card .feature-icon-on,
-.light-mode .vendor-pricing-card .feature-icon-on {
+body.light-mode .pricing-amount,
+html.light-mode .pricing-amount {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+body.light-mode .pricing-period,
+html.light-mode .pricing-period {
+  color: #64748b !important;
+  font-weight: 600 !important;
+}
+
+body.light-mode .pricing-features,
+html.light-mode .pricing-features {
+  color: #0f172a !important;
+}
+
+body.light-mode .pricing-features li,
+html.light-mode .pricing-features li {
+  color: #0f172a !important;
+  font-weight: 600 !important;
+}
+
+body.light-mode .feature-text-on,
+html.light-mode .feature-text-on {
+  color: #0f172a !important;
+  font-weight: 600 !important;
+}
+
+body.light-mode .feature-icon-on,
+html.light-mode .feature-icon-on {
+  color: #0891b2 !important;
+}
+
+body.light-mode .feature-icon-off,
+html.light-mode .feature-icon-off {
+  color: #ef4444 !important;
+}
+
+body.light-mode .feature-text-off,
+html.light-mode .feature-text-off {
+  color: #64748b !important;
+  font-weight: 500 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   VENDOR PRICING CARDS — HIGH CONTRAST LIGHT MODE & DARK MODE
+═══════════════════════════════════════════════════════════════════ */
+
+/* ── Base Default Card Styles (High-Contrast Light Mode) ── */
+.vendor-pricing-card {
+  position: relative !important;
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 16px !important;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08) !important;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease !important;
+  color: #0f172a !important;
+}
+
+.vendor-pricing-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12) !important;
+  border-color: #0891b2 !important;
+}
+
+.vendor-pricing-card .pricing-eyebrow {
+  color: #0891b2 !important;
+  font-weight: 800 !important;
+  letter-spacing: 1.2px !important;
+}
+
+.vendor-pricing-card .pricing-title {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+.vendor-pricing-card .pricing-desc {
+  color: #334155 !important;
+  font-weight: 500 !important;
+}
+
+.vendor-pricing-card .pricing-amount {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+.vendor-pricing-card .pricing-period {
+  color: #475569 !important;
+  font-weight: 600 !important;
+}
+
+.vendor-pricing-card .pricing-features {
+  color: #0f172a !important;
+}
+
+.vendor-pricing-card .pricing-features li {
+  color: #0f172a !important;
+  font-size: 0.92rem !important;
+}
+
+.vendor-pricing-card .feature-text-on {
+  color: #0f172a !important;
+  font-weight: 600 !important;
+}
+
+.vendor-pricing-card .feature-icon-on {
+  color: #0891b2 !important;
+  font-size: 1.2rem !important;
+  font-weight: 900 !important;
+}
+
+.vendor-pricing-card .feature-icon-off {
+  color: #ef4444 !important;
+  font-size: 1.2rem !important;
+  font-weight: bold !important;
+}
+
+.vendor-pricing-card .feature-text-off {
+  color: #64748b !important;
+  font-weight: 500 !important;
+}
+
+/* Action Buttons */
+.pricing-btn-primary {
+  padding: 12px 20px !important;
+  font-weight: 800 !important;
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%) !important;
+  color: #051013 !important;
+  border: none !important;
+  box-shadow: 0 4px 15px rgba(82, 234, 210, 0.35) !important;
+  transition: all 0.25s ease !important;
+}
+
+.pricing-btn-primary:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(82, 234, 210, 0.5) !important;
+  color: #051013 !important;
+}
+
+.current-pkg-btn,
+button.current-pkg-btn,
+button.current-pkg-btn[disabled],
+.btn.current-pkg-btn,
+.btn.current-pkg-btn[disabled] {
+  background: #10b981 !important;
+  background-image: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4) !important;
+  opacity: 1 !important;
+  font-weight: 800 !important;
+  cursor: default !important;
+}
+
+/* ── Explicit Dark Mode Overrides ── */
+body.dark-mode .vendor-pricing-card,
+html.dark-style .vendor-pricing-card,
+.dark-mode .vendor-pricing-card,
+.dark-style .vendor-pricing-card {
+  background: radial-gradient(circle at 80% 0%, rgba(128, 167, 255, 0.18), transparent 28rem), radial-gradient(circle at 10% 15%, rgba(82, 234, 210, 0.18), transparent 24rem), #0d2228 !important;
+  border: 1.5px solid #52ead2 !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25) !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .vendor-pricing-card:hover,
+html.dark-style .vendor-pricing-card:hover,
+.dark-mode .vendor-pricing-card:hover,
+.dark-style .vendor-pricing-card:hover {
+  transform: translateY(-5px) !important;
+  border-color: #52ead2 !important;
+  box-shadow: 0 20px 45px rgba(82, 234, 210, 0.2), 0 0 35px rgba(82, 234, 210, 0.15) !important;
+}
+
+body.dark-mode .vendor-pricing-card .pricing-eyebrow,
+html.dark-style .vendor-pricing-card .pricing-eyebrow,
+.dark-mode .vendor-pricing-card .pricing-eyebrow,
+.dark-style .vendor-pricing-card .pricing-eyebrow {
   color: #52ead2 !important;
 }
 
-body.light-mode .vendor-pricing-card .feature-icon-off,
-html.light-mode .vendor-pricing-card .feature-icon-off,
-.light-mode .vendor-pricing-card .feature-icon-off {
-  color: #f87171 !important;
+body.dark-mode .vendor-pricing-card .pricing-title,
+html.dark-style .vendor-pricing-card .pricing-title,
+.dark-mode .vendor-pricing-card .pricing-title,
+.dark-style .vendor-pricing-card .pricing-title {
+  color: #ffffff !important;
 }
 
-body.light-mode .vendor-pricing-card .feature-text-off,
-html.light-mode .vendor-pricing-card .feature-text-off,
-.light-mode .vendor-pricing-card .feature-text-off {
-  color: #7ba8a3 !important;
-  font-weight: 400 !important;
+body.dark-mode .vendor-pricing-card .pricing-desc,
+html.dark-style .vendor-pricing-card .pricing-desc,
+.dark-mode .vendor-pricing-card .pricing-desc,
+.dark-style .vendor-pricing-card .pricing-desc {
+  color: #cbd5e1 !important;
+}
+
+body.dark-mode .vendor-pricing-card .pricing-amount,
+html.dark-style .vendor-pricing-card .pricing-amount,
+.dark-mode .vendor-pricing-card .pricing-amount,
+.dark-style .vendor-pricing-card .pricing-amount {
+  color: #ffffff !important;
+}
+
+body.dark-mode .vendor-pricing-card .pricing-period,
+html.dark-style .vendor-pricing-card .pricing-period,
+.dark-mode .vendor-pricing-card .pricing-period,
+.dark-style .vendor-pricing-card .pricing-period {
+  color: #cbd5e1 !important;
+}
+
+body.dark-mode .vendor-pricing-card .pricing-features,
+html.dark-style .vendor-pricing-card .pricing-features,
+.dark-mode .vendor-pricing-card .pricing-features,
+.dark-style .vendor-pricing-card .pricing-features {
+  color: #ffffff !important;
+}
+
+body.dark-mode .vendor-pricing-card .pricing-features li,
+html.dark-style .vendor-pricing-card .pricing-features li,
+.dark-mode .vendor-pricing-card .pricing-features li,
+.dark-style .vendor-pricing-card .pricing-features li {
+  color: #ffffff !important;
+}
+
+body.dark-mode .vendor-pricing-card .feature-text-on,
+html.dark-style .vendor-pricing-card .feature-text-on,
+.dark-mode .vendor-pricing-card .feature-text-on,
+.dark-style .vendor-pricing-card .feature-text-on {
+  color: #ffffff !important;
+}
+
+body.dark-mode .vendor-pricing-card .feature-icon-on,
+html.dark-style .vendor-pricing-card .feature-icon-on,
+.dark-mode .vendor-pricing-card .feature-icon-on,
+.dark-style .vendor-pricing-card .feature-icon-on {
+  color: #52ead2 !important;
+}
+
+body.dark-mode .vendor-pricing-card .feature-icon-off,
+html.dark-style .vendor-pricing-card .feature-icon-off,
+.dark-mode .vendor-pricing-card .feature-icon-off,
+.dark-style .vendor-pricing-card .feature-icon-off {
+  color: #ff4d4d !important;
+}
+
+body.dark-mode .vendor-pricing-card .feature-text-off,
+html.dark-style .vendor-pricing-card .feature-text-off,
+.dark-mode .vendor-pricing-card .feature-text-off,
+.dark-style .vendor-pricing-card .feature-text-off {
+  color: #cbd5e1 !important;
+}
+
+/* ── 3. Fleet Distribution Donut Chart & Legend ── */
+.donut {
+  width: 190px !important; height: 190px !important; display: grid !important; place-items: center !important; margin: 16px auto 24px !important;
+  border-radius: 999px !important; background: conic-gradient(#52ead2 0 75%, #80a7ff 75% 100%) !important; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25) !important;
+}
+.donut-inner {
+  width: 122px !important; height: 122px !important; display: grid !important; place-items: center !important; border-radius: 999px !important;
+  background: #0b1020 !important; text-align: center !important; box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+}
+.donut-count { display: block !important; font-size: 2rem !important; font-weight: 800 !important; color: #ffffff !important; line-height: 1.1 !important; }
+.donut-label { display: block !important; font-size: 0.8rem !important; font-weight: 700 !important; color: #94a3b8 !important; text-transform: uppercase !important; letter-spacing: 0.8px !important; margin-top: 2px !important; }
+.legend { display: grid !important; gap: 10px !important; }
+.legend-item { display: flex !important; align-items: center !important; justify-content: space-between !important; gap: 12px !important; color: #cbd5e1 !important; font-size: 0.95rem !important; font-weight: 600 !important; padding: 4px 0 !important; }
+.legend-dot-auto { width: 12px !important; height: 12px !important; display: inline-block !important; margin-right: 10px !important; border-radius: 50% !important; background: #52ead2 !important; box-shadow: 0 0 8px rgba(82, 234, 210, 0.5) !important; }
+.legend-dot-manual { width: 12px !important; height: 12px !important; display: inline-block !important; margin-right: 10px !important; border-radius: 50% !important; background: #80a7ff !important; box-shadow: 0 0 8px rgba(128, 167, 255, 0.5) !important; }
+.legend-val { color: #52ead2 !important; font-weight: 800 !important; font-size: 0.95rem !important; }
+
+/* Light Mode Donut Overrides */
+body.light-mode .donut, html.light-mode .donut, .light-mode .donut { background: conic-gradient(#0891b2 0 75%, #2563eb 75% 100%) !important; box-shadow: 0 8px 25px rgba(8, 145, 178, 0.15) !important; }
+body.light-mode .donut-inner, html.light-mode .donut-inner, .light-mode .donut-inner { background: #ffffff !important; box-shadow: inset 0 2px 8px rgba(15, 23, 42, 0.08) !important; }
+body.light-mode .donut-count, html.light-mode .donut-count, .light-mode .donut-count { color: #0f172a !important; }
+body.light-mode .donut-label, html.light-mode .donut-label, .light-mode .donut-label { color: #475569 !important; }
+body.light-mode .legend-item, html.light-mode .legend-item, .light-mode .legend-item { color: #1e293b !important; }
+body.light-mode .legend-dot-auto, html.light-mode .legend-dot-auto, .light-mode .legend-dot-auto { background: #0891b2 !important; box-shadow: 0 0 8px rgba(8, 145, 178, 0.3) !important; }
+body.light-mode .legend-dot-manual, html.light-mode .legend-dot-manual, .light-mode .legend-dot-manual { background: #2563eb !important; box-shadow: 0 0 8px rgba(37, 99, 235, 0.3) !important; }
+body.light-mode .legend-val, html.light-mode .legend-val, .light-mode .legend-val { color: #0f172a !important; }
+
+/* ── 4. Recent Activity List Overrides ── */
+.activity-item { display: grid; grid-template-columns: 38px 1fr auto; gap: 12px; align-items: start; padding: 12px; border: 1px solid #e2e8f0; border-radius: var(--radius); background: #ffffff; }
+.activity-item p { margin: 0; color: #334155; }
+.activity-item p strong { color: #0891b2; font-weight: 700; }
+.activity-item small { color: #64748b; }
+
+body.light-mode .activity-item, html.light-mode .activity-item, .light-mode .activity-item { background: #ffffff !important; border: 1px solid #e2e8f0 !important; color: #1e293b !important; }
+body.light-mode .activity-item p, html.light-mode .activity-item p, .light-mode .activity-item p { color: #1e293b !important; font-weight: 500 !important; }
+body.light-mode .activity-item p strong, html.light-mode .activity-item p strong, .light-mode .activity-item p strong { color: #0891b2 !important; font-weight: 800 !important; }
+body.light-mode .activity-item small, html.light-mode .activity-item small, .light-mode .activity-item small { color: #64748b !important; font-weight: 600 !important; }
+
+/* ── 5. Status Badges Light Mode Overrides ── */
+body.light-mode .status-badge-progress, html.light-mode .status-badge-progress, .light-mode .status-badge-progress {
+  background: rgba(37, 99, 235, 0.1) !important; color: #1d4ed8 !important; border: 1px solid rgba(37, 99, 235, 0.3) !important; font-weight: 800 !important;
+}
+body.light-mode .status-badge-progress i { color: #1d4ed8 !important; }
+
+body.light-mode .status-badge-ended, html.light-mode .status-badge-ended, .light-mode .status-badge-ended {
+  background: #f1f5f9 !important; color: #334155 !important; border: 1px solid #cbd5e1 !important; font-weight: 800 !important;
+}
+
+/* ── 6. View T&C Button Light Mode Overrides ── */
+body.light-mode .btn-view-tc, html.light-mode .btn-view-tc, .light-mode .btn-view-tc {
+  background: rgba(15, 118, 110, 0.1) !important; color: #0f766e !important; border: none !important; outline: none !important; box-shadow: none !important; font-weight: 700 !important;
+}
+body.light-mode .btn-view-tc:hover, html.light-mode .btn-view-tc:hover, .light-mode .btn-view-tc:hover {
+  background: rgba(15, 118, 110, 0.18) !important; color: #0f766e !important; border: none !important; outline: none !important;
+}
+
+/* ── 7. Header Branch Selector Theme Styles ── */
+.header-branch-select option {
+  background: #0b1020 !important; color: #ffffff !important;
+}
+body.light-mode .header-branch-select, html.light-mode .header-branch-select, .light-mode .header-branch-select {
+  background: #ffffff !important; color: #0f172a !important; border: 1px solid #cbd5e1 !important; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06) !important; font-weight: 700 !important;
+}
+body.light-mode .header-branch-select option, html.light-mode .header-branch-select option, .light-mode .header-branch-select option {
+  background: #ffffff !important; color: #0f172a !important;
+}
+body.light-mode .branch-label, html.light-mode .branch-label, .light-mode .branch-label {
+  color: #475569 !important; font-weight: 700 !important;
+}
+body.light-mode .branch-icon, html.light-mode .branch-icon, .light-mode .branch-icon,
+body.light-mode .branch-arrow-icon, html.light-mode .branch-arrow-icon, .light-mode .branch-arrow-icon {
+  color: #0891b2 !important;
+}
+
+/* ── 8. Profile Trigger Button Theme Styles ── */
+body.light-mode .profile-trigger-btn, html.light-mode .profile-trigger-btn, .light-mode .profile-trigger-btn {
+  background: #ffffff !important; color: #0f172a !important; border: 1px solid #cbd5e1 !important; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06) !important;
+}
+body.light-mode .header-user-name, html.light-mode .header-user-name, .light-mode .header-user-name {
+  color: #0f172a !important; font-weight: 700 !important;
+}
+body.light-mode .profile-arrow-icon, html.light-mode .profile-arrow-icon, .light-mode .profile-arrow-icon {
+  color: #0891b2 !important;
+}
+
+/* ── 9. CKEditor Light Mode Content Area Overrides ── */
+body.light-mode .cke_contents, html.light-mode .cke_contents, .light-mode .cke_contents,
+body.light-mode .cke_wysiwyg_frame, html.light-mode .cke_wysiwyg_frame, .light-mode .cke_wysiwyg_frame,
+body.light-mode .cke_wysiwyg_div, html.light-mode .cke_wysiwyg_div, .light-mode .cke_wysiwyg_div {
+  background-color: #ffffff !important; background: #ffffff !important; color: #0f172a !important;
 }
 
 /* Pricing Modals Light Mode Overrides */
@@ -5278,85 +5577,34 @@ body.light-mode #confirmDetailsModal button[onclick*="closeDetailsModal"]:hover 
   background: #f1f5f9 !important;
 }
 
-/* ── Light Mode: Comprehensive Button Visibility & Contrast Overrides ── */
-
-/* Filter Bar Buttons (e.g. Vendor Management "All Vendors", "Active", "Inactive") */
-body.light-mode .panel-filter-bar .btn,
-body.light-mode .panel-filter-bar a.btn,
-body.light-mode .panel-filter-bar button.btn,
-body.light-mode .filter-btn,
-body.light-mode .nav-pills .nav-link,
-body.light-mode .tab-btn {
-  background: #ffffff !important;
-  border: 1px solid #cbd5e1 !important;
-  color: #1e293b !important;
-  font-weight: 700 !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04) !important;
-}
-
-body.light-mode .panel-filter-bar .btn:hover,
-body.light-mode .panel-filter-bar a.btn:hover,
-body.light-mode .panel-filter-bar button.btn:hover,
-body.light-mode .filter-btn:hover,
-body.light-mode .nav-pills .nav-link:hover,
-body.light-mode .tab-btn:hover,
-.panel-filter-bar .btn:hover,
-.panel-filter-bar a.btn:hover,
-.panel-filter-bar button.btn:hover,
-.filter-btn:hover,
-.tab-btn:hover {
+/* ── Light Mode: Force gradient on ALL vendor site action buttons ── */
+body.light-mode .btn-primary,
+body.light-mode button.btn-primary,
+body.light-mode a.btn-primary,
+body.light-mode .btn.btn-primary,
+body.light-mode button[type="submit"].btn-primary,
+body.light-mode button.btn.w-100[style*="linear-gradient(135deg, var(--brand"],
+body.light-mode button.btn.w-100[style*="linear-gradient(135deg, #52ead2"],
+body.light-mode button.btn.w-100[style*="background: linear-gradient"],
+body.light-mode button.btn[style*="background: linear-gradient(135deg, var(--brand"],
+body.light-mode button.btn[style*="linear-gradient(135deg, #52ead2"] {
   background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%) !important;
   color: #051013 !important;
-  border-color: rgba(82, 234, 210, 0.8) !important;
-  box-shadow: 0 4px 15px rgba(82, 234, 210, 0.35) !important;
+  border: none !important;
+  box-shadow: 0 4px 15px rgba(82, 234, 210, 0.3) !important;
+  border-radius: 999px !important;
   font-weight: 800 !important;
 }
 
-body.light-mode .panel-filter-bar .btn.active,
-body.light-mode .panel-filter-bar a.btn.active,
-body.light-mode .panel-filter-bar button.btn.active,
-body.light-mode .filter-btn.active,
-body.light-mode .nav-pills .nav-link.active,
-body.light-mode .tab-btn.active {
-  background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%) !important;
+body.light-mode .btn-primary:hover,
+body.light-mode button.btn-primary:hover,
+body.light-mode a.btn-primary:hover,
+body.light-mode .btn.btn-primary:hover,
+body.light-mode button[type="submit"].btn-primary:hover {
+  opacity: 0.92 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(82, 234, 210, 0.45) !important;
   color: #051013 !important;
-  border: 1px solid rgba(82, 234, 210, 0.8) !important;
-  box-shadow: 0 4px 14px rgba(82, 234, 210, 0.35) !important;
-  font-weight: 800 !important;
-}
-
-/* Secondary & Default Buttons in Light Mode */
-body.light-mode .btn-secondary,
-body.light-mode button.btn-secondary,
-body.light-mode a.btn-secondary,
-body.light-mode .btn-default,
-body.light-mode .btn-light,
-body.light-mode .btn-outline,
-body.light-mode .btn-outline-secondary,
-body.light-mode .btn-outline-primary {
-  background: #ffffff !important;
-  border: 1px solid #cbd5e1 !important;
-  color: #0f172a !important;
-  font-weight: 600 !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04) !important;
-}
-
-body.light-mode .btn-secondary:hover,
-body.light-mode button.btn-secondary:hover,
-body.light-mode a.btn-secondary:hover,
-body.light-mode .btn-default:hover,
-body.light-mode .btn-light:hover,
-body.light-mode .btn-outline:hover,
-body.light-mode .btn-outline-secondary:hover,
-body.light-mode .btn-outline-primary:hover,
-.btn-secondary:hover,
-.btn-outline:hover,
-.btn-outline-primary:hover {
-  background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%) !important;
-  color: #051013 !important;
-  border-color: rgba(82, 234, 210, 0.8) !important;
-  box-shadow: 0 4px 15px rgba(82, 234, 210, 0.35) !important;
-  font-weight: 800 !important;
 }
 
 /* Sidebar Nav Items Hover & Active / Selected */
@@ -5429,64 +5677,6 @@ body.light-mode .admin-submenu .submenu-item:hover .dot,
 body.light-mode .admin-submenu .submenu-item.active .dot,
 .light-style .admin-submenu .submenu-item.active .dot {
   background: #051013 !important;
-}
-
-/* Primary Action Buttons in Light Mode */
-body.light-mode .btn-primary,
-body.light-mode button.btn-primary,
-body.light-mode a.btn-primary,
-body.light-mode .btn.btn-primary,
-body.light-mode button[type="submit"].btn-primary,
-body.light-mode button.btn.w-100[style*="linear-gradient(135deg, var(--brand"],
-body.light-mode button.btn.w-100[style*="linear-gradient(135deg, #52ead2"],
-body.light-mode button.btn.w-100[style*="background: linear-gradient"],
-body.light-mode button.btn[style*="background: linear-gradient(135deg, var(--brand"],
-body.light-mode button.btn[style*="linear-gradient(135deg, #52ead2"] {
-  background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%) !important;
-  color: #051013 !important;
-  border: none !important;
-  box-shadow: 0 4px 15px rgba(82, 234, 210, 0.3) !important;
-  font-weight: 800 !important;
-}
-
-body.light-mode .btn-primary:hover,
-body.light-mode button.btn-primary:hover,
-body.light-mode a.btn-primary:hover,
-body.light-mode .btn.btn-primary:hover,
-body.light-mode button[type="submit"].btn-primary:hover {
-  opacity: 0.92 !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 8px 25px rgba(82, 234, 210, 0.45) !important;
-  color: #051013 !important;
-}
-
-/* Table Small Action Buttons in Light Mode */
-body.light-mode .btn-info,
-body.light-mode a.btn-info {
-  background: #0284c7 !important;
-  color: #ffffff !important;
-  border: none !important;
-}
-
-body.light-mode .btn-success,
-body.light-mode a.btn-success {
-  background: #16a34a !important;
-  color: #ffffff !important;
-  border: none !important;
-}
-
-body.light-mode .btn-warning,
-body.light-mode a.btn-warning {
-  background: #d97706 !important;
-  color: #ffffff !important;
-  border: none !important;
-}
-
-body.light-mode .btn-danger,
-body.light-mode a.btn-danger {
-  background: #dc2626 !important;
-  color: #ffffff !important;
-  border: none !important;
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -6037,34 +6227,6 @@ body.light-mode button:disabled.btn {
    Converts white/near-white/light-grey inline text → dark readable
 ═══════════════════════════════════════════════════════════════════ */
 
-/* ── Light Mode KPI Card & Subtext Crisp Visibility Overrides ── */
-body.light-mode .kpi-card strong,
-body.light-mode .mini-metric strong {
-  color: #0f172a !important;
-}
-
-body.light-mode .kpi-card span,
-body.light-mode .mini-metric span,
-body.light-mode .mini-metric .panel-muted {
-  color: #1e293b !important;
-  font-weight: 700 !important;
-  opacity: 1 !important;
-}
-
-body.light-mode .admin-hero h1,
-body.light-mode .admin-panel h2,
-body.light-mode .admin-panel h3 {
-  color: #0f172a !important;
-  font-weight: 800 !important;
-}
-
-body.light-mode .text-muted,
-body.light-mode .panel-muted,
-body.light-mode small {
-  color: #334155 !important;
-  opacity: 1 !important;
-}
-
 /* ── #f8fafc (near-white headings & body text) ── */
 body.light-mode *[style*="color: #f8fafc"],
 body.light-mode *[style*="color:#f8fafc"] {
@@ -6082,19 +6244,19 @@ body.light-mode *[style*="color:white"] {
 /* ── #cbd5e1 light-grey (labels, subheadings) ── */
 body.light-mode *[style*="color: #cbd5e1"],
 body.light-mode *[style*="color:#cbd5e1"] {
-  color: #1e293b !important;
+  color: #475569 !important;
 }
 
 /* ── #94a3b8 muted grey ── */
 body.light-mode *[style*="color: #94a3b8"],
 body.light-mode *[style*="color:#94a3b8"] {
-  color: #334155 !important;
+  color: #64748b !important;
 }
 
 /* ── #e2e8f0 very light grey ── */
 body.light-mode *[style*="color: #e2e8f0"],
 body.light-mode *[style*="color:#e2e8f0"] {
-  color: #1e293b !important;
+  color: #334155 !important;
 }
 
 /* ── #aab7cb, #b0bec5 muted light ── */
@@ -6102,17 +6264,20 @@ body.light-mode *[style*="color: #aab7cb"],
 body.light-mode *[style*="color:#aab7cb"],
 body.light-mode *[style*="color: #b0bec5"],
 body.light-mode *[style*="color:#b0bec5"] {
-  color: #334155 !important;
+  color: #64748b !important;
 }
 
 /* ── #64748b already readable, keep for contrast ── */
 body.light-mode *[style*="color: #64748b"],
 body.light-mode *[style*="color:#64748b"] {
-  color: #334155 !important;
+  color: #475569 !important;
 }
 
 /* ── rgba(255,255,255, …) white with opacity ── */
-body.light-mode *[style*="color: rgba(255, 255, 255"],
+body.light-mode *[style*="color: rgba(255, 255, 255"] {
+  color: #334155 !important;
+}
+
 body.light-mode *[style*="color: rgba(255,255,255"] {
   color: #334155 !important;
 }
@@ -6365,12 +6530,7 @@ body.light-mode .info-card p,
 body.light-mode .faq-item p,
 body.light-mode .contact-panel p,
 body.light-mode .flow-step p {
-  color: #ffffff !important;
-}
-
-body.light-mode .faq-item summary {
-  color: #ffffff !important;
-  font-weight: 700 !important;
+  color: #e2e8f0 !important;
 }
 
 body.light-mode .card span,
@@ -7058,547 +7218,5 @@ body.light-mode .booking-coverage-page div[style*="color: #94a3b8"] {
 
 body.light-mode .booking-coverage-page span[style*="color: #fff"],
 body.light-mode .booking-coverage-page span[style*="color: #ffffff"] {
-  color: #0f172a !important;
-}
-
-/* ═══════════════════════════════════════════════════════════════════
-   VENDOR PRICING CARDS — HIGH CONTRAST LIGHT MODE & DARK MODE
-═══════════════════════════════════════════════════════════════════ */
-
-/* ── Base Default Card Styles (High-Contrast Light Mode) ── */
-.vendor-pricing-card {
-  position: relative !important;
-  background: linear-gradient(160deg, #1a4a5a 0%, #0f3545 50%, #0a2535 100%) !important;
-  border: 1px solid rgba(82, 234, 210, 0.18) !important;
-  border-radius: 20px !important;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease !important;
-  color: #e2f5f3 !important;
-  overflow: hidden !important;
-}
-
-.vendor-pricing-card::before {
-  content: '' !important;
-  position: absolute !important;
-  top: -40px !important;
-  right: -40px !important;
-  width: 120px !important;
-  height: 120px !important;
-  background: radial-gradient(circle, rgba(82, 234, 210, 0.12) 0%, transparent 70%) !important;
-  pointer-events: none !important;
-}
-
-.vendor-pricing-card:hover {
-  transform: translateY(-6px) !important;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), 0 0 30px rgba(82, 234, 210, 0.12) !important;
-  border-color: rgba(82, 234, 210, 0.4) !important;
-}
-
-.vendor-pricing-card .pricing-eyebrow {
-  color: #52ead2 !important;
-  font-weight: 800 !important;
-  letter-spacing: 1.4px !important;
-  font-size: 0.72rem !important;
-}
-
-.vendor-pricing-card .pricing-title {
-  color: #ffffff !important;
-  font-weight: 800 !important;
-  font-size: 1.5rem !important;
-}
-
-.vendor-pricing-card .pricing-desc {
-  color: #a8d8d0 !important;
-  font-weight: 400 !important;
-  font-size: 0.9rem !important;
-  line-height: 1.6 !important;
-}
-
-.vendor-pricing-card .pricing-amount {
-  color: #ffffff !important;
-  font-weight: 900 !important;
-  font-size: 2.8rem !important;
-  line-height: 1 !important;
-}
-
-.vendor-pricing-card .pricing-period {
-  color: #7ecdc4 !important;
-  font-weight: 600 !important;
-  font-size: 1rem !important;
-  margin-left: 4px !important;
-}
-
-.vendor-pricing-card .pricing-features {
-  color: #d0eeea !important;
-}
-
-.vendor-pricing-card .pricing-features li {
-  color: #d0eeea !important;
-  font-size: 0.9rem !important;
-}
-
-.vendor-pricing-card .feature-text-on {
-  color: #cdf0eb !important;
-  font-weight: 500 !important;
-}
-
-.vendor-pricing-card .feature-icon-on {
-  color: #52ead2 !important;
-  font-size: 1.15rem !important;
-  font-weight: 900 !important;
-}
-
-.vendor-pricing-card .feature-icon-off {
-  color: #f87171 !important;
-  font-size: 1.15rem !important;
-  font-weight: bold !important;
-}
-
-.vendor-pricing-card .feature-text-off {
-  color: #7ba8a3 !important;
-  font-weight: 400 !important;
-}
-
-/* Action Buttons */
-.pricing-btn-primary {
-  padding: 12px 20px !important;
-  font-weight: 800 !important;
-  border-radius: 999px !important;
-  background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%) !important;
-  color: #051013 !important;
-  border: none !important;
-  box-shadow: 0 4px 15px rgba(82, 234, 210, 0.35) !important;
-  transition: all 0.25s ease !important;
-}
-
-.pricing-btn-primary:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: 0 8px 25px rgba(82, 234, 210, 0.5) !important;
-  color: #051013 !important;
-}
-
-.current-pkg-btn,
-button.current-pkg-btn,
-button.current-pkg-btn[disabled],
-.btn.current-pkg-btn,
-.btn.current-pkg-btn[disabled] {
-  background: #10b981 !important;
-  background-image: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
-  color: #ffffff !important;
-  border: none !important;
-  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4) !important;
-  opacity: 1 !important;
-  font-weight: 800 !important;
-  cursor: default !important;
-}
-
-/* ── Explicit Dark Mode Overrides (Vivid Teal Gradient) ── */
-body.dark-mode .vendor-pricing-card,
-html.dark-style .vendor-pricing-card,
-.dark-mode .vendor-pricing-card,
-.dark-style .vendor-pricing-card {
-  background: linear-gradient(170deg, #1a7a8a 0%, #0f4a5a 40%, #0a2535 100%) !important;
-  border: 1.5px solid rgba(82, 234, 210, 0.5) !important;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35) !important;
-  color: #ffffff !important;
-  overflow: hidden !important;
-}
-
-body.dark-mode .vendor-pricing-card:hover,
-html.dark-style .vendor-pricing-card:hover,
-.dark-mode .vendor-pricing-card:hover,
-.dark-style .vendor-pricing-card:hover {
-  transform: translateY(-6px) !important;
-  border-color: #52ead2 !important;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), 0 0 35px rgba(82, 234, 210, 0.25) !important;
-  background: linear-gradient(170deg, #22909f 0%, #135565 40%, #0d2e40 100%) !important;
-}
-
-body.dark-mode .vendor-pricing-card .pricing-eyebrow,
-html.dark-style .vendor-pricing-card .pricing-eyebrow,
-.dark-mode .vendor-pricing-card .pricing-eyebrow,
-.dark-style .vendor-pricing-card .pricing-eyebrow {
-  color: #52ead2 !important;
-}
-
-body.dark-mode .vendor-pricing-card .pricing-title,
-html.dark-style .vendor-pricing-card .pricing-title,
-.dark-mode .vendor-pricing-card .pricing-title,
-.dark-style .vendor-pricing-card .pricing-title {
-  color: #ffffff !important;
-}
-
-body.dark-mode .vendor-pricing-card .pricing-desc,
-html.dark-style .vendor-pricing-card .pricing-desc,
-.dark-mode .vendor-pricing-card .pricing-desc,
-.dark-style .vendor-pricing-card .pricing-desc {
-  color: #cbd5e1 !important;
-}
-
-body.dark-mode .vendor-pricing-card .pricing-amount,
-html.dark-style .vendor-pricing-card .pricing-amount,
-.dark-mode .vendor-pricing-card .pricing-amount,
-.dark-style .vendor-pricing-card .pricing-amount {
-  color: #ffffff !important;
-}
-
-body.dark-mode .vendor-pricing-card .pricing-period,
-html.dark-style .vendor-pricing-card .pricing-period,
-.dark-mode .vendor-pricing-card .pricing-period,
-.dark-style .vendor-pricing-card .pricing-period {
-  color: #cbd5e1 !important;
-}
-
-body.dark-mode .vendor-pricing-card .pricing-features,
-html.dark-style .vendor-pricing-card .pricing-features,
-.dark-mode .vendor-pricing-card .pricing-features,
-.dark-style .vendor-pricing-card .pricing-features {
-  color: #ffffff !important;
-}
-
-body.dark-mode .vendor-pricing-card .pricing-features li,
-html.dark-style .vendor-pricing-card .pricing-features li,
-.dark-mode .vendor-pricing-card .pricing-features li,
-.dark-style .vendor-pricing-card .pricing-features li {
-  color: #ffffff !important;
-}
-
-body.dark-mode .vendor-pricing-card .feature-text-on,
-html.dark-style .vendor-pricing-card .feature-text-on,
-.dark-mode .vendor-pricing-card .feature-text-on,
-.dark-style .vendor-pricing-card .feature-text-on {
-  color: #ffffff !important;
-}
-
-body.dark-mode .vendor-pricing-card .feature-icon-on,
-html.dark-style .vendor-pricing-card .feature-icon-on,
-.dark-mode .vendor-pricing-card .feature-icon-on,
-.dark-style .vendor-pricing-card .feature-icon-on {
-  color: #52ead2 !important;
-}
-
-body.dark-mode .vendor-pricing-card .feature-icon-off,
-html.dark-style .vendor-pricing-card .feature-icon-off,
-.dark-mode .vendor-pricing-card .feature-icon-off,
-.dark-style .vendor-pricing-card .feature-icon-off {
-  color: #ff4d4d !important;
-}
-
-body.dark-mode .vendor-pricing-card .feature-text-off,
-html.dark-style .vendor-pricing-card .feature-text-off,
-.dark-mode .vendor-pricing-card .feature-text-off,
-.dark-style .vendor-pricing-card .feature-text-off {
-  color: #cbd5e1 !important;
-}
-
-/* ── 3. Fleet Distribution Donut Chart & Legend ── */
-.donut {
-  width: 190px !important;
-  height: 190px !important;
-  display: grid !important;
-  place-items: center !important;
-  margin: 16px auto 24px !important;
-  border-radius: 999px !important;
-  background: conic-gradient(#52ead2 0 75%, #80a7ff 75% 100%) !important;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25) !important;
-}
-
-.donut-inner {
-  width: 122px !important;
-  height: 122px !important;
-  display: grid !important;
-  place-items: center !important;
-  border-radius: 999px !important;
-  background: #0b1020 !important;
-  text-align: center !important;
-  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4) !important;
-}
-
-.donut-count {
-  display: block !important;
-  font-size: 2rem !important;
-  font-weight: 800 !important;
-  color: #ffffff !important;
-  line-height: 1.1 !important;
-}
-
-.donut-label {
-  display: block !important;
-  font-size: 0.8rem !important;
-  font-weight: 700 !important;
-  color: #94a3b8 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.8px !important;
-  margin-top: 2px !important;
-}
-
-.legend {
-  display: grid !important;
-  gap: 10px !important;
-}
-
-.legend-item {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  gap: 12px !important;
-  color: #cbd5e1 !important;
-  font-size: 0.95rem !important;
-  font-weight: 600 !important;
-  padding: 4px 0 !important;
-}
-
-.legend-dot-auto {
-  width: 12px !important;
-  height: 12px !important;
-  display: inline-block !important;
-  margin-right: 10px !important;
-  border-radius: 50% !important;
-  background: #52ead2 !important;
-  box-shadow: 0 0 8px rgba(82, 234, 210, 0.5) !important;
-}
-
-.legend-dot-manual {
-  width: 12px !important;
-  height: 12px !important;
-  display: inline-block !important;
-  margin-right: 10px !important;
-  border-radius: 50% !important;
-  background: #80a7ff !important;
-  box-shadow: 0 0 8px rgba(128, 167, 255, 0.5) !important;
-}
-
-.legend-val {
-  color: #52ead2 !important;
-  font-weight: 800 !important;
-  font-size: 0.95rem !important;
-}
-
-/* Light Mode Donut Overrides */
-body.light-mode .donut,
-html.light-mode .donut,
-.light-mode .donut {
-  background: conic-gradient(#0891b2 0 75%, #2563eb 75% 100%) !important;
-  box-shadow: 0 8px 25px rgba(8, 145, 178, 0.15) !important;
-}
-
-body.light-mode .donut-inner,
-html.light-mode .donut-inner,
-.light-mode .donut-inner {
-  background: #ffffff !important;
-  box-shadow: inset 0 2px 8px rgba(15, 23, 42, 0.08) !important;
-}
-
-body.light-mode .donut-count,
-html.light-mode .donut-count,
-.light-mode .donut-count {
-  color: #0f172a !important;
-}
-
-body.light-mode .donut-label,
-html.light-mode .donut-label,
-.light-mode .donut-label {
-  color: #475569 !important;
-}
-
-body.light-mode .legend-item,
-html.light-mode .legend-item,
-.light-mode .legend-item {
-  color: #1e293b !important;
-}
-
-body.light-mode .legend-dot-auto,
-html.light-mode .legend-dot-auto,
-.light-mode .legend-dot-auto {
-  background: #0891b2 !important;
-  box-shadow: 0 0 8px rgba(8, 145, 178, 0.3) !important;
-}
-
-body.light-mode .legend-dot-manual,
-html.light-mode .legend-dot-manual,
-.light-mode .legend-dot-manual {
-  background: #2563eb !important;
-  box-shadow: 0 0 8px rgba(37, 99, 235, 0.3) !important;
-}
-
-body.light-mode .legend-val,
-html.light-mode .legend-val,
-.light-mode .legend-val {
-  color: #0f172a !important;
-}
-
-/* ── 4. Recent Activity List Overrides ── */
-.activity-item {
-  display: grid;
-  grid-template-columns: 38px 1fr auto;
-  gap: 12px;
-  align-items: start;
-  padding: 12px;
-  border: 1px solid #e2e8f0;
-  border-radius: var(--radius);
-  background: #ffffff;
-}
-
-.activity-item p {
-  margin: 0;
-  color: #334155;
-}
-
-.activity-item p strong {
-  color: #0891b2;
-  font-weight: 700;
-}
-
-.activity-item small {
-  color: #64748b;
-}
-
-body.light-mode .activity-item,
-html.light-mode .activity-item,
-.light-mode .activity-item {
-  background: #ffffff !important;
-  border: 1px solid #e2e8f0 !important;
-  color: #1e293b !important;
-}
-
-body.light-mode .activity-item p,
-html.light-mode .activity-item p,
-.light-mode .activity-item p {
-  color: #1e293b !important;
-  font-weight: 500 !important;
-}
-
-body.light-mode .activity-item p strong,
-html.light-mode .activity-item p strong,
-.light-mode .activity-item p strong {
-  color: #0891b2 !important;
-  font-weight: 800 !important;
-}
-
-body.light-mode .activity-item small,
-html.light-mode .activity-item small,
-.light-mode .activity-item small {
-  color: #64748b !important;
-  font-weight: 600 !important;
-}
-
-/* ── 5. Status Badges Light Mode Overrides ── */
-body.light-mode .status-badge-progress,
-html.light-mode .status-badge-progress,
-.light-mode .status-badge-progress {
-  background: rgba(37, 99, 235, 0.1) !important;
-  color: #1d4ed8 !important;
-  border: 1px solid rgba(37, 99, 235, 0.3) !important;
-  font-weight: 800 !important;
-}
-
-body.light-mode .status-badge-progress i {
-  color: #1d4ed8 !important;
-}
-
-body.light-mode .status-badge-ended,
-html.light-mode .status-badge-ended,
-.light-mode .status-badge-ended {
-  background: #f1f5f9 !important;
-  color: #334155 !important;
-  border: 1px solid #cbd5e1 !important;
-  font-weight: 800 !important;
-}
-
-/* ── 6. View T&C Button Light Mode Overrides ── */
-body.light-mode .btn-view-tc,
-html.light-mode .btn-view-tc,
-.light-mode .btn-view-tc {
-  background: rgba(15, 118, 110, 0.1) !important;
-  color: #0f766e !important;
-  border: none !important;
-  outline: none !important;
-  box-shadow: none !important;
-  font-weight: 700 !important;
-}
-
-body.light-mode .btn-view-tc:hover,
-html.light-mode .btn-view-tc:hover,
-.light-mode .btn-view-tc:hover {
-  background: rgba(15, 118, 110, 0.18) !important;
-  color: #0f766e !important;
-  border: none !important;
-  outline: none !important;
-}
-
-/* ── 7. Header Branch Selector Theme Styles ── */
-.header-branch-select option {
-  background: #0b1020 !important;
-  color: #ffffff !important;
-}
-
-body.light-mode .header-branch-select,
-html.light-mode .header-branch-select,
-.light-mode .header-branch-select {
-  background: #ffffff !important;
-  color: #0f172a !important;
-  border: 1px solid #cbd5e1 !important;
-  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06) !important;
-  font-weight: 700 !important;
-}
-
-body.light-mode .header-branch-select option,
-html.light-mode .header-branch-select option,
-.light-mode .header-branch-select option {
-  background: #ffffff !important;
-  color: #0f172a !important;
-}
-
-body.light-mode .branch-label,
-html.light-mode .branch-label,
-.light-mode .branch-label {
-  color: #475569 !important;
-  font-weight: 700 !important;
-}
-
-body.light-mode .branch-icon,
-html.light-mode .branch-icon,
-.light-mode .branch-icon,
-body.light-mode .branch-arrow-icon,
-html.light-mode .branch-arrow-icon,
-.light-mode .branch-arrow-icon {
-  color: #0891b2 !important;
-}
-
-/* ── 8. Profile Trigger Button Theme Styles ── */
-body.light-mode .profile-trigger-btn,
-html.light-mode .profile-trigger-btn,
-.light-mode .profile-trigger-btn {
-  background: #ffffff !important;
-  color: #0f172a !important;
-  border: 1px solid #cbd5e1 !important;
-  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06) !important;
-}
-
-body.light-mode .header-user-name,
-html.light-mode .header-user-name,
-.light-mode .header-user-name {
-  color: #0f172a !important;
-  font-weight: 700 !important;
-}
-
-body.light-mode .profile-arrow-icon,
-html.light-mode .profile-arrow-icon,
-.light-mode .profile-arrow-icon {
-  color: #0891b2 !important;
-}
-
-/* ── 9. CKEditor Light Mode Content Area Overrides ── */
-body.light-mode .cke_contents,
-html.light-mode .cke_contents,
-.light-mode .cke_contents,
-body.light-mode .cke_wysiwyg_frame,
-html.light-mode .cke_wysiwyg_frame,
-.light-mode .cke_wysiwyg_frame,
-body.light-mode .cke_wysiwyg_div,
-html.light-mode .cke_wysiwyg_div,
-.light-mode .cke_wysiwyg_div {
-  background-color: #ffffff !important;
-  background: #ffffff !important;
   color: #0f172a !important;
 }

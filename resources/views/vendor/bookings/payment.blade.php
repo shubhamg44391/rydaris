@@ -102,11 +102,13 @@
                                         <i class="fa fa-star me-1"></i> {{ $booking->review->rating }}★ Review
                                     </a>
                                 @elseif($booking->is_completed_or_ended)
-                                    <span class="badge" style="background: rgba(255, 255, 255, 0.05); color: #94a3b8; border: 1px solid rgba(255, 255, 255, 0.1); padding: 5px 10px; font-size: 0.78rem;" title="Trip Ended - Awaiting Customer Review">
-                                        <i class="fa fa-star-half-alt me-1" style="color: #fbbf24;"></i> Trip Ended
+                                    <span class="badge status-badge-ended" style="background: rgba(148, 163, 184, 0.12); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.25); padding: 5px 12px; font-size: 0.78rem; border-radius: 999px; display: inline-flex; align-items: center; gap: 5px; font-weight: 700;" title="Trip Ended - Awaiting Customer Review">
+                                        <i class="fa fa-flag-checkered" style="font-size: 0.72rem; color: #fbbf24;"></i> TRIP ENDED
                                     </span>
                                 @else
-                                    <span style="font-size: 0.78rem; color: #64748b;">In Progress</span>
+                                    <span class="badge status-badge-progress" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); padding: 5px 12px; font-size: 0.78rem; border-radius: 999px; display: inline-flex; align-items: center; gap: 5px; font-weight: 700;" title="Trip Currently In Progress">
+                                        <i class="fa fa-spinner fa-spin" style="font-size: 0.72rem; color: #60a5fa;"></i> IN PROGRESS
+                                    </span>
                                 @endif
                             </td>
                         </tr>

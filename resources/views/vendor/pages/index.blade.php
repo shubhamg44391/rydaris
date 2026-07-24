@@ -109,12 +109,33 @@
         // Initialize CKEditor 4 Full safely
         try {
             if (typeof CKEDITOR !== 'undefined') {
-                CKEDITOR.replace('tc_description', {
+                const isLightMode = document.body.classList.contains('light-mode') || document.documentElement.classList.contains('light-mode');
+                const editor = CKEDITOR.replace('tc_description', {
                     height: 480,
                     versionCheck: false,
-                    uiColor: '#2a3248',
-                    contentsCss: 'body { background-color: #050711; color: #f8fafc; font-family: Inter, sans-serif; } a { color: #52ead2; }'
+                    uiColor: isLightMode ? '#f1f5f9' : '#2a3248',
+                    contentsCss: isLightMode 
+                        ? 'body { background-color: #ffffff; color: #0f172a; font-family: Inter, sans-serif; } a { color: #0284c7; }' 
+                        : 'body { background-color: #050711; color: #f8fafc; font-family: Inter, sans-serif; } a { color: #52ead2; }'
                 });
+
+                const updateEditorTheme = () => {
+                    if (editor && editor.document) {
+                        const body = editor.document.getBody();
+                        if (body) {
+                            const isLight = document.body.classList.contains('light-mode') || document.documentElement.classList.contains('light-mode');
+                            if (isLight) {
+                                body.setStyle('background-color', '#ffffff');
+                                body.setStyle('color', '#0f172a');
+                            } else {
+                                body.setStyle('background-color', '#050711');
+                                body.setStyle('color', '#f8fafc');
+                            }
+                        }
+                    }
+                };
+
+                editor.on('instanceReady', updateEditorTheme);
             } else {
                 console.warn('CKEDITOR is not defined, skipping initialization.');
             }

@@ -163,91 +163,90 @@
 
     
     
-    <div id="vendorPanelOverlay" onclick="closeVendorPanel()" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:1040; backdrop-filter:blur(4px);"></div>
+    <!-- Vendor Details Off-Canvas Slide-Over Panel Overlay -->
+    <div id="vendorPanelOverlay" class="vendor-panel-overlay" onclick="closeVendorPanel()"></div>
 
-    
-    <div id="vendorDetailPanel" style="display:none; position:fixed; top:0; right:0; height:100vh; width:420px; max-width:100vw; background:#0d1526; border-left:1px solid rgba(255,255,255,0.08); z-index:1050; overflow-y:auto; padding:0; box-shadow:-20px 0 60px rgba(0,0,0,0.5); transition:transform 0.3s ease; font-family:'Inter',sans-serif;">
+    <!-- Vendor Details Slide-Over Drawer -->
+    <div id="vendorDetailPanel" class="vendor-detail-panel">
 
-        
-        <div style="padding:20px 24px; border-bottom:1px solid rgba(255,255,255,0.07); display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.02);">
+        <!-- Panel Header -->
+        <div class="vendor-panel-header">
             <div style="display:flex; align-items:center; gap:10px;">
-                <div style="width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg, var(--brand,#52ead2), #2bc2a8); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1rem; color:#050711;" id="panelAvatar">V</div>
+                <div class="vendor-panel-avatar" id="panelAvatar">V</div>
                 <div>
-                    <div id="panelName" style="font-weight:700; font-size:1rem; color:#f8fafc;">Vendor Name</div>
-                    <div id="panelHeaderUsername" style="font-size:0.78rem; color:#64748b; margin-top:2px;"></div>
+                    <div id="panelName" class="vendor-panel-name">Vendor Name</div>
+                    <div id="panelHeaderUsername" class="vendor-panel-username"></div>
                     <div id="panelStatus" style="font-size:0.75rem; margin-top:4px;"></div>
                 </div>
             </div>
-            <button onclick="closeVendorPanel()" style="background:none; border:none; color:#94a3b8; font-size:1.4rem; cursor:pointer; line-height:1;">&times;</button>
+            <button onclick="closeVendorPanel()" class="vendor-panel-close">&times;</button>
         </div>
 
-        
-        <div style="padding:20px 24px;">
-            <p style="font-size:0.7rem; font-weight:700; color:#52ead2; text-transform:uppercase; letter-spacing:1px; margin-bottom:12px;">Vendor Details</p>
-            <div style="display:flex; flex-direction:column; gap:10px;">
-                <div style="display:flex; justify-content:space-between; padding:10px 14px; background:rgba(255,255,255,0.03); border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
-                    <span style="color:#94a3b8; font-size:0.83rem;">Email</span>
-                    <span id="panelEmail" style="color:#f1f5f9; font-size:0.83rem; font-weight:600;"></span>
+        <!-- Vendor Details Section -->
+        <div class="vendor-panel-section">
+            <p class="vendor-panel-section-title">Vendor Details</p>
+            <div class="vendor-panel-grid">
+                <div class="vendor-panel-row">
+                    <span class="vendor-panel-label">Email</span>
+                    <span id="panelEmail" class="vendor-panel-val"></span>
                 </div>
-                <div style="display:flex; justify-content:space-between; padding:10px 14px; background:rgba(255,255,255,0.03); border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
-                    <span style="color:#94a3b8; font-size:0.83rem;">Phone</span>
-                    <span id="panelPhone" style="color:#f1f5f9; font-size:0.83rem; font-weight:600;"></span>
+                <div class="vendor-panel-row">
+                    <span class="vendor-panel-label">Phone</span>
+                    <span id="panelPhone" class="vendor-panel-val"></span>
                 </div>
-                <div style="display:flex; justify-content:space-between; padding:10px 14px; background:rgba(255,255,255,0.03); border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
-                    <span style="color:#94a3b8; font-size:0.83rem;">Company</span>
-                    <span id="panelCompany" style="color:#f1f5f9; font-size:0.83rem; font-weight:600;"></span>
+                <div class="vendor-panel-row">
+                    <span class="vendor-panel-label">Company</span>
+                    <span id="panelCompany" class="vendor-panel-val"></span>
                 </div>
-                <div style="display:flex; justify-content:space-between; padding:10px 14px; background:rgba(255,255,255,0.03); border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
-                    <span style="color:#94a3b8; font-size:0.83rem;">Username</span>
-                    <span id="panelUsername" style="color:#f1f5f9; font-size:0.83rem; font-weight:600;"></span>
+                <div class="vendor-panel-row">
+                    <span class="vendor-panel-label">Username</span>
+                    <span id="panelUsername" class="vendor-panel-val"></span>
                 </div>
-                <div style="display:flex; justify-content:space-between; padding:10px 14px; background:rgba(255,255,255,0.03); border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
-                    <span style="color:#94a3b8; font-size:0.83rem;">Joined</span>
-                    <span id="panelJoined" style="color:#f1f5f9; font-size:0.83rem; font-weight:600;"></span>
+                <div class="vendor-panel-row">
+                    <span class="vendor-panel-label">Joined</span>
+                    <span id="panelJoined" class="vendor-panel-val"></span>
                 </div>
             </div>
         </div>
 
-        
-        <div style="margin:0 24px; height:1px; background:rgba(255,255,255,0.07);"></div>
+        <div class="vendor-panel-divider"></div>
 
-        
-        <div style="padding:20px 24px;">
-            <p style="font-size:0.7rem; font-weight:700; color:#52ead2; text-transform:uppercase; letter-spacing:1px; margin-bottom:12px;">Address Details</p>
-            <div style="display:flex; flex-direction:column; gap:10px;">
-                <div style="display:flex; justify-content:space-between; padding:10px 14px; background:rgba(255,255,255,0.03); border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
-                    <span style="color:#94a3b8; font-size:0.83rem;">Street Address</span>
-                    <span id="panelAddress" style="color:#f1f5f9; font-size:0.83rem; font-weight:600;"></span>
+        <!-- Address Details Section -->
+        <div class="vendor-panel-section">
+            <p class="vendor-panel-section-title">Address Details</p>
+            <div class="vendor-panel-grid">
+                <div class="vendor-panel-row">
+                    <span class="vendor-panel-label">Street Address</span>
+                    <span id="panelAddress" class="vendor-panel-val"></span>
                 </div>
-                <div style="display:flex; justify-content:space-between; padding:10px 14px; background:rgba(255,255,255,0.03); border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
-                    <span style="color:#94a3b8; font-size:0.83rem;">Landmark</span>
-                    <span id="panelLandmark" style="color:#f1f5f9; font-size:0.83rem; font-weight:600;"></span>
+                <div class="vendor-panel-row">
+                    <span class="vendor-panel-label">Landmark</span>
+                    <span id="panelLandmark" class="vendor-panel-val"></span>
                 </div>
-                <div style="display:flex; justify-content:space-between; padding:10px 14px; background:rgba(255,255,255,0.03); border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
-                    <span style="color:#94a3b8; font-size:0.83rem;">City</span>
-                    <span id="panelCity" style="color:#f1f5f9; font-size:0.83rem; font-weight:600;"></span>
+                <div class="vendor-panel-row">
+                    <span class="vendor-panel-label">City</span>
+                    <span id="panelCity" class="vendor-panel-val"></span>
                 </div>
-                <div style="display:flex; justify-content:space-between; padding:10px 14px; background:rgba(255,255,255,0.03); border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
-                    <span style="color:#94a3b8; font-size:0.83rem;">Pincode</span>
-                    <span id="panelPincode" style="color:#f1f5f9; font-size:0.83rem; font-weight:600;"></span>
+                <div class="vendor-panel-row">
+                    <span class="vendor-panel-label">Pincode</span>
+                    <span id="panelPincode" class="vendor-panel-val"></span>
                 </div>
-                <div style="display:flex; justify-content:space-between; padding:10px 14px; background:rgba(255,255,255,0.03); border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
-                    <span style="color:#94a3b8; font-size:0.83rem;">Country</span>
-                    <span id="panelCountry" style="color:#f1f5f9; font-size:0.83rem; font-weight:600;"></span>
+                <div class="vendor-panel-row">
+                    <span class="vendor-panel-label">Country</span>
+                    <span id="panelCountry" class="vendor-panel-val"></span>
                 </div>
             </div>
         </div>
 
-        
-        <div style="margin:0 24px; height:1px; background:rgba(255,255,255,0.07);"></div>
+        <div class="vendor-panel-divider"></div>
 
-        
-        <div style="padding:20px 24px;">
-            <p style="font-size:0.7rem; font-weight:700; color:#52ead2; text-transform:uppercase; letter-spacing:1px; margin-bottom:12px; display:flex; align-items:center; gap:6px;">
+        <!-- Package History Section -->
+        <div class="vendor-panel-section">
+            <p class="vendor-panel-section-title">
                 <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
                 Package History
             </p>
-            <div id="panelPackages" style="display:flex; flex-direction:column; gap:10px;">
+            <div id="panelPackages" class="vendor-panel-grid">
                 
             </div>
         </div>
@@ -342,18 +341,18 @@
                     subs.forEach(s => {
                         const isActive = s.status === 'active';
                         const card = document.createElement('div');
-                        card.style.cssText = `padding:12px 16px; border-radius:10px; border:1px solid ${isActive ? 'rgba(82,234,210,0.3)' : 'rgba(255,255,255,0.06)'}; background:${isActive ? 'rgba(82,234,210,0.06)' : 'rgba(255,255,255,0.02)'};`;
+                        card.className = `vendor-pkg-card ${isActive ? 'active' : 'inactive'}`;
                         card.innerHTML = `
-                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                                <span style="font-weight:700; color:${isActive ? '#52ead2' : '#94a3b8'}; font-size:0.9rem; display:flex; align-items:center; gap:6px;">
+                            <div class="vendor-pkg-head">
+                                <span class="vendor-pkg-title">
                                     <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
                                     ${s.pkg}
                                 </span>
-                                <span style="font-size:0.72rem; font-weight:700; padding:3px 9px; border-radius:20px; ${isActive ? 'background:#dcfce7; color:#067647;' : 'background:#f1f5f9; color:#64748b;'}">${isActive ? 'Active' : s.status.charAt(0).toUpperCase() + s.status.slice(1)}</span>
+                                <span class="vendor-pkg-badge">${isActive ? 'Active' : s.status.charAt(0).toUpperCase() + s.status.slice(1)}</span>
                             </div>
-                            <div style="font-size:0.75rem; color:#64748b; display:flex; gap:12px; flex-wrap:wrap;">
+                            <div class="vendor-pkg-meta">
                                 <span>📅 ${s.starts} → ${s.ends}</span>
-                                ${s.amount > 0 ? `<span>💰 $${(parseFloat(s.amount) / 83).toFixed(2)}</span>` : '<span style="color:#52ead2;">Free</span>'}
+                                ${s.amount > 0 ? `<span>💰 $${(parseFloat(s.amount) / 83).toFixed(2)}</span>` : '<span class="vendor-pkg-free">Free</span>'}
                             </div>`;
                         pkgContainer.appendChild(card);
                     });

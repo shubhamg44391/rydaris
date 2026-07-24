@@ -1,0 +1,176 @@
+/* ==========================================================================
+   RYDARIS CUSTOMER PORTAL CSS
+   ========================================================================== */
+@import url('common.css');
+
+/* Stepper Bar */
+body.light-mode .stepper-wrapper {
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+}
+
+body.light-mode .stepper-wrapper div[style*="background: rgba(255, 255, 255, 0.1)"] {
+  background: rgba(15, 23, 42, 0.1) !important;
+}
+
+body.light-mode .stepper-wrapper .step span {
+  color: #64748b !important;
+}
+
+body.light-mode .stepper-wrapper .step span[style*="color: var(--brand)"],
+body.light-mode .stepper-wrapper .step span[style*="color: #52ead2"] {
+  color: #0f766e !important;
+}
+
+body.light-mode .stepper-wrapper div[style*="border: 1px solid rgba(255, 255, 255, 0.2)"] {
+  border-color: rgba(15, 23, 42, 0.2) !important;
+  color: #64748b !important;
+}
+
+/* Cards (Coverage, Equipment, Summary, Information, Payment) */
+body.light-mode .booking-coverage-page .card,
+body.light-mode .booking-coverage-page div[style*="background: rgba(11, 16, 32"],
+body.light-mode .booking-coverage-page div[style*="background: rgba(16, 23, 42"] {
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+  color: #0f172a !important;
+}
+
+/* Headings */
+body.light-mode .booking-coverage-page h3,
+body.light-mode .booking-coverage-page h4,
+body.light-mode .booking-coverage-page h5,
+body.light-mode .booking-coverage-page h6,
+body.light-mode .booking-coverage-page h3[style*="color"],
+body.light-mode .booking-coverage-page h4[style*="color"],
+body.light-mode .booking-coverage-page h5[style*="color"],
+body.light-mode .booking-coverage-page h6[style*="color"] {
+  color: #0f172a !important;
+}
+
+/* Table in Coverage */
+body.light-mode .booking-coverage-page table {
+  color: #0f172a !important;
+}
+
+body.light-mode .booking-coverage-page th {
+  color: #64748b !important;
+  border-bottom-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-mode .booking-coverage-page td {
+  color: #0f172a !important;
+  border-bottom-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-mode .booking-coverage-page td[style*="color: #cbd5e1"] {
+  color: #334155 !important;
+}
+
+body.light-mode .insurance-btn.btn-outline-light {
+  border-color: rgba(15, 23, 42, 0.2) !important;
+  color: #0f172a !important;
+  background: transparent !important;
+}
+
+body.light-mode .insurance-btn.btn-outline-light:hover {
+  background: rgba(15, 23, 42, 0.05) !important;
+  border-color: #0f766e !important;
+}
+
+/* Equipment items */
+body.light-mode .equipment-item {
+  border-bottom-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-mode .equipment-item div[style*="color: #94a3b8"] {
+  color: #64748b !important;
+}
+
+body.light-mode .equipment-item div[style*="background: rgba(255,255,255,0.05)"] {
+  background: #f1f5f9 !important;
+  border-color: rgba(15, 23, 42, 0.1) !important;
+}
+
+body.light-mode .equipment-item button {
+  color: #0f172a !important;
+}
+
+body.light-mode .equipment-item span[id^="extra-qty-"] {
+  color: #0f172a !important;
+}
+
+/* Summary Sidebar details */
+body.light-mode .summary-sidebar div[style*="background: radial-gradient"] {
+  background: radial-gradient(circle, rgba(15, 23, 42, 0.03) 0%, rgba(0, 0, 0, 0) 70%) !important;
+}
+
+body.light-mode .summary-sidebar div[style*="background: rgba(255,255,255,0.03)"] {
+  background: #f8fafc !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+body.light-mode .summary-sidebar span[style*="color: #94a3b8"] {
+  color: #64748b !important;
+}
+
+body.light-mode .summary-sidebar span[style*="color: #cbd5e1"],
+body.light-mode .summary-sidebar span[style*="color: #f8fafc"] {
+  color: #0f172a !important;
+}
+
+body.light-mode .summary-sidebar div[style*="background: rgba(82, 234, 210, 0.05)"] {
+  background: rgba(15, 118, 110, 0.06) !important;
+  border-top-color: rgba(15, 118, 110, 0.15) !important;
+}
+
+body.light-mode .summary-sidebar span[id="grand-total"] {
+  color: #0f766e !important;
+}
+
+/* Inputs & Form Labels in Booking Pages */
+body.light-mode .booking-coverage-page label {
+  color: #0f172a !important;
+}
+
+body.light-mode .booking-coverage-page input,
+body.light-mode .booking-coverage-page select,
+body.light-mode .booking-coverage-page textarea {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid rgba(15, 23, 42, 0.15) !important;
+}
+
+body.light-mode .booking-coverage-page input::placeholder,
+body.light-mode .booking-coverage-page textarea::placeholder {
+  color: #64748b !important;
+}
+
+body.light-mode .booking-coverage-page h1,
+body.light-mode .booking-coverage-page h2,
+body.light-mode .booking-coverage-page h3,
+body.light-mode .booking-coverage-page h4,
+body.light-mode .booking-coverage-page h5,
+body.light-mode .booking-coverage-page h6,
+body.light-mode .booking-coverage-page h1[style*="color"],
+body.light-mode .booking-coverage-page h2[style*="color"],
+body.light-mode .booking-coverage-page h3[style*="color"],
+body.light-mode .booking-coverage-page h4[style*="color"],
+body.light-mode .booking-coverage-page h5[style*="color"],
+body.light-mode .booking-coverage-page h6[style*="color"] {
+  color: #0f172a !important;
+}
+
+body.light-mode .booking-coverage-page p[style*="color: #94a3b8"],
+body.light-mode .booking-coverage-page p[style*="color: #cbd5e1"],
+body.light-mode .booking-coverage-page span[style*="color: #94a3b8"],
+body.light-mode .booking-coverage-page div[style*="color: #94a3b8"] {
+  color: #64748b !important;
+}
+
+body.light-mode .booking-coverage-page span[style*="color: #fff"],
+body.light-mode .booking-coverage-page span[style*="color: #ffffff"] {
+  color: #0f172a !important;
+}

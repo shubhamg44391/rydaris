@@ -252,10 +252,10 @@
               <div><h2>Fleet Distribution</h2><p class="panel-muted">Distribution of vehicles by gear transmission type.</p></div>
             </div>
             <div class="panel-body">
-              <div class="donut"><div class="donut-inner"><div><strong>{{ $totalVehicles }}</strong><span class="panel-muted">vehicles</span></div></div></div>
+              <div class="donut"><div class="donut-inner"><div><strong class="donut-count">{{ $totalVehicles }}</strong><span class="donut-label">vehicles</span></div></div></div>
               <div class="legend">
-                <span><b><i style="background: var(--brand);"></i>Automatic</b><strong>{{ $autoPercent }}%</strong></span>
-                <span><b><i style="background: rgba(82, 234, 210, 0.4);"></i>Manual</b><strong>{{ $manualPercent }}%</strong></span>
+                <span class="legend-item"><b><i class="legend-dot-auto"></i>Automatic</b><strong class="legend-val">{{ $autoPercent }}%</strong></span>
+                <span class="legend-item"><b><i class="legend-dot-manual"></i>Manual</b><strong class="legend-val">{{ $manualPercent }}%</strong></span>
               </div>
             </div>
           </article>
@@ -283,13 +283,13 @@
               @forelse($recentBookings as $b)
                 <div class="activity-item">
                   @if($b->checkin_status)
-                    <span class="admin-icon" style="background: rgba(82, 234, 210, 0.1); color: var(--brand);"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>
-                    <p><strong>{{ $b->vehicle->name ?? 'Vehicle' }}</strong> check-in completed by customer <strong>{{ $b->customer_fname }} {{ $b->customer_lname }}</strong>.</p>
+                    <span class="admin-icon" style="background: rgba(8, 145, 178, 0.1); color: #0891b2;"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>
+                    <p><strong>{{ optional($b->vehicle)->name ?: 'Vehicle #' . ($b->vehicle_id ?? '') }}</strong> check-in completed by customer <strong>{{ trim(($b->customer_fname ?? '') . ' ' . ($b->customer_lname ?? '')) ?: 'Customer' }}</strong>.</p>
                   @else
-                    <span class="admin-icon" style="background: rgba(82, 234, 210, 0.1); color: var(--brand);"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>
-                    <p>New booking request received for <strong>{{ $b->vehicle->name ?? 'Vehicle' }}</strong>.</p>
+                    <span class="admin-icon" style="background: rgba(8, 145, 178, 0.1); color: #0891b2;"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+                    <p>New booking request received for <strong>{{ optional($b->vehicle)->name ?: 'Vehicle #' . ($b->vehicle_id ?? '') }}</strong>.</p>
                   @endif
-                  <small>{{ $b->created_at->diffForHumans() }}</small>
+                  <small>{{ $b->created_at ? $b->created_at->diffForHumans() : 'Recently' }}</small>
                 </div>
               @empty
                 <p style="color: #64748b; font-style: italic; font-size: 0.9rem; padding: 10px 0;">No recent activities.</p>

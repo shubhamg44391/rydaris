@@ -553,9 +553,11 @@ Route::prefix('demo')->name('demo.')->group(function () {
     Route::get('/bookings', [$demo, 'bookings'])->name('bookings');
     Route::get('/bookings/payment', [$demo, 'bookingsPayment'])->name('bookings.payment');
 
+    Route::get('/groups', [$demo, 'groups'])->name('groups');
     Route::get('/vehicles', [$demo, 'vehicles'])->name('vehicles');
     Route::get('/vehicles/create', [$demo, 'vehiclesCreate'])->name('vehicles.create');
 
+    Route::get('/branches', [$demo, 'branches'])->name('branches');
     Route::get('/locations', [$demo, 'locations'])->name('locations');
     Route::get('/locations/create', [$demo, 'locationsCreate'])->name('locations.create');
 

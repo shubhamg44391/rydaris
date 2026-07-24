@@ -485,8 +485,13 @@ h3 {
 }
 
 @keyframes scroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 .grid {
@@ -884,6 +889,7 @@ textarea:focus {
 }
 
 @media (max-width: 560px) {
+
   .wrap,
   .nav {
     width: min(100% - 24px, 1180px);
@@ -1549,6 +1555,7 @@ textarea:focus {
 }
 
 @media (max-width: 720px) {
+
   .admin-topbar,
   .admin-hero {
     align-items: stretch;
@@ -1571,7 +1578,7 @@ textarea:focus {
     grid-template-columns: 38px 1fr;
   }
 
-  .activity-item > small {
+  .activity-item>small {
     grid-column: 2;
   }
 }

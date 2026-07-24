@@ -1,11 +1,19 @@
 @extends('frontend.layout.main')
 
 @section('title', $seo_title ?? 'Pricing | Rydaris')
-
+<style>
+  .priceing .section{
+    padding: 30px 0px;
+  }
+  .priceing .page-hero {
+    padding: 150px 0 0;
+  }
+  
+</style>
 @section('content')
   <link rel="stylesheet" href="{{ asset('assets/admin/vendor/fonts/boxicons.css') }}" />
-  <main>
-    <section class="page-hero">
+  <main class="priceing">
+    <section class="page-hero" >
       <div class="wrap">
         <p class="eyebrow">Pricing</p>
         <h1 class="page-title">Plans for every stage of fleet growth.</h1>
@@ -13,7 +21,7 @@
       </div>
     </section>
 
-    <section class="section light">
+    <section class="section light" style="padding-top: 0;">
       <div class="wrap">
         <div class="grid cols-3">
           @forelse ($packages as $pkg)
@@ -334,7 +342,6 @@
     </style>
 
     <script>
-      // Close modal if clicking outside of it
       window.onclick = function(event) {
         const modal = document.getElementById('customPackageModal');
         if (event.target == modal) {

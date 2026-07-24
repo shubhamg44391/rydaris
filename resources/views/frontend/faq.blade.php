@@ -71,15 +71,22 @@
   </main>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      document.querySelectorAll('details.faq-item').forEach((el) => {
-        el.addEventListener('toggle', (e) => {
-          if (el.open) {
-            document.querySelectorAll('details.faq-item').forEach((otherEl) => {
-              if (otherEl !== el && otherEl.open) {
-                otherEl.open = false;
-              }
-            });
+    document.addEventListener('DOMContentLoaded', function () {
+      const allFaqs = document.querySelectorAll('details.faq-item');
+
+      allFaqs.forEach(function (details) {
+        const summary = details.querySelector('summary');
+        summary.addEventListener('click', function (e) {
+          e.preventDefault();
+
+          const isOpen = details.hasAttribute('open');
+
+          allFaqs.forEach(function (d) {
+            d.removeAttribute('open');
+          });
+
+          if (!isOpen) {
+            details.setAttribute('open', '');
           }
         });
       });

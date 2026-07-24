@@ -28,16 +28,16 @@
             <svg class="chevron" viewBox="0 0 24 24" style="width: 14px; height: 14px; transition: transform 0.2s ease; {{ Request::is('admin/faqs*') ? 'transform: rotate(180deg);' : '' }}"><path d="m6 9 6 6 6-6"/></svg>
         </a>
         <div class="admin-submenu" style="{{ Request::is('admin/faqs*') ? 'display: flex;' : 'display: none;' }} padding-left: 20px; margin-top: 4px; flex-direction: column; gap: 4px;">
-            <a href="{{ route('admin.faqs.index', ['category' => 'product_basics']) }}" class="submenu-item {{ (Request::is('admin/faqs*') && request('category') === 'product_basics') ? 'active' : '' }}" style="{{ (Request::is('admin/faqs*') && request('category') === 'product_basics') ? 'color: var(--brand, #52ead2) !important; font-weight: bold; background: rgba(255, 255, 255, 0.04) !important;' : '' }} text-decoration: none;">
-                <span class="dot" style="{{ (Request::is('admin/faqs*') && request('category') === 'product_basics') ? 'background: var(--brand, #52ead2) !important;' : '' }}"></span>
+            <a href="{{ route('admin.faqs.index', ['category' => 'product_basics']) }}" class="submenu-item {{ (Request::is('admin/faqs*') && request('category') === 'product_basics') ? 'active' : '' }}" style="text-decoration: none;">
+                <span class="dot"></span>
                 Product Basics
             </a>
-            <a href="{{ route('admin.faqs.index', ['category' => 'onboarding']) }}" class="submenu-item {{ (Request::is('admin/faqs*') && request('category') === 'onboarding') ? 'active' : '' }}" style="{{ (Request::is('admin/faqs*') && request('category') === 'onboarding') ? 'color: var(--brand, #52ead2) !important; font-weight: bold; background: rgba(255, 255, 255, 0.04) !important;' : '' }} text-decoration: none;">
-                <span class="dot" style="{{ (Request::is('admin/faqs*') && request('category') === 'onboarding') ? 'background: var(--brand, #52ead2) !important;' : '' }}"></span>
+            <a href="{{ route('admin.faqs.index', ['category' => 'onboarding']) }}" class="submenu-item {{ (Request::is('admin/faqs*') && request('category') === 'onboarding') ? 'active' : '' }}" style="text-decoration: none;">
+                <span class="dot"></span>
                 Onboarding
             </a>
-            <a href="{{ route('admin.faqs.index', ['category' => 'reporting']) }}" class="submenu-item {{ (Request::is('admin/faqs*') && request('category') === 'reporting') ? 'active' : '' }}" style="{{ (Request::is('admin/faqs*') && request('category') === 'reporting') ? 'color: var(--brand, #52ead2) !important; font-weight: bold; background: rgba(255, 255, 255, 0.04) !important;' : '' }} text-decoration: none;">
-                <span class="dot" style="{{ (Request::is('admin/faqs*') && request('category') === 'reporting') ? 'background: var(--brand, #52ead2) !important;' : '' }}"></span>
+            <a href="{{ route('admin.faqs.index', ['category' => 'reporting']) }}" class="submenu-item {{ (Request::is('admin/faqs*') && request('category') === 'reporting') ? 'active' : '' }}" style="text-decoration: none;">
+                <span class="dot"></span>
                 Reporting
             </a>
         </div>
@@ -63,7 +63,7 @@
 
     
     <div class="admin-nav-group">
-        <a href="javascript:void(0);" class="nav-toggle" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ Request::is('admin/contact-inquiries*') || Request::is('admin/demo-inquiries*') ? 'color: #f8fafc; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb;' }} font-size: 0.92rem; font-weight: 780; transition: background 0.2s; text-decoration: none;">
+        <a href="javascript:void(0);" class="nav-toggle {{ Request::is('admin/contact-inquiries*') || Request::is('admin/demo-inquiries*') ? 'active' : '' }}" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); font-size: 0.92rem; font-weight: 780; transition: background 0.2s; text-decoration: none;">
             <span style="display: flex; align-items: center; gap: 10px;">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
@@ -73,12 +73,12 @@
             <svg class="chevron" viewBox="0 0 24 24" style="width: 14px; height: 14px; transition: transform 0.2s ease; {{ Request::is('admin/contact-inquiries*') || Request::is('admin/demo-inquiries*') ? 'transform: rotate(180deg);' : '' }}"><path d="m6 9 6 6 6-6"/></svg>
         </a>
         <div class="admin-submenu" style="{{ Request::is('admin/contact-inquiries*') || Request::is('admin/demo-inquiries*') ? 'display: flex;' : 'display: none;' }} padding-left: 20px; margin-top: 4px; flex-direction: column; gap: 4px;">
-            <a href="{{ route('admin.contact-inquiries.index') }}" class="submenu-item {{ Request::is('admin/contact-inquiries*') ? 'active' : '' }}" style="{{ Request::is('admin/contact-inquiries*') ? 'color: var(--brand, #52ead2) !important; font-weight: bold; background: rgba(255, 255, 255, 0.04) !important;' : '' }} text-decoration: none;">
-                <span class="dot" style="{{ Request::is('admin/contact-inquiries*') ? 'background: var(--brand, #52ead2) !important;' : '' }}"></span>
+            <a href="{{ route('admin.contact-inquiries.index') }}" class="submenu-item {{ Request::is('admin/contact-inquiries*') ? 'active' : '' }}" style="text-decoration: none;">
+                <span class="dot"></span>
               General Inquiry
             </a>
-            <a href="{{ route('admin.demo-inquiries.index') }}" class="submenu-item {{ Request::is('admin/demo-inquiries*') ? 'active' : '' }}" style="{{ Request::is('admin/demo-inquiries*') ? 'color: var(--brand, #52ead2) !important; font-weight: bold; background: rgba(255, 255, 255, 0.04) !important;' : '' }} text-decoration: none;">
-                <span class="dot" style="{{ Request::is('admin/demo-inquiries*') ? 'background: var(--brand, #52ead2) !important;' : '' }}"></span>
+            <a href="{{ route('admin.demo-inquiries.index') }}" class="submenu-item {{ Request::is('admin/demo-inquiries*') ? 'active' : '' }}" style="text-decoration: none;">
+                <span class="dot"></span>
                 Demo Inquiry
             </a>
         </div>
@@ -93,7 +93,7 @@
 
     
     <div class="admin-nav-group">
-        <a href="javascript:void(0);" class="nav-toggle" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ Request::is('admin/pages*') ? 'color: #f8fafc; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb;' }} font-size: 0.92rem; font-weight: 780; transition: background 0.2s; text-decoration: none;">
+        <a href="javascript:void(0);" class="nav-toggle {{ Request::is('admin/pages*') ? 'active' : '' }}" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); font-size: 0.92rem; font-weight: 780; transition: background 0.2s; text-decoration: none;">
             <span style="display: flex; align-items: center; gap: 10px;">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;">
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -103,8 +103,8 @@
             <svg class="chevron" viewBox="0 0 24 24" style="width: 14px; height: 14px; transition: transform 0.2s ease; {{ Request::is('admin/pages*') ? 'transform: rotate(180deg);' : '' }}"><path d="m6 9 6 6 6-6"/></svg>
         </a>
         <div class="admin-submenu" style="{{ Request::is('admin/pages*') ? 'display: flex;' : 'display: none;' }} padding-left: 20px; margin-top: 4px; flex-direction: column; gap: 4px;">
-            <a href="{{ route('admin.pages.index') }}" class="submenu-item {{ Request::is('admin/pages') && !Request::is('admin/pages/create') && !Request::is('admin/pages/*/edit') ? 'active' : '' }}" style="{{ Request::is('admin/pages') && !Request::is('admin/pages/create') && !Request::is('admin/pages/*/edit') ? 'color: var(--brand, #52ead2) !important; font-weight: bold; background: rgba(255, 255, 255, 0.04) !important;' : '' }} text-decoration: none;">
-                <span class="dot" style="{{ Request::is('admin/pages') && !Request::is('admin/pages/create') && !Request::is('admin/pages/*/edit') ? 'background: var(--brand, #52ead2) !important;' : '' }}"></span>
+            <a href="{{ route('admin.pages.index') }}" class="submenu-item {{ Request::is('admin/pages') && !Request::is('admin/pages/create') && !Request::is('admin/pages/*/edit') ? 'active' : '' }}" style="text-decoration: none;">
+                <span class="dot"></span>
                 All Pages
             </a>
             @php
@@ -115,8 +115,8 @@
                     $pageUrl = route('admin.pages.edit', $dbPage->id);
                     $isActiveSub = Request::is('admin/pages/' . $dbPage->id . '/edit') || (isset($page) && $page->id == $dbPage->id);
                 @endphp
-                <a href="{{ $pageUrl }}" class="submenu-item {{ $isActiveSub ? 'active' : '' }}" style="{{ $isActiveSub ? 'color: var(--brand, #52ead2) !important; font-weight: bold; background: rgba(255, 255, 255, 0.04) !important;' : '' }} text-decoration: none;">
-                    <span class="dot" style="{{ $isActiveSub ? 'background: var(--brand, #52ead2) !important;' : '' }}"></span>
+                <a href="{{ $pageUrl }}" class="submenu-item {{ $isActiveSub ? 'active' : '' }}" style="text-decoration: none;">
+                    <span class="dot"></span>
                     {{ $dbPage->title }}
                 </a>
             @endforeach
@@ -125,7 +125,7 @@
 
     
     <div class="admin-nav-group">
-        <a href="javascript:void(0);" class="nav-toggle" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ Request::is('admin/seo-settings*') ? 'color: #f8fafc; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb;' }} font-size: 0.92rem; font-weight: 780; transition: background 0.2s; text-decoration: none;">
+        <a href="javascript:void(0);" class="nav-toggle {{ Request::is('admin/seo-settings*') ? 'active' : '' }}" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); font-size: 0.92rem; font-weight: 780; transition: background 0.2s; text-decoration: none;">
             <span style="display: flex; align-items: center; gap: 10px;">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;">
                     <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
@@ -140,16 +140,16 @@
                 $isUserActive = (Request::is('admin/seo-settings') && request('type') === 'user') || (Request::is('admin/seo-settings/*/edit') && isset($seoMetadata) && $seoMetadata->portal_type === 'user');
                 $isVendorActive = (Request::is('admin/seo-settings') && request('type') === 'vendor') || (Request::is('admin/seo-settings/*/edit') && isset($seoMetadata) && $seoMetadata->portal_type === 'vendor');
             @endphp
-            <a href="{{ route('admin.seo-settings.index', ['type' => 'frontend']) }}" class="submenu-item {{ $isFrontendActive ? 'active' : '' }}" style="{{ $isFrontendActive ? 'color: var(--brand, #52ead2) !important; font-weight: bold; background: rgba(255, 255, 255, 0.04) !important;' : '' }} text-decoration: none;">
-                <span class="dot" style="{{ $isFrontendActive ? 'background: var(--brand, #52ead2) !important;' : '' }}"></span>
+            <a href="{{ route('admin.seo-settings.index', ['type' => 'frontend']) }}" class="submenu-item {{ $isFrontendActive ? 'active' : '' }}" style="text-decoration: none;">
+                <span class="dot"></span>
                 Frontend Pages
             </a>
-            <a href="{{ route('admin.seo-settings.index', ['type' => 'user']) }}" class="submenu-item {{ $isUserActive ? 'active' : '' }}" style="{{ $isUserActive ? 'color: var(--brand, #52ead2) !important; font-weight: bold; background: rgba(255, 255, 255, 0.04) !important;' : '' }} text-decoration: none;">
-                <span class="dot" style="{{ $isUserActive ? 'background: var(--brand, #52ead2) !important;' : '' }}"></span>
+            <a href="{{ route('admin.seo-settings.index', ['type' => 'user']) }}" class="submenu-item {{ $isUserActive ? 'active' : '' }}" style="text-decoration: none;">
+                <span class="dot"></span>
                 User Pages
             </a>
-            <a href="{{ route('admin.seo-settings.index', ['type' => 'vendor']) }}" class="submenu-item {{ $isVendorActive ? 'active' : '' }}" style="{{ $isVendorActive ? 'color: var(--brand, #52ead2) !important; font-weight: bold; background: rgba(255, 255, 255, 0.04) !important;' : '' }} text-decoration: none;">
-                <span class="dot" style="{{ $isVendorActive ? 'background: var(--brand, #52ead2) !important;' : '' }}"></span>
+            <a href="{{ route('admin.seo-settings.index', ['type' => 'vendor']) }}" class="submenu-item {{ $isVendorActive ? 'active' : '' }}" style="text-decoration: none;">
+                <span class="dot"></span>
                 Vendor Pages
             </a>
         </div>
@@ -157,7 +157,7 @@
 
     
     <div class="admin-nav-group">
-        <a href="javascript:void(0);" class="nav-toggle" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ Request::is('admin/settings*') ? 'color: #f8fafc; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb;' }} font-size: 0.92rem; font-weight: 780; transition: background 0.2s; text-decoration: none;">
+        <a href="javascript:void(0);" class="nav-toggle {{ Request::is('admin/settings*') ? 'active' : '' }}" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); font-size: 0.92rem; font-weight: 780; transition: background 0.2s; text-decoration: none;">
             <span style="display: flex; align-items: center; gap: 10px;">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="3"/>
@@ -167,16 +167,16 @@
             <svg class="chevron" viewBox="0 0 24 24" style="width: 14px; height: 14px; transition: transform 0.2s ease; {{ Request::is('admin/settings*') ? 'transform: rotate(180deg);' : '' }}"><path d="m6 9 6 6 6-6"/></svg>
         </a>
         <div class="admin-submenu" style="{{ Request::is('admin/settings*') ? 'display: flex;' : 'display: none;' }} padding-left: 20px; margin-top: 4px; flex-direction: column; gap: 4px;">
-            <a href="{{ route('admin.settings.general') }}" class="submenu-item {{ Request::is('admin/settings/general*') ? 'active' : '' }}" style="{{ Request::is('admin/settings/general*') ? 'color: var(--brand, #52ead2) !important; font-weight: bold; background: rgba(255, 255, 255, 0.04) !important;' : '' }} text-decoration: none;">
-                <span class="dot" style="{{ Request::is('admin/settings/general*') ? 'background: var(--brand, #52ead2) !important;' : '' }}"></span>
+            <a href="{{ route('admin.settings.general') }}" class="submenu-item {{ Request::is('admin/settings/general*') ? 'active' : '' }}" style="text-decoration: none;">
+                <span class="dot"></span>
                 General Contact
             </a>
-            <a href="{{ route('admin.settings.payment') }}" class="submenu-item {{ Request::is('admin/settings/payment*') ? 'active' : '' }}" style="{{ Request::is('admin/settings/payment*') ? 'color: var(--brand, #52ead2) !important; font-weight: bold; background: rgba(255, 255, 255, 0.04) !important;' : '' }} text-decoration: none;">
-                <span class="dot" style="{{ Request::is('admin/settings/payment*') ? 'background: var(--brand, #52ead2) !important;' : '' }}"></span>
+            <a href="{{ route('admin.settings.payment') }}" class="submenu-item {{ Request::is('admin/settings/payment*') ? 'active' : '' }}" style="text-decoration: none;">
+                <span class="dot"></span>
                 Payment Gateway
             </a>
-            <a href="{{ route('admin.settings.mail') }}" class="submenu-item {{ Request::is('admin/settings/mail*') ? 'active' : '' }}" style="{{ Request::is('admin/settings/mail*') ? 'color: var(--brand, #52ead2) !important; font-weight: bold; background: rgba(255, 255, 255, 0.04) !important;' : '' }} text-decoration: none;">
-                <span class="dot" style="{{ Request::is('admin/settings/mail*') ? 'background: var(--brand, #52ead2) !important;' : '' }}"></span>
+            <a href="{{ route('admin.settings.mail') }}" class="submenu-item {{ Request::is('admin/settings/mail*') ? 'active' : '' }}" style="text-decoration: none;">
+                <span class="dot"></span>
                 Mail Settings
             </a>
         </div>
@@ -196,10 +196,6 @@
         gap: 8px;
         border-radius: var(--radius);
         transition: all 0.2s;
-    }
-    .admin-submenu .submenu-item:hover {
-        color: var(--brand, #52ead2) !important;
-        background: rgba(255, 255, 255, 0.04) !important;
     }
     .admin-submenu .submenu-item .dot {
         width: 6px;

@@ -92,10 +92,30 @@
                             ];
                         @endphp
                         <td style="white-space: nowrap;">
-                            <button type="button" data-view='@json($bookingView)' onclick="demoOpenBooking(this)" style="background: none; border: none; color: var(--brand); text-decoration: underline; cursor: pointer; font-size: 0.85rem;">View</button>
-                        </td>
-                        <td style="white-space: nowrap;">
-                            <button type="button" data-view='@json($bookingView)' onclick="demoOpenBooking(this)" style="background: rgba(82,234,210,0.1); border: 1px solid rgba(82,234,210,0.25); color: var(--brand); padding: 6px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: 600; cursor: pointer;">View</button>
+                            <div style="display: inline-flex; align-items: center; gap: 8px;">
+                                <button type="button"
+                                    data-view='@json($bookingView)'
+                                    onclick="demoOpenBooking(this)"
+                                    title="Edit / View Details"
+                                    class="btn-action-edit"
+                                    style="width: 32px; height: 32px; border-radius: 8px; background: rgba(128, 167, 255, 0.08); border: 1px solid rgba(128, 167, 255, 0.25); color: #80a7ff; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; outline: none;"
+                                    onmouseover="this.style.background='rgba(128, 167, 255, 0.22)';this.style.transform='translateY(-1px)';"
+                                    onmouseout="this.style.background='rgba(128, 167, 255, 0.08)';this.style.transform='translateY(0)';"
+                                >
+                                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                                </button>
+
+                                <button type="button"
+                                    onclick="if(confirm('Are you sure you want to delete this booking?')) Swal.fire({title:'Deleted!', text:'Booking removed successfully.', icon:'success', timer:2000, showConfirmButton:false});"
+                                    title="Delete"
+                                    class="btn-action-delete"
+                                    style="width: 32px; height: 32px; border-radius: 8px; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25); color: #ef4444; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; outline: none;"
+                                    onmouseover="this.style.background='rgba(239, 68, 68, 0.22)';this.style.transform='translateY(-1px)';"
+                                    onmouseout="this.style.background='rgba(239, 68, 68, 0.08)';this.style.transform='translateY(0)';"
+                                >
+                                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 @endforeach

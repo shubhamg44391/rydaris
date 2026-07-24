@@ -127,14 +127,34 @@
     let pageEditor;
     document.addEventListener('DOMContentLoaded', function() {
         if (typeof CKEDITOR !== 'undefined') {
+            const isLightMode = document.body.classList.contains('light-mode') || document.documentElement.classList.contains('light-mode');
             pageEditor = CKEDITOR.replace('content', {
                 height: 480,
                 versionCheck: false,
-                uiColor: '#2a3248',
-                contentsCss: 'body { background-color: #050711; color: #f8fafc; font-family: Inter, sans-serif; } a { color: #52ead2; }'
+                uiColor: isLightMode ? '#f1f5f9' : '#2a3248',
+                contentsCss: isLightMode 
+                    ? 'body { background-color: #ffffff; color: #0f172a; font-family: Inter, sans-serif; } a { color: #0284c7; }' 
+                    : 'body { background-color: #050711; color: #f8fafc; font-family: Inter, sans-serif; } a { color: #52ead2; }'
             });
 
+            const updateEditorTheme = () => {
+                if (pageEditor && pageEditor.document) {
+                    const body = pageEditor.document.getBody();
+                    if (body) {
+                        const isLight = document.body.classList.contains('light-mode') || document.documentElement.classList.contains('light-mode');
+                        if (isLight) {
+                            body.setStyle('background-color', '#ffffff');
+                            body.setStyle('color', '#0f172a');
+                        } else {
+                            body.setStyle('background-color', '#050711');
+                            body.setStyle('color', '#f8fafc');
+                        }
+                    }
+                }
+            };
+
             pageEditor.on('instanceReady', function() {
+                updateEditorTheme();
                 updateCharCount();
             });
 

@@ -268,20 +268,24 @@
                                             <i class="fa fa-star me-1"></i> {{ $booking->review->rating }}★ Review
                                         </a>
                                     @elseif($booking->is_completed_or_ended)
-                                        <span class="badge" style="background: rgba(255, 255, 255, 0.05); color: #94a3b8; border: 1px solid rgba(255, 255, 255, 0.1); padding: 5px 10px; font-size: 0.78rem;" title="Trip Ended - Awaiting Customer Review">
-                                            <i class="fa fa-star-half-alt me-1" style="color: #fbbf24;"></i> Trip Ended
+                                        <span class="badge status-badge-ended" style="background: rgba(148, 163, 184, 0.12); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.25); padding: 5px 12px; font-size: 0.78rem; border-radius: 999px; display: inline-flex; align-items: center; gap: 5px; font-weight: 700;" title="Trip Ended - Awaiting Customer Review">
+                                            <i class="fa fa-flag-checkered" style="font-size: 0.72rem; color: #fbbf24;"></i> TRIP ENDED
                                         </span>
                                     @else
-                                        <span style="font-size: 0.78rem; color: #64748b;">In Progress</span>
+                                        <span class="badge status-badge-progress" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); padding: 5px 12px; font-size: 0.78rem; border-radius: 999px; display: inline-flex; align-items: center; gap: 5px; font-weight: 700;" title="Trip Currently In Progress">
+                                            <i class="fa fa-spinner fa-spin" style="font-size: 0.72rem; color: #60a5fa;"></i> IN PROGRESS
+                                        </span>
                                     @endif
                                 </td>
                                 <td style="padding: 15px 20px; white-space: nowrap;">
                                     <a href="{{ route('vendor.terms.public', auth()->id()) }}" target="_blank"
                                        title="View Terms & Conditions"
-                                       style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: rgba(82,234,210,0.08); color: #52ead2; border: 1px solid rgba(82,234,210,0.25); border-radius: 6px; font-size: 0.8rem; font-weight: 600; text-decoration: none; transition: all 0.2s;"
-                                       onmouseover="this.style.background='rgba(82,234,210,0.18)';this.style.borderColor='rgba(82,234,210,0.5)'"
-                                       onmouseout="this.style.background='rgba(82,234,210,0.08)';this.style.borderColor='rgba(82,234,210,0.25)'">
-                                        <svg viewBox="0 0 24 24" style="width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;">
+                                       class="btn-view-tc"
+                                       style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: rgba(82,234,210,0.1); color: #52ead2; border: none !important; outline: none !important; border-radius: 999px; font-size: 0.8rem; font-weight: 700; text-decoration: none; transition: all 0.25s ease;"
+                                       onmouseover="this.style.background='rgba(82,234,210,0.2)';this.style.transform='translateY(-1px)';"
+                                       onmouseout="this.style.background='rgba(82,234,210,0.1)';this.style.transform='translateY(0)';"
+                                    >
+                                        <svg viewBox="0 0 24 24" style="width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;">
                                             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                                             <polyline points="14 2 14 8 20 8"/>
                                             <line x1="16" y1="13" x2="8" y2="13"/>

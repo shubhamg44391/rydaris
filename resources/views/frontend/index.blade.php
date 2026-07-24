@@ -41,15 +41,54 @@
               <section class="board" id="panel-fleet" style="display:flex; flex-direction:column; height:100%;">
                 <div class="glass-card fleet-visual" style="position:relative; flex:1; min-height: 420px; display:flex; align-items:center; justify-content:center; overflow:hidden; border-radius:14px; padding:0;">
                   <!-- Center Video Play Button Overlay -->
-                  <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:3; background: rgba(5,7,17,0.22);">
-                    <button type="button" onclick="openDemoInquiryModal()" class="video-play-btn" title="Play Video Demo" aria-label="Play Video Demo">
+                  <div id="fleetVideoOverlay" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:3; background: rgba(5,7,17,0.32); cursor:pointer;" onclick="openFleetVideo()">
+                    <button type="button" class="video-play-btn" title="Play Video Demo" aria-label="Play Video Demo">
                       <svg viewBox="0 0 24 24" width="28" height="28" fill="#051013" stroke="currentColor" stroke-width="0">
                         <polygon points="6 3 20 12 6 21 6 3"></polygon>
                       </svg>
                     </button>
+                    <span style="position:absolute; bottom:18px; left:50%; transform:translateX(-50%); font-size:0.78rem; color:rgba(255,255,255,0.7); font-weight:600; white-space:nowrap; letter-spacing:0.04em;">▶ Watch Fleet Demo</span>
                   </div>
                 </div>
               </section>
+
+              <!-- Video Modal -->
+              <div id="fleetVideoModal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(5,7,17,0.92); align-items:center; justify-content:center;">
+                <div style="position:relative; width:min(900px, 94vw); border-radius:16px; overflow:hidden; box-shadow:0 30px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(82,234,210,0.2);">
+                  <button onclick="closeFleetVideo()" style="position:absolute; top:10px; right:12px; z-index:10; background:rgba(5,7,17,0.8); border:1px solid rgba(255,255,255,0.15); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#fff; font-size:1.1rem; line-height:1; transition:all 0.2s;" onmouseover="this.style.background='rgba(82,234,210,0.2)'" onmouseout="this.style.background='rgba(5,7,17,0.8)'">✕</button>
+                  <video id="fleetVideoPlayer" controls style="width:100%; display:block; border-radius:16px; background:#000;" preload="none">
+                    <source src="{{ asset('assets/video/recording_add_vhical.mp4') }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              </div>
+
+              <script>
+                function openFleetVideo() {
+                  const modal = document.getElementById('fleetVideoModal');
+                  modal.style.display = 'flex';
+                  document.body.style.overflow = 'hidden';
+                  document.getElementById('fleetVideoPlayer').play();
+                }
+                function closeFleetVideo() {
+                  const modal = document.getElementById('fleetVideoModal');
+                  modal.style.display = 'none';
+                  document.body.style.overflow = '';
+                  const v = document.getElementById('fleetVideoPlayer');
+                  v.pause();
+                  v.currentTime = 0;
+                }
+                // Close on backdrop click
+                document.addEventListener('DOMContentLoaded', function() {
+                  document.getElementById('fleetVideoModal').addEventListener('click', function(e) {
+                    if (e.target === this) closeFleetVideo();
+                  });
+                  // ESC key close
+                  document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape') closeFleetVideo();
+                  });
+                });
+              </script>
 
               <section class="board" id="panel-reservations" style="display:none; flex-direction:column; padding:14px;">
                 

@@ -362,4 +362,41 @@ class DemoData
             'data' => $data,
         ];
     }
+
+    public static function groups(): array
+    {
+        return [
+            ['name' => 'Economy 2/3 Door (ECMR)', 'code' => 'ECMR', 'description' => 'Economy 2/3 door hatchback with manual AC', 'vehicles_count' => '14 Vehicles', 'status' => 'Active'],
+            ['name' => 'Economy 4/5 Door (EDMR)', 'code' => 'EDMR', 'description' => 'Economy 4/5 door hatchback with manual AC', 'vehicles_count' => '22 Vehicles', 'status' => 'Active'],
+            ['name' => 'Compact SUV (CDMR)', 'code' => 'CDMR', 'description' => 'Compact 4-door SUV with manual transmission', 'vehicles_count' => '18 Vehicles', 'status' => 'Active'],
+            ['name' => 'Compact Automatic (CDAR)', 'code' => 'CDAR', 'description' => 'Compact 4-door vehicle with automatic AC', 'vehicles_count' => '15 Vehicles', 'status' => 'Active'],
+            ['name' => 'Intermediate Sedan (IDAR)', 'code' => 'IDAR', 'description' => '4-Door Sedan Automatic with AC & Cruise Control', 'vehicles_count' => '25 Vehicles', 'status' => 'Active'],
+            ['name' => 'Full Size MPV (FVAR)', 'code' => 'FVAR', 'description' => '7-Seater Passenger Van / MPV Automatic', 'vehicles_count' => '12 Vehicles', 'status' => 'Active'],
+            ['name' => 'Premium Sedan (PDAR)', 'code' => 'PDAR', 'description' => 'Premium 4-door sedan with luxury leather seats', 'vehicles_count' => '9 Vehicles', 'status' => 'Active'],
+            ['name' => 'Luxury SUV (XFAR)', 'code' => 'XFAR', 'description' => 'Premium Luxury SUV 4WD Automatic', 'vehicles_count' => '6 Vehicles', 'status' => 'Active'],
+            ['name' => 'Standard Convertible (STAR)', 'code' => 'STAR', 'description' => 'Standard Convertible sports car automatic', 'vehicles_count' => '4 Vehicles', 'status' => 'Active'],
+            ['name' => 'Mini Electric (MBER)', 'code' => 'MBER', 'description' => 'Mini 3-door electric city car automatic', 'vehicles_count' => '10 Vehicles', 'status' => 'Active'],
+            ['name' => 'Standard Pickup 4WD (SPAR)', 'code' => 'SPAR', 'description' => 'Double-cab 4WD utility pickup truck', 'vehicles_count' => '8 Vehicles', 'status' => 'Active'],
+            ['name' => 'Full Size SUV (FFAR)', 'code' => 'FFAR', 'description' => 'Full size 7-seater luxury SUV automatic', 'vehicles_count' => '16 Vehicles', 'status' => 'Active'],
+            ['name' => 'Intermediate Wagon (IWAR)', 'code' => 'IWAR', 'description' => 'Intermediate 5-door station wagon', 'vehicles_count' => '7 Vehicles', 'status' => 'Inactive'],
+            ['name' => 'Special Cargo Van (SKMR)', 'code' => 'SKMR', 'description' => 'Commercial cargo van with high roof', 'vehicles_count' => '11 Vehicles', 'status' => 'Active'],
+            ['name' => 'Overnight Sleeper RV (SVAR)', 'code' => 'SVAR', 'description' => 'Campervan / Motorhome sleeper vehicle', 'vehicles_count' => '3 Vehicles', 'status' => 'Active'],
+        ];
+    }
+
+    public static function branches(): array
+    {
+        return [
+            ['name' => 'Main Branch - Delhi', 'code' => 'DEL-01', 'city' => 'Delhi', 'phone' => '+91 98765 43210', 'email' => 'delhi@rydaris.com', 'status' => 'Active'],
+            ['name' => 'Airport Branch - Mumbai', 'code' => 'BOM-02', 'city' => 'Mumbai', 'phone' => '+91 98765 43211', 'email' => 'mumbai@rydaris.com', 'status' => 'Active'],
+            ['name' => 'Udhana Branch - Surat', 'code' => 'ST-03', 'city' => 'Surat', 'phone' => '+91 98765 43212', 'email' => 'surat@rydaris.com', 'status' => 'Active'],
+            ['name' => 'Central Branch - Ahmedabad', 'code' => 'AMD-04', 'city' => 'Ahmedabad', 'phone' => '+91 98765 43213', 'email' => 'ahmedabad@rydaris.com', 'status' => 'Active'],
+            ['name' => 'Vesu Hub - Surat', 'code' => 'ST-05', 'city' => 'Surat', 'phone' => '+91 98765 43214', 'email' => 'vesu@rydaris.com', 'status' => 'Active'],
+            ['name' => 'Connaught Place - Delhi', 'code' => 'DEL-06', 'city' => 'Delhi', 'phone' => '+91 98765 43215', 'email' => 'cp.delhi@rydaris.com', 'status' => 'Active'],
+            ['name' => 'BKC Center - Mumbai', 'code' => 'BOM-07', 'city' => 'Mumbai', 'phone' => '+91 98765 43216', 'email' => 'bkc.mumbai@rydaris.com', 'status' => 'Active'],
+            ['name' => 'MG Road Depot - Bengaluru', 'code' => 'BLR-08', 'city' => 'Bengaluru', 'phone' => '+91 98765 43217', 'email' => 'blr@rydaris.com', 'status' => 'Active'],
+            ['name' => 'Hi-Tech City - Hyderabad', 'code' => 'HYD-09', 'city' => 'Hyderabad', 'phone' => '+91 98765 43218', 'email' => 'hyd@rydaris.com', 'status' => 'Active'],
+            ['name' => 'Airport Counter - Goa', 'code' => 'GOA-10', 'city' => 'Goa', 'phone' => '+91 98765 43219', 'email' => 'goa@rydaris.com', 'status' => 'Active'],
+        ];
+    }
 }
