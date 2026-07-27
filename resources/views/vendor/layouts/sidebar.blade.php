@@ -160,6 +160,48 @@
         </a>
     </div>
     @endif
+
+    {{-- MAINTENANCE SCHEDULE --}}
+    @if(auth()->user()->hasMenuAccess('maintenance_schedule'))
+    <div class="admin-nav-group">
+        <a href="javascript:void(0);" class="nav-toggle" onclick="toggleSubmenu(this)"
+           style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); color: #aab7cb; font-size: 0.92rem; font-weight: 780; transition: background 0.2s; text-decoration: none;">
+            <span style="display: flex; align-items: center; gap: 10px;">
+                <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;">
+                    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                </svg>Maintenance Schedule
+            </span>
+            <svg class="chevron" viewBox="0 0 24 24" style="width: 14px; height: 14px; transition: transform 0.2s ease; {{ (Request::is('vendor/maintenance-schedules*') || Request::is('vendor/maintenance-requests*') || Request::is('vendor/work-orders*')) ? 'transform: rotate(180deg);' : '' }}"><path d="m6 9 6 6 6-6"/></svg>
+        </a>
+        <div class="admin-submenu"
+             style="{{ (Request::is('vendor/maintenance-schedules*') || Request::is('vendor/maintenance-requests*') || Request::is('vendor/work-orders*')) ? 'display: flex;' : 'display: none;' }} padding-left: 20px; margin-top: 4px; flex-direction: column; gap: 4px;">
+            <a href="{{ route('vendor.maintenance-schedules.index') }}"
+               class="submenu-item {{ Request::is('vendor/maintenance-schedules*') ? 'active' : '' }}"
+               style="text-decoration: none;">
+                <span class="dot"></span>
+                Maintenance Schedules
+            </a>
+            <a href="{{ route('vendor.maintenance-requests.index') }}"
+               class="submenu-item {{ Request::is('vendor/maintenance-requests*') ? 'active' : '' }}"
+               style="text-decoration: none;">
+                <span class="dot"></span>
+                Generate Request
+            </a>
+            <a href="{{ route('vendor.work-orders.index') }}"
+               class="submenu-item {{ (Request::is('vendor/work-orders*') && !request()->has('history')) ? 'active' : '' }}"
+               style="text-decoration: none;">
+                <span class="dot"></span>
+                Vendor Work Orders
+            </a>
+            <a href="{{ route('vendor.work-orders.index') }}?history=1"
+               class="submenu-item {{ (Request::is('vendor/work-orders*') && request()->has('history')) ? 'active' : '' }}"
+               style="text-decoration: none;">
+                <span class="dot"></span>
+                Complete Service History
+            </a>
+        </div>
+    </div>
+    @endif
  
     {{-- EXTRAS --}}
     @if(auth()->user()->hasMenuAccess('extras'))

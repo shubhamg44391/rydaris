@@ -442,7 +442,20 @@ Route::middleware(['auth', 'vendor'])->prefix('vendor')->group(function () {
             'update'  => 'vendor.invitations.update',
             'destroy' => 'vendor.invitations.destroy',
         ]);
-        Route::post('invitations/{id}/resend', [\App\Http\Controllers\Vendor\VendorInvitationController::class, 'resend'])->name('vendor.invitations.resend');
+        // Maintenance Schedules
+        Route::get('/maintenance-schedules', [\App\Http\Controllers\Vendor\VendorMaintenanceScheduleController::class, 'schedulesIndex'])->name('vendor.maintenance-schedules.index');
+        Route::get('/maintenance-schedules/create', [\App\Http\Controllers\Vendor\VendorMaintenanceScheduleController::class, 'schedulesCreate'])->name('vendor.maintenance-schedules.create');
+        Route::post('/maintenance-schedules', [\App\Http\Controllers\Vendor\VendorMaintenanceScheduleController::class, 'schedulesStore'])->name('vendor.maintenance-schedules.store');
+
+        // Maintenance Requests
+        Route::get('/maintenance-requests', [\App\Http\Controllers\Vendor\VendorMaintenanceScheduleController::class, 'requestsIndex'])->name('vendor.maintenance-requests.index');
+        Route::get('/maintenance-requests/create', [\App\Http\Controllers\Vendor\VendorMaintenanceScheduleController::class, 'requestsCreate'])->name('vendor.maintenance-requests.create');
+        Route::post('/maintenance-requests', [\App\Http\Controllers\Vendor\VendorMaintenanceScheduleController::class, 'requestsStore'])->name('vendor.maintenance-requests.store');
+
+        // Vendor Work Orders
+        Route::get('/work-orders', [\App\Http\Controllers\Vendor\VendorMaintenanceScheduleController::class, 'workOrdersIndex'])->name('vendor.work-orders.index');
+        Route::get('/work-orders/create', [\App\Http\Controllers\Vendor\VendorMaintenanceScheduleController::class, 'workOrdersCreate'])->name('vendor.work-orders.create');
+        Route::post('/work-orders', [\App\Http\Controllers\Vendor\VendorMaintenanceScheduleController::class, 'workOrdersStore'])->name('vendor.work-orders.store');
 
         Route::resource('groups', VendorGroupController::class)->except(['show'])->names([
             'index' => 'vendor.groups.index',

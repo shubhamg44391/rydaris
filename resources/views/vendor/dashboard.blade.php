@@ -133,9 +133,29 @@
           <div>
             <h1>Welcome, {{ Auth::user()->first_name ?? Auth::user()->name }}!</h1>
           </div>
+          @php
+            $sub = Auth::user()->activeSubscription ?? Auth::user()->subscription;
+            if ($sub) {
+                $startObj = $sub->starts_at ? \Carbon\Carbon::parse($sub->starts_at) : ($sub->created_at ? \Carbon\Carbon::parse($sub->created_at) : now());
+                $startDate = $startObj->format('Y-m-d');
+                if ($sub->ends_at) {
+                    $endDate = \Carbon\Carbon::parse($sub->ends_at)->format('Y-m-d');
+                } else {
+                    $period = strtolower($sub->package->billing_period ?? 'year');
+                    if (str_contains($period, 'year') || str_contains($period, 'annual') || str_contains($period, 'yr')) {
+                        $endDate = (clone $startObj)->addYear()->format('Y-m-d');
+                    } else {
+                        $endDate = (clone $startObj)->addMonth()->format('Y-m-d');
+                    }
+                }
+            } else {
+                $startObj = Auth::user()->created_at ? \Carbon\Carbon::parse(Auth::user()->created_at) : now();
+                $startDate = $startObj->format('Y-m-d');
+                $endDate = (clone $startObj)->addYear()->format('Y-m-d');
+            }
+          @endphp
           <div class="admin-date-card">
-            <strong>{{ now()->format('F Y') }}</strong>
-            <p class="panel-muted">Billing period: {{ now()->startOfMonth()->format('M d') }} to {{ now()->endOfMonth()->format('M d') }}</p>
+            <p class="panel-muted" style="margin: 0; font-weight: 600;">Billing period: {{ $startDate }} to {{ $endDate }}</p>
           </div>
         </section>
 
@@ -151,7 +171,7 @@
                 </svg>
               </span>
             </div>
-            <strong>₹{{ number_format($monthlyEarnings, 2) }}</strong>
+            <strong>{{ number_format($monthlyEarnings, 2) }}</strong>
             <span>monthly rental earnings</span>
           </article>
 

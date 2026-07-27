@@ -21,7 +21,6 @@
                         <th>S.No</th>
                         <th>Name</th>
                         <th>Email</th>
-                        <th>Country Code</th>
                         <th>Contact Number</th>
                         <th>Registered Date</th>
                         <th>Actions</th>
@@ -38,10 +37,7 @@
                                 {{ $customer->first_name ?? $customer->name }}
                             </td>
                             <td>{{ $customer->email }}</td>
-                            <td>
-                                {{ $customer->country_code ?? 'N/A' }}
-                            </td>
-                            <td>{{ $customer->contact_number ?? 'N/A' }}</td>
+                            <td><strong>{{ trim(($customer->country_code ?? '') . ' ' . ($customer->contact_number ?? 'N/A')) }}</strong></td>
                             <td>{{ $customer->created_at->format('Y-m-d H:i') }}</td>
                             <td>
                                 <div class="table-actions" style="display: flex; gap: 8px; align-items: center;">

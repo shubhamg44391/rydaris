@@ -190,6 +190,20 @@ class User extends Authenticatable
         return $limit === null || $limit === '' || $limit === 'Unlimited' || (int)$limit > 0;
     }
 
+    public function hasMaintenanceScheduleFeature()
+    {
+        if (!$this->hasMenuAccess('maintenance_schedule')) {
+            return false;
+        }
+        $subscription = $this->activeSubscription;
+        if (!$subscription || !$subscription->package) {
+            return false;
+        }
+
+        $limit = $subscription->package->no_of_maintenance_schedules;
+        return $limit === null || $limit === '' || $limit === 'Unlimited' || (int)$limit > 0;
+    }
+
     public function coupons()
     {
         return $this->hasMany(Coupon::class, 'vendor_id');

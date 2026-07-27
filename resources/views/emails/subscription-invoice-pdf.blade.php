@@ -191,11 +191,11 @@
                         </tr>
                         <tr>
                             <td style="padding: 3px 0; color: #666;">Date:</td>
-                            <td style="padding: 3px 0; font-weight: bold; text-align: right;">{{ $subscription->created_at->format('F d, Y') }}</td>
+                            <td style="padding: 3px 0; font-weight: bold; text-align: right;">{{ $subscription->created_at->format('Y-m-d') }}</td>
                         </tr>
                         <tr>
                             <td style="padding: 3px 0; color: #666;">Due Date:</td>
-                            <td style="padding: 3px 0; font-weight: bold; text-align: right;">{{ $subscription->starts_at->format('F d, Y') }}</td>
+                            <td style="padding: 3px 0; font-weight: bold; text-align: right;">{{ $subscription->starts_at->format('Y-m-d') }}</td>
                         </tr>
                     </table>
                 </td>
@@ -234,7 +234,7 @@
                             <div style="font-size: 11px; color: #666; margin-top: 4px;">{{ $subscription->package->description }}</div>
                         @endif
                         <span style="font-size: 11px; color: #00a4e4; display: block; margin-top: 4px;">
-                            Period: {{ $subscription->starts_at->format('d M Y') }} to {{ $subscription->ends_at->format('d M Y') }}
+                            Period: {{ $subscription->starts_at->format('Y-m-d') }} to {{ $subscription->ends_at->format('Y-m-d') }}
                         </span>
                     </td>
                     <td class="text-right">1</td>

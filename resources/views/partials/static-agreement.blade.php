@@ -16,7 +16,7 @@
     </div>
 
     <!-- PARTIES DETAILS SECTION -->
-    <div class="agr-parties-card" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; border-radius: 8px; padding: 16px;">
+    <div class="agr-parties-card" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; border-radius: 8px; padding: 16px;">
         
         <!-- User / Renter Details -->
         <div>

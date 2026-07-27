@@ -35,7 +35,6 @@
                         <th>S.No</th>
                         <th>Full Name</th>
                         <th>Email</th>
-                        <th>Country Codes</th>
                         <th>Contact Number</th>
                         <th>Registered Date</th>
                         <th>Status</th>
@@ -63,9 +62,8 @@
                             </td>
                             <td>{{ $vendor->email }}</td>
                             <td>
-                                {{ $vendor->country_code ?? 'N/A' }}
+                                <strong>{{ trim(($vendor->country_code ?? '') . ' ' . ($vendor->contact_number ?? 'N/A')) }}</strong>
                             </td>
-                            <td>{{ $vendor->contact_number ?? 'N/A' }}</td>
                             <td>{{ $vendor->created_at->format('Y-m-d H:i') }}</td>
                             <td>
                                 <form action="{{ route('admin.vendors.toggle-status', $vendor->id) }}" method="POST" style="display: inline;">

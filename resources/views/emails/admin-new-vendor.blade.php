@@ -135,7 +135,7 @@
                 </div>
                 <div class="field-group">
                     <div class="field-label">Registration Date</div>
-                    <div class="field-value">{{ $user->created_at->format('M d, Y h:i A') }}</div>
+                    <div class="field-value">{{ $user->created_at->format('Y-m-d H:i') }}</div>
                 </div>
             </div>
 

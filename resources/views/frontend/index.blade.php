@@ -38,10 +38,16 @@
                 </div>
               </aside>
               <!-- Fleet Board Panel -->
-              <section class="board" id="panel-fleet" style="display:flex; flex-direction:column; height:100%;">
-                <div class="glass-card fleet-visual" style="position:relative; flex:1; min-height: 420px; display:flex; align-items:center; justify-content:center; overflow:hidden; border-radius:14px; padding:0;">
+              <section class="board" id="panel-fleet" style="display:flex; flex-direction:column; width:100%; height:auto;">
+                <div class="glass-card fleet-visual" style="position:relative; width:100%; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; overflow:hidden; border-radius:14px; padding:0; background:#050711 linear-gradient(180deg, rgba(5, 7, 17, 0.08), rgba(5, 7, 17, 0.72)), url('{{ asset('assets/rydaris-hero.png') }}') center / cover no-repeat;">
+                  <!-- Inline Video Player -->
+                  <video id="inlineFleetVideo" controls style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; display:none; border-radius:14px; background:#050711;" preload="none">
+                    <source src="{{ asset('assets/video/Recording add vhicals.mp4') }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                  
                   <!-- Center Video Play Button Overlay -->
-                  <div id="fleetVideoOverlay" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:3; background: rgba(5,7,17,0.32); cursor:pointer;" onclick="openFleetVideo()">
+                  <div id="fleetVideoOverlay" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:3; background: rgba(5,7,17,0.32); cursor:pointer;" onclick="playFleetVideoInline()">
                     <button type="button" class="video-play-btn" title="Play Video Demo" aria-label="Play Video Demo">
                       <svg viewBox="0 0 24 24" width="28" height="28" fill="#051013" stroke="currentColor" stroke-width="0">
                         <polygon points="6 3 20 12 6 21 6 3"></polygon>
@@ -52,47 +58,19 @@
                 </div>
               </section>
 
-              <!-- Video Modal -->
-              <div id="fleetVideoModal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(5,7,17,0.92); align-items:center; justify-content:center;">
-                <div style="position:relative; width:min(900px, 94vw); border-radius:16px; overflow:hidden; box-shadow:0 30px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(82,234,210,0.2);">
-                  <button onclick="closeFleetVideo()" style="position:absolute; top:10px; right:12px; z-index:10; background:rgba(5,7,17,0.8); border:1px solid rgba(255,255,255,0.15); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#fff; font-size:1.1rem; line-height:1; transition:all 0.2s;" onmouseover="this.style.background='rgba(82,234,210,0.2)'" onmouseout="this.style.background='rgba(5,7,17,0.8)'">✕</button>
-                  <video id="fleetVideoPlayer" controls style="width:100%; display:block; border-radius:16px; background:#000;" preload="none">
-                    <source src="{{ asset('assets/video/recording_add_vhical.mp4') }}" type="video/mp4">
-                    Your browser does not support the video tag.
-                  </video>
-                </div>
-              </div>
-
               <script>
-                function openFleetVideo() {
-                  const modal = document.getElementById('fleetVideoModal');
-                  modal.style.display = 'flex';
-                  document.body.style.overflow = 'hidden';
-                  document.getElementById('fleetVideoPlayer').play();
+                function playFleetVideoInline() {
+                  const overlay = document.getElementById('fleetVideoOverlay');
+                  const player = document.getElementById('inlineFleetVideo');
+                  if (overlay) overlay.style.display = 'none';
+                  if (player) {
+                    player.style.display = 'block';
+                    player.play();
+                  }
                 }
-                function closeFleetVideo() {
-                  const modal = document.getElementById('fleetVideoModal');
-                  modal.style.display = 'none';
-                  document.body.style.overflow = '';
-                  const v = document.getElementById('fleetVideoPlayer');
-                  v.pause();
-                  v.currentTime = 0;
-                }
-                // Close on backdrop click
-                document.addEventListener('DOMContentLoaded', function() {
-                  document.getElementById('fleetVideoModal').addEventListener('click', function(e) {
-                    if (e.target === this) closeFleetVideo();
-                  });
-                  // ESC key close
-                  document.addEventListener('keydown', function(e) {
-                    if (e.key === 'Escape') closeFleetVideo();
-                  });
-                });
-              </script>
-
-              <section class="board" id="panel-reservations" style="display:none; flex-direction:column; padding:14px;">
+              </script>              <section class="board" id="panel-reservations" style="display:none; flex-direction:column; padding:14px; overflow-y:auto;">
                 
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:6px;">
                   <div style="display:flex; align-items:center; gap:10px;">
                     <h3 style="margin:0; font-size:0.85rem; font-weight:700; color:#f1f5f9;">Reservations</h3>
                     <span style="font-size:0.68rem; background:rgba(82,234,210,0.15); color:#52ead2; padding:2px 8px; border-radius:20px; font-weight:700;">20 Records</span>
@@ -104,8 +82,8 @@
                 </div>
 
                 
-                <div style="border:1px solid rgba(255,255,255,0.08); border-radius:8px; overflow:hidden; flex:1;">
-                  <table id="res-table" style="width:100%; border-collapse:collapse; font-size:0.7rem;">
+                <div style="border:1px solid rgba(255,255,255,0.08); border-radius:8px; overflow-x:auto; -webkit-overflow-scrolling:touch; width:100%; flex:1;">
+                  <table id="res-table" style="width:100%; min-width:620px; border-collapse:collapse; font-size:0.7rem;">
                     <thead>
                       <tr style="background:rgba(255,255,255,0.04); border-bottom:1px solid rgba(255,255,255,0.08);">
                         <th style="padding:8px 12px; text-align:left; font-size:0.6rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.05em; white-space:nowrap;">#</th>
@@ -125,7 +103,7 @@
                 </div>
 
                 
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; flex-wrap:wrap; gap:6px;">
                   <span id="res-info" style="font-size:0.63rem; color:#64748b;"></span>
                   <div style="display:flex; gap:4px; align-items:center;" id="res-pagination"></div>
                 </div>
@@ -138,11 +116,11 @@
                   @include('partials.static-agreement')
                 </div>
               </section>
- 
+
               
-              <section class="board" id="panel-reports" style="display:none; flex-direction:column; padding:14px;">
+              <section class="board" id="panel-reports" style="display:none; flex-direction:column; padding:14px; overflow-y:auto;">
                 
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:6px;">
                   <div style="display:flex; align-items:center; gap:10px;">
                     <h3 style="margin:0; font-size:0.85rem; font-weight:700; color:#f1f5f9;">Booking Reports</h3>
                     <span style="font-size:0.68rem; background:rgba(82,234,210,0.15); color:#52ead2; padding:2px 8px; border-radius:20px; font-weight:700;">All Reservations</span>
@@ -156,8 +134,8 @@
                 </div>
 
                 
-                <div style="border:1px solid rgba(255,255,255,0.08); border-radius:8px; overflow:hidden; flex:1;">
-                  <table style="width:100%; border-collapse:collapse; font-size:0.7rem;">
+                <div style="border:1px solid rgba(255,255,255,0.08); border-radius:8px; overflow-x:auto; -webkit-overflow-scrolling:touch; width:100%; flex:1;">
+                  <table style="width:100%; min-width:620px; border-collapse:collapse; font-size:0.7rem;">
                     <thead>
                       <tr style="background:rgba(255,255,255,0.04); border-bottom:1px solid rgba(255,255,255,0.08);">
                         <th style="padding:8px 12px; text-align:left; font-size:0.6rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.05em; white-space:nowrap;">#</th>
@@ -187,6 +165,13 @@
         </div>
 
         <style>
+          /* Mobile view responsiveness for video card & dashboard */
+          @media (max-width: 980px) {
+            .dashboard { min-height: auto !important; }
+            .board { padding: 10px !important; }
+            .fleet-visual { aspect-ratio: 16 / 9 !important; height: auto !important; min-height: auto !important; }
+          }
+
           /* Sidebar: only active gets full gradient; non-active hover = subtle glow */
           .side-item { cursor: pointer; transition: background 0.18s, color 0.18s; }
 
@@ -335,6 +320,10 @@
 
           /* ─── Tab Switcher ─── */
           function switchTab(tab, el) {
+            if (tab !== 'fleet') {
+              var vid = document.getElementById('inlineFleetVideo');
+              if (vid && !vid.paused) vid.pause();
+            }
             ['fleet','reservations','agreements','reports'].forEach(function(t) {
               var p = document.getElementById('panel-' + t);
               if (p) p.style.display = 'none';

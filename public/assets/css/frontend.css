@@ -617,13 +617,13 @@ h3 {
   min-height: 280px;
   background:
     linear-gradient(180deg, rgba(5, 7, 17, 0.08), rgba(5, 7, 17, 0.72)),
-    url("rydaris-hero.png") center / cover no-repeat;
+    url("../rydaris-hero.png") center / cover no-repeat;
 }
 
 body.light-mode .fleet-visual {
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.32)),
-    url("rydaris-hero.png") center / cover no-repeat !important;
+    url("../rydaris-hero.png") center / cover no-repeat !important;
 }
 
 .video-play-btn {

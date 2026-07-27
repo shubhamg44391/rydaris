@@ -116,6 +116,20 @@
                         </li>
                       @endif
 
+                      @if($pkg->maintenance_schedule_menu)
+                        @if($pkg->no_of_maintenance_schedules !== null && (int)$pkg->no_of_maintenance_schedules === 0)
+                          <li class="mb-2 d-flex align-items-center">
+                              <i class="bx bx-x-circle me-2 feature-icon-off"></i>
+                              <span class="feature-text-off">Maintenance Schedules Not Included</span>
+                          </li>
+                        @else
+                          <li class="mb-2 d-flex align-items-center">
+                              <i class="bx bx-check me-2 feature-icon-on"></i>
+                              <span class="feature-text-on">{{ $pkg->no_of_maintenance_schedules !== null ? ($pkg->no_of_maintenance_schedules . ' Maintenance Schedules Included') : 'Unlimited Maintenance Schedules' }}</span>
+                          </li>
+                        @endif
+                      @endif
+
                       @if($pkg->extras_menu)
                         @if($pkg->no_of_extras !== null && (int)$pkg->no_of_extras === 0)
                           <li class="mb-2 d-flex align-items-center">
@@ -711,106 +725,21 @@
                 });
             }
 
-            // Localize Pricing Logic with Caching
-            async function localizePricing() {
-                let userCurrency = 'INR'; // Default base currency
-                let userLocale = 'en-IN';
-                let userRate = 1;
-
-                const cacheKey = 'pricing_localization_data';
-                const cacheTTL = 3600 * 1000; // 1 hour
-
-                // Smart fallback using browser timezone
-                const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-                const isIndiaTz = userTimezone && (userTimezone === 'Asia/Kolkata' || userTimezone === 'Asia/Calcutta');
-
-                if (isIndiaTz) {
-                    userCurrency = 'INR';
-                    userLocale = 'en-IN';
-                }
-
-                try {
-                    let cachedData = localStorage.getItem(cacheKey);
-                    if (cachedData) {
-                        cachedData = JSON.parse(cachedData);
-                        if (Date.now() - cachedData.timestamp < cacheTTL) {
-                            userCurrency = cachedData.currency;
-                            userLocale = cachedData.locale;
-                            userRate = cachedData.rate;
-                            updatePricingDOM(userCurrency, userLocale, userRate);
-                            return;
-                        }
-                    }
-
-                    // 1. Fetch User's currency based on IP
-                    const geoRes = await fetch('https://ipapi.co/json/');
-                    if (geoRes.ok) {
-                        const geoData = await geoRes.json();
-                        if (!geoData.error && geoData.currency) {
-                            userCurrency = geoData.currency;
-                            userLocale = geoData.languages ? geoData.languages.split(',')[0] : (userCurrency === 'INR' ? 'en-IN' : 'en-US');
-                        }
-                    } else if (isIndiaTz) {
-                        userCurrency = 'INR';
-                        userLocale = 'en-IN';
-                    } else {
-                        // Fallback to USD if not in India and IP fails
-                        userCurrency = 'USD';
-                        userLocale = 'en-US';
-                    }
-                    
-                    // 2. Fetch Exchange Rates with INR as base
-                    const ratesRes = await fetch('https://open.er-api.com/v6/latest/INR');
-                    if (ratesRes.ok) {
-                        const ratesData = await ratesRes.json();
-                        const rates = ratesData.rates;
-                        userRate = rates[userCurrency] || 1;
-                    }
-
-                    // Save to Cache
-                    localStorage.setItem(cacheKey, JSON.stringify({
-                        currency: userCurrency,
-                        locale: userLocale,
-                        rate: userRate,
-                        timestamp: Date.now()
-                    }));
-
-                } catch (error) {
-                    console.error("Localization API failed, falling back to timezone defaults.", error);
-                    if (!isIndiaTz) {
-                        userCurrency = 'USD';
-                        userLocale = 'en-US';
-                    }
-                }
-
-                updatePricingDOM(userCurrency, userLocale, userRate);
-            }
-
-            function updatePricingDOM(currency, locale, rate) {
-                // Formatter for user currency
-                const formatter = new Intl.NumberFormat(locale, {
-                    style: 'currency',
-                    currency: currency,
-                    maximumFractionDigits: 0
-                });
-
-                // Update Pricing DOM
+            // Fixed USD ($) pricing display (No IP rate conversion)
+            function updatePricingDOM() {
                 document.querySelectorAll('[id^="pkg-price-"]').forEach(el => {
                     const rawPrice = el.getAttribute('data-raw-price').toLowerCase();
                     if (rawPrice === 'free' || rawPrice === 'custom' || rawPrice === 'enterprise' || rawPrice === '0' || rawPrice === '$0') {
-                        return; // Leave as is
+                        return;
                     }
                     
-                    // The raw price from the DB is in INR
                     let numericBase = parseFloat(rawPrice.replace(/[^0-9.]/g, ''));
                     if (numericBase > 0) {
-                        // Convert INR base to local currency using the exchange rate multiplier
-                        let convertedPrice = numericBase * rate;
-                        el.innerText = formatter.format(convertedPrice);
+                        el.innerText = '$' + Math.round(numericBase);
                     }
                 });
             }
-            localizePricing();
+            updatePricingDOM();
         });
     </script>
 </div>

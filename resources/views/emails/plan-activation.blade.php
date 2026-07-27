@@ -132,7 +132,7 @@
 
                 <div class="field-group">
                     <div class="field-label">Validity Period</div>
-                    <div class="field-value">{{ $subscription->starts_at->format('d M Y') }} to {{ $subscription->ends_at->format('d M Y') }}</div>
+                    <div class="field-value">{{ $subscription->starts_at->format('Y-m-d') }} to {{ $subscription->ends_at->format('Y-m-d') }}</div>
                 </div>
 
                 <div class="field-group">

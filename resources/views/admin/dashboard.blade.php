@@ -86,7 +86,6 @@
                 <tr>
                   <th>VENDOR NAME</th>
                   <th>EMAIL</th>
-                  <th>COUNTRY CODE</th>
                   <th>CONTACT NUMBER</th>
                   <th>STATUS</th>
                   <th>REGISTRATION DATE</th>
@@ -105,8 +104,7 @@
                       </div>
                     </td>
                     <td>{{ $vendor->email }}</td>
-                    <td>{{ $vendor->country_code ?? 'N/A' }}</td>
-                    <td>{{ $vendor->contact_number ?? 'N/A' }}</td>
+                    <td><strong>{{ trim(($vendor->country_code ?? '') . ' ' . ($vendor->contact_number ?? 'N/A')) }}</strong></td>
                     <td>
                       @if($vendor->status === 'active')
                         <span class="status-badge-active">ACTIVE</span>

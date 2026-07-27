@@ -285,6 +285,35 @@
                             </div>
                         </div>
 
+                        <!-- Maintenance Schedule Menu Permission Card -->
+                        <div class="menu-permission-card">
+                            <div style="display: flex; align-items: center; gap: 12px; min-width: 260px; flex-shrink: 0;">
+                                <label class="theme-switch">
+                                    <input type="checkbox" id="maintenance_schedule_menu" name="maintenance_schedule_menu" value="1" {{ old('maintenance_schedule_menu', $package->maintenance_schedule_menu) ? 'checked' : '' }} />
+                                    <span class="slider round"></span>
+                                </label>
+                                <span class="menu-title-text" onclick="document.getElementById('maintenance_schedule_menu').click();">Maintenance Schedule Menu</span>
+                            </div>
+                            <div id="maintenance_schedule_limit_container" class="limit-input-wrapper" style="flex-direction: column; gap: 12px; align-items: flex-end;">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <span class="limit-input-label">Maintenance Schedules Limit:</span>
+                                    <div class="segmented-control">
+                                        <input type="radio" name="limit_type_no_of_maintenance_schedules" id="no_of_maintenance_schedules_unlimited" value="unlimited" {{ (old('limit_type_no_of_maintenance_schedules', $package->no_of_maintenance_schedules !== null ? 'limited' : 'unlimited') === 'unlimited') ? 'checked' : '' }} onchange="toggleLimitInputType('no_of_maintenance_schedules', 'unlimited')" />
+                                        <label for="no_of_maintenance_schedules_unlimited">Unlimited</label>
+
+                                        <input type="radio" name="limit_type_no_of_maintenance_schedules" id="no_of_maintenance_schedules_limited" value="limited" {{ (old('limit_type_no_of_maintenance_schedules', $package->no_of_maintenance_schedules !== null ? 'limited' : 'unlimited') === 'limited') ? 'checked' : '' }} onchange="toggleLimitInputType('no_of_maintenance_schedules', 'limited')" />
+                                        <label for="no_of_maintenance_schedules_limited">Set Limit</label>
+                                    </div>
+                                    <div id="no_of_maintenance_schedules_input_wrapper" style="display: none;">
+                                        <input type="number" name="no_of_maintenance_schedules" id="no_of_maintenance_schedules" class="limit-input-field @error('no_of_maintenance_schedules') is-invalid @enderror" value="{{ old('no_of_maintenance_schedules', $package->no_of_maintenance_schedules ?? 0) }}" min="0" placeholder="Limit count" />
+                                    </div>
+                                </div>
+                                @error('no_of_maintenance_schedules')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
                         
                         <div class="menu-permission-card">
                             <div style="display: flex; align-items: center; gap: 12px; min-width: 260px; flex-shrink: 0;">
@@ -644,7 +673,8 @@
                             ['customers_menu', 'customers_limit_container'],
                             ['extras_menu', 'extras_limit_container'],
                             ['coupons_menu', 'coupons_limit_container'],
-                            ['support_ticket_menu', 'support_tickets_limit_container']
+                            ['support_ticket_menu', 'support_tickets_limit_container'],
+                            ['maintenance_schedule_menu', 'maintenance_schedule_limit_container']
                         ];
 
                         function toggleLimit(switchId, containerId) {
@@ -684,7 +714,8 @@
                             'no_of_features',
                             'no_of_rules',
                             'no_of_coupons',
-                            'no_of_support_tickets'
+                            'no_of_support_tickets',
+                            'no_of_maintenance_schedules'
                         ];
 
                         limitPrefixes.forEach(prefix => {
