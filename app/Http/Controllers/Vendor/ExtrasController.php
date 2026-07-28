@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Group;
 use App\Models\VendorExtra;
 use App\Models\VendorExtraFeature;
+use App\Models\VendorFeature;
 use App\Models\VendorRule;
 use Illuminate\Support\Facades\Auth;
 
@@ -48,7 +49,7 @@ class ExtrasController extends Controller
 
     private function getVendorFeatures()
     {
-        $vendor_features = \App\Models\VendorFeature::where('vendor_id', $this->vendorId())->orderBy('index_no')->get();
+        $vendor_features = VendorFeature::where('vendor_id', $this->vendorId())->orderBy('index_no')->get();
         
         $hasZeroOrDup = false;
         $seen = [];
@@ -65,7 +66,7 @@ class ExtrasController extends Controller
                 $vf->index_no = $k + 1;
                 $vf->save();
             }
-            $vendor_features = \App\Models\VendorFeature::where('vendor_id', $this->vendorId())->orderBy('index_no')->get();
+            $vendor_features = VendorFeature::where('vendor_id', $this->vendorId())->orderBy('index_no')->get();
         }
 
         return $vendor_features;
@@ -290,7 +291,7 @@ class ExtrasController extends Controller
             return back()->withErrors(['features' => 'You have reached your maximum features capacity based on your current plan. Upgrade your plan to add more features.']);
         }
 
-        \App\Models\VendorFeature::where('vendor_id', $vendor_id)->delete();
+        VendorFeature::where('vendor_id', $vendor_id)->delete();
 
         if ($request->has('features') && is_array($request->features)) {
             $idx = 1;
@@ -302,7 +303,7 @@ class ExtrasController extends Controller
                 }
 
                 if (!empty($title)) {
-                    \App\Models\VendorFeature::create([
+                    VendorFeature::create([
                         'vendor_id' => $vendor_id,
                         'title' => $title,
                         'index_no' => $index_no,
@@ -354,7 +355,7 @@ class ExtrasController extends Controller
         
         
         $extra = VendorExtra::where('vendor_id', $vendor_id)->find($request->vendor_extra_id);
-        $feature = \App\Models\VendorFeature::where('vendor_id', $vendor_id)->find($request->vendor_feature_id);
+        $feature = VendorFeature::where('vendor_id', $vendor_id)->find($request->vendor_feature_id);
 
         if (!$extra || !$feature) {
             return response()->json(['success' => false, 'message' => 'Unauthorized or invalid resource.'], 403);
@@ -387,9 +388,9 @@ class ExtrasController extends Controller
         ]);
 
         $vendor_id = $this->vendorId();
-        $feature = \App\Models\VendorFeature::where('vendor_id', $vendor_id)->findOrFail($id);
+        $feature = VendorFeature::where('vendor_id', $vendor_id)->findOrFail($id);
 
-        $exists = \App\Models\VendorFeature::where('vendor_id', $vendor_id)
+        $exists = VendorFeature::where('vendor_id', $vendor_id)
             ->where('id', '!=', $id)
             ->where('index_no', $request->index_no)
             ->exists();

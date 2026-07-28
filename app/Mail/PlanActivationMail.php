@@ -5,6 +5,7 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use App\Models\VendorSubscription;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -38,7 +39,7 @@ class PlanActivationMail extends Mailable
                             'mime' => 'application/pdf',
                         ]);
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error("Failed to generate and attach invoice PDF to subscription email: " . $e->getMessage());
+            Log::error("Failed to generate and attach invoice PDF to subscription email: " . $e->getMessage());
 
             // Fallback: Send email without attachment if PDF generation fails
             return $this->subject('Subscription Plan Activated - Rydaris')

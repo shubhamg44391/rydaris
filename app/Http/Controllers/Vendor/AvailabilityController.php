@@ -423,7 +423,7 @@ class AvailabilityController extends Controller
             ]);
         }
 
-        \App\Models\VendorRateHistory::create([
+        VendorRateHistory::create([
             'vendor_id' => $vid,
             'action_type' => 'single_update',
             'details' => json_encode(['date' => $date, 'day' => $day, 'price' => $price])
@@ -520,7 +520,7 @@ class AvailabilityController extends Controller
             foreach($chunks as $chunk) { Availability::insert($chunk); }
         }
 
-        \App\Models\VendorRateHistory::create([
+        VendorRateHistory::create([
             'vendor_id' => $vid,
             'action_type' => 'bulk_copy',
             'details' => json_encode(['copied_from_day1' => count($updates)])
@@ -684,7 +684,7 @@ class AvailabilityController extends Controller
             }
         }
 
-        \App\Models\VendorRateHistory::create([
+        VendorRateHistory::create([
             'vendor_id' => $vid,
             'action_type' => 'bulk_update',
             'details' => json_encode(['operation' => $operation, 'days' => count($days)])
@@ -735,7 +735,7 @@ class AvailabilityController extends Controller
             );
         }
 
-        \App\Models\VendorRateHistory::create([
+        VendorRateHistory::create([
             'vendor_id' => $vid,
             'action_type' => 'import',
             'details' => json_encode(['imported_count' => count($rates)])
@@ -760,7 +760,7 @@ class AvailabilityController extends Controller
         $matrix = $matrixResult['data'];
         $dates = $matrixResult['dates'];
         
-        \App\Models\VendorRateHistory::create([
+        VendorRateHistory::create([
             'vendor_id' => $vid,
             'action_type' => 'export',
             'details' => json_encode(['exported_dates' => count($dates)])
@@ -944,7 +944,7 @@ class AvailabilityController extends Controller
             }
         }
 
-        \App\Models\VendorRateHistory::create([
+        VendorRateHistory::create([
             'vendor_id' => $vid,
             'action_type' => 'import_csv',
             'details' => json_encode(['imported_rates' => $importedCount])

@@ -4,6 +4,14 @@ namespace App\Http\Controllers\Vendor;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Carbon\Carbon;
+use App\Models\Vehicle;
+use App\Models\Booking;
+use App\Models\Review;
+use App\Models\Package;
+use App\Models\VendorSubscription;
+use App\Models\SiteSetting;
 
 class DashboardController extends Controller
 {
@@ -29,8 +37,8 @@ class DashboardController extends Controller
         $endDate = null;
 
         if ($range === 'custom' && $startMonthStr && $endMonthStr) {
-            $startDate = \Carbon\Carbon::parse($startMonthStr . '-01')->startOfMonth();
-            $endDate = \Carbon\Carbon::parse($endMonthStr . '-01')->endOfMonth();
+            $startDate = Carbon::parse($startMonthStr . '-01')->startOfMonth();
+            $endDate = Carbon::parse($endMonthStr . '-01')->endOfMonth();
             
             
             $diffInMonths = $startDate->diffInMonths($endDate);
@@ -44,9 +52,9 @@ class DashboardController extends Controller
         }
 
         
-        $totalVehicles = \App\Models\Vehicle::where('vendor_id', $vendorId)->count();
+        $totalVehicles = Vehicle::where('vendor_id', $vendorId)->count();
         
-        $bookingsQuery = \App\Models\Booking::where('vendor_id', $vendorId);
+        $bookingsQuery = Booking::where('vendor_id', $vendorId);
         if ($startDate && $endDate) {
             $bookingsQuery->whereBetween('created_at', [$startDate, $endDate]);
         }
@@ -54,7 +62,7 @@ class DashboardController extends Controller
         $totalBookings = $bookingsQuery->count();
         $totalEarnings = (float)$bookingsQuery->sum('paid_amount');
         
-        $monthlyEarnings = \App\Models\Booking::where('vendor_id', $vendorId)
+        $monthlyEarnings = Booking::where('vendor_id', $vendorId)
             ->whereMonth('created_at', now()->month)
             ->whereYear('created_at', now()->year)
             ->sum('paid_amount');
@@ -64,11 +72,11 @@ class DashboardController extends Controller
         if ($startDate && $endDate) {
             $tempDate = (clone $startDate)->startOfMonth();
             while ($tempDate->lte($endDate)) {
-                $revenue = \App\Models\Booking::where('vendor_id', $vendorId)
+                $revenue = Booking::where('vendor_id', $vendorId)
                     ->whereMonth('created_at', $tempDate->month)
                     ->whereYear('created_at', $tempDate->year)
                     ->sum('paid_amount');
-                $count = \App\Models\Booking::where('vendor_id', $vendorId)
+                $count = Booking::where('vendor_id', $vendorId)
                     ->whereMonth('created_at', $tempDate->month)
                     ->whereYear('created_at', $tempDate->year)
                     ->count();
@@ -86,32 +94,32 @@ class DashboardController extends Controller
         $maxRevenue = collect($monthlyRevenue)->max('revenue') ?: 1;
 
         
-        $recentBookings = \App\Models\Booking::with('vehicle')
+        $recentBookings = Booking::with('vehicle')
             ->where('vendor_id', $vendorId)
             ->orderBy('id', 'desc')
             ->take(5)
             ->get();
 
         
-        $automaticCount = \App\Models\Vehicle::where('vendor_id', $vendorId)->where('gear_system', 'Automatic')->count();
-        $manualCount = \App\Models\Vehicle::where('vendor_id', $vendorId)->where('gear_system', 'Manual')->count();
+        $automaticCount = Vehicle::where('vendor_id', $vendorId)->where('gear_system', 'Automatic')->count();
+        $manualCount = Vehicle::where('vendor_id', $vendorId)->where('gear_system', 'Manual')->count();
         $totalGear = $automaticCount + $manualCount;
         
         $autoPercent = $totalGear > 0 ? round(($automaticCount / $totalGear) * 100) : 50;
         $manualPercent = $totalGear > 0 ? round(($manualCount / $totalGear) * 100) : 50;
 
         
-        $totalReviewsCount = \App\Models\Review::where('vendor_id', $vendorId)->count();
-        $avgRating = $totalReviewsCount > 0 ? (float)\App\Models\Review::where('vendor_id', $vendorId)->avg('rating') : 0.0;
-        $recentReviews = \App\Models\Review::with(['user', 'vehicle', 'booking'])
+        $totalReviewsCount = Review::where('vendor_id', $vendorId)->count();
+        $avgRating = $totalReviewsCount > 0 ? (float)Review::where('vendor_id', $vendorId)->avg('rating') : 0.0;
+        $recentReviews = Review::with(['user', 'vehicle', 'booking'])
             ->where('vendor_id', $vendorId)
             ->latest()
             ->take(5)
             ->get();
 
         // Calculate Vehicle Trip Statuses
-        $allVendorBookings = \App\Models\Booking::where('vendor_id', $vendorId)->get();
-        $todayDate = \Carbon\Carbon::today();
+        $allVendorBookings = Booking::where('vendor_id', $vendorId)->get();
+        $todayDate = Carbon::today();
 
         // 1. On Trip (Gayi hain): pickup_date <= Today AND return_date >= Today
         $onTripCount = $allVendorBookings->filter(function ($b) use ($todayDate) {
@@ -155,7 +163,7 @@ class DashboardController extends Controller
 
     public function pricing()
     {
-        $packages = \App\Models\Package::where('is_active', true)->get()->sortBy(function ($package) {
+        $packages = Package::where('is_active', true)->get()->sortBy(function ($package) {
             $priceStr = strtolower($package->price);
             if ($priceStr === 'free' || $priceStr === '0' || $priceStr === '$0') {
                 return 0;
@@ -174,7 +182,7 @@ class DashboardController extends Controller
 
     public function subscriptionHistory()
     {
-        $subscriptions = \App\Models\VendorSubscription::where('vendor_id', auth()->id())
+        $subscriptions = VendorSubscription::where('vendor_id', auth()->id())
             ->with('package')
             ->latest()
             ->get();
@@ -183,7 +191,7 @@ class DashboardController extends Controller
 
     public function subscriptionInvoice($id)
     {
-        $subscription = \App\Models\VendorSubscription::where('vendor_id', auth()->id())
+        $subscription = VendorSubscription::where('vendor_id', auth()->id())
             ->with(['vendor', 'package'])
             ->findOrFail($id);
 
@@ -192,11 +200,11 @@ class DashboardController extends Controller
 
     public function subscribe(Request $request, $packageId)
     {
-        $package = \App\Models\Package::findOrFail($packageId);
+        $package = Package::findOrFail($packageId);
         $user = auth()->user();
 
         
-        \App\Models\VendorSubscription::where('vendor_id', $user->id)
+        VendorSubscription::where('vendor_id', $user->id)
             ->where('status', 'active')
             ->update(['status' => 'expired']);
 
@@ -210,7 +218,7 @@ class DashboardController extends Controller
         }
 
         
-        \App\Models\VendorSubscription::create([
+        VendorSubscription::create([
             'vendor_id' => $user->id,
             'package_id' => $package->id,
             'starts_at' => now(),
@@ -233,7 +241,7 @@ class DashboardController extends Controller
             'country' => 'required|string|max:255',
         ]);
 
-        $package = \App\Models\Package::findOrFail($packageId);
+        $package = Package::findOrFail($packageId);
         
         
         $priceStr = $package->price;
@@ -243,7 +251,7 @@ class DashboardController extends Controller
         $priceInInr = $price;
         
         
-        $siteSettings = \App\Models\SiteSetting::first();
+        $siteSettings = SiteSetting::first();
         $taxRate = $siteSettings ? (float) $siteSettings->tax_percentage : 18.0;
         $totalPrice = $priceInInr * (1 + $taxRate / 100);
 
@@ -259,7 +267,7 @@ class DashboardController extends Controller
         }
         
         
-        $settings = \App\Models\SiteSetting::first();
+        $settings = SiteSetting::first();
         
         $isRazorpayActive = $settings && $settings->razorpay_active && !empty($settings->razorpay_key_id) && !empty($settings->razorpay_key_secret);
         
@@ -268,7 +276,7 @@ class DashboardController extends Controller
                 
                 $amountInPaise = round($totalPrice * 100);
                 
-                $response = \Illuminate\Support\Facades\Http::withoutVerifying()
+                $response = Http::withoutVerifying()
                     ->withBasicAuth($settings->razorpay_key_id, $settings->razorpay_key_secret)
                     ->post('https://api.razorpay.com/v1/orders', [
                         'amount'   => $amountInPaise,
@@ -323,7 +331,7 @@ class DashboardController extends Controller
 
         $mode = $request->input('mode');
         $packageId = $request->input('package_id');
-        $package = \App\Models\Package::findOrFail($packageId);
+        $package = Package::findOrFail($packageId);
         $user = auth()->user();
         
         
@@ -334,7 +342,7 @@ class DashboardController extends Controller
         $priceInInr = $price;
 
         
-        $siteSettings = \App\Models\SiteSetting::first();
+        $siteSettings = SiteSetting::first();
         $taxRate = $siteSettings ? (float) $siteSettings->tax_percentage : 18.0;
         $totalPrice = $priceInInr * (1 + $taxRate / 100);
 
@@ -352,7 +360,7 @@ class DashboardController extends Controller
             $razorpayPaymentId = $request->input('razorpay_payment_id');
             $razorpaySignature = $request->input('razorpay_signature');
             
-            $settings = \App\Models\SiteSetting::first();
+            $settings = SiteSetting::first();
             $keySecret = $settings ? $settings->razorpay_key_secret : '';
             
             
@@ -368,7 +376,7 @@ class DashboardController extends Controller
             
             $paymentMethod = null;
             try {
-                $paymentResponse = \Illuminate\Support\Facades\Http::withBasicAuth($settings ? $settings->razorpay_key_id : '', $keySecret)
+                $paymentResponse = Http::withBasicAuth($settings ? $settings->razorpay_key_id : '', $keySecret)
                     ->get("https://api.razorpay.com/v1/payments/{$razorpayPaymentId}");
                 
                 if ($paymentResponse->successful()) {
@@ -380,12 +388,12 @@ class DashboardController extends Controller
             }
 
             
-            \App\Models\VendorSubscription::where('vendor_id', $user->id)
+            VendorSubscription::where('vendor_id', $user->id)
                 ->where('status', 'active')
                 ->update(['status' => 'expired']);
                 
             
-            \App\Models\VendorSubscription::create([
+            VendorSubscription::create([
                 'vendor_id' => $user->id,
                 'package_id' => $package->id,
                 'starts_at' => now(),
@@ -412,11 +420,11 @@ class DashboardController extends Controller
             ]);
         } elseif ($mode === 'free') {
             
-            \App\Models\VendorSubscription::where('vendor_id', $user->id)
+            VendorSubscription::where('vendor_id', $user->id)
                 ->where('status', 'active')
                 ->update(['status' => 'expired']);
 
-            \App\Models\VendorSubscription::create([
+            VendorSubscription::create([
                 'vendor_id'  => $user->id,
                 'package_id' => $package->id,
                 'starts_at'  => now(),
@@ -440,12 +448,12 @@ class DashboardController extends Controller
         } else {
             
             
-            \App\Models\VendorSubscription::where('vendor_id', $user->id)
+            VendorSubscription::where('vendor_id', $user->id)
                 ->where('status', 'active')
                 ->update(['status' => 'expired']);
                 
             
-            \App\Models\VendorSubscription::create([
+            VendorSubscription::create([
                 'vendor_id' => $user->id,
                 'package_id' => $package->id,
                 'starts_at' => now(),

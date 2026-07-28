@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class Booking extends Model
 {
@@ -50,31 +53,34 @@ class Booking extends Model
 
     public function review()
     {
-        return $this->hasOne(Review::class);
+        return $this->hasOne(Review::class, 'booking_id');
     }
 
-    public function getPaymentMethodLabelAttribute()
+    public function getFormattedPaymentMethodAttribute()
     {
-        $paymentId = $this->payment_reference;
-        $method = $this->payment_method; 
+        $method = $this->payment_method ?? 'Offline';
+        if ($method !== 'Razorpay') {
+            return ucfirst($method);
+        }
 
+        $paymentId = $this->payment_reference;
         if (empty($paymentId)) {
-            return $method === 'arrival' ? 'Pay on Arrival' : 'N/A';
+            return 'Razorpay';
         }
 
         if (strpos($paymentId, 'SIMULATED_') === 0) {
             return 'Razorpay (Simulated)';
         }
 
-        return \Illuminate\Support\Facades\Cache::rememberForever("razorpay_booking_method_{$paymentId}", function () use ($paymentId, $method) {
+        return Cache::rememberForever("razorpay_booking_method_{$paymentId}", function () use ($paymentId, $method) {
             try {
-                $settings = \App\Models\VendorPaymentSetting::where('vendor_id', $this->vendor_id)->first();
+                $settings = VendorPaymentSetting::where('vendor_id', $this->vendor_id)->first();
                 $keyId = $settings ? $settings->razorpay_key : '';
                 $keySecret = $settings ? $settings->razorpay_secret : '';
 
                 if (empty($keyId) || empty($keySecret)) {
                     
-                    $siteSettings = \App\Models\SiteSetting::first();
+                    $siteSettings = SiteSetting::first();
                     $keyId = $siteSettings ? $siteSettings->razorpay_key_id : '';
                     $keySecret = $siteSettings ? $siteSettings->razorpay_key_secret : '';
                 }
@@ -83,18 +89,21 @@ class Booking extends Model
                     return 'Razorpay';
                 }
 
-                $response = \Illuminate\Support\Facades\Http::timeout(5)
+                $response = Http::timeout(5)
                     ->withBasicAuth($keyId, $keySecret)
                     ->get("https://api.razorpay.com/v1/payments/{$paymentId}");
                     
                 if ($response->successful()) {
                     $data = $response->json();
-                    return isset($data['method']) ? strtoupper($data['method']) : 'Razorpay';
+                    if (isset($data['method'])) {
+                        return 'Razorpay (' . ucfirst($data['method']) . ')';
+                    }
                 }
             } catch (\Exception $e) {
-                \Illuminate\Support\Facades\Log::error("Failed to fetch Razorpay method for booking {$paymentId}: " . $e->getMessage());
+                Log::error("Failed to fetch Razorpay method for booking payment {$paymentId}: " . $e->getMessage());
             }
-            return 'Razorpay (' . ucfirst($method) . ')';
+
+            return 'Razorpay';
         });
     }
 

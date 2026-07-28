@@ -4,7 +4,13 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Booking;
+use App\Models\Branch;
+use App\Models\PickupLocation;
+use App\Models\Vehicle;
+use App\Models\VehicleAvailability;
 
 class UserDashboardController extends Controller
 {
@@ -12,7 +18,7 @@ class UserDashboardController extends Controller
     {
         $bookings = [];
         if (auth()->check()) {
-            $bookings = \App\Models\Booking::with('vehicle')
+            $bookings = Booking::with('vehicle')
                 ->where('user_id', auth()->id())
                 ->orderBy('id', 'desc')
                 ->get();
@@ -72,10 +78,10 @@ class UserDashboardController extends Controller
         }
 
         
-        $branches = \App\Models\Branch::where('vendor_id', $id)->where('status', true)->orderBy('name')->get();
+        $branches = Branch::where('vendor_id', $id)->where('status', true)->orderBy('name')->get();
         $selectedBranchId = $request->input('branch_id');
 
-        $locationsQuery = \App\Models\PickupLocation::where('vendor_id', $id);
+        $locationsQuery = PickupLocation::where('vendor_id', $id);
         if ($selectedBranchId) {
             $locationsQuery->where('branch_id', $selectedBranchId);
         }
@@ -88,8 +94,8 @@ class UserDashboardController extends Controller
 
         if ($pickupDate && $returnDate) {
             try {
-                $pDate = \Carbon\Carbon::createFromFormat('d/m/Y', $pickupDate);
-                $rDate = \Carbon\Carbon::createFromFormat('d/m/Y', $returnDate);
+                $pDate = Carbon::createFromFormat('d/m/Y', $pickupDate);
+                $rDate = Carbon::createFromFormat('d/m/Y', $returnDate);
                 $diff = $pDate->diffInDays($rDate);
                 $rentalDays = $diff > 0 ? $diff : 1;
             } catch (\Exception $e) {
@@ -98,7 +104,7 @@ class UserDashboardController extends Controller
         }
 
         
-        $vehiclesQuery = \App\Models\Vehicle::where('vendor_id', $id)->where('status', 'active');
+        $vehiclesQuery = Vehicle::where('vendor_id', $id)->where('status', 'active');
         
         if ($selectedBranchId) {
             $vehiclesQuery->where('branch_id', $selectedBranchId);
@@ -113,7 +119,7 @@ class UserDashboardController extends Controller
         
         
         foreach ($vehicles as $vehicle) {
-            $availability = \App\Models\VehicleAvailability::where('vehicle_id', $vehicle->id)
+            $availability = VehicleAvailability::where('vehicle_id', $vehicle->id)
                 ->where('status', 1)
                 ->orderBy('price', 'asc')
                 ->first();

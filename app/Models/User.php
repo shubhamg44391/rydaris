@@ -225,37 +225,37 @@ class User extends Authenticatable
 
     public function pickupLocations()
     {
-        return $this->hasMany(\App\Models\PickupLocation::class, 'vendor_id');
+        return $this->hasMany(PickupLocation::class, 'vendor_id');
     }
 
     public function vendorExtras()
     {
-        return $this->hasMany(\App\Models\VendorExtra::class, 'vendor_id')->where('type', 'extra');
+        return $this->hasMany(VendorExtra::class, 'vendor_id')->where('type', 'extra');
     }
 
     public function vendorInsurances()
     {
-        return $this->hasMany(\App\Models\VendorExtra::class, 'vendor_id')->where('type', 'insurance');
+        return $this->hasMany(VendorExtra::class, 'vendor_id')->where('type', 'insurance');
     }
 
     public function vendorFeatures()
     {
-        return $this->hasMany(\App\Models\VendorFeature::class, 'vendor_id');
+        return $this->hasMany(VendorFeature::class, 'vendor_id');
     }
 
     public function vendorRules()
     {
-        return $this->hasMany(\App\Models\VendorRule::class, 'vendor_id');
+        return $this->hasMany(VendorRule::class, 'vendor_id');
     }
 
     public function userInvitations()
     {
-        return $this->hasMany(\App\Models\UserInvitation::class, 'vendor_id');
+        return $this->hasMany(UserInvitation::class, 'vendor_id');
     }
 
     public function supportTickets()
     {
-        return $this->hasMany(\App\Models\SupportTicket::class, 'vendor_id');
+        return $this->hasMany(SupportTicket::class, 'vendor_id');
     }
 
     public function checkLimit($count, $limit)
@@ -263,7 +263,7 @@ class User extends Authenticatable
         if ($limit === null || $limit === '' || $limit === 'Unlimited') {
             return true;
         }
-        return $count < (int)$limit;
+        return (int)$count < (int)$limit;
     }
 
     public function canAddLocation()
@@ -361,7 +361,7 @@ class User extends Authenticatable
             return false;
         }
         
-        $count = \App\Models\Booking::where('vendor_id', $this->id)
+        $count = Booking::where('vendor_id', $this->id)
             ->where('created_at', '>=', $subscription->starts_at)
             ->count();
             

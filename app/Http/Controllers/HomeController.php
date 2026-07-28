@@ -4,7 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use App\Mail\ContactSubmissionMail;
+use App\Models\Faq;
+use App\Models\Package;
+use App\Models\AdminTermsCondition;
+use App\Models\ContactInquiry;
+use App\Models\User;
+use App\Models\Page;
 
 class HomeController extends Controller
 {
@@ -36,7 +43,7 @@ class HomeController extends Controller
 
     public function pricing()
     {
-        $packages = \App\Models\Package::where('is_active', true)->get()->sortBy(function ($package) {
+        $packages = Package::where('is_active', true)->get()->sortBy(function ($package) {
             $priceStr = strtolower($package->price);
             if ($priceStr === 'free' || $priceStr === '0' || $priceStr === '$0') {
                 return 0;
@@ -55,16 +62,16 @@ class HomeController extends Controller
 
     public function faq()
     {
-        $productBasics = \App\Models\Faq::where('category', 'product_basics')->orderBy('created_at', 'asc')->get();
-        $onboarding = \App\Models\Faq::where('category', 'onboarding')->orderBy('created_at', 'asc')->get();
-        $reporting = \App\Models\Faq::where('category', 'reporting')->orderBy('created_at', 'asc')->get();
+        $productBasics = Faq::where('category', 'product_basics')->orderBy('created_at', 'asc')->get();
+        $onboarding = Faq::where('category', 'onboarding')->orderBy('created_at', 'asc')->get();
+        $reporting = Faq::where('category', 'reporting')->orderBy('created_at', 'asc')->get();
 
         return view('frontend.faq', compact('productBasics', 'onboarding', 'reporting'));
     }
 
     public function terms()
     {
-        $page = \App\Models\AdminTermsCondition::first();
+        $page = AdminTermsCondition::first();
 
         return view('frontend.terms', compact('page'));
     }
@@ -87,16 +94,16 @@ class HomeController extends Controller
         ]);
 
         
-        \App\Models\ContactInquiry::create($validated);
+        ContactInquiry::create($validated);
 
         
-        $adminEmail = \App\Models\User::where('role', 'super_admin')->first()->email ?? 'admin@rydaris.com';
+        $adminEmail = User::where('role', 'super_admin')->first()->email ?? 'admin@rydaris.com';
 
         try {
             Mail::to($adminEmail)->send(new ContactSubmissionMail($validated));
         } catch (\Exception $e) {
             
-            \Illuminate\Support\Facades\Log::error('Contact email notification failed: ' . $e->getMessage());
+            Log::error('Contact email notification failed: ' . $e->getMessage());
         }
 
         return redirect()->route('contact')->with('success', 'Thank you! Your message has been sent successfully. We will get back to you within one business day.');
@@ -106,7 +113,7 @@ class HomeController extends Controller
 
     public function showPage($slug)
     {
-        $page = \App\Models\Page::where('slug', $slug)->firstOrFail();
+        $page = Page::where('slug', $slug)->firstOrFail();
         return view('frontend.page', compact('page'));
     }
 }

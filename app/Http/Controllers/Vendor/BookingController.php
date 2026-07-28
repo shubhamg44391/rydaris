@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Vendor;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
+use App\Models\Booking;
+use App\Models\VendorSmtpSetting;
 
 class BookingController extends Controller
 {
@@ -12,7 +16,7 @@ class BookingController extends Controller
         
         auth()->user()->update(['last_checked_bookings_at' => now()]);
 
-        $bookings = \App\Models\Booking::with(['vehicle', 'pickupLocation', 'returnLocation', 'user', 'review'])
+        $bookings = Booking::with(['vehicle', 'pickupLocation', 'returnLocation', 'user', 'review'])
             ->where('vendor_id', auth()->id())
             ->orderBy('created_at', 'desc')
             ->paginate(10);
@@ -22,7 +26,7 @@ class BookingController extends Controller
 
     public function payment()
     {
-        $bookings = \App\Models\Booking::with(['vehicle', 'review'])
+        $bookings = Booking::with(['vehicle', 'review'])
             ->where('vendor_id', auth()->id())
             ->orderBy('created_at', 'desc')
             ->paginate(10);
@@ -37,7 +41,7 @@ class BookingController extends Controller
             'status' => 'required|string',
         ]);
 
-        $booking = \App\Models\Booking::with('vehicle')->where('id', $request->booking_id)
+        $booking = Booking::with('vehicle')->where('id', $request->booking_id)
             ->where('vendor_id', auth()->id())
             ->firstOrFail();
 
@@ -46,7 +50,7 @@ class BookingController extends Controller
 
         
         try {
-            \App\Models\VendorSmtpSetting::setMailConfig($booking->vendor_id);
+            VendorSmtpSetting::setMailConfig($booking->vendor_id);
             $template = 'email_templates.status_change';
             
             if ($request->status == 'cancelled') {
@@ -91,12 +95,12 @@ class BookingController extends Controller
                 'pai' => '',
             ];
             
-            \Illuminate\Support\Facades\Mail::send($template, ['booking' => $booking, 'vehicle' => $booking->vehicle, 'customer_data' => $customer_data, 'trip_data' => $trip_data], function ($message) use ($booking, $request) {
+            Mail::send($template, ['booking' => $booking, 'vehicle' => $booking->vehicle, 'customer_data' => $customer_data, 'trip_data' => $trip_data], function ($message) use ($booking, $request) {
                 $message->to($booking->customer_email)
                         ->subject('Booking Status Updated - Rydaris');
             });
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Failed to send status update email: ' . $e->getMessage());
+            Log::error('Failed to send status update email: ' . $e->getMessage());
         }
 
         return response()->json(['success' => true, 'message' => 'Booking status updated successfully.']);
@@ -104,7 +108,7 @@ class BookingController extends Controller
 
     public function show($id)
     {
-        $booking = \App\Models\Booking::with(['vehicle', 'pickupLocation', 'returnLocation', 'user'])
+        $booking = Booking::with(['vehicle', 'pickupLocation', 'returnLocation', 'user'])
             ->where('vendor_id', auth()->id())
             ->where('id', $id)
             ->firstOrFail();
@@ -114,7 +118,7 @@ class BookingController extends Controller
 
     public function update(Request $request, $id)
     {
-        $booking = \App\Models\Booking::where('vendor_id', auth()->id())
+        $booking = Booking::where('vendor_id', auth()->id())
             ->where('id', $id)
             ->firstOrFail();
 
@@ -160,7 +164,7 @@ class BookingController extends Controller
     public function exportCsv()
     {
         
-        $bookings = \App\Models\Booking::with(['vehicle', 'pickupLocation', 'returnLocation', 'user'])
+        $bookings = Booking::with(['vehicle', 'pickupLocation', 'returnLocation', 'user'])
             ->where('vendor_id', auth()->id())
             ->orderBy('created_at', 'desc')
             ->get();

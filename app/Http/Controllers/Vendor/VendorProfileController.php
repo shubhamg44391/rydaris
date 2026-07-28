@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
+use App\Models\Branch;
+use App\Models\User;
 
 class VendorProfileController extends Controller
 {
@@ -15,7 +18,7 @@ class VendorProfileController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $branches = \App\Models\Branch::where('vendor_id', $user->id)
+        $branches = Branch::where('vendor_id', $user->id)
             ->where('status', true)
             ->orderBy('name')
             ->get();
@@ -47,7 +50,7 @@ class VendorProfileController extends Controller
         ]);
 
         if ($request->filled('current_branch_id')) {
-            $branchExists = \App\Models\Branch::where('vendor_id', $user->id)
+            $branchExists = Branch::where('vendor_id', $user->id)
                 ->where('id', $request->current_branch_id)
                 ->where('status', true)
                 ->exists();
@@ -56,10 +59,10 @@ class VendorProfileController extends Controller
             }
         }
 
-        $baseUsername = \Illuminate\Support\Str::slug($request->username, '');
+        $baseUsername = Str::slug($request->username, '');
         $username = $baseUsername;
         
-        while (\App\Models\User::where('username', $username)->where('id', '!=', $user->id)->exists()) {
+        while (User::where('username', $username)->where('id', '!=', $user->id)->exists()) {
             $username = $baseUsername . random_int(100, 9999);
         }
 

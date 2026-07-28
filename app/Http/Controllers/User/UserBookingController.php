@@ -7,11 +7,21 @@ use Illuminate\Http\Request;
 use App\Models\Vehicle;
 use App\Models\VendorExtra;
 use App\Models\PickupLocation;
+use App\Models\VehicleAvailability;
+use App\Models\VendorFeature;
+use App\Models\VendorPaymentSetting;
+use App\Models\VendorPage;
+use App\Models\Booking;
+use App\Models\BookingExtra;
+use App\Models\Review;
+use App\Models\VendorSmtpSetting;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Config;
-use App\Models\VendorSmtpSetting;
-use App\Models\User;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+
 class UserBookingController extends Controller
 {
     public function coverage(Request $request, $vehicle_id)
@@ -35,7 +45,7 @@ class UserBookingController extends Controller
         }
 
         
-        $availability = \App\Models\VehicleAvailability::where('vehicle_id', $vehicle->id)
+        $availability = VehicleAvailability::where('vehicle_id', $vehicle->id)
             ->where('status', 1)
             ->orderBy('price', 'asc')
             ->first();
@@ -65,7 +75,7 @@ class UserBookingController extends Controller
                         ->get();
         
         
-        $vendorFeatures = \App\Models\VendorFeature::where('vendor_id', $vehicle->vendor_id)
+        $vendorFeatures = VendorFeature::where('vendor_id', $vehicle->vendor_id)
                         ->where('status', 1)
                         ->orderBy('index_no')
                         ->get();
@@ -106,7 +116,7 @@ class UserBookingController extends Controller
         }
 
         
-        $availability = \App\Models\VehicleAvailability::where('vehicle_id', $vehicle->id)
+        $availability = VehicleAvailability::where('vehicle_id', $vehicle->id)
             ->where('status', 1)
             ->orderBy('price', 'asc')
             ->first();
@@ -162,10 +172,10 @@ class UserBookingController extends Controller
         $grandTotal = $vehicle->total_price + $insuranceTotal + $extrasTotal;
 
         
-        $paymentSettings = \App\Models\VendorPaymentSetting::where('vendor_id', $vehicle->vendor_id)->first();
+        $paymentSettings = VendorPaymentSetting::where('vendor_id', $vehicle->vendor_id)->first();
 
         
-        $vendorTC = \App\Models\VendorPage::where('vendor_id', $vehicle->vendor_id)->first();
+        $vendorTC = VendorPage::where('vendor_id', $vehicle->vendor_id)->first();
 
         return view('user.booking.payment', compact(
             'vehicle', 'rentalDays', 'pickupDate', 'returnDate', 'pickupTime', 'returnTime',
@@ -195,7 +205,7 @@ class UserBookingController extends Controller
         }
 
         
-        $availability = \App\Models\VehicleAvailability::where('vehicle_id', $vehicle->id)
+        $availability = VehicleAvailability::where('vehicle_id', $vehicle->id)
             ->where('status', 1)
             ->orderBy('price', 'asc')
             ->first();
@@ -283,7 +293,7 @@ class UserBookingController extends Controller
 
         do {
             $reservationNumber = $prefix . mt_rand(10000, 99999);
-        } while (\App\Models\Booking::where('reservation_number', $reservationNumber)->exists());
+        } while (Booking::where('reservation_number', $reservationNumber)->exists());
 
         
         $totalAmount = (float)$request->input('total_price', 0);
@@ -294,7 +304,7 @@ class UserBookingController extends Controller
         $paymentMethod = $request->input('payment_method', 'arrival');
 
         
-        $paymentSettings = \App\Models\VendorPaymentSetting::where('vendor_id', $vehicle->vendor_id)->first();
+        $paymentSettings = VendorPaymentSetting::where('vendor_id', $vehicle->vendor_id)->first();
         
         if ($request->has('razorpay_payment_id') && !empty($request->input('razorpay_payment_id'))) {
             $paymentReference = $request->input('razorpay_payment_id');
@@ -314,7 +324,7 @@ class UserBookingController extends Controller
             }
         }
 
-        $booking = \App\Models\Booking::create([
+        $booking = Booking::create([
             'reservation_number' => $reservationNumber,
             'vendor_id' => $vehicle->vendor_id,
             'user_id' => auth()->id(), 
@@ -341,27 +351,30 @@ class UserBookingController extends Controller
 
         
         if ($request->filled('insurance_id')) {
-            $selectedInsurance = \App\Models\VendorExtra::find($request->input('insurance_id'));
+            $selectedInsurance = VendorExtra::find($request->input('insurance_id'));
             if ($selectedInsurance) {
-                \App\Models\BookingExtra::create([
+                BookingExtra::create([
                     'booking_id' => $booking->id,
                     'vendor_extra_id' => $selectedInsurance->id,
-                    'qty' => 1,
-                    'price' => $selectedInsurance->price
+                    'name' => $selectedInsurance->name,
+                    'price' => $selectedInsurance->price,
+                    'charge_type' => $selectedInsurance->charge_type,
+                    'quantity' => 1,
                 ]);
             }
         }
 
         
-        if ($request->filled('extras')) {
+        if ($request->filled('selected_extras')) {
+            $extrasInput = $request->input('selected_extras');
+            $extrasList = is_array($extrasInput) ? $extrasInput : explode(',', $extrasInput);
             
-            $extrasArr = explode(',', $request->input('extras'));
-            foreach ($extrasArr as $ex) {
-                $parts = explode(':', $ex);
-                if (count($parts) == 2) {
-                    $extra = \App\Models\VendorExtra::find($parts[0]);
+            foreach ($extrasList as $item) {
+                $parts = explode(':', trim($item));
+                if (count($parts) >= 2 && (int)$parts[1] > 0) {
+                    $extra = VendorExtra::find($parts[0]);
                     if ($extra) {
-                        \App\Models\BookingExtra::create([
+                        BookingExtra::create([
                             'booking_id' => $booking->id,
                             'vendor_extra_id' => $extra->id,
                             'qty' => (int)$parts[1],
@@ -397,10 +410,9 @@ class UserBookingController extends Controller
 
             
             Config::set('mail', $defaultConfig);
-            \Illuminate\Support\Facades\Mail::purge('smtp');
-
+            Mail::purge('smtp');
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Error sending booking emails: ' . $e->getMessage());
+            Log::error('Error sending booking emails: ' . $e->getMessage());
         }
 
         
@@ -432,7 +444,7 @@ class UserBookingController extends Controller
         }
 
         
-        $availability = \App\Models\VehicleAvailability::where('vehicle_id', $vehicle->id)
+        $availability = VehicleAvailability::where('vehicle_id', $vehicle->id)
             ->where('status', 1)
             ->orderBy('price', 'asc')
             ->first();
@@ -496,15 +508,15 @@ class UserBookingController extends Controller
 
     public function edit($id)
     {
-        $booking = \App\Models\Booking::with(['vehicle', 'pickupLocation', 'returnLocation', 'vendor', 'extras.vendorExtra'])
+        $booking = Booking::with(['vehicle', 'pickupLocation', 'returnLocation', 'vendor', 'extras.vendorExtra'])
             ->where('user_id', auth()->id())
             ->where('id', $id)
             ->firstOrFail();
             
-        $locations = \App\Models\PickupLocation::where('vendor_id', $booking->vendor_id)->get();
-        $vehicles = \App\Models\Vehicle::where('vendor_id', $booking->vendor_id)->where('status', 1)->get();
+        $locations = PickupLocation::where('vendor_id', $booking->vendor_id)->get();
+        $vehicles = Vehicle::where('vendor_id', $booking->vendor_id)->where('status', 1)->get();
         
-        $availableExtras = \App\Models\VendorExtra::where('vendor_id', $booking->vendor_id)
+        $availableExtras = VendorExtra::where('vendor_id', $booking->vendor_id)
             ->where('type', 'extra')
             ->where('status', 1)
             ->get();
@@ -514,9 +526,9 @@ class UserBookingController extends Controller
         return view('user.booking.edit', compact('booking', 'locations', 'vehicles', 'availableExtras', 'selectedExtras'));
     }
 
-    public function update(Request $request, $id)
+    public function updateBooking(Request $request, $id)
     {
-        $booking = \App\Models\Booking::where('user_id', auth()->id())
+        $booking = Booking::where('user_id', auth()->id())
             ->where('id', $id)
             ->firstOrFail();
 
@@ -539,41 +551,12 @@ class UserBookingController extends Controller
         ]);
 
         
-        $pickupDate = $request->input('pickup_date');
-        $returnDate = $request->input('return_date');
-        
-        $pDate = null;
-        $rDate = null;
-        
-        foreach (['Y-m-d', 'd/m/Y', 'd-m-Y'] as $format) {
-            try {
-                if (!$pDate) $pDate = \Carbon\Carbon::createFromFormat($format, $pickupDate);
-            } catch (\Exception $e) {}
-            try {
-                if (!$rDate) $rDate = \Carbon\Carbon::createFromFormat($format, $returnDate);
-            } catch (\Exception $e) {}
-        }
-        
-        if (!$pDate) {
-            try {
-                $pDate = \Carbon\Carbon::parse($pickupDate);
-            } catch (\Exception $e) {
-                $pDate = \Carbon\Carbon::now();
-            }
-        }
-        if (!$rDate) {
-            try {
-                $rDate = \Carbon\Carbon::parse($returnDate);
-            } catch (\Exception $e) {
-                $rDate = \Carbon\Carbon::now()->addDays(2);
-            }
-        }
-        
-        $diff = $pDate->diffInDays($rDate);
-        $rentalDays = $diff > 0 ? $diff : 1;
+        $pickupDate = Carbon::createFromFormat('Y-m-d', $request->input('pickup_date'));
+        $returnDate = Carbon::createFromFormat('Y-m-d', $request->input('return_date'));
+        $rentalDays = max(1, $pickupDate->diffInDays($returnDate));
 
         
-        $vehicle = \App\Models\Vehicle::findOrFail($request->input('vehicle_id'));
+        $vehicle = Vehicle::findOrFail($request->input('vehicle_id'));
         $carTotal = ($vehicle->price_per_day ?? 50) * $rentalDays;
 
         
@@ -583,7 +566,7 @@ class UserBookingController extends Controller
             foreach ($request->input('extras') as $extraId => $qty) {
                 $qty = (int)$qty;
                 if ($qty > 0) {
-                    $extra = \App\Models\VendorExtra::find($extraId);
+                    $extra = VendorExtra::find($extraId);
                     if ($extra) {
                         $price = $extra->price;
                         if ($extra->price_type == 1) { 
@@ -657,9 +640,9 @@ class UserBookingController extends Controller
             }
 
             Config::set('mail', $defaultConfig);
-            \Illuminate\Support\Facades\Mail::purge('smtp');
+            Mail::purge('smtp');
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Error sending modify-booking emails: ' . $e->getMessage());
+            Log::error('Error sending modify-booking emails: ' . $e->getMessage());
         }
 
         return redirect()->back()->with('success', 'Booking details updated successfully.');
@@ -667,7 +650,7 @@ class UserBookingController extends Controller
 
     public function checkinRedirect()
     {
-        $booking = \App\Models\Booking::where('user_id', auth()->id())
+        $booking = Booking::where('user_id', auth()->id())
             ->orderBy('id', 'desc')
             ->first();
 
@@ -680,12 +663,12 @@ class UserBookingController extends Controller
 
     public function checkinForm($id)
     {
-        $booking = \App\Models\Booking::with(['vehicle', 'pickupLocation', 'returnLocation', 'vendor', 'extras.vendorExtra'])
+        $booking = Booking::with(['vehicle', 'pickupLocation', 'returnLocation', 'vendor', 'extras.vendorExtra'])
             ->where('user_id', auth()->id())
             ->findOrFail($id);
 
         
-        $recentDocBooking = \App\Models\Booking::where('user_id', auth()->id())
+        $recentDocBooking = Booking::where('user_id', auth()->id())
             ->where('checkin_status', true)
             ->where('updated_at', '>=', now()->subMonths(3))
             ->orderBy('updated_at', 'desc')
@@ -707,9 +690,9 @@ class UserBookingController extends Controller
 
     public function submitCheckin(Request $request, $id)
     {
-        $booking = \App\Models\Booking::where('user_id', auth()->id())->findOrFail($id);
+        $booking = Booking::where('user_id', auth()->id())->findOrFail($id);
 
-        $recentDocBooking = \App\Models\Booking::where('user_id', auth()->id())
+        $recentDocBooking = Booking::where('user_id', auth()->id())
             ->where('checkin_status', true)
             ->where('updated_at', '>=', now()->subMonths(3))
             ->orderBy('updated_at', 'desc')
@@ -736,8 +719,8 @@ class UserBookingController extends Controller
         ];
 
         if ($request->hasFile('license_image')) {
-            if ($booking->license_image && \Storage::disk('public')->exists($booking->license_image)) {
-                \Storage::disk('public')->delete($booking->license_image);
+            if ($booking->license_image && Storage::disk('public')->exists($booking->license_image)) {
+                Storage::disk('public')->delete($booking->license_image);
             }
             $data['license_image'] = $request->file('license_image')->store('documents', 'public');
         } elseif (!$booking->license_image && $recentDocBooking && $recentDocBooking->license_image) {
@@ -745,8 +728,8 @@ class UserBookingController extends Controller
         }
 
         if ($request->hasFile('passport_image')) {
-            if ($booking->passport_image && \Storage::disk('public')->exists($booking->passport_image)) {
-                \Storage::disk('public')->delete($booking->passport_image);
+            if ($booking->passport_image && Storage::disk('public')->exists($booking->passport_image)) {
+                Storage::disk('public')->delete($booking->passport_image);
             }
             $data['passport_image'] = $request->file('passport_image')->store('documents', 'public');
         } elseif (!$booking->passport_image && $recentDocBooking && $recentDocBooking->passport_image) {
@@ -760,7 +743,7 @@ class UserBookingController extends Controller
 
     public function paymentRedirect()
     {
-        $booking = \App\Models\Booking::where('user_id', auth()->id())
+        $booking = Booking::where('user_id', auth()->id())
             ->orderBy('id', 'desc')
             ->first();
 
@@ -773,18 +756,18 @@ class UserBookingController extends Controller
 
     public function paymentPage($id)
     {
-        $booking = \App\Models\Booking::with(['vehicle', 'pickupLocation', 'returnLocation', 'vendor', 'extras.vendorExtra'])
+        $booking = Booking::with(['vehicle', 'pickupLocation', 'returnLocation', 'vendor', 'extras.vendorExtra'])
             ->where('user_id', auth()->id())
             ->findOrFail($id);
 
-        $paymentSettings = \App\Models\VendorPaymentSetting::where('vendor_id', $booking->vendor_id)->first();
+        $paymentSettings = VendorPaymentSetting::where('vendor_id', $booking->vendor_id)->first();
 
         return view('user.booking.payment-page', compact('booking', 'paymentSettings'));
     }
 
-    public function processPaymentPage(\Illuminate\Http\Request $request, $id)
+    public function processPaymentPage(Request $request, $id)
     {
-        $booking = \App\Models\Booking::where('user_id', auth()->id())->findOrFail($id);
+        $booking = Booking::where('user_id', auth()->id())->findOrFail($id);
 
         $request->validate([
             'payment_choice' => 'required|in:deposit,full'
@@ -793,7 +776,7 @@ class UserBookingController extends Controller
         $choice = $request->input('payment_choice');
         $totalAmount = (float)$booking->total_amount;
 
-        $paymentSettings = \App\Models\VendorPaymentSetting::where('vendor_id', $booking->vendor_id)->first();
+        $paymentSettings = VendorPaymentSetting::where('vendor_id', $booking->vendor_id)->first();
         $discountPercent = $paymentSettings ? (float)($paymentSettings->full_payment_discount ?? 5) : 5;
         $depositPercent = $paymentSettings ? (float)($paymentSettings->deposit_percentage ?? 5) : 5;
 
@@ -837,7 +820,7 @@ class UserBookingController extends Controller
 
     public function invoice($id)
     {
-        $booking = \App\Models\Booking::with(['vehicle.vendor', 'pickupLocation', 'returnLocation', 'extras.vendorExtra'])
+        $booking = Booking::with(['vehicle.vendor', 'pickupLocation', 'returnLocation', 'extras.vendorExtra'])
             ->where('user_id', auth()->id())
             ->findOrFail($id);
 
@@ -846,9 +829,9 @@ class UserBookingController extends Controller
 
     public function submitReview(Request $request, $id)
     {
-        $booking = \App\Models\Booking::where('user_id', auth()->id())->findOrFail($id);
+        $booking = Booking::where('user_id', auth()->id())->findOrFail($id);
 
-        if (\App\Models\Review::where('booking_id', $booking->id)->exists()) {
+        if (Review::where('booking_id', $booking->id)->exists()) {
             return redirect()->back()->with('error', 'You have already submitted a review for this booking.');
         }
 
@@ -857,7 +840,7 @@ class UserBookingController extends Controller
             'comment' => 'nullable|string|max:1000'
         ]);
 
-        \App\Models\Review::create([
+        Review::create([
             'booking_id' => $booking->id,
             'vendor_id' => $booking->vendor_id,
             'vehicle_id' => $booking->vehicle_id,

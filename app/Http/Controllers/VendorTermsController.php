@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\VendorPage;
 use App\Models\User;
+use App\Models\Vehicle;
 
 class VendorTermsController extends Controller
 {
     
+
 
     public function show($vendorId)
     {
@@ -21,7 +23,7 @@ class VendorTermsController extends Controller
 
     public function showVehicleTerms($vehicleId)
     {
-        $vehicle = \App\Models\Vehicle::findOrFail($vehicleId);
+        $vehicle = Vehicle::findOrFail($vehicleId);
         $vendor = User::findOrFail($vehicle->vendor_id);
         
         $tc = (object)[

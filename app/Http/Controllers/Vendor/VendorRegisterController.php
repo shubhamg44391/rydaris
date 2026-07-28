@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Mail\AdminNewVendorMail;
 use App\Mail\VendorWelcomeMail;
 use App\Models\User;
+use App\Models\UserInvitation;
+use App\Models\SiteSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -24,7 +26,7 @@ class VendorRegisterController extends Controller
         $invitation = null;
 
         if (request()->has('invite_token')) {
-            $invitation = \App\Models\UserInvitation::where('token', request('invite_token'))
+            $invitation = UserInvitation::where('token', request('invite_token'))
                 ->where('status', 'pending')
                 ->first();
                 
@@ -42,7 +44,7 @@ class VendorRegisterController extends Controller
     {
         $invitation = null;
         if ($request->filled('invite_token')) {
-            $invitation = \App\Models\UserInvitation::where('token', $request->invite_token)
+            $invitation = UserInvitation::where('token', $request->invite_token)
                 ->where('status', 'pending')
                 ->first();
                 
@@ -184,9 +186,9 @@ class VendorRegisterController extends Controller
     {
         try {
             try {
-                \App\Models\SiteSetting::setMailConfig();
+                SiteSetting::setMailConfig();
             } catch (\Exception $e) {
-                \Illuminate\Support\Facades\Log::error("Failed to load SMTP settings for registration emails: " . $e->getMessage());
+                Log::error("Failed to load SMTP settings for registration emails: " . $e->getMessage());
             }
 
             Mail::to($user->email)->send(new VendorWelcomeMail($user));
@@ -201,7 +203,7 @@ class VendorRegisterController extends Controller
                 Mail::to($admin->email)->send(new AdminNewVendorMail($user));
             }
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error("Failed to send vendor registration emails: " . $e->getMessage());
+            Log::error("Failed to send vendor registration emails: " . $e->getMessage());
         }
     }
 }

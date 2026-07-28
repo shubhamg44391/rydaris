@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use App\Models\SiteSetting;
 
 class AdminSettingController extends Controller
@@ -33,6 +36,8 @@ class AdminSettingController extends Controller
             'razorpay_active' => $request->has('razorpay_active'),
             'tax_percentage' => $request->input('tax_percentage', 18),
         ]);
+
+        Cache::forget('site_setting_global');
 
         return back()->with('success', 'Razorpay settings updated successfully.');
     }
@@ -70,6 +75,8 @@ class AdminSettingController extends Controller
             'from_name' => $request->input('from_name'),
         ]);
 
+        Cache::forget('site_setting_global');
+
         return back()->with('success', 'Mail / SMTP settings updated successfully.');
     }
 
@@ -85,7 +92,7 @@ class AdminSettingController extends Controller
             
             SiteSetting::setMailConfig();
             
-            \Illuminate\Support\Facades\Mail::raw('This is a test email from Rydaris to verify your SMTP settings. If you receive this, your settings are correct!', function($message) use ($request) {
+            Mail::raw('This is a test email from Rydaris to verify your SMTP settings. If you receive this, your settings are correct!', function($message) use ($request) {
                 $message->to($request->input('test_email'))
                         ->subject('Test Email - Rydaris SMTP Verification');
             });
@@ -120,29 +127,29 @@ class AdminSettingController extends Controller
         ];
 
         if ($request->hasFile('site_logo')) {
-            if ($settings->site_logo && \Illuminate\Support\Facades\Storage::disk('public')->exists($settings->site_logo)) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($settings->site_logo);
+            if ($settings->site_logo && Storage::disk('public')->exists($settings->site_logo)) {
+                Storage::disk('public')->delete($settings->site_logo);
             }
             $data['site_logo'] = $request->file('site_logo')->store('site', 'public');
         }
 
         if ($request->hasFile('site_logo_light')) {
-            if ($settings->site_logo_light && \Illuminate\Support\Facades\Storage::disk('public')->exists($settings->site_logo_light)) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($settings->site_logo_light);
+            if ($settings->site_logo_light && Storage::disk('public')->exists($settings->site_logo_light)) {
+                Storage::disk('public')->delete($settings->site_logo_light);
             }
             $data['site_logo_light'] = $request->file('site_logo_light')->store('site', 'public');
         }
 
         if ($request->hasFile('favicon')) {
-            if ($settings->favicon && \Illuminate\Support\Facades\Storage::disk('public')->exists($settings->favicon)) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($settings->favicon);
+            if ($settings->favicon && Storage::disk('public')->exists($settings->favicon)) {
+                Storage::disk('public')->delete($settings->favicon);
             }
             $data['favicon'] = $request->file('favicon')->store('site', 'public');
         }
 
         $settings->update($data);
 
-        \Illuminate\Support\Facades\Cache::forget('site_setting_global');
+        Cache::forget('site_setting_global');
 
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json([

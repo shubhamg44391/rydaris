@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use App\Models\UserInvitation;
+use App\Models\VendorSmtpSetting;
 
 class InviteUserMail extends Mailable
 {
@@ -34,7 +35,7 @@ class InviteUserMail extends Mailable
         $email = $this->subject('Invitation from ' . $vendorName)
                       ->view('emails.invite-user');
 
-        $smtpSetting = \App\Models\VendorSmtpSetting::where('vendor_id', $this->invitation->vendor_id)->first();
+        $smtpSetting = VendorSmtpSetting::where('vendor_id', $this->invitation->vendor_id)->first();
         if ($smtpSetting && $smtpSetting->from_email) {
             $email->from($smtpSetting->from_email, $smtpSetting->from_name ?? $vendorName);
         } else {

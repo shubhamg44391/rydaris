@@ -4,6 +4,10 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Pagination\Paginator;
+use App\Models\SeoMetadata;
+use App\Models\SiteSetting;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Schema::defaultStringLength(191);
-        \Illuminate\Pagination\Paginator::useBootstrapFive();
+        Paginator::useBootstrapFive();
 
         view()->composer('*', function ($view) {
             if (!app()->runningInConsole() && Schema::hasTable('seo_metadatas')) {
@@ -62,8 +66,8 @@ class AppServiceProvider extends ServiceProvider
                     }
                 }
 
-                $seo = \Illuminate\Support\Facades\Cache::remember('seo_' . md5($lookupPath), 600, function () use ($lookupPath) {
-                    return \App\Models\SeoMetadata::where('url_path', $lookupPath)->first();
+                $seo = Cache::remember('seo_' . md5($lookupPath), 600, function () use ($lookupPath) {
+                    return SeoMetadata::where('url_path', $lookupPath)->first();
                 });
 
                 if ($seo) {
@@ -74,8 +78,8 @@ class AppServiceProvider extends ServiceProvider
             }
 
             if (!app()->runningInConsole() && Schema::hasTable('site_settings')) {
-                $site_setting = \Illuminate\Support\Facades\Cache::remember('site_setting_global', 600, function () {
-                    return \App\Models\SiteSetting::first();
+                $site_setting = Cache::remember('site_setting_global', 600, function () {
+                    return SiteSetting::first();
                 });
                 $view->with('site_setting', $site_setting);
             }

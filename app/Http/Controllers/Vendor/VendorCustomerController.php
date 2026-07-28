@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Vendor;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Booking;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -159,7 +160,7 @@ class VendorCustomerController extends Controller
             ->where('vendor_id', auth()->id())
             ->findOrFail($id);
 
-        $bookings = \App\Models\Booking::where('vendor_id', auth()->id())
+        $bookings = Booking::where('vendor_id', auth()->id())
             ->where(function($q) use ($customer) {
                 $q->where('user_id', $customer->id)
                   ->orWhere('customer_email', $customer->email);

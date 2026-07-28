@@ -4,6 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
+use App\Mail\PlanActivationMail;
 
 class VendorSubscription extends Model
 {
@@ -37,15 +42,15 @@ class VendorSubscription extends Model
             if ($subscription->status === 'active') {
                 try {
                     
-                    \App\Models\SiteSetting::setMailConfig();
+                    SiteSetting::setMailConfig();
 
                     $vendor = $subscription->vendor;
                     if ($vendor && $vendor->email) {
-                        \Illuminate\Support\Facades\Mail::to($vendor->email)
-                            ->send(new \App\Mail\PlanActivationMail($subscription));
+                        Mail::to($vendor->email)
+                            ->send(new PlanActivationMail($subscription));
                     }
                 } catch (\Exception $e) {
-                    \Illuminate\Support\Facades\Log::error("Failed to send subscription activation email to vendor: " . $e->getMessage());
+                    Log::error("Failed to send subscription activation email to vendor: " . $e->getMessage());
                 }
             }
         });
@@ -78,9 +83,9 @@ class VendorSubscription extends Model
             return 'Simulated / Free';
         }
         
-        return \Illuminate\Support\Facades\Cache::rememberForever("razorpay_method_{$paymentId}", function () use ($paymentId) {
+        return Cache::rememberForever("razorpay_method_{$paymentId}", function () use ($paymentId) {
             try {
-                $settings = \App\Models\SiteSetting::first();
+                $settings = SiteSetting::first();
                 $keyId = $settings ? $settings->razorpay_key_id : '';
                 $keySecret = $settings ? $settings->razorpay_key_secret : '';
                 
@@ -88,7 +93,7 @@ class VendorSubscription extends Model
                     return 'Razorpay';
                 }
 
-                $response = \Illuminate\Support\Facades\Http::timeout(5)
+                $response = Http::timeout(5)
                     ->withBasicAuth($keyId, $keySecret)
                     ->get("https://api.razorpay.com/v1/payments/{$paymentId}");
                     
@@ -97,8 +102,9 @@ class VendorSubscription extends Model
                     return isset($data['method']) ? strtoupper($data['method']) : 'Razorpay';
                 }
             } catch (\Exception $e) {
-                \Illuminate\Support\Facades\Log::error("Failed to fetch Razorpay method for subscription payment {$paymentId}: " . $e->getMessage());
+                Log::error("Failed to fetch Razorpay method for subscription payment {$paymentId}: " . $e->getMessage());
             }
+
             return 'Razorpay';
         });
     }
