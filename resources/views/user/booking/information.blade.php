@@ -63,28 +63,28 @@
                         <div class="card-body p-4 pt-2">
                             <div class="row g-4">
                                 <div class="col-md-6">
-                                    <label style="display: block; margin-bottom: 8px; color: #94a3b8; font-size: 0.85rem; font-weight: 600;">First Name *</label>
-                                    <input type="text" id="first_name" class="form-control" placeholder="John" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; padding: 12px 15px; border-radius: 8px;" value="{{ auth()->check() ? (auth()->user()->first_name ?? (str_contains(auth()->user()->name, ' ') ? explode(' ', auth()->user()->name, 2)[0] : auth()->user()->name)) : '' }}" required>
+                                    <label style="display: block; margin-bottom: 8px; color: #e2e8f0; font-size: 0.88rem; font-weight: 700;">First Name *</label>
+                                    <input type="text" id="first_name" class="form-control" placeholder="John" style="background: rgba(11, 16, 32, 0.8); border: 1px solid rgba(82, 234, 210, 0.3); color: #ffffff; font-weight: 600; padding: 12px 15px; border-radius: 8px;" value="{{ auth()->check() ? (auth()->user()->first_name ?? (str_contains(auth()->user()->name, ' ') ? explode(' ', auth()->user()->name, 2)[0] : auth()->user()->name)) : '' }}" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label style="display: block; margin-bottom: 8px; color: #94a3b8; font-size: 0.85rem; font-weight: 600;">Last Name *</label>
-                                    <input type="text" id="last_name" class="form-control" placeholder="Doe" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; padding: 12px 15px; border-radius: 8px;" value="{{ auth()->check() ? (auth()->user()->last_name ?? (str_contains(auth()->user()->name, ' ') ? explode(' ', auth()->user()->name, 2)[1] : '-')) : '' }}" required>
+                                    <label style="display: block; margin-bottom: 8px; color: #e2e8f0; font-size: 0.88rem; font-weight: 700;">Last Name *</label>
+                                    <input type="text" id="last_name" class="form-control" placeholder="Doe" style="background: rgba(11, 16, 32, 0.8); border: 1px solid rgba(82, 234, 210, 0.3); color: #ffffff; font-weight: 600; padding: 12px 15px; border-radius: 8px;" value="{{ auth()->check() ? (auth()->user()->last_name ?? (str_contains(auth()->user()->name, ' ') ? explode(' ', auth()->user()->name, 2)[1] : '-')) : '' }}" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label style="display: block; margin-bottom: 8px; color: #94a3b8; font-size: 0.85rem; font-weight: 600;">Email *</label>
-                                    <input type="email" id="email" class="form-control" placeholder="john.doe@example.com" oncopy="return false" onpaste="return false" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; padding: 12px 15px; border-radius: 8px;" value="{{ auth()->check() ? auth()->user()->email : '' }}" required>
+                                    <label style="display: block; margin-bottom: 8px; color: #e2e8f0; font-size: 0.88rem; font-weight: 700;">Email *</label>
+                                    <input type="email" id="email" class="form-control" placeholder="john.doe@example.com" oncopy="return false" onpaste="return false" style="background: rgba(11, 16, 32, 0.8); border: 1px solid rgba(82, 234, 210, 0.3); color: #ffffff; font-weight: 600; padding: 12px 15px; border-radius: 8px;" value="{{ auth()->check() ? auth()->user()->email : '' }}" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label style="display: block; margin-bottom: 8px; color: #94a3b8; font-size: 0.85rem; font-weight: 600;">Confirm Email *</label>
-                                    <input type="email" id="confirm_email" class="form-control" placeholder="john.doe@example.com" oncopy="return false" onpaste="return false" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; padding: 12px 15px; border-radius: 8px;" value="{{ auth()->check() ? auth()->user()->email : '' }}" required>
+                                    <label style="display: block; margin-bottom: 8px; color: #e2e8f0; font-size: 0.88rem; font-weight: 700;">Confirm Email *</label>
+                                    <input type="email" id="confirm_email" class="form-control" placeholder="john.doe@example.com" oncopy="return false" onpaste="return false" style="background: rgba(11, 16, 32, 0.8); border: 1px solid rgba(82, 234, 210, 0.3); color: #ffffff; font-weight: 600; padding: 12px 15px; border-radius: 8px;" value="{{ auth()->check() ? auth()->user()->email : '' }}" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label style="display: block; margin-bottom: 8px; color: #94a3b8; font-size: 0.85rem; font-weight: 600;">Phone Number *</label>
-                                    <input type="tel" id="phone" name="phone" class="form-control w-100" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; padding: 12px 15px 12px 50px; border-radius: 8px;" value="{{ auth()->check() ? (auth()->user()->country_code . auth()->user()->contact_number) : '' }}" required>
+                                    <label style="display: block; margin-bottom: 8px; color: #e2e8f0; font-size: 0.88rem; font-weight: 700;">Phone Number *</label>
+                                    <input type="tel" id="phone" name="phone" class="form-control w-100" style="background: rgba(11, 16, 32, 0.8); border: 1px solid rgba(82, 234, 210, 0.3); color: #ffffff; font-weight: 600; padding: 12px 15px 12px 50px; border-radius: 8px;" value="{{ auth()->check() ? (auth()->user()->country_code . auth()->user()->contact_number) : '' }}" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label style="display: block; margin-bottom: 8px; color: #94a3b8; font-size: 0.85rem; font-weight: 600;">Date of Birth *</label>
-                                    <input type="text" id="dob" class="form-control" placeholder="Select Date" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #94a3b8; padding: 12px 15px; border-radius: 8px;" value="{{ auth()->check() ? (auth()->user()->dob ?? date('Y-m-d', strtotime('-21 years'))) : '' }}" required>
+                                    <label style="display: block; margin-bottom: 8px; color: #e2e8f0; font-size: 0.88rem; font-weight: 700;">Date of Birth *</label>
+                                    <input type="text" id="dob" class="form-control" placeholder="Select Date" style="background: rgba(11, 16, 32, 0.8); border: 1px solid rgba(82, 234, 210, 0.3); color: #ffffff; font-weight: 600; padding: 12px 15px; border-radius: 8px;" value="{{ auth()->check() ? (auth()->user()->dob ?? date('Y-m-d', strtotime('-21 years'))) : '' }}" required>
                                 </div>
                             </div>
                         </div>
@@ -97,12 +97,12 @@
                         </div>
                         <div class="card-body p-4 pt-2">
                             <div class="mb-4">
-                                <label style="display: block; margin-bottom: 8px; color: #94a3b8; font-size: 0.85rem; font-weight: 600;">Flight Number</label>
-                                <input type="text" id="flight_number" class="form-control" placeholder="e.g., AA123" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; padding: 12px 15px; border-radius: 8px;">
+                                <label style="display: block; margin-bottom: 8px; color: #e2e8f0; font-size: 0.88rem; font-weight: 700;">Flight Number</label>
+                                <input type="text" id="flight_number" class="form-control" placeholder="e.g., AA123" style="background: rgba(11, 16, 32, 0.8); border: 1px solid rgba(82, 234, 210, 0.3); color: #ffffff; font-weight: 600; padding: 12px 15px; border-radius: 8px;">
                             </div>
                             <div>
-                                <label style="display: block; margin-bottom: 8px; color: #94a3b8; font-size: 0.85rem; font-weight: 600;">Special Comments</label>
-                                <textarea id="special_comments" class="form-control" rows="4" placeholder="Any special requests or instructions..." style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; padding: 12px 15px; border-radius: 8px;"></textarea>
+                                <label style="display: block; margin-bottom: 8px; color: #e2e8f0; font-size: 0.88rem; font-weight: 700;">Special Comments</label>
+                                <textarea id="special_comments" class="form-control" rows="4" placeholder="Any special requests or instructions..." style="background: rgba(11, 16, 32, 0.8); border: 1px solid rgba(82, 234, 210, 0.3); color: #ffffff; font-weight: 600; padding: 12px 15px; border-radius: 8px;"></textarea>
                             </div>
                         </div>
                     </div>
@@ -261,6 +261,17 @@
     .flatpickr-current-month input.cur-year { font-weight: 700 !important; color: #fff !important; line-height: 1 !important; height: auto !important; padding: 0 !important; margin: 0 !important; }
     .flatpickr-current-month .flatpickr-monthDropdown-months { appearance: menulist !important; background: rgba(11, 16, 32, 0.95) !important; color: #fff !important; padding: 0 !important; height: auto !important; line-height: 1 !important; margin: 0 !important; border: none !important; }
     .flatpickr-weekday { color: var(--brand) !important; font-weight: 700 !important; }
+
+    /* High-contrast form label and input visibility enhancements */
+    .card label { color: #e2e8f0 !important; font-weight: 700 !important; }
+    .form-control { color: #ffffff !important; background: rgba(11, 16, 32, 0.8) !important; border: 1px solid rgba(82, 234, 210, 0.3) !important; font-weight: 600 !important; }
+    .form-control::placeholder { color: #94a3b8 !important; opacity: 0.9 !important; }
+    .form-control:focus { background: rgba(11, 16, 32, 0.95) !important; border-color: var(--brand, #52ead2) !important; box-shadow: 0 0 10px rgba(82, 234, 210, 0.25) !important; color: #ffffff !important; }
+    .iti { width: 100%; }
+    .iti__selected-dial-code { color: #ffffff !important; font-weight: 700 !important; }
+    .iti__country-list { background: #0b1020 !important; border: 1px solid rgba(82, 234, 210, 0.3) !important; color: #ffffff !important; }
+    .iti__country-list .iti__country-name, .iti__country-list .iti__dial-code { color: #ffffff !important; }
+    .iti__country-list .iti__country.iti__highlight { background: rgba(82, 234, 210, 0.2) !important; }
 </style>
 <script>
     document.addEventListener("DOMContentLoaded", function() {

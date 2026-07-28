@@ -1,6 +1,25 @@
 @extends('user.layouts.app')
 
 @section('main-content')
+@php
+    $resNum = request()->input('reservation_number');
+    if (!$resNum) {
+        $fname = request()->input('fname', '');
+        $lname = request()->input('lname', '');
+        $fullName = trim($fname . ' ' . $lname);
+        $prefix = '';
+        if (!empty($fullName)) {
+            $words = preg_split('/\s+/', $fullName);
+            foreach ($words as $w) {
+                if (!empty($w)) {
+                    $prefix .= strtoupper(mb_substr($w, 0, 1));
+                }
+            }
+        }
+        $prefix = !empty($prefix) ? $prefix : 'RYD';
+        $resNum = $prefix . rand(10000, 99999);
+    }
+@endphp
 <div class="booking-coverage-page" style="padding: 30px; min-height: 100vh;">
     <div class="container-fluid" style="max-width: 1400px; margin: 0 auto;">
         
@@ -16,7 +35,7 @@
                 </div>
                 <h2 class="print-text-dark animate-fade-in-up delay-1" style="color: #f8fafc; font-weight: 800; font-size: 2.2rem; margin-bottom: 15px; width: 100%; text-align: center;">Booking Confirmed!</h2>
                 <p class="print-text-dark animate-fade-in-up delay-2" style="color: #94a3b8; font-size: 1.1rem; max-width: 600px; width: 100%; text-align: center;">
-                    Hi <span style="color: #fff; font-weight: 600;">{{ request()->input('fname', 'Customer') }}</span>, we've received your booking <strong class="text-brand" style="color: var(--brand);">#<span id="order-number-val">{{ request()->input('reservation_number', 'DCR' . rand(10000, 99999)) }}</span></strong> and have sent a confirmation email to <span style="color: #fff; font-weight: 600;">{{ request()->input('email', '') }}</span>.
+                    Hi <span style="color: #fff; font-weight: 600;">{{ request()->input('fname', 'Customer') }}</span>, we've received your booking <strong class="text-brand" style="color: var(--brand);">#<span id="order-number-val">{{ $resNum }}</span></strong> and have sent a confirmation email to <span style="color: #fff; font-weight: 600;">{{ request()->input('email', '') }}</span>.
                 </p>
             </div>
 
@@ -127,6 +146,17 @@
                         </div>
                     </div>
 
+                    <!-- Rental Agreement Card -->
+                    <div class="card mb-4" style="background: rgba(11, 16, 32, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; overflow: hidden;">
+                        <div class="card-header border-0 p-4 pb-0 d-flex justify-content-between align-items-center" style="background: transparent;">
+                            <h4 style="color: #f8fafc; font-weight: 700; font-size: 1.1rem; margin: 0;">Vehicle Rental Agreement</h4>
+                            <span class="badge" style="background: rgba(82, 234, 210, 0.15); color: var(--brand); border: 1px solid rgba(82, 234, 210, 0.3);">Executed & Binding</span>
+                        </div>
+                        <div class="card-body p-4 pt-0">
+                            @include('partials.static-agreement')
+                        </div>
+                    </div>
+
                 </div>
 
                 
@@ -226,7 +256,7 @@
                     </td>
                     <td valign="middle" align="right" style="width: 45%;">
                         <div style="font-size: 1.1rem; font-weight: 800; color: #0f172a; letter-spacing: 0.5px; white-space: nowrap;">BOOKING CONFIRMATION</div>
-                        <div style="font-size: 0.78rem; color: #64748b; font-weight: 600; margin-top: 1px;">Order #<span id="invoice-order-num">{{ request()->input('reservation_number', 'DCR' . rand(10000, 99999)) }}</span></div>
+                        <div style="font-size: 0.78rem; color: #64748b; font-weight: 600; margin-top: 1px;">Order #<span id="invoice-order-num">{{ $resNum }}</span></div>
                     </td>
                 </tr>
             </table>
@@ -243,7 +273,7 @@
                         <table width="100%" cellpadding="0" cellspacing="0" style="font-size: 0.75rem; color: #334155; border-collapse: collapse;">
                             <tr>
                                 <td style="font-weight: 700; color: #475569; width: 1%; white-space: nowrap; padding-right: 12px; padding-top: 1px; padding-bottom: 1px;">Order Number:</td>
-                                <td style="font-weight: 600; color: #0f172a; padding-top: 1px; padding-bottom: 1px;">{{ request()->input('reservation_number', 'DCR' . rand(10000, 99999)) }}</td>
+                                <td style="font-weight: 600; color: #0f172a; padding-top: 1px; padding-bottom: 1px;">{{ $resNum }}</td>
                             </tr>
                             <tr>
                                 <td style="font-weight: 700; color: #475569; width: 1%; white-space: nowrap; padding-right: 12px; padding-top: 1px; padding-bottom: 1px;">Booking Date:</td>

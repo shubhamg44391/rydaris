@@ -3,34 +3,68 @@
 @section('main-content')
 @php
     $vendorTC = \App\Models\VendorPage::where('vendor_id', $vendor->id)->first();
+    $totalReviewsCount = \App\Models\Review::where('vendor_id', $vendor->id)->count();
+    $avgVendorRating = $totalReviewsCount > 0 ? round((float)\App\Models\Review::where('vendor_id', $vendor->id)->avg('rating'), 1) : 0.0;
 @endphp
 <div class="admin-panel" style="padding: 20px;">
 
     
     
-    <div class="vendor-header mb-5 p-4" style="background: rgba(11, 16, 32, 0.6); border: 1px solid rgba(82, 234, 210, 0.15); border-radius: 12px; display: flex; align-items: center; gap: 25px;">
-        <div class="vendor-avatar" style="width: 80px; height: 80px; background: rgba(82, 234, 210, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--brand); font-weight: bold; font-size: 2rem; overflow: hidden; border: 2px solid rgba(82, 234, 210, 0.3);">
-            @if($vendor->company_logo)
-                <img src="{{ asset('storage/' . $vendor->company_logo) }}" alt="{{ $vendor->company_name }}" style="width: 100%; height: 100%; object-fit: cover;">
-            @else
-                {{ strtoupper(substr($vendor->company_name ?? $vendor->name, 0, 1)) }}
-            @endif
+    <div class="vendor-header mb-5 p-4" style="background: rgba(11, 16, 32, 0.6); border: 1px solid rgba(82, 234, 210, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: space-between; gap: 25px; flex-wrap: wrap;">
+        <div class="d-flex align-items-center gap-4">
+            <div class="vendor-avatar" style="width: 80px; height: 80px; background: rgba(82, 234, 210, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--brand); font-weight: bold; font-size: 2rem; overflow: hidden; border: 2px solid rgba(82, 234, 210, 0.3); flex-shrink: 0;">
+                @if($vendor->company_logo)
+                    <img src="{{ asset('storage/' . $vendor->company_logo) }}" alt="{{ $vendor->company_name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                @else
+                    {{ strtoupper(substr($vendor->company_name ?? $vendor->name, 0, 1)) }}
+                @endif
+            </div>
+            <div>
+                <h2 style="font-weight: 700; color: #f8fafc; margin-bottom: 5px;">{{ $vendor->company_name ?? $vendor->name }}</h2>
+                <div class="d-flex align-items-center gap-4 text-muted flex-wrap">
+                    <span class="badge" style="background: rgba(82, 234, 210, 0.2); color: var(--brand); font-weight: normal;">Trusted Vendor</span>
+                    <span class="d-flex align-items-center gap-1">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                        {{ $vendor->country_code }} {{ $vendor->contact_number }}
+                    </span>
+                </div>
+            </div>
         </div>
-        <div>
-            <h2 style="font-weight: 700; color: #f8fafc; margin-bottom: 5px;">{{ $vendor->company_name ?? $vendor->name }}</h2>
-            <div class="d-flex align-items-center gap-4 text-muted">
-                <span class="badge" style="background: rgba(82, 234, 210, 0.2); color: var(--brand); font-weight: normal;">Trusted Vendor</span>
-                <span class="d-flex align-items-center gap-1">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                    {{ $vendor->country_code }} {{ $vendor->contact_number }}
+
+        <!-- Rating Card on Right Side -->
+        <div class="vendor-rating-card" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(82, 234, 210, 0.2); border-radius: 12px; padding: 12px 20px; display: flex; align-items: center; gap: 16px; margin-left: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.25);">
+            <div style="background: rgba(251, 191, 36, 0.15); border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 10px; padding: 8px 14px; text-align: center; min-width: 70px;">
+                <span style="font-size: 1.4rem; font-weight: 900; color: #fbbf24; line-height: 1; display: flex; align-items: center; justify-content: center; gap: 3px;">
+                    {{ number_format($avgVendorRating, 1) }}
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="#fbbf24" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
                 </span>
+                <span style="font-size: 0.65rem; color: #cbd5e1; text-transform: uppercase; font-weight: 700; display: block; margin-top: 3px; letter-spacing: 0.5px;">OUT OF 5</span>
+            </div>
+            <div>
+                <div class="vendor-rating-title" style="font-weight: 700; color: #f8fafc; font-size: 0.95rem; margin-bottom: 2px;">
+                    @if($totalReviewsCount == 0)
+                        No Ratings Yet
+                    @elseif($avgVendorRating >= 4.5)
+                        Excellent Vendor
+                    @elseif($avgVendorRating >= 4.0)
+                        Very Good Vendor
+                    @elseif($avgVendorRating >= 3.0)
+                        Good Vendor
+                    @else
+                        Satisfactory Vendor
+                    @endif
+                </div>
+                <div style="font-size: 0.8rem; color: var(--brand, #52ead2); font-weight: 600; display: flex; align-items: center; gap: 4px;">
+                    <svg viewBox="0 0 24 24" width="13" height="13" fill="#fbbf24" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                    {{ $totalReviewsCount }} Verified {{ Str::plural('Review', $totalReviewsCount) }}
+                </div>
             </div>
         </div>
     </div>
 
     
     <div class="search-widget p-4" style="background: rgba(11, 16, 32, 0.6); border: 1px solid rgba(82, 234, 210, 0.15); border-radius: 16px; margin-bottom: 40px;">
-        <form action="#" method="GET">
+        <form action="{{ route('user.vendors.show', $vendor->id) }}" method="GET">
             
             @if(isset($branches) && $branches->isNotEmpty())
             <div class="row g-3 mb-4">
@@ -141,8 +175,8 @@
 
 
     <!-- ── Vehicles Section ─────────────────────────────── -->
-    <div id="vehicles" class="container-fluid" style="max-width: 1400px; margin: 0 auto;">
-    <div class="vehicles-section mt-5">
+    <div id="vehicles" style="max-width: 1400px; margin-left: 0; margin-right: auto; width: 100%;">
+    <div class="vehicles-section mt-4">
         <h2 style="font-weight: 700; color: #f8fafc; margin-bottom: 20px;">Our Vehicles</h2>
         
         

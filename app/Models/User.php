@@ -34,6 +34,7 @@ class User extends Authenticatable
         'pincode',
         'city',
         'country',
+        'currency',
         'current_branch_id',
     ];
 

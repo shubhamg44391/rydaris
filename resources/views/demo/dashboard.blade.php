@@ -96,15 +96,21 @@
             
             /* Theme cohesive dropdown and date pickers */
             #rangeSelect {
-                background: #0b1020 !important;
+                background-color: #0b1020 !important;
                 border: 1px solid rgba(82, 234, 210, 0.25) !important;
                 color: #ffffff !important;
-                padding: 8px 16px !important;
+                padding: 8px 36px 8px 16px !important;
                 border-radius: 8px !important;
                 font-size: 0.85rem !important;
                 cursor: pointer;
                 outline: none;
                 font-family: inherit;
+                appearance: none;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") !important;
+                background-repeat: no-repeat !important;
+                background-position: right 14px center !important;
             }
             #rangeSelect option {
                 background: #050711 !important;
@@ -248,6 +254,44 @@
             <span>customer review score</span>
           </article>
         </section>
+
+        <!-- Single Vehicle Trip Status Bar -->
+        <div style="margin-bottom: 22px; background: rgba(11, 16, 32, 0.6); border: 1px solid rgba(82, 234, 210, 0.2); border-radius: 12px; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="width: 40px; height: 40px; border-radius: 10px; background: rgba(82, 234, 210, 0.12); display: flex; align-items: center; justify-content: center; color: var(--brand, #52ead2);">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="1" y="3" width="15" height="13" rx="2"></rect>
+                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                <circle cx="18.5" cy="18.5" r="2.5"></circle>
+              </svg>
+            </span>
+            <div>
+              <h4 style="margin: 0; font-size: 1rem; font-weight: 800; color: #f8fafc;">Vehicle Trip Status</h4>
+              <p style="margin: 2px 0 0 0; font-size: 0.8rem; color: #94a3b8;">Active trips out today, upcoming queue, and returned vehicles</p>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+            <!-- 1. On Trip Cars -->
+            <div style="display: flex; align-items: center; gap: 10px; background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.25); padding: 8px 16px; border-radius: 8px;">
+              <span style="font-size: 0.82rem; font-weight: 700; color: #4ade80;">On Trip:</span>
+              <strong style="font-size: 1.3rem; font-weight: 900; color: #ffffff;">{{ $onTripCount ?? 0 }}</strong>
+            </div>
+
+            <!-- 2. Queue Cars -->
+            <div style="display: flex; align-items: center; gap: 10px; background: rgba(234, 179, 8, 0.08); border: 1px solid rgba(234, 179, 8, 0.25); padding: 8px 16px; border-radius: 8px;">
+              <span style="font-size: 0.82rem; font-weight: 700; color: #facc15;">In Queue:</span>
+              <strong style="font-size: 1.3rem; font-weight: 900; color: #ffffff;">{{ $inQueueCount ?? 0 }}</strong>
+            </div>
+
+            <!-- 3. Return Cars -->
+            <div style="display: flex; align-items: center; gap: 10px; background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.25); padding: 8px 16px; border-radius: 8px;">
+              <span style="font-size: 0.82rem; font-weight: 700; color: #60a5fa;">Returned:</span>
+              <strong style="font-size: 1.3rem; font-weight: 900; color: #ffffff;">{{ $returnedCount ?? 0 }}</strong>
+            </div>
+          </div>
+        </div>
 
         
         <section id="analytics" class="admin-grid" style="margin-bottom: 22px;">

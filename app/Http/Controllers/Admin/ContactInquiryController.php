@@ -34,6 +34,16 @@ class ContactInquiryController extends Controller
 
     
 
+    public function show($id)
+    {
+        $inquiry = ContactInquiry::findOrFail($id);
+        if ($inquiry->status === 'unread') {
+            $inquiry->update(['status' => 'read']);
+        }
+
+        return view('admin.contact_inquiries.show', compact('inquiry'));
+    }
+
     public function toggleStatus($id)
     {
         $inquiry = ContactInquiry::findOrFail($id);

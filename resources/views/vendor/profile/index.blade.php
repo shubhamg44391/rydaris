@@ -111,6 +111,20 @@
                     @error('country')<div style="color: #ff6b6b; font-size: 0.875rem; margin-top: 5px;">{{ $message }}</div>@enderror
                 </div>
 
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; color: #f8fafc; font-size: 0.875rem; font-weight: 700;">
+                        Default Currency / Price Format <span style="color: var(--brand, #52ead2); font-size: 0.78rem;">(Select Currency)</span>
+                    </label>
+                    <select name="currency" required style="width: 100%; padding: 12px; background: #0b1020; border: 1px solid rgba(82, 234, 210, 0.25); border-radius: var(--radius); color: #ffffff; font-size: 0.9rem; outline: none; cursor: pointer;">
+                        <option value="USD" {{ old('currency', $user->currency ?? 'USD') == 'USD' ? 'selected' : '' }}>USD ($) - US Dollar</option>
+                        <option value="EUR" {{ old('currency', $user->currency) == 'EUR' ? 'selected' : '' }}>EUR (€) - Euro</option>
+                        <option value="AED" {{ old('currency', $user->currency) == 'AED' ? 'selected' : '' }}>AED (AED) - UAE Dirham</option>
+                        <option value="INR" {{ old('currency', $user->currency) == 'INR' ? 'selected' : '' }}>INR (₹) - Indian Rupee</option>
+                        <option value="GBP" {{ old('currency', $user->currency) == 'GBP' ? 'selected' : '' }}>GBP (£) - British Pound</option>
+                    </select>
+                    @error('currency')<div style="color: #ff6b6b; font-size: 0.875rem; margin-top: 5px;">{{ $message }}</div>@enderror
+                </div>
+
                 <input type="hidden" name="current_branch_id" value="{{ $user->current_branch_id }}">
 
                 <button type="submit" class="btn btn-primary" style="margin-top: 15px;">Save Changes</button>

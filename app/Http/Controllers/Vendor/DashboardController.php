@@ -109,6 +109,29 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
+        // Calculate Vehicle Trip Statuses
+        $allVendorBookings = \App\Models\Booking::where('vendor_id', $vendorId)->get();
+        $todayDate = \Carbon\Carbon::today();
+
+        // 1. On Trip (Gayi hain): pickup_date <= Today AND return_date >= Today
+        $onTripCount = $allVendorBookings->filter(function ($b) use ($todayDate) {
+            $pDate = $b->pickup_date_parsed;
+            $rDate = $b->return_date_parsed;
+            return $pDate->lte($todayDate) && $rDate->gte($todayDate);
+        })->count();
+
+        // 2. In Queue (Upcoming trip): pickup_date > Today
+        $inQueueCount = $allVendorBookings->filter(function ($b) use ($todayDate) {
+            $pDate = $b->pickup_date_parsed;
+            return $pDate->gt($todayDate);
+        })->count();
+
+        // 3. Returned (Completed trip): return_date < Today
+        $returnedCount = $allVendorBookings->filter(function ($b) use ($todayDate) {
+            $rDate = $b->return_date_parsed;
+            return $rDate->lt($todayDate);
+        })->count();
+
         return view('vendor.dashboard', compact(
             'totalVehicles',
             'totalBookings',
@@ -123,7 +146,10 @@ class DashboardController extends Controller
             'manualPercent',
             'avgRating',
             'totalReviewsCount',
-            'recentReviews'
+            'recentReviews',
+            'onTripCount',
+            'inQueueCount',
+            'returnedCount'
         ));
     }
 

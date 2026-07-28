@@ -42,6 +42,7 @@ class VendorProfileController extends Controller
             'pincode' => ['required', 'string', 'max:20'],
             'city' => ['required', 'string', 'max:255'],
             'country' => ['required', 'string', 'max:255'],
+            'currency' => ['nullable', 'string', 'in:USD,EUR,AED,INR,GBP'],
             'current_branch_id' => ['nullable', 'exists:branches,id'],
         ]);
 
@@ -78,6 +79,7 @@ class VendorProfileController extends Controller
             'pincode' => $request->pincode,
             'city' => $request->city,
             'country' => $request->country,
+            'currency' => $request->currency ?? 'USD',
             'current_branch_id' => $request->current_branch_id,
         ];
 

@@ -345,8 +345,21 @@
                 @if($booking->extras && count($booking->extras) > 0)
                     @foreach($booking->extras as $bExtra)
                         @if($bExtra->vendorExtra)
+                            @php
+                                $isIns = (strtolower($bExtra->vendorExtra->type) === 'insurance');
+                                $tagLabel = $isIns ? 'Coverage' : 'Equipment';
+                                $badgeStyle = $isIns 
+                                    ? 'background: rgba(82, 234, 210, 0.15); color: #52ead2; border: 1px solid rgba(82, 234, 210, 0.3);' 
+                                    : 'background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3);';
+                            @endphp
                             <div class="price-row">
-                                <span>{{ $bExtra->vendorExtra->name }} (Qty: {{ $bExtra->qty }})</span>
+                                <span>
+                                    <span style="display: inline-block; padding: 1px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; margin-right: 4px; {{ $badgeStyle }}">
+                                        {{ $tagLabel }}
+                                    </span>
+                                    {{ $bExtra->vendorExtra->name }}
+                                    @if(!$isIns) (Qty: {{ $bExtra->qty }}) @endif
+                                </span>
                                 @php
                                     $ePrice = $bExtra->price * $bExtra->qty;
                                     if($bExtra->vendorExtra->price_type == 1) {

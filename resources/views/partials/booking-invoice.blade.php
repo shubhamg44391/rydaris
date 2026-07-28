@@ -402,6 +402,18 @@
                 border-top: 1px solid #cbd5e1 !important;
                 color: #64748b !important;
             }
+            .page-break {
+                page-break-before: always !important;
+                break-before: page !important;
+                border-top: none !important;
+                margin-top: 0 !important;
+                padding-top: 20px !important;
+            }
+            .master-agreement-box {
+                background: #ffffff !important;
+                color: #000000 !important;
+                border: 1px solid #cbd5e1 !important;
+            }
         }
     </style>
 </head>
@@ -559,12 +571,26 @@
                 
                 
                 @foreach($booking->extras as $extra)
+                @php
+                    $extraObj = $extra->vendorExtra;
+                    $isInsurance = ($extraObj && strtolower($extraObj->type) === 'insurance');
+                    $categoryLabel = $isInsurance ? 'Coverage' : 'Equipment';
+                    $badgeBg = $isInsurance ? 'rgba(82, 234, 210, 0.18)' : 'rgba(192, 132, 252, 0.18)';
+                    $badgeColor = $isInsurance ? '#52ead2' : '#c084fc';
+                    $badgeBorder = $isInsurance ? 'rgba(82, 234, 210, 0.4)' : 'rgba(192, 132, 252, 0.4)';
+                @endphp
                 <tr>
-                    <td class="extra-desc">
-                        • {{ $extra->vendorExtra->name ?? 'Extra Service' }} (Qty: {{ $extra->qty }})
+                    <td class="extra-desc" style="padding-top: 10px; padding-bottom: 10px;">
+                        <span style="display: inline-block; padding: 3px 9px; border-radius: 4px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-right: 8px; background: {{ $badgeBg }}; color: {{ $badgeColor }}; border: 1px solid {{ $badgeBorder }}; letter-spacing: 0.5px;">
+                            {{ $categoryLabel }}
+                        </span>
+                        <strong style="color: #ffffff; font-weight: 700; font-size: 0.95rem;">{{ $extraObj->name ?? ($isInsurance ? 'Insurance Plan' : 'Rental Equipment') }}</strong>
+                        @if(!$isInsurance)
+                            <span style="font-size: 0.85rem; color: #cbd5e1; margin-left: 6px; font-weight: 600;">(Qty: {{ $extra->qty }})</span>
+                        @endif
                     </td>
-                    <td align="right">—</td>
-                    <td align="right" class="extra-amount">${{ number_format($extra->price * $extra->qty * $rentalDays, 2) }}</td>
+                    <td align="right" style="color: #ffffff; font-size: 0.9rem; font-weight: 600;">{{ $rentalDays }}</td>
+                    <td align="right" class="extra-amount" style="font-weight: 700; color: #ffffff; font-size: 0.95rem;">${{ number_format($extra->price * $extra->qty * $rentalDays, 2) }}</td>
                 </tr>
                 @endforeach
             </tbody>
@@ -596,6 +622,15 @@
             <h5>Terms & Conditions</h5>
             <p>Please keep a copy of this invoice for your pick-up verification. Rental charges are subject to vendor policy agreements. For support, please contact the vendor directly or write to {{ $vendor->email ?? 'support@carrental.com' }}.</p>
             <p style="margin-top: 15px; font-weight: 700; color: var(--brand-dark);">Thank you for choosing {{ $vendor->company_name ?? $vendor->name ?? 'our Car Rental' }}!</p>
+        </div>
+
+        <!-- Page 2: Master Vehicle Rental Agreement -->
+        <div style="page-break-before: always; break-before: page; margin-top: 50px; padding-top: 30px; border-top: 2px dashed rgba(82, 234, 210, 0.25);" class="page-break">
+            <h4 style="color: var(--brand, #52ead2); font-weight: 800; font-size: 1.15rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                Page 2: Vehicle Rental Agreement
+            </h4>
+            @include('partials.static-agreement')
         </div>
     </div>
 

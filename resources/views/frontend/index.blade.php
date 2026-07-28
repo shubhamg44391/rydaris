@@ -39,36 +39,17 @@
               </aside>
               <!-- Fleet Board Panel -->
               <section class="board" id="panel-fleet" style="display:flex; flex-direction:column; width:100%; height:auto;">
-                <div class="glass-card fleet-visual" style="position:relative; width:100%; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; overflow:hidden; border-radius:14px; padding:0; background:#050711 linear-gradient(180deg, rgba(5, 7, 17, 0.08), rgba(5, 7, 17, 0.72)), url('{{ asset('assets/rydaris-hero.png') }}') center / cover no-repeat;">
-                  <!-- Inline Video Player -->
-                  <video id="inlineFleetVideo" controls style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; display:none; border-radius:14px; background:#050711;" preload="none">
+                <div class="glass-card fleet-visual" style="position:relative; width:100%; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; overflow:hidden; border-radius:14px; padding:0; background:#050711;">
+                  <!-- Autoplay Video Player -->
+                  <video id="inlineFleetVideo" autoplay muted loop playsinline style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; border-radius:14px; background:#050711;">
                     <source src="{{ asset('assets/video/Recording add vhicals.mp4') }}" type="video/mp4">
                     Your browser does not support the video tag.
                   </video>
-                  
-                  <!-- Center Video Play Button Overlay -->
-                  <div id="fleetVideoOverlay" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:3; background: rgba(5,7,17,0.32); cursor:pointer;" onclick="playFleetVideoInline()">
-                    <button type="button" class="video-play-btn" title="Play Video Demo" aria-label="Play Video Demo">
-                      <svg viewBox="0 0 24 24" width="28" height="28" fill="#051013" stroke="currentColor" stroke-width="0">
-                        <polygon points="6 3 20 12 6 21 6 3"></polygon>
-                      </svg>
-                    </button>
-                    <span style="position:absolute; bottom:18px; left:50%; transform:translateX(-50%); font-size:0.78rem; color:rgba(255,255,255,0.7); font-weight:600; white-space:nowrap; letter-spacing:0.04em;">▶ Watch Fleet Demo</span>
-                  </div>
                 </div>
               </section>
 
-              <script>
-                function playFleetVideoInline() {
-                  const overlay = document.getElementById('fleetVideoOverlay');
-                  const player = document.getElementById('inlineFleetVideo');
-                  if (overlay) overlay.style.display = 'none';
-                  if (player) {
-                    player.style.display = 'block';
-                    player.play();
-                  }
-                }
-              </script>              <section class="board" id="panel-reservations" style="display:none; flex-direction:column; padding:14px; overflow-y:auto;">
+              <!-- Reservations Panel -->
+              <section class="board" id="panel-reservations" style="display:none; flex-direction:column; padding:14px; overflow-y:auto;">
                 
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:6px;">
                   <div style="display:flex; align-items:center; gap:10px;">
@@ -320,9 +301,9 @@
 
           /* ─── Tab Switcher ─── */
           function switchTab(tab, el) {
-            if (tab !== 'fleet') {
-              var vid = document.getElementById('inlineFleetVideo');
-              if (vid && !vid.paused) vid.pause();
+            var vid = document.getElementById('inlineFleetVideo');
+            if (vid && vid.paused) {
+              vid.play().catch(function(){});
             }
             ['fleet','reservations','agreements','reports'].forEach(function(t) {
               var p = document.getElementById('panel-' + t);

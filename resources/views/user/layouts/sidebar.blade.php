@@ -1,15 +1,18 @@
 <nav class="admin-nav">
     
      @if(auth()->user()->hasMenuAccess('vehicles'))
-        @if(auth()->check() && auth()->user()->vendor_id)
-            <a class="{{ Request::is('user/vendor/*') ? 'active' : '' }}" href="{{ route('user.vendors.show', auth()->user()->vendor_id) }}#vehicles">
+        @php
+            $sidebarVendorId = auth()->check() ? (auth()->user()->vendor_id ?? (auth()->user()->role === 'vendor' ? auth()->user()->id : null)) : null;
+        @endphp
+        @if($sidebarVendorId)
+            <a class="{{ Request::is('user/vehicles*') || Request::is('user/vendors*') || Request::is('user/vendor*') ? 'active' : '' }}" href="{{ route('user.vendors.show', $sidebarVendorId) }}">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="11" cy="11" r="8"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 </svg> Search Vehicle
             </a>
         @else
-            <a class="{{ request()->has('search') ? 'active' : '' }}" href="{{ route('user.dashboard') }}?search=" onclick="document.querySelector('input[name=search]').focus(); return false;">
+            <a class="{{ Request::is('user/vehicles*') || Request::is('user/vendors*') || Request::is('user/vendor*') || request()->has('search') ? 'active' : '' }}" href="{{ route('user.dashboard') }}?search=" onclick="document.querySelector('input[name=search]').focus(); return false;">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="11" cy="11" r="8"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
@@ -18,7 +21,7 @@
         @endif
     @endif
     @if(auth()->user()->hasMenuAccess('booking'))
-    <a class="{{ Request::is('user/bookings*') && !Request::is('user/bookings/*/edit') && !Request::is('user/bookings/*/checkin') ? 'active' : '' }}" href="{{ route('user.dashboard') }}">
+    <a class="{{ (Request::is('user/my-bookings*') || Request::is('user/dashboard*') || Request::is('user/bookings*')) && !Request::is('user/bookings/*/edit') && !Request::is('user/bookings/*/checkin') && !Request::is('user/bookings/*/payment-page') ? 'active' : '' }}" href="{{ route('user.dashboard') }}">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
             <line x1="16" y1="2" x2="16" y2="6"></line>

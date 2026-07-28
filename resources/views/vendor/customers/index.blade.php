@@ -41,9 +41,9 @@
                             <td>{{ $customer->created_at->format('Y-m-d H:i') }}</td>
                             <td>
                                 <div class="table-actions" style="display: flex; gap: 8px; align-items: center;">
-                                    <button type="button" class="icon-button view-btn" title="View Details" data-customer="{{ json_encode($customer) }}" onclick="openViewModal(this)" style="color: #cbd5e1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 6px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                                    <a href="{{ route('vendor.customers.show', $customer->id) }}" class="icon-button view-btn" title="View Customer Details" style="color: #52ead2; background: rgba(82, 234, 210, 0.1); border: 1px solid rgba(82, 234, 210, 0.2); padding: 6px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; text-decoration: none;">
                                         <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                                    </button>
+                                    </a>
 
                                     
                                     <a href="{{ route('vendor.customers.edit', $customer->id) }}" class="icon-button edit-btn" title="Edit Customer" style="color: var(--brand, #52ead2); background: rgba(82, 234, 210, 0.1); border: 1px solid rgba(82, 234, 210, 0.2); padding: 6px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; text-decoration: none;">

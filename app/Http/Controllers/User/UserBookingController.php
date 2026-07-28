@@ -266,7 +266,24 @@ class UserBookingController extends Controller
             return back()->with('error', 'This vehicle cannot be booked at this moment because the vendor has reached their subscription booking limit.');
         }
 
-        $reservationNumber = 'DCR' . mt_rand(10000, 99999);
+        $vendorName = trim($vendor ? ($vendor->company_name ?? $vendor->name) : '');
+
+        $prefix = '';
+        if (!empty($vendorName)) {
+            $words = preg_split('/\s+/', $vendorName);
+            foreach ($words as $w) {
+                if (!empty($w)) {
+                    $prefix .= strtoupper(mb_substr($w, 0, 1));
+                }
+            }
+        }
+        if (empty($prefix)) {
+            $prefix = 'RYD';
+        }
+
+        do {
+            $reservationNumber = $prefix . mt_rand(10000, 99999);
+        } while (\App\Models\Booking::where('reservation_number', $reservationNumber)->exists());
 
         
         $totalAmount = (float)$request->input('total_price', 0);

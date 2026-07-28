@@ -153,6 +153,31 @@ class VendorCustomerController extends Controller
 
     
 
+    public function show($id)
+    {
+        $customer = User::where('role', 'user')
+            ->where('vendor_id', auth()->id())
+            ->findOrFail($id);
+
+        $bookings = \App\Models\Booking::where('vendor_id', auth()->id())
+            ->where(function($q) use ($customer) {
+                $q->where('user_id', $customer->id)
+                  ->orWhere('customer_email', $customer->email);
+            })
+            ->with(['vehicle', 'pickupLocation', 'returnLocation'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $totalSpent = $bookings->sum('paid_amount');
+        $totalBookings = $bookings->count();
+
+        $latestDocBooking = $bookings->first(function($b) {
+            return !empty($b->license_number) || !empty($b->license_image) || !empty($b->passport_image) || !empty($b->pass_number) || !empty($b->flight_number);
+        });
+
+        return view('vendor.customers.show', compact('customer', 'bookings', 'totalSpent', 'totalBookings', 'latestDocBooking'));
+    }
+
     public function destroy($id)
     {
         $customer = User::where('role', 'user')

@@ -25,9 +25,9 @@
                 Renter (Customer) Details
             </h4>
             <div class="agr-details-list" style="font-size: 0.82rem; display: flex; flex-direction: column; gap: 3px;">
-                <div><strong class="agr-strong">Full Name:</strong> <span class="agr-val">{{ isset($booking) ? ($booking->customer_fname . ' ' . $booking->customer_lname) : (auth()->user()->name ?? 'Guest Customer') }}</span></div>
-                <div><strong class="agr-strong">Contact Number:</strong> <span class="agr-val">{{ isset($booking) ? $booking->customer_phone : (auth()->user()->phone ?? '+918882688646') }}</span></div>
-                <div><strong class="agr-strong">Email ID:</strong> <span class="agr-val">{{ isset($booking) ? $booking->customer_email : (auth()->user()->email ?? ($site_setting->contact_email ?? 'support@rydaris.com')) }}</span></div>
+                <div><strong class="agr-strong">Full Name:</strong> <span class="agr-val">{{ isset($booking) ? ($booking->customer_fname . ' ' . $booking->customer_lname) : (request()->input('fname') ? (request()->input('fname') . ' ' . request()->input('lname')) : (auth()->user()->name ?? 'Guest Customer')) }}</span></div>
+                <div><strong class="agr-strong">Contact Number:</strong> <span class="agr-val">{{ isset($booking) ? $booking->customer_phone : (request()->input('phone') ? request()->input('phone') : (auth()->user()->phone ?? 'N/A')) }}</span></div>
+                <div><strong class="agr-strong">Email ID:</strong> <span class="agr-val">{{ isset($booking) ? $booking->customer_email : (request()->input('email') ? request()->input('email') : (auth()->user()->email ?? 'support@rydaris.com')) }}</span></div>
             </div>
         </div>
 
@@ -38,10 +38,10 @@
                 Lender (Vehicle Provider) Details
             </h4>
             @php
-                $v = isset($booking) ? ($booking->vehicle->vendor ?? null) : null;
+                $v = isset($booking) ? ($booking->vehicle->vendor ?? null) : (isset($vehicle) ? ($vehicle->vendor ?? null) : null);
                 $vName = $v->company_name ?? $v->name ?? 'Rydaris Fleet Operations';
                 $vEmail = $v->email ?? ($site_setting->contact_email ?? 'support@rydaris.com');
-                $vPhone = $v->phone ?? ($site_setting->contact_phone ?? '+918882688646');
+                $vPhone = $v->contact_number ?? $v->phone ?? ($site_setting->contact_phone ?? '+918882688646');
             @endphp
             <div class="agr-details-list" style="font-size: 0.82rem; display: flex; flex-direction: column; gap: 3px;">
                 <div><strong class="agr-strong">Provider:</strong> <span class="agr-val">{{ $vName }}</span></div>

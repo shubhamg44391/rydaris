@@ -625,20 +625,20 @@
 
                             <div class="mb-3">
                                 <label class="dark-label">License Number *</label>
-                                <input type="text" name="license_number" class="form-control dark-input" value="{{ old('license_number', $booking->license_number) }}" {{ $booking->checkin_status ? 'disabled readonly style=background:rgba(255,255,255,0.03);cursor:not-allowed;' : 'required' }}>
+                                <input type="text" name="license_number" class="form-control dark-input" placeholder="Enter License Number (e.g. DL-1234567)" value="{{ old('license_number', $booking->license_number) }}" {{ $booking->checkin_status ? 'disabled readonly style=background:rgba(255,255,255,0.03);cursor:not-allowed;' : 'required' }}>
                             </div>
                             <div class="row">
                                 <div class="col-6">
                                     <label class="dark-label">Issue Date *</label>
                                     <div class="position-relative">
-                                        <input type="text" name="license_issue_date" class="form-control dark-input pe-4" value="{{ old('license_issue_date', $booking->license_issue_date) }}" {{ $booking->checkin_status ? 'disabled readonly style=background:rgba(255,255,255,0.03);cursor:not-allowed;' : 'required' }}>
+                                        <input type="text" name="license_issue_date" class="form-control dark-input pe-4" placeholder="Select Issue Date " value="{{ old('license_issue_date', $booking->license_issue_date) }}" {{ $booking->checkin_status ? 'disabled readonly style=background:rgba(255,255,255,0.03);cursor:not-allowed;' : 'required' }}>
                                         <i class="fa fa-calendar-alt position-absolute" style="right: 12px; top: 50%; transform: translateY(-50%); color: #52ead2; pointer-events: none; font-size: 0.85rem;"></i>
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <label class="dark-label">Expiry Date *</label>
                                     <div class="position-relative">
-                                        <input type="text" name="license_expiry_date" class="form-control dark-input pe-4" value="{{ old('license_expiry_date', $booking->license_expiry_date) }}" {{ $booking->checkin_status ? 'disabled readonly style=background:rgba(255,255,255,0.03);cursor:not-allowed;' : 'required' }}>
+                                        <input type="text" name="license_expiry_date" class="form-control dark-input pe-4" placeholder="Select Expiry Date" value="{{ old('license_expiry_date', $booking->license_expiry_date) }}" {{ $booking->checkin_status ? 'disabled readonly style=background:rgba(255,255,255,0.03);cursor:not-allowed;' : 'required' }}>
                                         <i class="fa fa-calendar-alt position-absolute" style="right: 12px; top: 50%; transform: translateY(-50%); color: #52ead2; pointer-events: none; font-size: 0.85rem;"></i>
                                     </div>
                                 </div>
@@ -968,20 +968,28 @@
         const expiryInput = document.querySelector('input[name="license_expiry_date"]');
 
         if (issueInput && !issueInput.disabled && typeof flatpickr !== 'undefined') {
-            flatpickr(issueInput, {
+            const fpIssue = flatpickr(issueInput, {
                 dateFormat: "Y-m-d",
                 altInput: true,
                 altFormat: "d/m/Y",
+                altInputClass: "form-control dark-input pe-4",
                 allowInput: true
             });
+            if (fpIssue.altInput) {
+                fpIssue.altInput.placeholder = "Select Issue Date ";
+            }
         }
         if (expiryInput && !expiryInput.disabled && typeof flatpickr !== 'undefined') {
-            flatpickr(expiryInput, {
+            const fpExpiry = flatpickr(expiryInput, {
                 dateFormat: "Y-m-d",
                 altInput: true,
                 altFormat: "d/m/Y",
+                altInputClass: "form-control dark-input pe-4",
                 allowInput: true
             });
+            if (fpExpiry.altInput) {
+                fpExpiry.altInput.placeholder = "Select Expiry Date";
+            }
         }
 
         // Live image file preview when selecting files

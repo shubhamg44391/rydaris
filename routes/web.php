@@ -282,8 +282,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
         'destroy' => 'admin.pages.destroy',
     ]);
 
-    Route::resource('contact-inquiries', AdminContactInquiryController::class)->only(['index', 'destroy'])->names([
+    Route::resource('contact-inquiries', AdminContactInquiryController::class)->only(['index', 'show', 'destroy'])->names([
         'index' => 'admin.contact-inquiries.index',
+        'show' => 'admin.contact-inquiries.show',
         'destroy' => 'admin.contact-inquiries.destroy',
     ]);
     Route::post('contact-inquiries/{id}/toggle-status', [AdminContactInquiryController::class, 'toggleStatus'])->name('admin.contact-inquiries.toggle-status');
@@ -339,7 +340,10 @@ Route::post('/register', [\App\Http\Controllers\User\UserRegisterController::cla
 
 // User Routes (Auth + User Middleware)
 Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
-    Route::get('/dashboard', [\App\Http\Controllers\User\UserDashboardController::class, 'index'])->name('user.dashboard');
+    Route::get('/my-bookings', [\App\Http\Controllers\User\UserDashboardController::class, 'index'])->name('user.dashboard');
+    Route::get('/dashboard', function() {
+        return redirect()->route('user.dashboard');
+    });
     
     // Profile
     Route::get('/profile', [\App\Http\Controllers\User\UserProfileController::class, 'index'])->name('user.profile.index');
@@ -347,7 +351,10 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     Route::post('/profile/password', [\App\Http\Controllers\User\UserProfileController::class, 'updatePassword'])->name('user.profile.password');
 
     Route::get('/search', [\App\Http\Controllers\User\UserDashboardController::class, 'search'])->name('user.vendors.search');
-    Route::get('/vendors/{id}', [\App\Http\Controllers\User\UserDashboardController::class, 'showVendor'])->name('user.vendors.show');
+    Route::get('/vehicles/{id}', [\App\Http\Controllers\User\UserDashboardController::class, 'showVendor'])->name('user.vendors.show');
+    Route::get('/vendors/{id}', function($id) {
+        return redirect()->route('user.vendors.show', array_merge(['id' => $id], request()->query()));
+    });
     Route::get('/book/{vehicle}/coverage', [\App\Http\Controllers\User\UserBookingController::class, 'coverage'])->name('user.book.coverage');
     Route::get('/book/{vehicle}/information', [\App\Http\Controllers\User\UserBookingController::class, 'information'])->name('user.book.information');
     Route::get('/book/{vehicle}/payment', [\App\Http\Controllers\User\UserBookingController::class, 'payment'])->name('user.book.payment');
@@ -424,10 +431,11 @@ Route::middleware(['auth', 'vendor'])->prefix('vendor')->group(function () {
 
         Route::get('/smtp-settings', [\App\Http\Controllers\Vendor\SmtpSettingController::class, 'index'])->name('vendor.smtp_settings.index');
         Route::post('/smtp-settings', [\App\Http\Controllers\Vendor\SmtpSettingController::class, 'update'])->name('vendor.smtp_settings.update');
-        Route::resource('customers', \App\Http\Controllers\Vendor\VendorCustomerController::class)->except(['show'])->names([
+        Route::resource('customers', \App\Http\Controllers\Vendor\VendorCustomerController::class)->names([
             'index'   => 'vendor.customers.index',
             'create'  => 'vendor.customers.create',
             'store'   => 'vendor.customers.store',
+            'show'    => 'vendor.customers.show',
             'edit'    => 'vendor.customers.edit',
             'update'  => 'vendor.customers.update',
             'destroy' => 'vendor.customers.destroy',
