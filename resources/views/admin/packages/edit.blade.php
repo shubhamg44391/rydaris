@@ -124,7 +124,7 @@
                                         <label for="no_of_bookings_limited">Set Limit</label>
                                     </div>
                                     <div id="no_of_bookings_input_wrapper" style="display: none;">
-                                        <input type="number" name="no_of_bookings" id="no_of_bookings" class="limit-input-field @error('no_of_bookings') is-invalid @enderror" value="{{ old('no_of_bookings', $package->no_of_bookings ?? 0) }}" min="0" placeholder="Limit count" />
+                                        <input type="number" name="no_of_bookings" id="no_of_bookings" class="limit-input-field @error('no_of_bookings') is-invalid @enderror" value="{{ old('no_of_bookings', $package->no_of_bookings) }}" min="0" placeholder="Limit count" />
                                     </div>
                                 </div>
                                 @error('no_of_bookings')
@@ -154,7 +154,7 @@
                                         <label for="no_of_vehicles_limited">Set Limit</label>
                                     </div>
                                     <div id="no_of_vehicles_input_wrapper" style="display: none;">
-                                        <input type="number" name="no_of_vehicles" id="no_of_vehicles" class="limit-input-field @error('no_of_vehicles') is-invalid @enderror" value="{{ old('no_of_vehicles', $package->no_of_vehicles ?? 0) }}" min="0" placeholder="Limit count" />
+                                        <input type="number" name="no_of_vehicles" id="no_of_vehicles" class="limit-input-field @error('no_of_vehicles') is-invalid @enderror" value="{{ old('no_of_vehicles', $package->no_of_vehicles) }}" min="0" placeholder="Limit count" />
                                     </div>
                                 </div>
                                 
@@ -168,7 +168,7 @@
                                         <label for="no_of_groups_limited">Set Limit</label>
                                     </div>
                                     <div id="no_of_groups_input_wrapper" style="display: none;">
-                                        <input type="number" name="no_of_groups" id="no_of_groups" class="limit-input-field @error('no_of_groups') is-invalid @enderror" value="{{ old('no_of_groups', $package->no_of_groups ?? 0) }}" min="0" placeholder="Limit count" />
+                                        <input type="number" name="no_of_groups" id="no_of_groups" class="limit-input-field @error('no_of_groups') is-invalid @enderror" value="{{ old('no_of_groups', $package->no_of_groups) }}" min="0" placeholder="Limit count" />
                                     </div>
                                 </div>
                                 @error('no_of_vehicles')
@@ -201,7 +201,7 @@
                                         <label for="no_of_locations_limited">Set Limit</label>
                                     </div>
                                     <div id="no_of_locations_input_wrapper" style="display: none;">
-                                        <input type="number" name="no_of_locations" id="no_of_locations" class="limit-input-field @error('no_of_locations') is-invalid @enderror" value="{{ old('no_of_locations', $package->no_of_locations ?? 0) }}" min="0" placeholder="Limit count" />
+                                        <input type="number" name="no_of_locations" id="no_of_locations" class="limit-input-field @error('no_of_locations') is-invalid @enderror" value="{{ old('no_of_locations', $package->no_of_locations) }}" min="0" placeholder="Limit count" />
                                     </div>
                                 </div>
                                 
@@ -215,7 +215,7 @@
                                         <label for="no_of_branches_limited">Set Limit</label>
                                     </div>
                                     <div id="no_of_branches_input_wrapper" style="display: none;">
-                                        <input type="number" name="no_of_branches" id="no_of_branches" class="limit-input-field @error('no_of_branches') is-invalid @enderror" value="{{ old('no_of_branches', $package->no_of_branches ?? 0) }}" min="0" placeholder="Limit count" />
+                                        <input type="number" name="no_of_branches" id="no_of_branches" class="limit-input-field @error('no_of_branches') is-invalid @enderror" value="{{ old('no_of_branches', $package->no_of_branches) }}" min="0" placeholder="Limit count" />
                                     </div>
                                 </div>
                                 @error('no_of_locations')
@@ -248,7 +248,7 @@
                                         <label for="no_of_users_limited">Set Limit</label>
                                     </div>
                                     <div id="no_of_users_input_wrapper" style="display: none;">
-                                        <input type="number" name="no_of_users" id="no_of_users" class="limit-input-field @error('no_of_users') is-invalid @enderror" value="{{ old('no_of_users', $package->no_of_users ?? 0) }}" min="0" placeholder="Limit count" />
+                                        <input type="number" name="no_of_users" id="no_of_users" class="limit-input-field @error('no_of_users') is-invalid @enderror" value="{{ old('no_of_users', $package->no_of_users) }}" min="0" placeholder="Limit count" />
                                     </div>
                                 </div>
                                 
@@ -262,7 +262,7 @@
                                         <label for="no_of_invitations_limited">Set Limit</label>
                                     </div>
                                     <div id="no_of_invitations_input_wrapper" style="display: none;">
-                                        <input type="number" name="no_of_invitations" id="no_of_invitations" class="limit-input-field @error('no_of_invitations') is-invalid @enderror" value="{{ old('no_of_invitations', $package->no_of_invitations ?? 0) }}" min="0" placeholder="Limit count" />
+                                        <input type="number" name="no_of_invitations" id="no_of_invitations" class="limit-input-field @error('no_of_invitations') is-invalid @enderror" value="{{ old('no_of_invitations', $package->no_of_invitations) }}" min="0" placeholder="Limit count" />
                                     </div>
                                 </div>
                                 @error('no_of_users')
@@ -305,7 +305,7 @@
                                         <label for="no_of_maintenance_schedules_limited">Set Limit</label>
                                     </div>
                                     <div id="no_of_maintenance_schedules_input_wrapper" style="display: none;">
-                                        <input type="number" name="no_of_maintenance_schedules" id="no_of_maintenance_schedules" class="limit-input-field @error('no_of_maintenance_schedules') is-invalid @enderror" value="{{ old('no_of_maintenance_schedules', $package->no_of_maintenance_schedules ?? 0) }}" min="0" placeholder="Limit count" />
+                                        <input type="number" name="no_of_maintenance_schedules" id="no_of_maintenance_schedules" class="limit-input-field @error('no_of_maintenance_schedules') is-invalid @enderror" value="{{ old('no_of_maintenance_schedules', $package->no_of_maintenance_schedules) }}" min="0" placeholder="Limit count" />
                                     </div>
                                 </div>
                                 @error('no_of_maintenance_schedules')
@@ -335,7 +335,7 @@
                                         <label for="no_of_extras_limited">Set Limit</label>
                                     </div>
                                     <div id="no_of_extras_input_wrapper" style="display: none;">
-                                        <input type="number" name="no_of_extras" id="no_of_extras" class="limit-input-field @error('no_of_extras') is-invalid @enderror" value="{{ old('no_of_extras', $package->no_of_extras ?? 0) }}" min="0" placeholder="Limit count" />
+                                        <input type="number" name="no_of_extras" id="no_of_extras" class="limit-input-field @error('no_of_extras') is-invalid @enderror" value="{{ old('no_of_extras', $package->no_of_extras) }}" min="0" placeholder="Limit count" />
                                     </div>
                                 </div>
                                 
@@ -349,7 +349,7 @@
                                         <label for="no_of_insurances_limited">Set Limit</label>
                                     </div>
                                     <div id="no_of_insurances_input_wrapper" style="display: none;">
-                                        <input type="number" name="no_of_insurances" id="no_of_insurances" class="limit-input-field @error('no_of_insurances') is-invalid @enderror" value="{{ old('no_of_insurances', $package->no_of_insurances ?? 0) }}" min="0" placeholder="Limit count" />
+                                        <input type="number" name="no_of_insurances" id="no_of_insurances" class="limit-input-field @error('no_of_insurances') is-invalid @enderror" value="{{ old('no_of_insurances', $package->no_of_insurances) }}" min="0" placeholder="Limit count" />
                                     </div>
                                 </div>
                                 
@@ -363,7 +363,7 @@
                                         <label for="no_of_features_limited">Set Limit</label>
                                     </div>
                                     <div id="no_of_features_input_wrapper" style="display: none;">
-                                        <input type="number" name="no_of_features" id="no_of_features" class="limit-input-field @error('no_of_features') is-invalid @enderror" value="{{ old('no_of_features', $package->no_of_features ?? 0) }}" min="0" placeholder="Limit count" />
+                                        <input type="number" name="no_of_features" id="no_of_features" class="limit-input-field @error('no_of_features') is-invalid @enderror" value="{{ old('no_of_features', $package->no_of_features) }}" min="0" placeholder="Limit count" />
                                     </div>
                                 </div>
                                 
@@ -377,7 +377,7 @@
                                         <label for="no_of_rules_limited">Set Limit</label>
                                     </div>
                                     <div id="no_of_rules_input_wrapper" style="display: none;">
-                                        <input type="number" name="no_of_rules" id="no_of_rules" class="limit-input-field @error('no_of_rules') is-invalid @enderror" value="{{ old('no_of_rules', $package->no_of_rules ?? 0) }}" min="0" placeholder="Limit count" />
+                                        <input type="number" name="no_of_rules" id="no_of_rules" class="limit-input-field @error('no_of_rules') is-invalid @enderror" value="{{ old('no_of_rules', $package->no_of_rules) }}" min="0" placeholder="Limit count" />
                                     </div>
                                 </div>
                                 @error('no_of_extras')
@@ -415,7 +415,7 @@
                                         <label for="no_of_coupons_limited">Set Limit</label>
                                     </div>
                                     <div id="no_of_coupons_input_wrapper" style="display: none;">
-                                        <input type="number" name="no_of_coupons" id="no_of_coupons" class="limit-input-field @error('no_of_coupons') is-invalid @enderror" value="{{ old('no_of_coupons', $package->no_of_coupons ?? 0) }}" min="0" placeholder="Limit count" />
+                                        <input type="number" name="no_of_coupons" id="no_of_coupons" class="limit-input-field @error('no_of_coupons') is-invalid @enderror" value="{{ old('no_of_coupons', $package->no_of_coupons) }}" min="0" placeholder="Limit count" />
                                     </div>
                                 </div>
                                 @error('no_of_coupons')
@@ -444,7 +444,7 @@
                                         <label for="no_of_support_tickets_limited">Set Limit</label>
                                     </div>
                                     <div id="no_of_support_tickets_input_wrapper" style="display: none;">
-                                        <input type="number" name="no_of_support_tickets" id="no_of_support_tickets" class="limit-input-field @error('no_of_support_tickets') is-invalid @enderror" value="{{ old('no_of_support_tickets', $package->no_of_support_tickets ?? 0) }}" min="0" placeholder="Limit count" />
+                                        <input type="number" name="no_of_support_tickets" id="no_of_support_tickets" class="limit-input-field @error('no_of_support_tickets') is-invalid @enderror" value="{{ old('no_of_support_tickets', $package->no_of_support_tickets) }}" min="0" placeholder="Limit count" />
                                     </div>
                                 </div>
                                 @error('no_of_support_tickets')
@@ -461,6 +461,17 @@
                                     <span class="slider round"></span>
                                 </label>
                                 <span class="menu-title-text" onclick="document.getElementById('settings_menu').click();">Settings Menu</span>
+                            </div>
+                        </div>
+
+                        
+                        <div class="menu-permission-card">
+                            <div style="display: flex; align-items: center; gap: 12px; min-width: 260px; flex-shrink: 0;">
+                                <label class="theme-switch">
+                                    <input type="checkbox" id="community_menu" name="community_menu" value="1" {{ old('community_menu', $package->community_menu ?? true) ? 'checked' : '' }} />
+                                    <span class="slider round"></span>
+                                </label>
+                                <span class="menu-title-text" onclick="document.getElementById('community_menu').click();">Community Menu</span>
                             </div>
                         </div>
 

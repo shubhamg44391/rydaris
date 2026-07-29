@@ -28,9 +28,9 @@
   --card-backdrop-blur: blur(16px);
 
   /* Centralized Button Design System Tokens */
-  --btn-primary-bg: linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 100%);
-  --btn-primary-text: #051013;
-  --btn-primary-shadow: 0 4px 15px rgba(82, 234, 210, 0.25);
+  --btn-primary-bg: linear-gradient(135deg, #4de8d8 0%, #76a9ff 100%);
+  --btn-primary-text: #000000;
+  --btn-primary-shadow: 0 4px 15px rgba(77, 232, 216, 0.3);
   --btn-secondary-bg: rgba(255, 255, 255, 0.08);
   --btn-secondary-border: 1px solid rgba(255, 255, 255, 0.18);
   --btn-secondary-text: #ffffff;
@@ -276,10 +276,11 @@ select:-webkit-autofill:focus {
   border: 1px solid transparent;
 }
 
+.nav-actions .btn-nav-community,
 .nav-actions .btn-nav-register,
 .nav-actions .btn.primary {
   color: #061218;
-  background: linear-gradient(135deg, var(--brand-2), var(--brand));
+  background: linear-gradient(135deg, var(--brand-2, #80a7ff), var(--brand, #52ead2));
   border: 1px solid transparent;
 }
 
@@ -568,7 +569,7 @@ h3 {
   padding: 12px 17px;
   border: 1px solid transparent;
   border-radius: 999px;
-  font-weight: 850;
+  font-weight: 700 !important;
   line-height: 1;
   cursor: pointer;
 }
@@ -1617,7 +1618,7 @@ textarea:focus {
   border-radius: var(--radius);
   color: #aab7cb;
   font-size: 0.92rem;
-  font-weight: 780;
+  font-weight: 700 !important;
 }
 
 .admin-nav a:hover,
@@ -1629,6 +1630,7 @@ textarea:focus {
   color: #051013 !important;
   background: linear-gradient(135deg, var(--brand, #52ead2) 0%, var(--brand-2, #80a7ff) 100%) !important;
   box-shadow: 0 4px 15px rgba(82, 234, 210, 0.25) !important;
+  font-weight: 700 !important;
 }
 
 .admin-nav a:hover svg,
@@ -1800,7 +1802,7 @@ button[type="submit"].btn-primary,
   justify-content: center !important;
   gap: 8px !important;
   border-radius: 999px !important;
-  font-weight: 800 !important;
+  font-weight: 400 !important;
 }
 
 .admin-action.primary:hover,
@@ -2652,7 +2654,7 @@ td div[style*="#e2e8f0"] {
   border: none !important;
   box-shadow: 0 4px 15px rgba(82, 234, 210, 0.25) !important;
   border-radius: 999px !important;
-  font-weight: 800 !important;
+  font-weight: 400 !important;
 }
 
 .btn.btn-primary:hover,
@@ -5356,7 +5358,7 @@ body.light-mode .btn-outline-primary:hover,
   color: #051013 !important;
   border-color: rgba(82, 234, 210, 0.8) !important;
   box-shadow: 0 4px 15px rgba(82, 234, 210, 0.35) !important;
-  font-weight: 800 !important;
+  font-weight: 500 !important;
 }
 
 /* Sidebar Nav Items Hover & Active / Selected */
@@ -5391,7 +5393,7 @@ body.light-mode .side-item.active,
   background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%) !important;
   color: #051013 !important;
   box-shadow: 0 4px 15px rgba(82, 234, 210, 0.35) !important;
-  font-weight: 800 !important;
+  font-weight: 700 !important;
 }
 
 .admin-nav a:hover svg,
@@ -5446,7 +5448,7 @@ body.light-mode button.btn[style*="linear-gradient(135deg, #52ead2"] {
   color: #051013 !important;
   border: none !important;
   box-shadow: 0 4px 15px rgba(82, 234, 210, 0.3) !important;
-  font-weight: 800 !important;
+  font-weight: 400 !important;
 }
 
 body.light-mode .btn-primary:hover,
@@ -7658,4 +7660,71 @@ body.light-mode .chk-btn-card:has(input:checked) {
   background: #e0f2fe !important;
   border-color: #0284c7 !important;
   color: #0369a1 !important;
+}
+
+/* Global Button Font-Weight Reset - 100% Matches Sidebar Active Menu (700 Bold Weight) */
+button,
+.btn,
+.btn-primary,
+.btn-secondary,
+.btn-teal,
+.btn-blue,
+.btn-success,
+.btn-danger,
+.btn-warning,
+.btn-info,
+.btn-dark,
+.btn-light,
+.btn-outline,
+.btn-outline-primary,
+.btn-outline-secondary,
+.btn-sm,
+.btn-lg,
+.admin-action,
+.btn-action,
+.action-btn,
+input[type="submit"],
+input[type="button"],
+a.btn,
+button.btn,
+button *,
+.btn *,
+.admin-action *,
+input[type="submit"] *,
+input[type="button"] * {
+  font-weight: 700 !important;
+}
+
+button:hover,
+.btn:hover,
+.admin-action:hover,
+.btn-action:hover,
+.action-btn:hover,
+.btn-primary:hover,
+.btn-secondary:hover,
+.btn-teal:hover,
+.btn-blue:hover,
+.btn-success:hover,
+.btn-danger:hover,
+.btn-warning:hover,
+.btn-info:hover,
+.btn-dark:hover,
+.btn-light:hover,
+.btn-outline:hover,
+.btn-outline-primary:hover,
+.btn-outline-secondary:hover,
+.btn-sm:hover,
+.btn-lg:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover,
+a.btn:hover,
+button.btn:hover,
+button:hover *,
+.btn:hover *,
+.admin-action:hover *,
+button:focus,
+.btn:focus,
+button:active,
+.btn:active {
+  font-weight: 700 !important;
 }

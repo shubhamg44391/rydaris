@@ -61,6 +61,7 @@ class PackageController extends Controller
             'coupons_menu' => ['nullable', 'boolean'],
             'support_ticket_menu' => ['nullable', 'boolean'],
             'settings_menu' => ['nullable', 'boolean'],
+            'community_menu' => ['nullable', 'boolean'],
         ]);
 
         Package::create([
@@ -74,20 +75,20 @@ class PackageController extends Controller
             'is_active' => $request->has('is_active'),
             'button_text' => $request->button_text,
             'order' => $request->order,
-            'no_of_users' => $request->no_of_users,
-            'no_of_invitations' => $request->no_of_invitations,
-            'no_of_coupons' => $request->no_of_coupons,
-            'no_of_vehicles' => $request->no_of_vehicles,
-            'no_of_groups' => $request->no_of_groups,
-            'no_of_branches' => $request->no_of_branches,
-            'no_of_bookings' => $request->no_of_bookings,
-            'no_of_locations' => $request->no_of_locations,
-            'no_of_extras' => $request->no_of_extras,
-            'no_of_insurances' => $request->no_of_insurances,
-            'no_of_features' => $request->no_of_features,
-            'no_of_rules' => $request->no_of_rules,
-            'no_of_support_tickets' => $request->no_of_support_tickets,
-            'no_of_maintenance_schedules' => $request->no_of_maintenance_schedules,
+            'no_of_users' => $this->getLimitValue($request, 'no_of_users'),
+            'no_of_invitations' => $this->getLimitValue($request, 'no_of_invitations'),
+            'no_of_coupons' => $this->getLimitValue($request, 'no_of_coupons'),
+            'no_of_vehicles' => $this->getLimitValue($request, 'no_of_vehicles'),
+            'no_of_groups' => $this->getLimitValue($request, 'no_of_groups'),
+            'no_of_branches' => $this->getLimitValue($request, 'no_of_branches'),
+            'no_of_bookings' => $this->getLimitValue($request, 'no_of_bookings'),
+            'no_of_locations' => $this->getLimitValue($request, 'no_of_locations'),
+            'no_of_extras' => $this->getLimitValue($request, 'no_of_extras'),
+            'no_of_insurances' => $this->getLimitValue($request, 'no_of_insurances'),
+            'no_of_features' => $this->getLimitValue($request, 'no_of_features'),
+            'no_of_rules' => $this->getLimitValue($request, 'no_of_rules'),
+            'no_of_support_tickets' => $this->getLimitValue($request, 'no_of_support_tickets'),
+            'no_of_maintenance_schedules' => $this->getLimitValue($request, 'no_of_maintenance_schedules'),
             'booking_menu' => $request->has('booking_menu'),
             'vehicles_menu' => $request->has('vehicles_menu'),
             'locations_menu' => $request->has('locations_menu'),
@@ -98,6 +99,7 @@ class PackageController extends Controller
             'coupons_menu' => $request->has('coupons_menu'),
             'support_ticket_menu' => $request->has('support_ticket_menu'),
             'settings_menu' => $request->has('settings_menu'),
+            'community_menu' => $request->has('community_menu'),
         ]);
 
         return redirect()->route('admin.packages.index')->with('success', 'Package created successfully.');
@@ -152,6 +154,7 @@ class PackageController extends Controller
             'coupons_menu' => ['nullable', 'boolean'],
             'support_ticket_menu' => ['nullable', 'boolean'],
             'settings_menu' => ['nullable', 'boolean'],
+            'community_menu' => ['nullable', 'boolean'],
         ]);
 
         $package->update([
@@ -165,20 +168,20 @@ class PackageController extends Controller
             'is_active' => $request->has('is_active'),
             'button_text' => $request->button_text,
             'order' => $request->order,
-            'no_of_users' => $request->no_of_users,
-            'no_of_invitations' => $request->no_of_invitations,
-            'no_of_coupons' => $request->no_of_coupons,
-            'no_of_vehicles' => $request->no_of_vehicles,
-            'no_of_groups' => $request->no_of_groups,
-            'no_of_branches' => $request->no_of_branches,
-            'no_of_bookings' => $request->no_of_bookings,
-            'no_of_locations' => $request->no_of_locations,
-            'no_of_extras' => $request->no_of_extras,
-            'no_of_insurances' => $request->no_of_insurances,
-            'no_of_features' => $request->no_of_features,
-            'no_of_rules' => $request->no_of_rules,
-            'no_of_support_tickets' => $request->no_of_support_tickets,
-            'no_of_maintenance_schedules' => $request->no_of_maintenance_schedules,
+            'no_of_users' => $this->getLimitValue($request, 'no_of_users'),
+            'no_of_invitations' => $this->getLimitValue($request, 'no_of_invitations'),
+            'no_of_coupons' => $this->getLimitValue($request, 'no_of_coupons'),
+            'no_of_vehicles' => $this->getLimitValue($request, 'no_of_vehicles'),
+            'no_of_groups' => $this->getLimitValue($request, 'no_of_groups'),
+            'no_of_branches' => $this->getLimitValue($request, 'no_of_branches'),
+            'no_of_bookings' => $this->getLimitValue($request, 'no_of_bookings'),
+            'no_of_locations' => $this->getLimitValue($request, 'no_of_locations'),
+            'no_of_extras' => $this->getLimitValue($request, 'no_of_extras'),
+            'no_of_insurances' => $this->getLimitValue($request, 'no_of_insurances'),
+            'no_of_features' => $this->getLimitValue($request, 'no_of_features'),
+            'no_of_rules' => $this->getLimitValue($request, 'no_of_rules'),
+            'no_of_support_tickets' => $this->getLimitValue($request, 'no_of_support_tickets'),
+            'no_of_maintenance_schedules' => $this->getLimitValue($request, 'no_of_maintenance_schedules'),
             'booking_menu' => $request->has('booking_menu'),
             'vehicles_menu' => $request->has('vehicles_menu'),
             'locations_menu' => $request->has('locations_menu'),
@@ -189,9 +192,22 @@ class PackageController extends Controller
             'coupons_menu' => $request->has('coupons_menu'),
             'support_ticket_menu' => $request->has('support_ticket_menu'),
             'settings_menu' => $request->has('settings_menu'),
+            'community_menu' => $request->has('community_menu'),
         ]);
 
         return redirect()->route('admin.packages.index')->with('success', 'Package updated successfully.');
+    }
+
+    private function getLimitValue(Request $request, string $field): ?int
+    {
+        $limitType = $request->input('limit_type_' . $field);
+        if ($limitType === 'unlimited') {
+            return null;
+        }
+        if ($limitType === 'limited') {
+            return $request->filled($field) ? (int)$request->input($field) : 0;
+        }
+        return $request->filled($field) ? (int)$request->input($field) : null;
     }
 
     

@@ -70,6 +70,7 @@
           <a class="{{ request()->is('about') ? 'active' : '' }}" href="{{ route('about') }}">About Us</a>
           <a class="{{ request()->is('pricing') ? 'active' : '' }}" href="{{ route('pricing') }}">Pricing</a>
           <a class="{{ request()->is('faq') ? 'active' : '' }}" href="{{ route('faq') }}">FAQ</a>
+          <a class="{{ request()->is('community*') ? 'active' : '' }}" href="{{ route('community.index') }}">Community</a>
           <a class="{{ request()->is('contact') ? 'active' : '' }}" href="{{ route('contact') }}">Contact Us</a>
         </div>
 
@@ -155,6 +156,7 @@
           <a class="{{ request()->is('about') ? 'active' : '' }}" href="{{ route('about') }}">About Us</a>
           <a class="{{ request()->is('pricing') ? 'active' : '' }}" href="{{ route('pricing') }}">Pricing</a>
           <a class="{{ request()->is('faq') ? 'active' : '' }}" href="{{ route('faq') }}">FAQ</a>
+          <a class="{{ request()->is('community*') ? 'active' : '' }}" href="{{ route('community.index') }}">Community</a>
           <a class="{{ request()->is('contact') ? 'active' : '' }}" href="{{ route('contact') }}">Contact Us</a>
         </div>
         <div class="mobile-nav-actions">

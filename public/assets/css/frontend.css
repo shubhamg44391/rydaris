@@ -424,7 +424,7 @@ h3 {
   padding: 12px 17px;
   border: 1px solid transparent;
   border-radius: 999px;
-  font-weight: 850;
+  font-weight: 700 !important;
   line-height: 1;
   cursor: pointer;
 }
@@ -2471,4 +2471,68 @@ body.light-mode .dashboard-table tr {
 body.light-mode .booking-coverage-page {
   background: #f8fafc !important;
   color: #0f172a !important;
+}
+
+/* Global Button Font-Weight Reset - Completely Unbolded (Normal 400 Weight) */
+button,
+.btn,
+.btn-primary,
+.btn-secondary,
+.btn-teal,
+.btn-blue,
+.btn-success,
+.btn-danger,
+.btn-warning,
+.btn-info,
+.btn-dark,
+.btn-light,
+.btn-outline,
+.btn-outline-primary,
+.btn-outline-secondary,
+.btn-sm,
+.btn-lg,
+input[type="submit"],
+input[type="button"],
+a.btn,
+button.btn,
+button *,
+.btn *,
+.admin-action *,
+input[type="submit"] *,
+input[type="button"] * {
+  font-weight: 700 !important;
+}
+
+button:hover,
+.btn:hover,
+.admin-action:hover,
+.btn-action:hover,
+.action-btn:hover,
+.btn-primary:hover,
+.btn-secondary:hover,
+.btn-teal:hover,
+.btn-blue:hover,
+.btn-success:hover,
+.btn-danger:hover,
+.btn-warning:hover,
+.btn-info:hover,
+.btn-dark:hover,
+.btn-light:hover,
+.btn-outline:hover,
+.btn-outline-primary:hover,
+.btn-outline-secondary:hover,
+.btn-sm:hover,
+.btn-lg:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover,
+a.btn:hover,
+button.btn:hover,
+button:hover *,
+.btn:hover *,
+.admin-action:hover *,
+button:focus,
+.btn:focus,
+button:active,
+.btn:active {
+  font-weight: 700 !important;
 }

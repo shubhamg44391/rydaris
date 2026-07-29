@@ -44,6 +44,7 @@ class Package extends Model
         'coupons_menu',
         'support_ticket_menu',
         'settings_menu',
+        'community_menu',
     ];
 
     protected $casts = [
@@ -69,5 +70,6 @@ class Package extends Model
         'coupons_menu' => 'boolean',
         'support_ticket_menu' => 'boolean',
         'settings_menu' => 'boolean',
+        'community_menu' => 'boolean',
     ];
 }

@@ -462,6 +462,17 @@
                             </div>
                         </div>
 
+                        
+                        <div class="menu-permission-card">
+                            <div style="display: flex; align-items: center; gap: 12px; min-width: 260px; flex-shrink: 0;">
+                                <label class="theme-switch">
+                                    <input type="checkbox" id="community_menu" name="community_menu" value="1" {{ old('community_menu', '1') ? 'checked' : '' }} />
+                                    <span class="slider round"></span>
+                                </label>
+                                <span class="menu-title-text" onclick="document.getElementById('community_menu').click();">Community Menu</span>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 

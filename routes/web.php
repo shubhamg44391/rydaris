@@ -70,6 +70,11 @@ Route::get('/pricing', [HomeController::class, 'pricing'])->name('pricing');
 Route::get('/faq', [HomeController::class, 'faq'])->name('faq');
 Route::get('/terms-of-service', [HomeController::class, 'terms'])->name('terms');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
+
+// Public Community Routes
+Route::get('/community', [\App\Http\Controllers\CommunityController::class, 'index'])->name('community.index');
+Route::get('/community/{id}', [\App\Http\Controllers\CommunityController::class, 'show'])->name('community.show');
+Route::post('/community/{id}/comment', [\App\Http\Controllers\CommunityController::class, 'storeComment'])->name('community.comment');
 Route::get('/page/{slug}', function($slug) {
     return redirect()->to('/' . $slug, 301);
 });
@@ -249,6 +254,15 @@ Route::match(['get', 'post'], '/logout', [LoginController::class, 'logout'])->na
 // Admin Routes (Auth + Admin Middleware)
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/community', [\App\Http\Controllers\Admin\CommunityController::class, 'index'])->name('admin.community.index');
+    Route::get('/community/create', [\App\Http\Controllers\Admin\CommunityController::class, 'create'])->name('admin.community.create');
+    Route::post('/community', [\App\Http\Controllers\Admin\CommunityController::class, 'store'])->name('admin.community.store');
+    Route::get('/community/{id}', [\App\Http\Controllers\Admin\CommunityController::class, 'show'])->name('admin.community.show');
+    Route::post('/community/{id}/reply', [\App\Http\Controllers\Admin\CommunityController::class, 'storeReply'])->name('admin.community.reply');
+    Route::delete('/community/{id}', [\App\Http\Controllers\Admin\CommunityController::class, 'destroy'])->name('admin.community.destroy');
+    Route::post('/community/{id}/toggle-status', [\App\Http\Controllers\Admin\CommunityController::class, 'toggleStatus'])->name('admin.community.toggle-status');
+    Route::delete('/community/reply/{id}', [\App\Http\Controllers\Admin\CommunityController::class, 'destroyReply'])->name('admin.community.reply.destroy');
+
     Route::get('/vendor', [AdminVendorController::class, 'index'])->name('admin.vendors.index');
     Route::post('/vendor/{id}/toggle-status', [AdminVendorController::class, 'toggleStatus'])->name('admin.vendors.toggle-status');
     Route::get('/vendor/{id}/edit', [AdminVendorController::class, 'edit'])->name('admin.vendors.edit');
@@ -428,6 +442,15 @@ Route::middleware(['auth', 'vendor'])->prefix('vendor')->group(function () {
         Route::put('/branches/{id}', [\App\Http\Controllers\Vendor\BranchController::class, 'update'])->name('vendor.branches.update');
         Route::delete('/branches/{id}', [\App\Http\Controllers\Vendor\BranchController::class, 'destroy'])->name('vendor.branches.destroy');
         Route::post('/branches/select', [\App\Http\Controllers\Vendor\BranchController::class, 'selectBranch'])->name('vendor.branches.select');
+
+        // Community Routes
+        Route::get('/community', [\App\Http\Controllers\Vendor\CommunityController::class, 'index'])->name('vendor.community.index');
+        Route::get('/community/create', [\App\Http\Controllers\Vendor\CommunityController::class, 'create'])->name('vendor.community.create');
+        Route::post('/community', [\App\Http\Controllers\Vendor\CommunityController::class, 'store'])->name('vendor.community.store');
+        Route::get('/community/{id}', [\App\Http\Controllers\Vendor\CommunityController::class, 'show'])->name('vendor.community.show');
+        Route::post('/community/{id}/comment', [\App\Http\Controllers\Vendor\CommunityController::class, 'storeComment'])->name('vendor.community.comment');
+        Route::post('/community/{id}/like', [\App\Http\Controllers\Vendor\CommunityController::class, 'toggleLike'])->name('vendor.community.like');
+        Route::delete('/community/{id}', [\App\Http\Controllers\Vendor\CommunityController::class, 'destroy'])->name('vendor.community.destroy');
 
         Route::get('/smtp-settings', [\App\Http\Controllers\Vendor\SmtpSettingController::class, 'index'])->name('vendor.smtp_settings.index');
         Route::post('/smtp-settings', [\App\Http\Controllers\Vendor\SmtpSettingController::class, 'update'])->name('vendor.smtp_settings.update');

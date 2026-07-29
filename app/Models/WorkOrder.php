@@ -17,6 +17,7 @@ class WorkOrder extends Model
         'mechanic_workshop',
         'vehicle_status',
         'progress_percentage',
+        'checklist_tasks',
         'checklist_completed',
         'incident_flag',
         'status',
@@ -24,8 +25,9 @@ class WorkOrder extends Model
     ];
 
     protected $casts = [
+        'checklist_tasks'    => 'array',
         'checklist_completed' => 'array',
-        'completed_at' => 'datetime',
+        'completed_at'       => 'datetime',
     ];
 
     public function vehicle()

@@ -142,17 +142,17 @@
         padding-top: 15px;
     }
     .btn-teal {
-        background: linear-gradient(135deg, #52ead2, #2bc2a8) !important;
-        color: #050711 !important;
-        font-weight: 600 !important;
+        background: linear-gradient(135deg, #4de8d8 0%, #76a9ff 100%) !important;
+        color: #000000 !important;
+        font-weight: 700 !important;
         border: none !important;
-        box-shadow: 0 8px 20px rgba(82, 234, 210, 0.2) !important;
+        box-shadow: 0 8px 20px rgba(77, 232, 216, 0.25) !important;
         transition: all 0.3s ease !important;
         padding: 10px 24px;
-        border-radius: 6px;
+        border-radius: 12px;
     }
     .btn-teal:hover {
-        box-shadow: 0 8px 25px rgba(82, 234, 210, 0.4) !important;
+        box-shadow: 0 8px 25px rgba(77, 232, 216, 0.45) !important;
         transform: translateY(-1px);
     }
     .checkbox-container {

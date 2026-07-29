@@ -214,6 +214,13 @@
                             <span class="feature-text-on">System Settings Access</span>
                         </li>
                       @endif
+
+                      @if($pkg->community_menu)
+                        <li class="mb-2 d-flex align-items-center">
+                            <i class="bx bx-check me-2 feature-icon-on"></i>
+                            <span class="feature-text-on">Community Access Included</span>
+                        </li>
+                      @endif
                     </ul>
 
                     <div class="mt-auto pt-3">

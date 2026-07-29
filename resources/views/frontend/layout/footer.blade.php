@@ -61,6 +61,26 @@
       });
     @endif
 
+    @if(session('success'))
+      Swal.fire({
+        title: 'Success!',
+        text: @json(session('success')),
+        icon: 'success',
+        confirmButtonColor: '#3bb8a0',
+        confirmButtonText: 'OK'
+      });
+    @endif
+
+    @if(session('error'))
+      Swal.fire({
+        title: 'Notice',
+        text: @json(session('error')),
+        icon: 'error',
+        confirmButtonColor: '#ef4444',
+        confirmButtonText: 'OK'
+      });
+    @endif
+
     @if($errors->any() && old('first_name'))
       openDemoInquiryModal();
     @endif

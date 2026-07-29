@@ -40,12 +40,16 @@
     </div>
 
     <!-- Tabs: Active Work Orders vs Complete Service History -->
-    <div style="display: flex; gap: 12px; margin-bottom: 20px; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 10px;">
-        <button type="button" id="tabActiveBtn" onclick="switchWoTab('active')" class="btn btn-secondary" style="padding: 10px 20px; font-weight: 700; font-size: 0.9rem; border-radius: 8px;">
-             Active Work Orders
+    <div style="display: flex; gap: 12px; margin-bottom: 20px; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 10px; margin-left: 10px;">
+        <button type="button" id="tabActiveBtn" onclick="switchWoTab('active')"
+            style="padding: 10px 20px; font-weight: 700; font-size: 0.9rem; border-radius: 8px; border: none; cursor: pointer;
+                   background: linear-gradient(135deg, #80a7ff 0%, #52ead2 100%); color: #061218;">
+            Active Work Orders
         </button>
-        <button type="button" id="tabHistoryBtn" onclick="switchWoTab('history')" class="btn btn-secondary" style="padding: 10px 20px; font-weight: 700; font-size: 0.9rem; border-radius: 8px;">
-             Complete Service History Log
+        <button type="button" id="tabHistoryBtn" onclick="switchWoTab('history')"
+            style="padding: 10px 20px; font-weight: 700; font-size: 0.9rem; border-radius: 8px; cursor: pointer;
+                   background: transparent; color: var(--text, #1e293b); border: 1px solid rgba(0,0,0,0.15);">
+            Complete Service History Log
         </button>
     </div>
 
@@ -106,6 +110,7 @@
                                         onclick="openEditWoModalFromBtn(this)" 
                                         data-vehicle="{{ $wo->vehicle_id }}"
                                         data-tasks="{{ json_encode($wo->checklist_completed ?? []) }}"
+                                        data-all-tasks="{{ json_encode($wo->checklist_tasks ?? []) }}"
                                         data-mechanic="{{ $wo->mechanic_workshop }}"
                                         data-status="{{ $wo->vehicle_status }}"
                                         data-incident="{{ $wo->incident_flag }}"
@@ -245,7 +250,7 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 20px;">
                 <div>
                     <label class="form-label-custom" style="display: block; font-size: 0.9rem; font-weight: 700; margin-bottom: 8px;">Assigned Workshop / Mechanic <span style="color: #ef4444;">*</span></label>
-                    <input type="text" id="woMechanic" name="mechanic_workshop" placeholder="e.g. Ramesh Repair Services" required class="form-control" style="width: 100%; padding: 12px 16px; font-size: 0.95rem;">
+                    <input type="text" id="woMechanic" name="mechanic_workshop" placeholder="e.g. Ramesh Repair Services" required class="form-control" readonly style="width: 100%; padding: 12px 16px; font-size: 0.95rem; cursor: not-allowed; background: rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.15); font-weight: 600;">
                 </div>
 
                 <div>
@@ -275,7 +280,7 @@
                 <label class="form-label-custom" style="display: block; font-size: 0.9rem; font-weight: 700; margin-bottom: 8px;">Incident / Problem Flag</label>
                 <select id="woIncident" name="incident_flag" class="form-control" style="width: 100%; padding: 12px 16px; font-size: 0.95rem;">
                     <option value="No Incident">Normal (No Issues)</option>
-                    <option value="Incident Flagged">⚠️ Mark Incident / Problem Encountered</option>
+                    <option value="Incident Flagged"> Mark Incident / Problem Encountered</option>
                 </select>
             </div>
 
@@ -373,6 +378,7 @@ function renderWoChecklist(tasks) {
         html += `
             <label class="chk-btn-card" style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 1px solid rgba(0,0,0,0.1); border-radius: 8px; background: rgba(0,0,0,0.02); font-size: 0.85rem; font-weight: 600; cursor: pointer;">
                 <input type="checkbox" name="checklist_completed[]" class="wo-task-chk" onchange="recalcWoProgress()" value="${task}">
+                <input type="hidden" name="checklist_tasks[]" value="${task}">
                 <span>${idx + 1}. ${task}</span>
             </label>
         `;
@@ -413,24 +419,38 @@ function openAddWoModal(vehicleId, tasksParam, isEdit = false) {
 
 function openEditWoModalFromBtn(btn) {
     const vId = btn.getAttribute('data-vehicle');
-    const tasksRaw = btn.getAttribute('data-tasks');
+    const tasksRaw = btn.getAttribute('data-tasks');       // completed tasks
+    const allTasksRaw = btn.getAttribute('data-all-tasks'); // full task list
     const mechanic = btn.getAttribute('data-mechanic');
     const vStatus = btn.getAttribute('data-status');
     const incident = btn.getAttribute('data-incident');
     const editId = btn.getAttribute('data-id');
 
-    let tasks = [];
-    try {
-        tasks = JSON.parse(tasksRaw);
-    } catch(e) {
-        tasks = [];
-    }
+    let completedTasks = [];
+    let allTasks = [];
+    try { completedTasks = JSON.parse(tasksRaw); } catch(e) { completedTasks = []; }
+    try { allTasks = JSON.parse(allTasksRaw); } catch(e) { allTasks = []; }
 
-    editWoModal(vId, tasks, mechanic, vStatus, incident, editId);
+    editWoModal(vId, completedTasks, allTasks, mechanic, vStatus, incident, editId);
 }
 
-function editWoModal(vehicleId, completedTasks, mechanic, vStatus, incidentFlag, editId) {
-    openAddWoModal(vehicleId, defaultWoTasks, true);
+function editWoModal(vehicleId, completedTasks, allTasks, mechanic, vStatus, incidentFlag, editId) {
+    // Resolve completed task names for pre-checking
+    let checkedArr = [];
+    if (Array.isArray(completedTasks)) {
+        checkedArr = completedTasks.map(t => (typeof t === 'object' && t !== null && t.task) ? t.task : String(t));
+    }
+
+    // Use the stored full task list; fall back to checkedArr, then defaultWoTasks
+    let taskListToRender = defaultWoTasks;
+    if (Array.isArray(allTasks) && allTasks.length > 0) {
+        taskListToRender = allTasks; // correct: stored original task list
+    } else if (checkedArr.length > 0) {
+        taskListToRender = checkedArr; // fallback: at least show completed tasks
+    }
+
+    // Open modal and render the correct task list
+    openAddWoModal(vehicleId, taskListToRender, true);
 
     if (editId && document.getElementById('woEditId')) {
         document.getElementById('woEditId').value = editId;
@@ -451,32 +471,14 @@ function editWoModal(vehicleId, completedTasks, mechanic, vStatus, incidentFlag,
         if (iSelect) iSelect.value = incidentFlag;
     }
 
-    let checkedArr = [];
-    if (Array.isArray(completedTasks)) {
-        checkedArr = completedTasks.map(t => (typeof t === 'object' && t !== null && t.task) ? t.task : String(t));
-    } else if (typeof completedTasks === 'string' && completedTasks.trim() !== '') {
-        try {
-            const parsed = JSON.parse(completedTasks);
-            if (Array.isArray(parsed)) {
-                checkedArr = parsed.map(t => (typeof t === 'object' && t !== null && t.task) ? t.task : String(t));
-            } else {
-                checkedArr = [completedTasks];
-            }
-        } catch (e) {
-            checkedArr = [completedTasks];
-        }
-    }
-
-    const chks = document.querySelectorAll('.wo-task-chk');
-    chks.forEach(chk => {
-        if (checkedArr.includes(chk.value)) {
-            chk.checked = true;
-        } else {
-            chk.checked = false;
-        }
-    });
-
-    recalcWoProgress();
+    // Pre-check the previously completed tasks
+    setTimeout(() => {
+        const chks = document.querySelectorAll('.wo-task-chk');
+        chks.forEach(chk => {
+            chk.checked = checkedArr.some(name => name.trim() === chk.value.trim());
+        });
+        recalcWoProgress();
+    }, 50);
 }
 
 function closeAddWoModal() {
@@ -535,7 +537,7 @@ function viewHistoryRecord(woNumber, vehName, dateStr, timeStr, workshop, tasksJ
                             <span style="color: #10b981; font-weight: 700;">☑</span> ${taskName}
                         </span>
                         <span style="font-size: 0.75rem; color: #10b981; font-weight: 700; background: rgba(16, 185, 129, 0.12); padding: 3px 10px; border-radius: 999px;">
-                            🕒 ${taskTime}
+                            ${taskTime}
                         </span>
                     </div>
                 `;
@@ -563,29 +565,35 @@ function switchWoTab(tab) {
 
     if (!activeBtn || !historyBtn) return;
 
-    if (tab === 'history') {
-        activeBtn.style.background = 'transparent';
-        activeBtn.style.color = '#34d399';
-        activeBtn.style.border = '1px solid rgba(255, 255, 255, 0.15)';
-        activeBtn.style.boxShadow = 'none';
+    const activeStyle  = 'linear-gradient(135deg, #80a7ff 0%, #52ead2 100%)';
+    const inactiveStyle = 'transparent';
+    const activeColor  = '#061218';
+    const inactiveColor = 'var(--text, #1e293b)';
+    const inactiveBorder = '1px solid rgba(0,0,0,0.15)';
 
-        historyBtn.style.background = 'linear-gradient(90deg, #34d399, #60a5fa)';
-        historyBtn.style.color = '#050711';
-        historyBtn.style.border = 'none';
-        historyBtn.style.boxShadow = '0 4px 15px rgba(52, 211, 153, 0.35)';
+    if (tab === 'history') {
+        activeBtn.style.background  = inactiveStyle;
+        activeBtn.style.color       = inactiveColor;
+        activeBtn.style.border      = inactiveBorder;
+        activeBtn.style.boxShadow   = 'none';
+
+        historyBtn.style.background = activeStyle;
+        historyBtn.style.color      = activeColor;
+        historyBtn.style.border     = 'none';
+        historyBtn.style.boxShadow  = 'none';
 
         if (activeContent) activeContent.style.display = 'none';
         if (historyContent) historyContent.style.display = 'block';
     } else {
-        historyBtn.style.background = 'transparent';
-        historyBtn.style.color = '#34d399';
-        historyBtn.style.border = '1px solid rgba(255, 255, 255, 0.15)';
-        historyBtn.style.boxShadow = 'none';
+        historyBtn.style.background = inactiveStyle;
+        historyBtn.style.color      = inactiveColor;
+        historyBtn.style.border     = inactiveBorder;
+        historyBtn.style.boxShadow  = 'none';
 
-        activeBtn.style.background = 'linear-gradient(90deg, #34d399, #60a5fa)';
-        activeBtn.style.color = '#050711';
-        activeBtn.style.border = 'none';
-        activeBtn.style.boxShadow = '0 4px 15px rgba(52, 211, 153, 0.35)';
+        activeBtn.style.background  = activeStyle;
+        activeBtn.style.color       = activeColor;
+        activeBtn.style.border      = 'none';
+        activeBtn.style.boxShadow   = 'none';
 
         if (historyContent) historyContent.style.display = 'none';
         if (activeContent) activeContent.style.display = 'block';

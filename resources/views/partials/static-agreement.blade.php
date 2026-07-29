@@ -38,10 +38,19 @@
                 Lender (Vehicle Provider) Details
             </h4>
             @php
-                $v = isset($booking) ? ($booking->vehicle->vendor ?? null) : (isset($vehicle) ? ($vehicle->vendor ?? null) : null);
+                $v = isset($booking) ? ($booking->vehicle->vendor ?? null) : (isset($vehicle) ? ($vehicle->vendor ?? null) : ($vendor ?? null));
                 $vName = $v->company_name ?? $v->name ?? 'Rydaris Fleet Operations';
                 $vEmail = $v->email ?? ($site_setting->contact_email ?? 'support@rydaris.com');
                 $vPhone = $v->contact_number ?? $v->phone ?? ($site_setting->contact_phone ?? '+918882688646');
+                
+                $vWords = preg_split('/\s+/', trim($vName));
+                $vInitials = '';
+                foreach ($vWords as $w) {
+                    if (!empty($w)) {
+                        $vInitials .= strtoupper(substr($w, 0, 1));
+                    }
+                }
+                $vInitials = !empty($vInitials) ? $vInitials : 'R';
             @endphp
             <div class="agr-details-list" style="font-size: 0.82rem; display: flex; flex-direction: column; gap: 3px;">
                 <div><strong class="agr-strong">Provider:</strong> <span class="agr-val">{{ $vName }}</span></div>
@@ -86,10 +95,15 @@
 
     <!-- DIGITAL SIGNATURE FOOTER -->
     <div class="agr-footer" style="border-top: 1px dashed var(--agr-border, rgba(255, 255, 255, 0.15)); padding-top: 12px; margin-top: 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; font-size: 0.78rem;">
-        <div class="agr-sig" style="display: flex; align-items: center; gap: 8px; font-weight: 700; letter-spacing: 0.03em;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+        <div class="agr-sig" style="display: flex; align-items: center; gap: 8px; font-weight: 600;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
             Digitally Signed via Rydaris Platform
         </div>
+        
+        <div class="agr-initial" style="font-weight: 600; font-size: 0.78rem;">
+            Initialized: {{ $vInitials }}
+        </div>
+
         <div class="agr-hash" style="font-size: 0.72rem;">
             Authentication Hash: <span style="font-family: monospace;">{{ md5(($booking->reservation_number ?? 'static') . (auth()->id() ?? 'guest')) }}</span> | Date: {{ date('M d, Y') }}
         </div>

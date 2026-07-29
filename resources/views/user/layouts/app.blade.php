@@ -228,9 +228,15 @@
       const isCollapsed = body.classList.contains('sidebar-collapsed');
       localStorage.setItem('sidebar-collapsed', isCollapsed);
     }
-    // Close sidebar on nav link click (mobile)
+    // Close sidebar on nav link click (mobile), but ignore submenu toggles
     document.querySelectorAll('#adminSidebar .admin-nav a').forEach(function(link) {
-      link.addEventListener('click', function() { if (window.innerWidth <= 1180) closeSidebar(); });
+      link.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        if (this.classList.contains('nav-toggle') || href === 'javascript:void(0);' || href === '#' || !href) {
+          return; // Do NOT close sidebar when clicking submenu toggles
+        }
+        if (window.innerWidth <= 1180) closeSidebar();
+      });
     });
     // Restore collapse state on load
     if (localStorage.getItem('sidebar-collapsed') === 'true') {

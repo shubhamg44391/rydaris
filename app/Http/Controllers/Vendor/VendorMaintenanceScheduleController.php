@@ -187,6 +187,29 @@ class VendorMaintenanceScheduleController extends Controller
                 return $q->where('branch_id', $currentBranchId);
             })->latest()->get();
 
+        // Fallback: for work orders missing checklist_tasks, fetch from linked maintenance request
+        $vehicleIds = $workOrders->where('checklist_tasks', null)
+                                  ->pluck('vehicle_id')->unique()->filter();
+
+        $reqTasksMap = [];
+        if ($vehicleIds->isNotEmpty()) {
+            MaintenanceRequest::where('vendor_id', $vendorId)
+                ->whereIn('vehicle_id', $vehicleIds)
+                ->get()
+                ->each(function ($req) use (&$reqTasksMap) {
+                    if (!isset($reqTasksMap[$req->vehicle_id]) && !empty($req->checklist_tasks)) {
+                        $reqTasksMap[$req->vehicle_id] = $req->checklist_tasks;
+                    }
+                });
+        }
+
+        // Attach fetched tasks to work orders that are missing them
+        $workOrders->each(function ($wo) use ($reqTasksMap) {
+            if (empty($wo->checklist_tasks) && isset($reqTasksMap[$wo->vehicle_id])) {
+                $wo->checklist_tasks = $reqTasksMap[$wo->vehicle_id];
+            }
+        });
+
         return view('vendor.work-orders.index', compact('vehicles', 'workOrders'));
     }
 
@@ -215,6 +238,8 @@ class VendorMaintenanceScheduleController extends Controller
         $completedAt = ($progress >= 100) ? now() : null;
 
         $submittedTasks = $request->input('checklist_completed', []);
+        // Full task list from the modal (all checkboxes, checked or not)
+        $allTasksList = $request->input('checklist_tasks', []);
         $existingMap = [];
 
         if ($workOrder && is_array($workOrder->checklist_completed)) {
@@ -240,29 +265,31 @@ class VendorMaintenanceScheduleController extends Controller
 
         if ($workOrder) {
             $workOrder->update([
-                'vehicle_id' => $vehicleId,
-                'mechanic_workshop' => $request->mechanic_workshop ?? $workOrder->mechanic_workshop,
-                'vehicle_status' => $request->vehicle_status ?? $workOrder->vehicle_status,
+                'vehicle_id'          => $vehicleId,
+                'mechanic_workshop'   => $request->mechanic_workshop ?? $workOrder->mechanic_workshop,
+                'vehicle_status'      => $request->vehicle_status ?? $workOrder->vehicle_status,
                 'progress_percentage' => $progress,
+                'checklist_tasks'     => !empty($allTasksList) ? $allTasksList : ($workOrder->checklist_tasks ?? []),
                 'checklist_completed' => $checklistWithTimestamps,
-                'incident_flag' => $request->incident_flag ?? $workOrder->incident_flag,
-                'status' => $status,
-                'completed_at' => $completedAt ?? $workOrder->completed_at,
+                'incident_flag'       => $request->incident_flag ?? $workOrder->incident_flag,
+                'status'              => $status,
+                'completed_at'        => $completedAt ?? $workOrder->completed_at,
             ]);
             $message = 'Work Order updated successfully in database.';
         } else {
             $workOrder = WorkOrder::create([
-                'work_order_number' => 'WO-2026-' . rand(100, 999),
-                'vendor_id' => $vendorId,
-                'branch_id' => $currentBranchId,
-                'vehicle_id' => $vehicleId,
-                'mechanic_workshop' => $request->mechanic_workshop ?? 'Ramesh Repair Services',
-                'vehicle_status' => $request->vehicle_status ?? 'In Maintenance',
+                'work_order_number'   => 'WO-2026-' . rand(100, 999),
+                'vendor_id'           => $vendorId,
+                'branch_id'           => $currentBranchId,
+                'vehicle_id'          => $vehicleId,
+                'mechanic_workshop'   => $request->mechanic_workshop ?? 'Ramesh Repair Services',
+                'vehicle_status'      => $request->vehicle_status ?? 'In Maintenance',
                 'progress_percentage' => $progress,
+                'checklist_tasks'     => !empty($allTasksList) ? $allTasksList : $submittedTasks,
                 'checklist_completed' => $checklistWithTimestamps,
-                'incident_flag' => $request->incident_flag ?? 'No Incident',
-                'status' => $status,
-                'completed_at' => $completedAt,
+                'incident_flag'       => $request->incident_flag ?? 'No Incident',
+                'status'              => $status,
+                'completed_at'        => $completedAt,
             ]);
             $message = 'Work Order stored successfully in database.';
         }

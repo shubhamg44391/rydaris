@@ -143,6 +143,10 @@
                   @if($pkg->settings_menu)
                     <li><span class="check">✓</span><span>System Settings Access</span></li>
                   @endif
+
+                  @if($pkg->community_menu)
+                    <li><span class="check">✓</span><span>Community Access Included</span></li>
+                  @endif
                 </ul>
 
               <div class="actions" style="margin-top: auto; padding-top: 24px; display: flex; justify-content: center; width: 100%;">

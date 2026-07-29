@@ -4,14 +4,14 @@
 <div class="admin-panel" style="padding: 20px;">
     <div class="d-flex justify-content-between align-items-center mb-5">
         <div>
-            <h2 style="font-weight: 700; color: #f8fafc; margin-bottom: 5px;">My Bookings</h2>
+            <h2 style="font-weight: 700; color: #f8fafc; margin-bottom: 5px;">Payment History</h2>
         </div>
     </div>
     
     @if(isset($bookings) && count($bookings) > 0)
     <div class="row">
         <div class="col-12">
-            <h4 class="dashboard-section-title" style="font-weight: 700; margin-bottom: 20px;">My Bookings & Payment History</h4>
+            <!-- <h4 class="dashboard-section-title" style="font-weight: 700; margin-bottom: 20px;">Payment History</h4> -->
             <div class="table-responsive dashboard-table-wrap" style="background: rgba(11, 16, 32, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 20px;">
                 <table class="table table-borderless dashboard-table" style="margin-bottom: 0;">
                     <thead>

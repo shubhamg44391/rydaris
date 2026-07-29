@@ -46,15 +46,15 @@
                         <td>
                             @if($req->status === 'completed')
                                 <span class="badge" style="background: rgba(16, 185, 129, 0.12); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 999px; padding: 4px 10px; font-size: 0.75rem; font-weight: 700;">
-                                    🟢 COMPLETED
+                                     COMPLETED
                                 </span>
                             @elseif($req->status === 'converted' || $req->status === 'in_progress')
                                 <span class="badge" style="background: rgba(2, 132, 199, 0.12); color: #0284c7; border: 1px solid rgba(2, 132, 199, 0.25); border-radius: 999px; padding: 4px 10px; font-size: 0.75rem; font-weight: 700;">
-                                    ⚙️ WORK ORDER CREATED
+                                     WORK ORDER CREATED
                                 </span>
                             @else
                                 <span class="badge" style="background: rgba(234, 179, 8, 0.12); color: #eab308; border: 1px solid rgba(234, 179, 8, 0.25); border-radius: 999px; padding: 4px 10px; font-size: 0.75rem; font-weight: 700;">
-                                    🟡 PENDING
+                                     PENDING
                                 </span>
                             @endif
                         </td>
@@ -103,27 +103,53 @@
             <input type="hidden" name="request_id" id="reqEditId" value="">
             <!-- Vehicle Selection -->
             <div style="margin-bottom: 20px;">
-                <label class="form-label-custom" style="display: block; font-size: 0.9rem; font-weight: 700; margin-bottom: 8px;">Select Vehicle <span style="color: #ef4444;">*</span></label>
-                <select id="reqVehicle" name="vehicle_id" required class="form-control" style="width: 100%; padding: 12px 16px; font-size: 0.95rem;">
-                    <option value="">-- Select Vehicle --</option>
-                    @foreach($vehicles as $v)
-                        <option value="{{ $v->id }}">
-                            [{{ $v->code ?? ('VEH-'.$v->id) }}] {{ $v->name }} ({{ $v->reg_number ?? 'REG' }})
-                        </option>
-                    @endforeach
-                </select>
+                <label class="form-label-custom" style="display: block; font-size: 0.9rem; font-weight: 700; margin-bottom: 8px; text-transform: uppercase;">SELECT VEHICLE <span style="color: #ef4444;">*</span></label>
+                
+                <div id="vehicleReadonlyWrap" style="display: none;">
+                    <input type="text" id="reqVehicleReadonlyInput" readonly class="form-control" style="width: 100%; padding: 12px 16px; font-size: 0.95rem; background: rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.15); border-radius: 12px; font-weight: 600; cursor: not-allowed; color: inherit;" value="">
+                    <input type="hidden" id="reqVehicleHiddenInput" name="vehicle_id" value="" disabled>
+                </div>
+
+                <div id="vehicleSelectWrap">
+                    <select id="reqVehicleSelect" required class="form-control" style="width: 100%; padding: 12px 16px; font-size: 0.95rem; border-radius: 12px;" onchange="handleVehicleSelectChange(this)">
+                        <option value="">-- Select Vehicle --</option>
+                        @foreach($vehicles as $v)
+                            @php
+                                $vLabel = '[' . ($v->code ?? ('VEH-'.$v->id)) . '] ' . $v->name . ' (' . ($v->reg_number ?? 'REG') . ')';
+                            @endphp
+                            <option value="{{ $v->id }}" data-label="{{ $vLabel }}">
+                                {{ $vLabel }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
 
             <!-- Priority Level -->
             <input type="hidden" name="interval_type" id="reqType" value="Engine Hours">
             <div style="margin-bottom: 20px;">
                 <label class="form-label-custom" style="display: block; font-size: 0.9rem; font-weight: 700; margin-bottom: 8px;">Priority Level</label>
-                <select id="reqPriority" name="priority" class="form-control" style="width: 100%; padding: 12px 16px; font-size: 0.95rem;">
+                <select id="reqPriority" name="priority" class="form-control" style="width: 100%; padding: 12px 16px; font-size: 0.95rem; border-radius: 12px;">
                     <option value="Medium">Medium</option>
                     <option value="High">High</option>
                     <option value="Low">Low</option>
                     <option value="Emergency">Emergency</option>
                 </select>
+            </div>
+
+            <!-- Assigned Workshop / Mechanic & Vehicle Rental Status -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 20px;">
+                <div>
+                    <label class="form-label-custom" style="display: block; font-size: 0.9rem; font-weight: 700; margin-bottom: 8px; text-transform: uppercase;">Assigned Workshop / Mechanic <span style="color: #ef4444;">*</span></label>
+                    <input type="text" id="reqMechanic" name="mechanic_workshop" placeholder="e.g. Ramesh Repair Services" required class="form-control" style="width: 100%; padding: 12px 16px; font-size: 0.95rem; border-radius: 12px;">
+                </div>
+                <div>
+                    <label class="form-label-custom" style="display: block; font-size: 0.9rem; font-weight: 700; margin-bottom: 8px; text-transform: uppercase;">Vehicle Rental Status <span style="color: #ef4444;">*</span></label>
+                    <select id="reqVehicleStatus" name="vehicle_status" required class="form-control" style="width: 100%; padding: 12px 16px; font-size: 0.95rem; border-radius: 12px;">
+                        <option value="In Maintenance">In Maintenance</option>
+                        <option value="Available">Available</option>
+                    </select>
+                </div>
             </div>
 
             <!-- Service Checkboxes (Button-Style Cards) -->
@@ -162,18 +188,51 @@
 
             <div style="margin-bottom: 24px;">
                 <label class="form-label-custom" style="display: block; font-size: 0.9rem; font-weight: 700; margin-bottom: 8px;">Additional Service Notes</label>
-                <textarea id="reqNotes" name="notes" rows="2" placeholder="Optional notes for mechanic..." class="form-control" style="width: 100%; padding: 12px 16px; font-size: 0.95rem;"></textarea>
+                <textarea id="reqNotes" name="notes" rows="2" placeholder="Optional notes for mechanic..." class="form-control" style="width: 100%; padding: 12px 16px; font-size: 0.95rem; border-radius: 12px;"></textarea>
             </div>
 
             <div style="display: flex; justify-content: flex-end; gap: 14px;">
-                <button type="button" onclick="closeAddReqModal()" class="btn btn-secondary" style="padding: 12px 24px; font-weight: 600; font-size: 0.95rem;">Cancel</button>
-                <button type="submit" id="reqSubmitBtn" class="btn btn-primary" style="padding: 12px 28px; font-weight: 700; font-size: 0.95rem;">Submit Ticket Request</button>
+                <button type="button" onclick="closeAddReqModal()" class="btn btn-secondary" style="padding: 12px 24px; font-weight: 600; font-size: 0.95rem; border-radius: 10px;">Cancel</button>
+                <button type="submit" id="reqSubmitBtn" class="btn btn-primary" style="padding: 12px 28px; font-weight: 700; font-size: 0.95rem; border-radius: 10px;">Submit Ticket Request</button>
             </div>
         </form>
     </div>
 </div>
 
 <script>
+function setVehicleReadonlyState(val, label) {
+    const readonlyWrap = document.getElementById('vehicleReadonlyWrap');
+    const readonlyInput = document.getElementById('reqVehicleReadonlyInput');
+    const hiddenInput = document.getElementById('reqVehicleHiddenInput');
+    const selectWrap = document.getElementById('vehicleSelectWrap');
+    const selectElem = document.getElementById('reqVehicleSelect');
+
+    if (val && val !== '') {
+        readonlyInput.value = label;
+        hiddenInput.value = val;
+        hiddenInput.disabled = false;
+        selectElem.disabled = true;
+
+        readonlyWrap.style.display = 'block';
+        selectWrap.style.display = 'none';
+    } else {
+        readonlyInput.value = '';
+        hiddenInput.value = '';
+        hiddenInput.disabled = true;
+        selectElem.disabled = false;
+
+        readonlyWrap.style.display = 'none';
+        selectWrap.style.display = 'block';
+    }
+}
+
+function handleVehicleSelectChange(select) {
+    if (select.value) {
+        const label = select.options[select.selectedIndex].text;
+        setVehicleReadonlyState(select.value, label);
+    }
+}
+
 function openAddReqModal(vehicleId, isEdit = false) {
     if (!isEdit) {
         const form = document.getElementById('reqForm');
@@ -181,27 +240,38 @@ function openAddReqModal(vehicleId, isEdit = false) {
         if (document.getElementById('reqEditId')) document.getElementById('reqEditId').value = '';
     }
     document.getElementById('addReqModal').style.display = 'flex';
+
+    const selectElem = document.getElementById('reqVehicleSelect');
+
     if (vehicleId) {
-        const select = document.getElementById('reqVehicle');
-        if (select) {
-            select.value = vehicleId;
-            if (select.selectedIndex <= 0) {
-                for (let i = 0; i < select.options.length; i++) {
-                    const optVal = String(select.options[i].value);
-                    const optTxt = select.options[i].text.toLowerCase();
-                    if (optVal === String(vehicleId) || optTxt.includes(String(vehicleId).toLowerCase())) {
-                        select.selectedIndex = i;
-                        break;
-                    }
+        let foundVal = '';
+        let foundLabel = '';
+        if (selectElem) {
+            for (let i = 0; i < selectElem.options.length; i++) {
+                const optVal = String(selectElem.options[i].value);
+                const optTxt = selectElem.options[i].text;
+                if (optVal === String(vehicleId) || optTxt.toLowerCase().includes(String(vehicleId).toLowerCase())) {
+                    foundVal = selectElem.options[i].value;
+                    foundLabel = optTxt;
+                    selectElem.selectedIndex = i;
+                    break;
                 }
             }
         }
+        if (foundVal) {
+            setVehicleReadonlyState(foundVal, foundLabel);
+        } else {
+            setVehicleReadonlyState('', '');
+        }
+    } else {
+        setVehicleReadonlyState('', '');
     }
 }
 function closeAddReqModal() {
     document.getElementById('addReqModal').style.display = 'none';
     document.getElementById('reqForm').reset();
     if (document.getElementById('reqEditId')) document.getElementById('reqEditId').value = '';
+    setVehicleReadonlyState('', '');
 }
 
 function toggleSelectAllReqTasks(master) {
