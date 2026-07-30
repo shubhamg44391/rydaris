@@ -28,7 +28,7 @@
                         <div>
                             <label for="site_logo" class="form-label-custom">Logo (For Dark Theme)</label>
                             <input type="file" 
-                                   class="form-control form-input-custom @error('site_logo') is-invalid @enderror" 
+                                   class="file-input-custom @error('site_logo') is-invalid @enderror" 
                                    id="site_logo" 
                                    name="site_logo"
                                    accept="image/*"
@@ -50,7 +50,7 @@
                         <div>
                             <label for="site_logo_light" class="form-label-custom">Logo (For Light Theme)</label>
                             <input type="file" 
-                                   class="form-control form-input-custom @error('site_logo_light') is-invalid @enderror" 
+                                   class="file-input-custom @error('site_logo_light') is-invalid @enderror" 
                                    id="site_logo_light" 
                                    name="site_logo_light"
                                    accept="image/*"
@@ -72,7 +72,7 @@
                         <div>
                             <label for="favicon" class="form-label-custom">Favicon (Browser Tab Icon)</label>
                             <input type="file" 
-                                   class="form-control form-input-custom @error('favicon') is-invalid @enderror" 
+                                   class="file-input-custom @error('favicon') is-invalid @enderror" 
                                    id="favicon" 
                                    name="favicon"
                                    accept="image/*"
@@ -149,6 +149,53 @@
     </div>
 
     <!-- AJAX & SweetAlert Modal Script -->
+    <style>
+    /* File input — no padding override, proper height */
+    .file-input-custom {
+        display: block;
+        width: 100%;
+        padding: 6px 10px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        line-height: 1.5;
+        color: var(--text, #f8fafc);
+        background: var(--input-bg, rgba(255,255,255,0.05));
+        border: 1px solid var(--line, rgba(82,234,210,0.18));
+        border-radius: var(--radius, 8px);
+        cursor: pointer;
+        box-sizing: border-box;
+        transition: border-color 0.2s ease;
+    }
+    .file-input-custom:focus {
+        outline: none;
+        border-color: var(--brand, #52ead2);
+    }
+    .file-input-custom::file-selector-button {
+        padding: 4px 12px;
+        margin-right: 10px;
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--text, #f8fafc);
+        background: rgba(82, 234, 210, 0.12);
+        border: 1px solid rgba(82, 234, 210, 0.3);
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.2s ease;
+    }
+    .file-input-custom::file-selector-button:hover {
+        background: rgba(82, 234, 210, 0.22);
+    }
+    body.light-mode .file-input-custom {
+        color: #0f172a;
+        background: #f8fafc;
+        border-color: #cbd5e1;
+    }
+    body.light-mode .file-input-custom::file-selector-button {
+        color: #0f172a;
+        background: #e2e8f0;
+        border-color: #94a3b8;
+    }
+    </style>
     <script>
     function previewImage(input, previewId) {
         if (input.files && input.files[0]) {
@@ -160,104 +207,106 @@
         }
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('generalSettingsForm');
-        if (!form) return;
+    $(document).ready(function () {
+        var $form = $('#generalSettingsForm');
+        if (!$form.length) return;
 
-        form.addEventListener('submit', function (e) {
+        $form.on('submit', function (e) {
             e.preventDefault();
 
-            const submitBtn = form.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = 'Saving...';
+            var $submitBtn = $form.find('button[type="submit"]');
+            var originalText = $submitBtn.html();
+            $submitBtn.prop('disabled', true).html('<i class="fa-solid fa-spinner fa-spin"></i> Saving...');
 
-            const formData = new FormData(form);
+            var formData = new FormData(this);
 
-            fetch(form.action, {
-                method: 'POST',
-                body: formData,
+            $.ajax({
+                url: $form.attr('action'),
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: 'json',
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || formData.get('_token')
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalText;
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') || '{{ csrf_token() }}'
+                },
+                success: function (data) {
+                    $submitBtn.prop('disabled', false).html(originalText);
 
-                // Dynamically detect theme to style SweetAlert accordingly
-                const isLight = document.body.classList.contains('light-mode');
-                const swalBg = isLight ? '#ffffff' : '#0b1020';
-                const swalColor = isLight ? '#0f172a' : '#f8fafc';
-                const confirmBtnColor = '#52ead2';
+                    var isLight = $('body').hasClass('light-mode');
+                    var swalBg = isLight ? '#ffffff' : '#0b1020';
+                    var swalColor = isLight ? '#0f172a' : '#f8fafc';
 
-                if (data.success) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success!',
-                        text: data.message || 'General contact settings updated successfully.',
-                        background: swalBg,
-                        color: swalColor,
-                        confirmButtonColor: confirmBtnColor,
-                        confirmButtonText: 'OK'
-                    });
-                    
-                    // Update header/branding logos dynamically on successful save
-                    if (data.site_logo_url) {
-                        const darkLogoEl = document.getElementById('siteLogoPreview');
-                        if (darkLogoEl) darkLogoEl.src = data.site_logo_url;
-                        
-                        // Also update any sidebar/topbar main logos that use it
-                        const sidebarLogo = document.querySelector('.admin-sidebar .brand-full img');
-                        if (sidebarLogo && !isLight) sidebarLogo.src = data.site_logo_url;
+                    if (data.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: data.message || 'General contact settings updated successfully.',
+                            background: swalBg,
+                            color: swalColor,
+                            confirmButtonColor: '#52ead2',
+                            confirmButtonText: 'OK'
+                        });
+
+                        if (data.site_logo_url) {
+                            $('#siteLogoPreview').attr('src', data.site_logo_url);
+                            var $sidebarLogo = $('.admin-sidebar .brand-full img');
+                            if ($sidebarLogo.length && !isLight) $sidebarLogo.attr('src', data.site_logo_url);
+                        }
+                        if (data.site_logo_light_url) {
+                            $('#siteLogoLightPreview').attr('src', data.site_logo_light_url);
+                            var $sidebarLogo2 = $('.admin-sidebar .brand-full img');
+                            if ($sidebarLogo2.length && isLight) $sidebarLogo2.attr('src', data.site_logo_light_url);
+                        }
+                        if (data.favicon_url) {
+                            $('#faviconPreview').attr('src', data.favicon_url);
+                            var $headFavicon = $('link[rel="icon"]');
+                            if ($headFavicon.length) $headFavicon.attr('href', data.favicon_url);
+                        }
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: data.message || 'Failed to update settings.',
+                            background: swalBg,
+                            color: swalColor,
+                            confirmButtonColor: '#ef4444',
+                            confirmButtonText: 'Try Again'
+                        });
                     }
-                    if (data.site_logo_light_url) {
-                        const lightLogoEl = document.getElementById('siteLogoLightPreview');
-                        if (lightLogoEl) lightLogoEl.src = data.site_logo_light_url;
-                        
-                        const sidebarLogo = document.querySelector('.admin-sidebar .brand-full img');
-                        if (sidebarLogo && isLight) sidebarLogo.src = data.site_logo_light_url;
+                },
+                error: function (xhr) {
+                    $submitBtn.prop('disabled', false).html(originalText);
+
+                    var isLight = $('body').hasClass('light-mode');
+                    var swalBg = isLight ? '#ffffff' : '#0b1020';
+                    var swalColor = isLight ? '#0f172a' : '#f8fafc';
+
+                    if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON.errors) {
+                        var errors = xhr.responseJSON.errors;
+                        var firstErr = Object.values(errors)[0][0];
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Validation Error',
+                            text: firstErr,
+                            background: swalBg,
+                            color: swalColor,
+                            confirmButtonColor: '#52ead2',
+                            confirmButtonText: 'OK'
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: 'Something went wrong. Please try again.',
+                            background: swalBg,
+                            color: swalColor,
+                            confirmButtonColor: '#ef4444',
+                            confirmButtonText: 'OK'
+                        });
                     }
-                    if (data.favicon_url) {
-                        const faviconEl = document.getElementById('faviconPreview');
-                        if (faviconEl) faviconEl.src = data.favicon_url;
-                        
-                        // Dynamically update the document head favicon
-                        const headFavicon = document.querySelector('link[rel="icon"]');
-                        if (headFavicon) headFavicon.href = data.favicon_url;
-                    }
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: data.message || 'Failed to update settings.',
-                        background: swalBg,
-                        color: swalColor,
-                        confirmButtonColor: '#ef4444',
-                        confirmButtonText: 'Try Again'
-                    });
                 }
-            })
-            .catch(error => {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalText;
-                
-                const isLight = document.body.classList.contains('light-mode');
-                const swalBg = isLight ? '#ffffff' : '#0b1020';
-                const swalColor = isLight ? '#0f172a' : '#f8fafc';
-                
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'Something went wrong. Please try again.',
-                    background: swalBg,
-                    color: swalColor,
-                    confirmButtonColor: '#ef4444',
-                    confirmButtonText: 'OK'
-                });
             });
         });
     });

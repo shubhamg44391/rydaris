@@ -102,11 +102,18 @@ class PackageController extends Controller
             'community_menu' => $request->has('community_menu'),
         ]);
 
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Package created successfully.',
+                'redirect' => route('admin.packages.index')
+            ]);
+        }
+
         return redirect()->route('admin.packages.index')->with('success', 'Package created successfully.');
     }
 
     
-
     public function edit($id)
     {
         $package = Package::findOrFail($id);
@@ -115,7 +122,6 @@ class PackageController extends Controller
     }
 
     
-
     public function update(Request $request, $id)
     {
         $package = Package::findOrFail($id);
@@ -195,6 +201,14 @@ class PackageController extends Controller
             'community_menu' => $request->has('community_menu'),
         ]);
 
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Package updated successfully.',
+                'redirect' => route('admin.packages.index')
+            ]);
+        }
+
         return redirect()->route('admin.packages.index')->with('success', 'Package updated successfully.');
     }
 
@@ -211,11 +225,17 @@ class PackageController extends Controller
     }
 
     
-
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $package = Package::findOrFail($id);
         $package->delete();
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Package deleted successfully.'
+            ]);
+        }
 
         return redirect()->route('admin.packages.index')->with('success', 'Package deleted successfully.');
     }

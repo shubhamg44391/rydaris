@@ -110,9 +110,17 @@ class AdminPageController extends Controller
 
     
 
-    public function destroy(Page $page)
+    public function destroy(Request $request, Page $page)
     {
         $page->delete();
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Page deleted successfully.'
+            ]);
+        }
+
         return redirect()->route('admin.pages.index')->with('success', 'Page deleted successfully.');
     }
 }

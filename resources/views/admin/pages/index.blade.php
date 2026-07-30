@@ -92,25 +92,74 @@
 
 @section('js')
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.delete-btn').forEach(button => {
-            button.addEventListener('click', function (e) {
-                const form = this.closest('form');
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#ef4444',
-                    cancelButtonColor: '#64748b',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        form.submit();
-                    }
-                });
+    $(document).ready(function () {
+        // Delete page via jQuery AJAX
+        $(document).on('click', '.delete-btn', function (e) {
+            e.preventDefault();
+            var $button = $(this);
+            var $form = $button.closest('form');
+            var $row = $button.closest('tr');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Yes, delete it!'
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    var formData = new FormData($form[0]);
+                    formData.append('_method', 'DELETE');
+
+                    $.ajax({
+                        url: $form.attr('action'),
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        dataType: 'json',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        success: function (data) {
+                            if (data.success) {
+                                if ($row.length) {
+                                    $row.css({
+                                        'transition': 'opacity 0.3s ease, transform 0.3s ease',
+                                        'opacity': '0',
+                                        'transform': 'translateX(20px)'
+                                    });
+                                    setTimeout(function () { $row.remove(); }, 300);
+                                }
+                                Swal.fire({
+                                    title: 'Deleted!',
+                                    text: data.message,
+                                    icon: 'success',
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                });
+                            }
+                        },
+                        error: function () {
+                            Swal.fire('Error!', 'Failed to delete page.', 'error');
+                        }
+                    });
+                }
             });
         });
+
+        @if(session('success'))
+            Swal.fire({
+                title: 'Success!',
+                text: "{{ session('success') }}",
+                icon: 'success',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        @endif
     });
 </script>
 @endsection

@@ -9,18 +9,19 @@
         </div>
 
         
-        <div class="panel-filter-bar">
-            <a href="{{ route('admin.custom-package-requests.index') }}" class="btn btn-sm {{ !request('status') ? 'active' : '' }}">
-                All Requests
+        <div class="panel-filter-bar" id="pkgFilterBar">
+            <a href="{{ route('admin.custom-package-requests.index') }}" data-status="" class="btn btn-sm {{ !request('status') ? 'active' : '' }}">
+                All Requests <span id="countAll">{{ $totalCount }}</span>
             </a>
-            <a href="{{ route('admin.custom-package-requests.index', ['status' => 'unread']) }}" class="btn btn-sm {{ request('status') === 'unread' ? 'active' : '' }}">
-                Unread
+            <a href="{{ route('admin.custom-package-requests.index', ['status' => 'unread']) }}" data-status="unread" class="btn btn-sm {{ request('status') === 'unread' ? 'active' : '' }}">
+                Unread <span id="countUnread">{{ $unreadCount }}</span>
             </a>
-            <a href="{{ route('admin.custom-package-requests.index', ['status' => 'read']) }}" class="btn btn-sm {{ request('status') === 'read' ? 'active' : '' }}">
-                Read
+            <a href="{{ route('admin.custom-package-requests.index', ['status' => 'read']) }}" data-status="read" class="btn btn-sm {{ request('status') === 'read' ? 'active' : '' }}">
+                Read <span id="countRead">{{ $readCount }}</span>
             </a>
         </div>
 
+        <div id="pkgTableContainer">
         <div class="panel-body admin-table-wrap">
             <table class="admin-table">
                 <thead>
@@ -65,14 +66,14 @@
                                 <span style="font-size: 0.85rem; color: #64748b;">{{ $request->created_at->format('M d, Y') }}</span>
                             </td>
                             <td>
-                                <form action="{{ route('admin.custom-package-requests.toggle-status', $request->id) }}" method="POST" style="display: inline;">
-                                    @csrf
-                                     @if($request->status === 'unread')
-                                        <button type="submit" title="Mark as Read" class="status-badge-active">Unread</button>
-                                    @else
-                                        <button type="submit" title="Mark as Unread" class="status-badge-inactive">Read</button>
-                                    @endif
-                                </form>
+                                <button type="button"
+                                    class="status-toggle-btn {{ $request->status === 'unread' ? 'status-badge-active' : 'status-badge-inactive' }}"
+                                    data-id="{{ $request->id }}"
+                                    data-url="{{ route('admin.custom-package-requests.toggle-status', $request->id) }}"
+                                    data-status="{{ $request->status }}"
+                                    title="{{ $request->status === 'unread' ? 'Mark as Read' : 'Mark as Unread' }}">
+                                    {{ ucfirst($request->status) }}
+                                </button>
                             </td>
                             <td>
                                 <div class="table-actions" style="display: flex; gap: 8px;">
@@ -114,6 +115,7 @@
                 </div>
             </div>
         @endif
+        </div>{{-- close #pkgTableContainer --}}
 
     </div>
 
@@ -176,63 +178,171 @@
 @section('js')
 <script>
     function openViewModal(button) {
-        const data = JSON.parse(button.getAttribute('data-request'));
-        
-        document.getElementById('modalName').textContent = data.name;
-        document.getElementById('modalCompany').textContent = data.company_name;
-        document.getElementById('modalEmail').textContent = data.email;
-        document.getElementById('modalContact').textContent = (data.country_code ? data.country_code + ' ' : '') + data.contact_details;
-        document.getElementById('modalBudget').textContent = data.budget ? '$' + data.budget : 'Not specified';
-        document.getElementById('modalDate').textContent = new Date(data.created_at).toLocaleDateString();
-        document.getElementById('modalDescription').textContent = data.description || 'No description provided.';
-        
-        document.getElementById('viewModal').style.display = 'flex';
+        var data = JSON.parse(button.getAttribute('data-request'));
+        $('#modalName').text(data.name);
+        $('#modalCompany').text(data.company_name);
+        $('#modalEmail').text(data.email);
+        $('#modalContact').text((data.country_code ? data.country_code + ' ' : '') + data.contact_details);
+        $('#modalBudget').text(data.budget ? '$' + data.budget : 'Not specified');
+        $('#modalDate').text(new Date(data.created_at).toLocaleDateString());
+        $('#modalDescription').text(data.description || 'No description provided.');
+        $('#viewModal').css('display', 'flex');
     }
 
     function closeViewModal() {
-        document.getElementById('viewModal').style.display = 'none';
+        $('#viewModal').css('display', 'none');
     }
 
-    // Close on outside click
-    window.onclick = function(event) {
-        const modal = document.getElementById('viewModal');
-        if (event.target == modal) {
-            closeViewModal();
-        }
-    }
+    $(document).ready(function () {
 
-    document.addEventListener('DOMContentLoaded', function () {
-        // Delete confirmation
-        document.querySelectorAll('.delete-btn').forEach(button => {
-            button.addEventListener('click', function (e) {
-                e.preventDefault();
-                const form = this.closest('form');
+        // Backdrop close
+        $('#viewModal').on('click', function (e) {
+            if (e.target === this) closeViewModal();
+        });
 
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "This will delete the request permanently.",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#ff3e1d',
-                    cancelButtonColor: '#8592a3',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        form.submit();
+        // ── Filter Tabs (AJAX - no page refresh) ──
+        $(document).on('click', '#pkgFilterBar a', function (e) {
+            e.preventDefault();
+            var $tab = $(this);
+            var url = $tab.attr('href');
+
+            $('#pkgFilterBar a').removeClass('active');
+            $tab.addClass('active');
+            $('#pkgTableContainer').css({ 'opacity': '0.5', 'pointer-events': 'none' });
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'json',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                success: function (data) {
+                    if (data.html) $('#pkgTableContainer').html(data.html);
+                    if (data.totalCount !== undefined) {
+                        $('#countAll').text(data.totalCount);
+                        $('#countUnread').text(data.unreadCount);
+                        $('#countRead').text(data.readCount);
                     }
-                });
+                    history.pushState({ url: url }, '', url);
+                },
+                error: function () { window.location.href = url; },
+                complete: function () {
+                    $('#pkgTableContainer').css({ 'opacity': '1', 'pointer-events': '' });
+                }
             });
         });
 
-        // Success session alert
-        @if(session('success'))
-            Swal.fire({
-                title: 'Success!',
-                text: "{{ session('success') }}",
-                icon: 'success',
-                timer: 3000,
-                showConfirmButton: false
+        // ── Pagination (AJAX) ──
+        $(document).on('click', '#pkgTableContainer .pagination a', function (e) {
+            e.preventDefault();
+            var url = $(this).attr('href');
+            $('#pkgTableContainer').css({ 'opacity': '0.5', 'pointer-events': 'none' });
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'json',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                success: function (data) {
+                    if (data.html) $('#pkgTableContainer').html(data.html);
+                    history.pushState({ url: url }, '', url);
+                },
+                complete: function () {
+                    $('#pkgTableContainer').css({ 'opacity': '1', 'pointer-events': '' });
+                }
             });
+        });
+
+        // ── Status Toggle (AJAX - no page refresh) ──
+        $(document).on('click', '.status-toggle-btn', function () {
+            var $btn = $(this);
+            var url = $btn.attr('data-url');
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                success: function (data) {
+                    if (data.success) {
+                        var newStatus = data.status || data.new_status;
+                        $btn.attr('data-status', newStatus);
+                        if (newStatus === 'unread') {
+                            $btn.removeClass('status-badge-inactive').addClass('status-badge-active')
+                                .text('Unread').attr('title', 'Mark as Read');
+                        } else {
+                            $btn.removeClass('status-badge-active').addClass('status-badge-inactive')
+                                .text('Read').attr('title', 'Mark as Unread');
+                        }
+                        // Refresh counts
+                        $.ajax({
+                            url: '{{ route("admin.custom-package-requests.index") }}',
+                            type: 'GET',
+                            dataType: 'json',
+                            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                            success: function (resp) {
+                                if (resp.totalCount !== undefined) {
+                                    $('#countAll').text(resp.totalCount);
+                                    $('#countUnread').text(resp.unreadCount);
+                                    $('#countRead').text(resp.readCount);
+                                }
+                            }
+                        });
+                    }
+                },
+                error: function () {
+                    Swal.fire('Error!', 'Failed to update status.', 'error');
+                }
+            });
+        });
+
+        // ── Delete (AJAX) ──
+        $(document).on('click', '.delete-btn', function (e) {
+            e.preventDefault();
+            var $form = $(this).closest('form');
+            var $row = $(this).closest('tr');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This will delete the request permanently.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ff3e1d',
+                cancelButtonColor: '#8592a3',
+                confirmButtonText: 'Yes, delete it!'
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    var formData = new FormData($form[0]);
+                    formData.append('_method', 'DELETE');
+                    $.ajax({
+                        url: $form.attr('action'),
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        dataType: 'json',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        success: function (data) {
+                            if (data.success) {
+                                $row.css({ 'transition': 'opacity 0.3s ease, transform 0.3s ease', 'opacity': '0', 'transform': 'translateX(20px)' });
+                                setTimeout(function () { $row.remove(); }, 300);
+                                Swal.fire({ title: 'Deleted!', text: data.message, icon: 'success', timer: 2000, showConfirmButton: false });
+                            }
+                        },
+                        error: function () {
+                            Swal.fire('Error!', 'Failed to delete request.', 'error');
+                        }
+                    });
+                }
+            });
+        });
+
+        @if(session('success'))
+            Swal.fire({ title: 'Success!', text: "{{ session('success') }}", icon: 'success', timer: 3000, showConfirmButton: false });
         @endif
     });
 </script>

@@ -287,19 +287,7 @@
             </div>
         </div>
 
-        @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show community-alert-success" role="alert">
-                <i class="bx bx-check-circle me-2"></i> {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
 
-        @if(session('error'))
-            <div class="alert alert-danger alert-dismissible fade show community-alert-danger" role="alert">
-                <i class="bx bx-error-circle me-2"></i> {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
 
         <div class="community-grid-wrap">
             <div class="row g-4">
@@ -349,7 +337,7 @@
                                         </span>
 
                                         <!-- Toggle Switch for Public / Private -->
-                                        <form action="{{ route('admin.community.toggle-status', $post->id) }}" method="POST" class="d-inline-flex align-items-center">
+                                        <form action="{{ route('admin.community.toggle-status', $post->id) }}" method="POST" class="d-inline-flex align-items-center toggle-community-status-form">
                                             @csrf
                                             <button type="submit" class="btn-toggle-status" title="Click to toggle Public / Private">
                                                 <div class="toggle-switch-track" style="background: {{ $post->is_published ? '#22c55e' : '#64748b' }}; justify-content: {{ $post->is_published ? 'flex-end' : 'flex-start' }};">
@@ -367,7 +355,7 @@
                                             View 
                                         </a>
 
-                                        <form action="{{ route('admin.community.destroy', $post->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this post?');" class="d-inline">
+                                        <form action="{{ route('admin.community.destroy', $post->id) }}" method="POST" class="d-inline delete-community-post-form">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-outline-danger btn-community-delete" title="Delete Post">
@@ -399,4 +387,117 @@
             @endif
         </div>
     </div>
+@endsection
+
+@section('js')
+<script>
+    $(document).ready(function () {
+        @if(session('success'))
+            Swal.fire({
+                title: 'Success!',
+                text: "{{ session('success') }}",
+                icon: 'success',
+                timer: 2500,
+                showConfirmButton: false
+            });
+        @endif
+        // Toggle Status Public / Private via jQuery AJAX
+        $(document).on('submit', '.toggle-community-status-form', function (e) {
+            e.preventDefault();
+            var $form = $(this);
+            var formData = new FormData(this);
+
+            $.ajax({
+                url: $form.attr('action'),
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                success: function (data) {
+                    if (data.success) {
+                        var $track = $form.find('.toggle-switch-track');
+                        var $label = $form.find('.toggle-switch-label');
+
+                        if (data.is_published) {
+                            $track.css({ 'background': '#22c55e', 'justify-content': 'flex-end' });
+                            $label.css('color', '#4ade80').text('Public');
+                        } else {
+                            $track.css({ 'background': '#64748b', 'justify-content': 'flex-start' });
+                            $label.css('color', '#94a3b8').text('Private');
+                        }
+
+                        Swal.fire({
+                            title: 'Status Updated!',
+                            text: data.message,
+                            icon: 'success',
+                            timer: 1800,
+                            showConfirmButton: false
+                        });
+                    }
+                }
+            });
+        });
+
+        // Delete Post via jQuery AJAX
+        $(document).on('submit', '.delete-community-post-form', function (e) {
+            e.preventDefault();
+            var $form = $(this);
+            var $cardCol = $form.closest('.col-md-6, .col-lg-4');
+
+            Swal.fire({
+                title: 'Delete this post?',
+                text: 'This action cannot be undone!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#8592a3',
+                confirmButtonText: 'Yes, delete it!'
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    var formData = new FormData($form[0]);
+                    formData.append('_method', 'DELETE');
+
+                    $.ajax({
+                        url: $form.attr('action'),
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        dataType: 'json',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        success: function (data) {
+                            if (data.success) {
+                                $cardCol.css({
+                                    'transition': 'opacity 0.3s ease, transform 0.3s ease',
+                                    'opacity': '0',
+                                    'transform': 'translateY(20px)'
+                                });
+                                setTimeout(function () { $cardCol.remove(); }, 300);
+
+                                Swal.fire({
+                                    title: 'Deleted!',
+                                    text: data.message,
+                                    icon: 'success',
+                                    timer: 1800,
+                                    showConfirmButton: false
+                                });
+                            }
+                        },
+                        error: function () {
+                            Swal.fire('Error!', 'Failed to delete post.', 'error');
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
 @endsection

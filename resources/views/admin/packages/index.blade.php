@@ -7,8 +7,8 @@
                 <h2>Packages Management</h2>
             </div>
             <div>
-                <a href="{{ route('admin.packages.create') }}" class="admin-action" style="background: var(--brand); color: #061218; font-weight: bold; border-radius: var(--radius); padding: 8px 16px; display: inline-flex; align-items: center; gap: 5px; text-decoration: none;">
-                    <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add Package
+                <a href="{{ route('admin.packages.create') }}" class="btn btn-primary rounded-pill px-4" style="font-weight: 800 !important;">
+                    <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.5;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add Package
                 </a>
             </div>
         </div>
@@ -88,30 +88,64 @@
 
 @section('js')
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Delete confirmation
-        document.querySelectorAll('.delete-btn').forEach(button => {
-            button.addEventListener('click', function (e) {
-                e.preventDefault();
-                const form = this.closest('form');
+    $(document).ready(function () {
+        // Delete package via jQuery AJAX
+        $(document).on('click', '.delete-btn', function (e) {
+            e.preventDefault();
+            var $button = $(this);
+            var $form = $button.closest('form');
+            var $row = $button.closest('tr');
 
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "This will delete the pricing plan permanently.",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#ff3e1d',
-                    cancelButtonColor: '#8592a3',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        form.submit();
-                    }
-                });
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "This will delete the pricing plan permanently.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ff3e1d',
+                cancelButtonColor: '#8592a3',
+                confirmButtonText: 'Yes, delete it!'
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    var formData = new FormData($form[0]);
+                    formData.append('_method', 'DELETE');
+
+                    $.ajax({
+                        url: $form.attr('action'),
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        dataType: 'json',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        success: function (data) {
+                            if (data.success) {
+                                $row.css({
+                                    'transition': 'opacity 0.3s ease, transform 0.3s ease',
+                                    'opacity': '0',
+                                    'transform': 'translateX(20px)'
+                                });
+                                setTimeout(function () { $row.remove(); }, 300);
+
+                                Swal.fire({
+                                    title: 'Deleted!',
+                                    text: data.message,
+                                    icon: 'success',
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                });
+                            }
+                        },
+                        error: function () {
+                            Swal.fire('Error!', 'Failed to delete package.', 'error');
+                        }
+                    });
+                }
             });
         });
 
-        // Success session alert using SweetAlert
         @if(session('success'))
             Swal.fire({
                 title: 'Success!',

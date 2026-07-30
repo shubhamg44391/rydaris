@@ -8,18 +8,19 @@
             </div>
         </div>
 
-        <div class="panel-filter-bar">
-            <a href="{{ route('admin.demo-inquiries.index') }}" class="btn btn-sm {{ !$status ? 'active' : '' }}">
-                All <span>{{ $totalCount }}</span>
+        <div class="panel-filter-bar" id="demoFilterBar">
+            <a href="{{ route('admin.demo-inquiries.index') }}" data-status="" class="btn btn-sm {{ !$status ? 'active' : '' }}">
+                All <span id="countAll">{{ $totalCount }}</span>
             </a>
-            <a href="{{ route('admin.demo-inquiries.index', ['status' => 'unread']) }}" class="btn btn-sm {{ $status === 'unread' ? 'active' : '' }}">
-                Unread <span>{{ $unreadCount }}</span>
+            <a href="{{ route('admin.demo-inquiries.index', ['status' => 'unread']) }}" data-status="unread" class="btn btn-sm {{ $status === 'unread' ? 'active' : '' }}">
+                Unread <span id="countUnread">{{ $unreadCount }}</span>
             </a>
-            <a href="{{ route('admin.demo-inquiries.index', ['status' => 'read']) }}" class="btn btn-sm {{ $status === 'read' ? 'active' : '' }}">
-                Read <span>{{ $readCount }}</span>
+            <a href="{{ route('admin.demo-inquiries.index', ['status' => 'read']) }}" data-status="read" class="btn btn-sm {{ $status === 'read' ? 'active' : '' }}">
+                Read <span id="countRead">{{ $readCount }}</span>
             </a>
         </div>
 
+        <div id="demoTableContainer">
         <div class="panel-body admin-table-wrap">
             <table class="admin-table">
                 <thead>
@@ -58,14 +59,14 @@
                                 <span style="font-size: 0.85rem; color: #64748b;">{{ $inquiry->created_at->format('M d, Y') }}</span>
                             </td>
                             <td>
-                                <form action="{{ route('admin.demo-inquiries.toggle-status', $inquiry->id) }}" method="POST" style="display: inline;">
-                                    @csrf
-                                    @if($inquiry->status === 'unread')
-                                        <button type="submit" title="Mark as Read" class="status-badge-active">Unread</button>
-                                    @else
-                                        <button type="submit" title="Mark as Unread" class="status-badge-inactive">Read</button>
-                                    @endif
-                                </form>
+                                <button type="button"
+                                    class="status-toggle-btn {{ $inquiry->status === 'unread' ? 'status-badge-active' : 'status-badge-inactive' }}"
+                                    data-id="{{ $inquiry->id }}"
+                                    data-url="{{ route('admin.demo-inquiries.toggle-status', $inquiry->id) }}"
+                                    data-status="{{ $inquiry->status }}"
+                                    title="{{ $inquiry->status === 'unread' ? 'Mark as Read' : 'Mark as Unread' }}">
+                                    {{ ucfirst($inquiry->status) }}
+                                </button>
                             </td>
                             <td>
                                 <div class="table-actions" style="display: flex; gap: 8px;">
@@ -102,6 +103,7 @@
                 <div>{{ $inquiries->links() }}</div>
             </div>
         @endif
+        </div>{{-- close #demoTableContainer --}}
     </div>
 
     <div id="demoViewModal" class="custom-modal">
@@ -142,40 +144,164 @@
 @section('js')
 <script>
     function openDemoViewModal(button) {
-        const data = JSON.parse(button.getAttribute('data-inquiry'));
-        document.getElementById('demoModalName').textContent = data.name;
-        document.getElementById('demoModalCompany').textContent = data.company_name;
-        document.getElementById('demoModalEmail').textContent = data.email;
-        document.getElementById('demoModalContact').textContent = (data.country_code ? data.country_code + ' ' : '') + data.contact_details;
-        document.getElementById('demoModalDate').textContent = new Date(data.created_at).toLocaleDateString();
-        document.getElementById('demoModalDescription').textContent = data.description || 'No description provided.';
-        document.getElementById('demoViewModal').style.display = 'flex';
+        var data = JSON.parse(button.getAttribute('data-inquiry'));
+        $('#demoModalName').text(data.name);
+        $('#demoModalCompany').text(data.company_name);
+        $('#demoModalEmail').text(data.email);
+        $('#demoModalContact').text((data.country_code ? data.country_code + ' ' : '') + data.contact_details);
+        $('#demoModalDate').text(new Date(data.created_at).toLocaleDateString());
+        $('#demoModalDescription').text(data.description || 'No description provided.');
+        $('#demoViewModal').css('display', 'flex');
     }
+
     function closeDemoViewModal() {
-        document.getElementById('demoViewModal').style.display = 'none';
+        $('#demoViewModal').css('display', 'none');
     }
-    window.addEventListener('click', function(event) {
-        const modal = document.getElementById('demoViewModal');
-        if (event.target === modal) closeDemoViewModal();
-    });
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.delete-btn').forEach(button => {
-            button.addEventListener('click', function (e) {
-                e.preventDefault();
-                const form = this.closest('form');
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: 'This will delete the demo inquiry permanently.',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#ff3e1d',
-                    cancelButtonColor: '#8592a3',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) form.submit();
-                });
+
+    $(document).ready(function () {
+
+        // Backdrop close modal
+        $('#demoViewModal').on('click', function (e) {
+            if (e.target === this) closeDemoViewModal();
+        });
+
+        // ── Filter Tabs (AJAX - no page refresh) ──
+        $(document).on('click', '#demoFilterBar a', function (e) {
+            e.preventDefault();
+            var $tab = $(this);
+            var url = $tab.attr('href');
+
+            $('#demoFilterBar a').removeClass('active');
+            $tab.addClass('active');
+            $('#demoTableContainer').css({ 'opacity': '0.5', 'pointer-events': 'none' });
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'json',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                success: function (data) {
+                    if (data.html) $('#demoTableContainer').html(data.html);
+                    if (data.totalCount !== undefined) {
+                        $('#countAll').text(data.totalCount);
+                        $('#countUnread').text(data.unreadCount);
+                        $('#countRead').text(data.readCount);
+                    }
+                    history.pushState({ url: url }, '', url);
+                },
+                error: function () { window.location.href = url; },
+                complete: function () {
+                    $('#demoTableContainer').css({ 'opacity': '1', 'pointer-events': '' });
+                }
             });
         });
+
+        // ── Pagination (AJAX) ──
+        $(document).on('click', '#demoTableContainer .pagination a', function (e) {
+            e.preventDefault();
+            var url = $(this).attr('href');
+            $('#demoTableContainer').css({ 'opacity': '0.5', 'pointer-events': 'none' });
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'json',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                success: function (data) {
+                    if (data.html) $('#demoTableContainer').html(data.html);
+                    history.pushState({ url: url }, '', url);
+                },
+                complete: function () {
+                    $('#demoTableContainer').css({ 'opacity': '1', 'pointer-events': '' });
+                }
+            });
+        });
+
+        // ── Status Toggle (AJAX - no page refresh) ──
+        $(document).on('click', '.status-toggle-btn', function () {
+            var $btn = $(this);
+            var url = $btn.attr('data-url');
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                success: function (data) {
+                    if (data.success) {
+                        var newStatus = data.status;
+                        $btn.attr('data-status', newStatus);
+                        if (newStatus === 'unread') {
+                            $btn.removeClass('status-badge-inactive').addClass('status-badge-active')
+                                .text('Unread').attr('title', 'Mark as Read');
+                        } else {
+                            $btn.removeClass('status-badge-active').addClass('status-badge-inactive')
+                                .text('Read').attr('title', 'Mark as Unread');
+                        }
+                        // Refresh counts
+                        $.get('{{ route("admin.demo-inquiries.index") }}', {}, function (resp) {
+                            if (resp.totalCount !== undefined) {
+                                $('#countAll').text(resp.totalCount);
+                                $('#countUnread').text(resp.unreadCount);
+                                $('#countRead').text(resp.readCount);
+                            }
+                        }, 'json').fail(function () {});
+                    }
+                },
+                error: function () {
+                    Swal.fire('Error!', 'Failed to update status.', 'error');
+                }
+            });
+        });
+
+        // ── Delete (AJAX) ──
+        $(document).on('click', '.delete-btn', function (e) {
+            e.preventDefault();
+            var $form = $(this).closest('form');
+            var $row = $(this).closest('tr');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This will delete the demo inquiry permanently.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ff3e1d',
+                cancelButtonColor: '#8592a3',
+                confirmButtonText: 'Yes, delete it!'
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    var formData = new FormData($form[0]);
+                    formData.append('_method', 'DELETE');
+                    $.ajax({
+                        url: $form.attr('action'),
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        dataType: 'json',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        success: function (data) {
+                            if (data.success) {
+                                $row.css({ 'transition': 'opacity 0.3s ease, transform 0.3s ease', 'opacity': '0', 'transform': 'translateX(20px)' });
+                                setTimeout(function () { $row.remove(); }, 300);
+                                Swal.fire({ title: 'Deleted!', text: data.message, icon: 'success', timer: 2000, showConfirmButton: false });
+                            } else {
+                                Swal.fire('Error!', data.message || 'Something went wrong.', 'error');
+                            }
+                        },
+                        error: function () {
+                            Swal.fire('Error!', 'Failed to delete inquiry.', 'error');
+                        }
+                    });
+                }
+            });
+        });
+
         @if(session('success'))
             Swal.fire({ title: 'Success!', text: "{{ session('success') }}", icon: 'success', timer: 3000, showConfirmButton: false });
         @endif

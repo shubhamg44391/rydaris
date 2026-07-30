@@ -20,6 +20,16 @@ class AdminVendorController extends Controller
         }
 
         $vendors = $query->with(['activeSubscription.package', 'subscriptions.package'])->orderBy('created_at', 'desc')->paginate(10);
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'html' => view('admin.vendors.partials.table', compact('vendors', 'status'))->render(),
+                'status' => $status,
+                'heading_status' => ($status === 'active') ? '- Active' : (($status === 'inactive') ? '- Inactive' : '')
+            ]);
+        }
+
         return view('admin.vendors.index', compact('vendors', 'status'));
     }
 
@@ -30,6 +40,14 @@ class AdminVendorController extends Controller
         $vendor = User::where('role', 'vendor')->findOrFail($id);
         $vendor->status = ($vendor->status === 'active') ? 'inactive' : 'active';
         $vendor->save();
+
+        if (request()->ajax() || request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Vendor status updated successfully.',
+                'status' => $vendor->status
+            ]);
+        }
 
         return redirect()->back()->with('success', 'Vendor status updated successfully.');
     }
@@ -90,6 +108,14 @@ class AdminVendorController extends Controller
             'country' => $request->country,
         ]);
 
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Vendor updated successfully.',
+                'redirect' => route('admin.vendors.index')
+            ]);
+        }
+
         return redirect(route('admin.vendors.index'))->with('success', 'Vendor updated successfully.');
     }
 
@@ -99,6 +125,13 @@ class AdminVendorController extends Controller
     {
         $vendor = User::where('role', 'vendor')->findOrFail($id);
         $vendor->delete();
+
+        if (request()->ajax() || request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Vendor deleted successfully.'
+            ]);
+        }
 
         return redirect(route('admin.vendors.index'))->with('success', 'Vendor deleted successfully.');
     }

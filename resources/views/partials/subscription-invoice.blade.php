@@ -301,7 +301,7 @@
     </div>
 
     @php
-        $total = $subscription->amount_paid;
+        $total = (float)($subscription->amount_paid ?? 0);
         if ($total > 0) {
             $subtotal = $total / 1.18;
             $gst = $total - $subtotal;

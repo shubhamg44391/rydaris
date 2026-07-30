@@ -8,7 +8,7 @@
             </div>
         </div>
         <div class="panel-body" style="padding: 24px;">
-            <form method="POST" action="{{ route('admin.vendors.update', $vendor->id) }}">
+            <form id="vendorEditForm" method="POST" action="{{ route('admin.vendors.update', $vendor->id) }}" novalidate>
                 @csrf
                 @method('PUT')
 
@@ -150,8 +150,138 @@
 
 @section('js')
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        $(document).ready(function () {
             initializeIntlTelInput('reg_phone', 'hidden_country_code', 'hidden_contact_number');
+
+            var requiredFields = [
+                { id: 'first_name', name: 'First Name' },
+                { id: 'last_name', name: 'Last Name' },
+                { id: 'username', name: 'Username' },
+                { id: 'email', name: 'Email Address' },
+                { id: 'street_address', name: 'Street Address' },
+                { id: 'city', name: 'City' },
+                { id: 'pincode', name: 'Pincode' },
+                { id: 'country', name: 'Country' }
+            ];
+
+            // Real-time validation on typing
+            $.each(requiredFields, function (i, field) {
+                $('#' + field.id).on('input change', function () {
+                    var val = $.trim($(this).val());
+                    var $parent = $(this).parent();
+                    $parent.find('.ajax-error').remove();
+                    if (val) {
+                        $(this).removeClass('is-invalid');
+                    } else {
+                        $(this).addClass('is-invalid');
+                        $parent.append('<div class="invalid-feedback d-block ajax-error" style="color: #fb7185; font-size: 0.82rem; margin-top: 4px; font-weight: 600;">' + field.name + ' is required.</div>');
+                    }
+                });
+            });
+
+            $('#reg_phone').on('input change', function () {
+                var val = $.trim($(this).val());
+                var $parent = $(this).parent();
+                $parent.find('.ajax-error').remove();
+                if (val) {
+                    $(this).removeClass('is-invalid');
+                } else {
+                    $(this).addClass('is-invalid');
+                    $parent.append('<div class="invalid-feedback d-block ajax-error" style="color: #fb7185; font-size: 0.82rem; margin-top: 4px; font-weight: 600;">Contact Number is required.</div>');
+                }
+            });
+
+            $('#vendorEditForm').on('submit', function (e) {
+                e.preventDefault();
+                var $form = $(this);
+                var $submitBtn = $form.find('button[type="submit"]');
+                var origText = $submitBtn.text();
+
+                // Clear previous errors
+                $('.invalid-feedback.ajax-error').remove();
+                $('.is-invalid').removeClass('is-invalid');
+
+                var hasError = false;
+                var $firstInvalid = null;
+
+                // Client-side validation checks
+                $.each(requiredFields, function (i, field) {
+                    var $input = $('#' + field.id);
+                    var val = $.trim($input.val());
+                    if (!val) {
+                        $input.addClass('is-invalid');
+                        $input.parent().append('<div class="invalid-feedback d-block ajax-error" style="color: #fb7185; font-size: 0.82rem; margin-top: 4px; font-weight: 600;">' + field.name + ' is required.</div>');
+                        hasError = true;
+                        if (!$firstInvalid) $firstInvalid = $input;
+                    }
+                });
+
+                var phoneVal = $.trim($('#reg_phone').val());
+                if (!phoneVal) {
+                    $('#reg_phone').addClass('is-invalid');
+                    $('#reg_phone').parent().append('<div class="invalid-feedback d-block ajax-error" style="color: #fb7185; font-size: 0.82rem; margin-top: 4px; font-weight: 600;">Contact Number is required.</div>');
+                    hasError = true;
+                    if (!$firstInvalid) $firstInvalid = $('#reg_phone');
+                }
+
+                if (hasError) {
+                    if ($firstInvalid) {
+                        $('html, body').animate({ scrollTop: $firstInvalid.offset().top - 100 }, 300);
+                        $firstInvalid.focus();
+                    }
+                    return;
+                }
+
+                $submitBtn.prop('disabled', true).text('Saving...');
+
+                var formData = new FormData(this);
+
+                $.ajax({
+                    url: $form.attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    success: function (data) {
+                        if (data.success) {
+                            Swal.fire({
+                                title: 'Success!',
+                                text: data.message || 'Vendor updated successfully.',
+                                icon: 'success',
+                                timer: 1800,
+                                showConfirmButton: false
+                            }).then(function () {
+                                window.location.href = data.redirect || "{{ route('admin.vendors.index') }}";
+                            });
+                        }
+                    },
+                    error: function (xhr) {
+                        $submitBtn.prop('disabled', false).text(origText);
+
+                        if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON.errors) {
+                            var errors = xhr.responseJSON.errors;
+                            $.each(errors, function (field, msgs) {
+                                var $input = $('#' + field);
+                                if (!$input.length) $input = $('[name="' + field + '"]');
+                                if ($input.length) {
+                                    $input.addClass('is-invalid');
+                                    $input.parent().append('<div class="invalid-feedback d-block ajax-error" style="color: #fb7185; font-size: 0.82rem; margin-top: 4px; font-weight: 600;">' + msgs[0] + '</div>');
+                                }
+                            });
+                            var firstErr = Object.values(errors)[0][0];
+                            Swal.fire('Validation Error', firstErr, 'warning');
+                        } else {
+                            var msg = (xhr.responseJSON && xhr.responseJSON.message) ? xhr.responseJSON.message : 'An error occurred while updating the vendor profile.';
+                            Swal.fire('Error!', msg, 'error');
+                        }
+                    }
+                });
+            });
         });
     </script>
 @endsection

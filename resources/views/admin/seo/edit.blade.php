@@ -92,103 +92,108 @@
 
 @section('js')
 <script>
-    // AJAX Form submission
-    document.getElementById('editSeoForm').addEventListener('submit', function(e) {
-        e.preventDefault();
+    $(document).ready(function () {
 
-        const form = this;
-        const submitBtn = document.getElementById('submitBtn');
-        const originalBtnHtml = submitBtn.innerHTML;
-
-        // Clear previous error messages & highlight states
-        document.querySelectorAll('.error-msg').forEach(el => {
-            el.style.display = 'none';
-            el.innerText = '';
-        });
-        document.querySelectorAll('.form-control').forEach(el => {
-            el.style.borderColor = 'rgba(255, 255, 255, 0.14)';
-        });
-
-        // Set Loading State
-        submitBtn.disabled = true;
-        submitBtn.style.opacity = '0.7';
-        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
-
-        const formData = new FormData(form);
-
-        fetch(form.action, {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Accept': 'application/json'
+        // Real-time validation
+        $('#meta_title').on('input', function () {
+            if ($.trim($(this).val())) {
+                $(this).css('border-color', 'rgba(255,255,255,0.14)');
+                $('#error-meta_title').hide().text('');
             }
-        })
-        .then(response => {
-            return response.json().then(data => {
-                if (!response.ok) {
-                    throw { status: response.status, data: data };
+        });
+        $('#meta_description').on('input', function () {
+            if ($.trim($(this).val())) {
+                $(this).css('border-color', 'rgba(255,255,255,0.14)');
+                $('#error-meta_description').hide().text('');
+            }
+        });
+
+        // jQuery AJAX Form submission
+        $('#editSeoForm').on('submit', function (e) {
+            e.preventDefault();
+
+            var $form = $(this);
+            var $submitBtn = $('#submitBtn');
+            var originalBtnHtml = $submitBtn.html();
+
+            // Client-side validation
+            var hasError = false;
+            $('.error-msg').hide().text('');
+            $('.form-control').css('border-color', 'rgba(255, 255, 255, 0.14)');
+
+            if (!$.trim($('#meta_title').val())) {
+                $('#meta_title').css('border-color', '#ef4444');
+                $('#error-meta_title').text('Meta Title is required.').show();
+                hasError = true;
+            }
+            if (!$.trim($('#meta_description').val())) {
+                $('#meta_description').css('border-color', '#ef4444');
+                $('#error-meta_description').text('Meta Description is required.').show();
+                hasError = true;
+            }
+            if (hasError) return;
+
+            $submitBtn.prop('disabled', true).css('opacity', '0.7').html('<i class="fa-solid fa-spinner fa-spin"></i> Saving...');
+
+            var formData = new FormData(this);
+
+            $.ajax({
+                url: $form.attr('action'),
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                success: function (data) {
+                    if (data.success) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: data.message || 'SEO Settings updated successfully.',
+                            icon: 'success',
+                            timer: 2000,
+                            showConfirmButton: false,
+                            background: 'rgba(11, 16, 32, 0.95)',
+                            color: '#f8fafc'
+                        }).then(function () {
+                            window.location.href = data.redirect_url;
+                        });
+                    }
+                },
+                error: function (xhr) {
+                    $submitBtn.prop('disabled', false).css('opacity', '1').html(originalBtnHtml);
+
+                    if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON.errors) {
+                        var errors = xhr.responseJSON.errors;
+                        $.each(errors, function (key, msgs) {
+                            $('#' + key).css('border-color', '#ef4444');
+                            $('#error-' + key).text(msgs[0]).show();
+                        });
+                        Swal.fire({
+                            title: 'Validation Failed',
+                            text: 'Please review and correct the highlighted fields.',
+                            icon: 'warning',
+                            confirmButtonText: 'Got it',
+                            background: 'rgba(11, 16, 32, 0.95)',
+                            color: '#f8fafc',
+                            confirmButtonColor: '#52ead2'
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Something went wrong while saving. Please try again.',
+                            icon: 'error',
+                            confirmButtonText: 'OK',
+                            background: 'rgba(11, 16, 32, 0.95)',
+                            color: '#f8fafc',
+                            confirmButtonColor: '#52ead2'
+                        });
+                    }
                 }
-                return data;
             });
-        })
-        .then(data => {
-            if (data.success) {
-                Swal.fire({
-                    title: 'Success!',
-                    text: data.message || 'SEO Settings updated successfully.',
-                    icon: 'success',
-                    timer: 2000,
-                    showConfirmButton: false,
-                    background: 'rgba(11, 16, 32, 0.95)',
-                    color: '#f8fafc'
-                }).then(() => {
-                    window.location.href = data.redirect_url;
-                });
-            }
-        })
-        .catch(error => {
-            // Restore button state
-            submitBtn.disabled = false;
-            submitBtn.style.opacity = '1';
-            submitBtn.innerHTML = originalBtnHtml;
-
-            if (error.status === 422 && error.data && error.data.errors) {
-                const errors = error.data.errors;
-                for (const key in errors) {
-                    const inputField = document.getElementById(key);
-                    const errorContainer = document.getElementById(`error-${key}`);
-                    
-                    if (inputField) {
-                        inputField.style.borderColor = '#ef4444';
-                    }
-                    if (errorContainer) {
-                        errorContainer.innerText = errors[key][0];
-                        errorContainer.style.display = 'block';
-                    }
-                }
-                
-                Swal.fire({
-                    title: 'Validation Failed',
-                    text: 'Please review and correct the highlighted fields.',
-                    icon: 'warning',
-                    confirmButtonText: 'Got it',
-                    background: 'rgba(11, 16, 32, 0.95)',
-                    color: '#f8fafc',
-                    confirmButtonColor: '#52ead2'
-                });
-            } else {
-                console.error(error);
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Something went wrong while saving. Please try again.',
-                    icon: 'error',
-                    confirmButtonText: 'OK',
-                    background: 'rgba(11, 16, 32, 0.95)',
-                    color: '#f8fafc',
-                    confirmButtonColor: '#52ead2'
-                });
-            }
         });
     });
 </script>

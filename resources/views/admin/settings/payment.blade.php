@@ -5,7 +5,6 @@
         <div class="panel-head">
             <div>
                 <h2 class="panel-title">Payment Gateway Settings</h2>
-                <p class="panel-muted" style="margin: 0; margin-top: 4px;">Configure the Razorpay API credentials and activation state for site-wide payments.</p>
             </div>
         </div>
         
@@ -107,16 +106,86 @@
 
     <script>
         function toggleSecretVisibility() {
-            const secretInput = document.getElementById('razorpay_key_secret');
-            const eyeIcon = document.getElementById('eyeIcon');
-            
-            if (secretInput.type === 'password') {
-                secretInput.type = 'text';
-                eyeIcon.innerHTML = `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>`;
+            var $input = $('#razorpay_key_secret');
+            var $icon = $('#eyeIcon');
+            if ($input.attr('type') === 'password') {
+                $input.attr('type', 'text');
+                $icon.html('<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>');
             } else {
-                secretInput.type = 'password';
-                eyeIcon.innerHTML = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
+                $input.attr('type', 'password');
+                $icon.html('<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>');
             }
         }
+
+        $(document).ready(function () {
+            $('#razorpay_key_id, #razorpay_key_secret').on('input', function () {
+                if ($.trim($(this).val())) {
+                    $(this).removeClass('is-invalid');
+                }
+            });
+
+            $('#settingsForm').on('submit', function (e) {
+                e.preventDefault();
+                var $form = $(this);
+                var $btn = $form.find('button[type="submit"]');
+                var originalText = $btn.html();
+
+                // Client-side validation
+                var hasError = false;
+                if (!$.trim($('#razorpay_key_id').val())) {
+                    $('#razorpay_key_id').addClass('is-invalid');
+                    hasError = true;
+                }
+                if (!$.trim($('#razorpay_key_secret').val())) {
+                    $('#razorpay_key_secret').addClass('is-invalid');
+                    hasError = true;
+                }
+                if (hasError) {
+                    Swal.fire('Validation Error', 'Please fill in all required fields.', 'warning');
+                    return;
+                }
+
+                $btn.prop('disabled', true).html('<i class="fa-solid fa-spinner fa-spin"></i> Saving...');
+
+                $.ajax({
+                    url: $form.attr('action'),
+                    type: 'POST',
+                    data: new FormData(this),
+                    processData: false,
+                    contentType: false,
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    success: function (data) {
+                        $btn.prop('disabled', false).html(originalText);
+                        if (data.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Saved!',
+                                text: data.message || 'Payment settings updated successfully.',
+                                timer: 2500,
+                                showConfirmButton: false
+                            });
+                        } else {
+                            Swal.fire('Error!', data.message || 'Failed to save settings.', 'error');
+                        }
+                    },
+                    error: function (xhr) {
+                        $btn.prop('disabled', false).html(originalText);
+                        if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON.errors) {
+                            var errors = xhr.responseJSON.errors;
+                            $.each(errors, function (key, msgs) {
+                                $('#' + key).addClass('is-invalid');
+                            });
+                            Swal.fire('Validation Error', Object.values(errors)[0][0], 'warning');
+                        } else {
+                            Swal.fire('Error!', 'Something went wrong. Please try again.', 'error');
+                        }
+                    }
+                });
+            });
+        });
     </script>
 @endsection

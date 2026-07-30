@@ -8,7 +8,7 @@
             </div>
         </div>
         <div class="panel-body" style="padding: 24px;">
-            <form method="POST" action="{{ route('admin.packages.update', $package->id) }}">
+            <form id="packageEditForm" method="POST" action="{{ route('admin.packages.update', $package->id) }}" novalidate>
                 @csrf
                 @method('PUT')
 
@@ -810,10 +810,120 @@
 
                 
                 <div class="d-flex align-items-center gap-3" style="display: flex; gap: 16px; align-items: center; margin-top: 24px;">
-                    <button type="submit" class="btn btn-primary rounded-pill px-4" style="min-height: 40px; font-weight: 800; font-size: 0.9rem; background: var(--brand, #52ead2); border: none; color: #061218; cursor: pointer;">Update Package</button>
+                    <button type="submit" id="updatePkgBtn" class="btn btn-primary rounded-pill px-4" style="min-height: 40px; font-weight: 800; font-size: 0.9rem; background: var(--brand, #52ead2); border: none; color: #061218; cursor: pointer;">Update Package</button>
                     <a href="{{ route('admin.packages.index') }}" class="btn btn-link text-muted cancel-link">Cancel</a>
                 </div>
             </form>
         </div>
     </div>
+@endsection
+
+@section('js')
+<script>
+    $(document).ready(function () {
+        var requiredFields = [
+            { id: 'name', name: 'Package Name' },
+            { id: 'price', name: 'Price' },
+            { id: 'button_text', name: 'Button Text' },
+            { id: 'order', name: 'Display Order' }
+        ];
+
+        // Real-time error clearing on input
+        $.each(requiredFields, function (i, field) {
+            $('#' + field.id).on('input change', function () {
+                var val = $.trim($(this).val());
+                var $parent = $(this).parent();
+                $parent.find('.ajax-error').remove();
+                if (val) {
+                    $(this).removeClass('is-invalid');
+                } else {
+                    $(this).addClass('is-invalid');
+                    $parent.append('<div class="invalid-feedback d-block ajax-error" style="color: #fb7185; font-size: 0.82rem; margin-top: 6px; font-weight: 600;">' + field.name + ' is required.</div>');
+                }
+            });
+        });
+
+        $('#packageEditForm').on('submit', function (e) {
+            e.preventDefault();
+            var $form = $(this);
+            var $submitBtn = $('#updatePkgBtn');
+            var origText = $submitBtn.text();
+
+            $('.invalid-feedback.ajax-error').remove();
+            $('.is-invalid').removeClass('is-invalid');
+
+            var hasError = false;
+            var $firstInvalid = null;
+
+            $.each(requiredFields, function (i, field) {
+                var $input = $('#' + field.id);
+                var val = $.trim($input.val());
+                if (!val) {
+                    $input.addClass('is-invalid');
+                    $input.parent().append('<div class="invalid-feedback d-block ajax-error" style="color: #fb7185; font-size: 0.82rem; margin-top: 6px; font-weight: 600;">' + field.name + ' is required.</div>');
+                    hasError = true;
+                    if (!$firstInvalid) $firstInvalid = $input;
+                }
+            });
+
+            if (hasError) {
+                if ($firstInvalid) {
+                    $('html, body').animate({ scrollTop: $firstInvalid.offset().top - 100 }, 300);
+                    $firstInvalid.focus();
+                }
+                return;
+            }
+
+            $submitBtn.prop('disabled', true).text('Updating...');
+
+            var formData = new FormData(this);
+
+            $.ajax({
+                url: $form.attr('action'),
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                success: function (data) {
+                    if (data.success) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: data.message || 'Package updated successfully.',
+                            icon: 'success',
+                            timer: 1800,
+                            showConfirmButton: false
+                        }).then(function () {
+                            window.location.href = data.redirect || "{{ route('admin.packages.index') }}";
+                        });
+                    }
+                },
+                error: function (xhr) {
+                    $submitBtn.prop('disabled', false).text(origText);
+
+                    if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON.errors) {
+                        var errors = xhr.responseJSON.errors;
+                        $.each(errors, function (field, msgs) {
+                            var $input = $('#' + field);
+                            if (!$input.length) $input = $('[name="' + field + '"]');
+                            if ($input.length) {
+                                $input.addClass('is-invalid');
+                                $input.parent().append('<div class="invalid-feedback d-block ajax-error" style="color: #fb7185; font-size: 0.82rem; margin-top: 6px; font-weight: 600;">' + msgs[0] + '</div>');
+                            }
+                        });
+                        var firstErr = Object.values(errors)[0][0];
+                        Swal.fire('Validation Error', firstErr, 'warning');
+                    } else {
+                        var msg = (xhr.responseJSON && xhr.responseJSON.message) ? xhr.responseJSON.message : 'An error occurred while updating the package.';
+                        Swal.fire('Error!', msg, 'error');
+                    }
+                }
+            });
+        });
+    });
+</script>
 @endsection

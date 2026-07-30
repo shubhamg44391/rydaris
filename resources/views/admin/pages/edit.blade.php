@@ -156,111 +156,81 @@
         document.getElementById('char-count').innerText = `${text.length} characters`;
     }
 
-    // AJAX Form submission
-    document.getElementById('editPageForm').addEventListener('submit', function(e) {
+    // jQuery AJAX Form submission
+    $('#editPageForm').on('submit', function (e) {
         e.preventDefault();
 
-        const form = this;
-        const submitBtn = document.getElementById('submitBtn');
-        const originalBtnHtml = submitBtn.innerHTML;
+        var $form = $(this);
+        var $submitBtn = $('#submitBtn');
+        var originalBtnHtml = $submitBtn.html();
 
-        // Sync CKEditor data to textarea
         if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances.content) {
             CKEDITOR.instances.content.updateElement();
         }
 
-        // Clear previous error messages & highlight states
-        document.querySelectorAll('.error-msg').forEach(el => {
-            el.style.display = 'none';
-            el.innerText = '';
-        });
-        document.querySelectorAll('.form-control').forEach(el => {
-            el.style.borderColor = 'rgba(255, 255, 255, 0.14)';
-        });
+        $('.error-msg').hide().text('');
+        $('.form-control').css('border-color', 'rgba(255, 255, 255, 0.14)');
 
-        // Set Loading State
-        submitBtn.disabled = true;
-        submitBtn.style.opacity = '0.7';
-        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+        $submitBtn.prop('disabled', true).css('opacity', '0.7').html('<i class="fa-solid fa-spinner fa-spin"></i> Saving...');
 
-        const formData = new FormData(form);
+        var formData = new FormData(this);
 
-        fetch(form.action, {
-            method: 'POST',
-            body: formData,
+        $.ajax({
+            url: $form.attr('action'),
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
             headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Accept': 'application/json'
-            }
-        })
-        .then(response => {
-            return response.json().then(data => {
-                if (!response.ok) {
-                    // Throw validation errors
-                    throw { status: response.status, data: data };
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function (data) {
+                if (data.success) {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: data.message || 'Page updated successfully.',
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false,
+                        background: 'rgba(11, 16, 32, 0.95)',
+                        color: '#f8fafc'
+                    }).then(function () {
+                        window.location.href = data.redirect_url;
+                    });
                 }
-                return data;
-            });
-        })
-        .then(data => {
-            if (data.success) {
-                Swal.fire({
-                    title: 'Success!',
-                    text: data.message || 'Page updated successfully.',
-                    icon: 'success',
-                    timer: 2000,
-                    showConfirmButton: false,
-                    background: 'rgba(11, 16, 32, 0.95)',
-                    color: '#f8fafc'
-                }).then(() => {
-                    window.location.href = data.redirect_url;
-                });
-            }
-        })
-        .catch(error => {
-            // Restore button state
-            submitBtn.disabled = false;
-            submitBtn.style.opacity = '1';
-            submitBtn.innerHTML = originalBtnHtml;
+            },
+            error: function (xhr) {
+                $submitBtn.prop('disabled', false).css('opacity', '1').html(originalBtnHtml);
 
-            if (error.status === 422 && error.data && error.data.errors) {
-                // Laravel validation failed, show inline errors
-                const errors = error.data.errors;
-                for (const key in errors) {
-                    const inputField = document.getElementById(key);
-                    const errorContainer = document.getElementById(`error-${key}`);
-                    
-                    if (inputField) {
-                        inputField.style.borderColor = '#ef4444';
-                    }
-                    if (errorContainer) {
-                        errorContainer.innerText = errors[key][0];
-                        errorContainer.style.display = 'block';
-                    }
+                if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON.errors) {
+                    var errors = xhr.responseJSON.errors;
+                    $.each(errors, function (key, msgs) {
+                        $('#' + key).css('border-color', '#ef4444');
+                        $('#error-' + key).text(msgs[0]).show();
+                    });
+
+                    Swal.fire({
+                        title: 'Validation Failed',
+                        text: 'Please review and correct the highlighted fields.',
+                        icon: 'warning',
+                        confirmButtonText: 'Got it',
+                        background: 'rgba(11, 16, 32, 0.95)',
+                        color: '#f8fafc',
+                        confirmButtonColor: '#52ead2'
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Something went wrong while saving the page. Please try again.',
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                        background: 'rgba(11, 16, 32, 0.95)',
+                        color: '#f8fafc',
+                        confirmButtonColor: '#52ead2'
+                    });
                 }
-                
-                // Show standard warning alert
-                Swal.fire({
-                    title: 'Validation Failed',
-                    text: 'Please review and correct the highlighted fields.',
-                    icon: 'warning',
-                    confirmButtonText: 'Got it',
-                    background: 'rgba(11, 16, 32, 0.95)',
-                    color: '#f8fafc',
-                    confirmButtonColor: '#52ead2'
-                });
-            } else {
-                // Generic server error
-                console.error(error);
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Something went wrong while saving the page. Please try again.',
-                    icon: 'error',
-                    confirmButtonText: 'OK',
-                    background: 'rgba(11, 16, 32, 0.95)',
-                    color: '#f8fafc',
-                    confirmButtonColor: '#52ead2'
-                });
             }
         });
     });

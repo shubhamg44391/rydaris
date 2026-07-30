@@ -45,6 +45,13 @@ class AdminTermsController extends Controller
             ]);
         }
 
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Terms & Conditions saved successfully!'
+            ]);
+        }
+
         return redirect()->route('admin.terms.index')
             ->with('success', 'Terms & Conditions saved successfully!');
     }

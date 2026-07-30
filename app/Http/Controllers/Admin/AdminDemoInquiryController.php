@@ -26,6 +26,17 @@ class AdminDemoInquiryController extends Controller
         $unreadCount = DemoInquiry::where('status', 'unread')->count();
         $readCount   = DemoInquiry::where('status', 'read')->count();
 
+        if ($request->ajax() || $request->wantsJson()) {
+            $html = view('admin.demo-inquiries.partials.table', compact('inquiries', 'status'))->render();
+            return response()->json([
+                'success'     => true,
+                'html'        => $html,
+                'totalCount'  => $totalCount,
+                'unreadCount' => $unreadCount,
+                'readCount'   => $readCount,
+            ]);
+        }
+
         return view('admin.demo-inquiries.index', compact('inquiries', 'status', 'totalCount', 'unreadCount', 'readCount'));
     }
 
@@ -33,13 +44,29 @@ class AdminDemoInquiryController extends Controller
     {
         DemoInquiry::findOrFail($id)->delete();
 
+        if (request()->ajax() || request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Demo inquiry deleted successfully.'
+            ]);
+        }
+
         return back()->with('success', 'Demo inquiry deleted successfully.');
     }
 
     public function toggleStatus($id)
     {
         $inquiry = DemoInquiry::findOrFail($id);
-        $inquiry->update(['status' => $inquiry->status === 'unread' ? 'read' : 'unread']);
+        $newStatus = $inquiry->status === 'unread' ? 'read' : 'unread';
+        $inquiry->update(['status' => $newStatus]);
+
+        if (request()->ajax() || request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Demo inquiry status updated successfully.',
+                'status' => $inquiry->status
+            ]);
+        }
 
         return back()->with('success', 'Demo inquiry status updated successfully.');
     }

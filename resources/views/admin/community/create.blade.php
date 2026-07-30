@@ -8,7 +8,7 @@
             </div>
         </div>
         <div class="panel-body" style="padding: 24px;">
-            <form id="adminCommunityForm" method="POST" action="{{ route('admin.community.store') }}" enctype="multipart/form-data">
+            <form id="adminCommunityForm" method="POST" action="{{ route('admin.community.store') }}" enctype="multipart/form-data" novalidate>
                 @csrf
 
                 <!-- Post Title -->
@@ -64,14 +64,14 @@
 
                 <!-- Action Buttons -->
                 <div class="d-flex align-items-center gap-3" style="display: flex; gap: 16px; align-items: center; margin-top: 24px;">
-                    <button type="submit" id="submitBtn" class="btn btn-primary rounded-pill px-4" style="min-height: 40px; font-weight: 800; font-size: 0.9rem; background: var(--brand, #52ead2); border: none; color: #061218; cursor: pointer;">Publish Post</button>
+                    <button type="submit" id="submitBtn" class="btn btn-primary rounded-pill px-4" style="min-height: 40px; font-weight: 800 !important; font-size: 0.9rem; background: var(--brand, #52ead2); border: none; color: #061218; cursor: pointer;">Publish Post</button>
                     <a href="{{ route('admin.community.index') }}" class="btn btn-link text-muted cancel-link">Cancel</a>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Image Preview & AJAX Submit Scripts -->
+    <!-- Image Preview & jQuery AJAX Submit Scripts -->
     <script>
     function handleImagePreview(input) {
         if (input.files && input.files[0]) {
@@ -94,41 +94,104 @@
         document.getElementById('upload-prompt').style.display = 'block';
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('adminCommunityForm');
-        if (!form) return;
+    $(document).ready(function () {
+        // Real-time error clearing on typing
+        $('#title, #content').on('input change', function () {
+            if ($.trim($(this).val())) {
+                $(this).removeClass('is-invalid');
+                $(this).siblings('.invalid-feedback').hide();
+            }
+        });
 
-        form.addEventListener('submit', function (e) {
+        $('#adminCommunityForm').on('submit', function (e) {
             e.preventDefault();
-            const submitBtn = document.getElementById('submitBtn');
-            const originalText = submitBtn.innerHTML;
+            var $form = $(this);
+            var $submitBtn = $('#submitBtn');
+            var originalText = $submitBtn.html();
 
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = 'Publishing...';
+            // Client-side validation
+            var titleVal = $.trim($('#title').val());
+            var contentVal = $.trim($('#content').val());
+            var hasError = false;
+            var $firstInvalid = null;
 
-            const formData = new FormData(form);
+            // Clear previous errors
+            $('.is-invalid').removeClass('is-invalid');
+            $('.ajax-error').remove();
 
-            fetch(form.action, {
-                method: 'POST',
+            if (!titleVal) {
+                $('#title').addClass('is-invalid');
+                $('#title').parent().append('<div class="invalid-feedback d-block ajax-error" style="margin-top: 8px; color: #fb7185; font-weight: 600; font-size: 0.85rem;">Post Title is required.</div>');
+                hasError = true;
+                if (!$firstInvalid) $firstInvalid = $('#title');
+            }
+
+            if (!contentVal) {
+                $('#content').addClass('is-invalid');
+                $('#content').parent().append('<div class="invalid-feedback d-block ajax-error" style="margin-top: 8px; color: #fb7185; font-weight: 600; font-size: 0.85rem;">Post Content is required.</div>');
+                hasError = true;
+                if (!$firstInvalid) $firstInvalid = $('#content');
+            }
+
+            if (hasError) {
+                if ($firstInvalid) {
+                    $('html, body').animate({ scrollTop: $firstInvalid.offset().top - 100 }, 300);
+                    $firstInvalid.focus();
+                }
+                return;
+            }
+
+            $submitBtn.prop('disabled', true).html('<i class="fa-solid fa-spinner fa-spin me-1"></i> Publishing...');
+
+            var formData = new FormData(this);
+
+            $.ajax({
+                url: $form.attr('action'),
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: 'json',
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    window.location.href = data.redirect || "{{ route('admin.community.index') }}";
-                } else {
-                    alert(data.message || 'An error occurred while publishing the post.');
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = originalText;
+                success: function (data) {
+                    if (data.success) {
+                        Swal.fire({
+                            title: 'Published!',
+                            text: data.message || 'Community post published successfully.',
+                            icon: 'success',
+                            timer: 2000,
+                            showConfirmButton: false
+                        }).then(function () {
+                            window.location.href = data.redirect || "{{ route('admin.community.index') }}";
+                        });
+                    } else {
+                        $submitBtn.prop('disabled', false).html(originalText);
+                        Swal.fire('Error!', data.message || 'Failed to publish post.', 'error');
+                    }
+                },
+                error: function (xhr) {
+                    $submitBtn.prop('disabled', false).html(originalText);
+
+                    if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON.errors) {
+                        var errors = xhr.responseJSON.errors;
+                        $.each(errors, function (field, msgs) {
+                            var $input = $('#' + field);
+                            if (!$input.length) $input = $('[name="' + field + '"]');
+                            if ($input.length) {
+                                $input.addClass('is-invalid');
+                                $input.parent().append('<div class="invalid-feedback d-block ajax-error" style="margin-top: 8px; color: #fb7185; font-weight: 600; font-size: 0.85rem;">' + msgs[0] + '</div>');
+                            }
+                        });
+                        var firstErr = Object.values(errors)[0][0];
+                        Swal.fire('Validation Error', firstErr, 'warning');
+                    } else {
+                        var msg = (xhr.responseJSON && xhr.responseJSON.message) ? xhr.responseJSON.message : 'An error occurred while publishing the post.';
+                        Swal.fire('Error!', msg, 'error');
+                    }
                 }
-            })
-            .catch(error => {
-                console.error('AJAX error:', error);
-                form.submit();
             });
         });
     });

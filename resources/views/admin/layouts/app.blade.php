@@ -24,7 +24,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600;1,700;1,800&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,700;1,800&display=swap"
     rel="stylesheet" />
 
   
@@ -40,19 +40,282 @@
   <link rel="stylesheet" href="{{ asset('assets/admin/vendor/libs/apex-charts/apex-charts.css')}}" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.3.1/dist/sweetalert2.min.css">
   <link rel="stylesheet" href="{{ asset('assets/styles.css') }}?v={{ time() }}" />
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
   <style>
-    /* Force Premium Glassmorphism SweetAlert2 Redesign */
+    /* Complete Global Bold Buttons & Typography Styling Across Admin Site */
+    button, 
+    input[type="button"], 
+    input[type="submit"], 
+    input[type="reset"],
+    .btn, 
+    a.btn, 
+    button.btn, 
+    input.btn,
+    .admin-action,
+    a.admin-action,
+    button.admin-action,
+    .panel-filter-bar .btn, 
+    .panel-filter-bar a, 
+    .panel-filter-bar button,
+    .filter-btn, 
+    .tab-btn, 
+    .nav-pills .nav-link,
+    .nav-tabs .nav-link,
+    .btn-primary, 
+    .btn-secondary, 
+    .btn-success, 
+    .btn-danger, 
+    .btn-warning, 
+    .btn-info,
+    .btn-brand,
+    .btn-outline-primary,
+    .btn-outline-secondary,
+    .btn-outline-success,
+    .btn-outline-danger,
+    .status-badge-active,
+    .status-badge-inactive,
+    .table-actions button,
+    .icon-button {
+        font-family: 'Plus Jakarta Sans', 'Public Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+        font-weight: 800 !important;
+        letter-spacing: -0.01em !important;
+    }
+
+    button *, 
+    .btn *, 
+    a.btn *, 
+    button.btn *, 
+    .admin-action *,
+    a.admin-action *,
+    button:hover,
+    .btn:hover, 
+    a.btn:hover, 
+    button.btn:hover,
+    .admin-action:hover,
+    a.admin-action:hover,
+    .panel-filter-bar .btn:hover, 
+    .panel-filter-bar a:hover,
+    .filter-btn:hover, 
+    .tab-btn:hover,
+    .nav-pills .nav-link:hover,
+    .nav-tabs .nav-link:hover {
+        font-weight: 800 !important;
+    }
+    /* Primary & Confirm Action Buttons Styling (Second Color: Cyan-to-Blue Gradient) */
+    .btn-primary, 
+    button[type="submit"].btn-primary, 
+    a.btn-primary, 
+    .btn-brand, 
+    #subSubmitBtn, 
+    #faqSubmitBtn,
+    .swal2-confirm, 
+    .swal2-styled.swal2-confirm {
+        background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%) !important;
+        color: #051013 !important;
+        font-weight: 800 !important;
+        border: none !important;
+        box-shadow: 0 4px 14px rgba(82, 234, 210, 0.3) !important;
+        transition: all 0.25s ease !important;
+    }
+    .btn-primary:hover, 
+    button[type="submit"].btn-primary:hover, 
+    a.btn-primary:hover, 
+    .btn-brand:hover, 
+    #subSubmitBtn:hover, 
+    #faqSubmitBtn:hover,
+    .swal2-confirm:hover, 
+    .swal2-styled.swal2-confirm:hover {
+        background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%) !important;
+        color: #051013 !important;
+        box-shadow: 0 6px 18px rgba(82, 234, 210, 0.45) !important;
+        opacity: 0.95 !important;
+    }
+
+    /* Force Premium Glassmorphism SweetAlert2 Redesign & Perfect Viewport Centering */
     body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) { background-color: rgba(5, 7, 17, 0.4) !important; backdrop-filter: blur(8px) !important; }
-    div.swal2-container.swal2-backdrop-show { background: transparent !important; }
-    div.swal2-popup { background: rgba(11, 16, 32, 0.95) !important; backdrop-filter: blur(16px) !important; border: 1px solid rgba(82, 234, 210, 0.25) !important; border-radius: 16px !important; color: #f8fafc !important; box-shadow: 0 0 40px rgba(82, 234, 210, 0.1), 0 24px 80px rgba(0, 0, 0, 0.5) !important; padding: 2.5em 2em !important; }
+    
+    body div.swal2-container,
+    html div.swal2-container,
+    div.swal2-container,
+    .swal2-container {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        max-width: 100vw !important;
+        max-height: 100vh !important;
+        margin: 0 !important;
+        padding: 20px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        z-index: 999999 !important;
+        box-sizing: border-box !important;
+        background: rgba(5, 7, 17, 0.6) !important;
+        backdrop-filter: blur(8px) !important;
+    }
+
+    .custom-modal[style*="display: none"],
+    .custom-modal[style*="display:none"],
+    .custom-modal.d-none {
+        display: none !important;
+    }
+
+    body div.swal2-popup,
+    html div.swal2-popup,
+    div.swal2-popup,
+    .swal2-popup {
+        background: rgba(11, 16, 32, 0.95) !important;
+        backdrop-filter: blur(16px) !important;
+        border: 1px solid rgba(82, 234, 210, 0.25) !important;
+        border-radius: 16px !important;
+        color: #f8fafc !important;
+        box-shadow: 0 0 40px rgba(82, 234, 210, 0.1), 0 24px 80px rgba(0, 0, 0, 0.5) !important;
+        padding: 2.5em 2em !important;
+        margin: auto !important;
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        transform: none !important;
+    }
     div.swal2-title { color: #f8fafc !important; font-size: 1.5rem !important; font-weight: 700 !important; letter-spacing: -0.02em !important; margin-bottom: 0.5em !important; }
     div.swal2-html-container { color: #a8b3c5 !important; font-size: 1.05rem !important; line-height: 1.6 !important; }
     .swal2-icon.swal2-success { border-color: rgba(82, 234, 210, 0.5) !important; color: #52ead2 !important; box-shadow: 0 0 20px rgba(82, 234, 210, 0.1) !important; }
     .swal2-icon.swal2-success .swal2-success-ring { border-color: rgba(82, 234, 210, 0.4) !important; }
     .swal2-icon.swal2-success [class^=swal2-success-line] { background-color: #52ead2 !important; }
     .swal2-actions { margin-top: 2em !important; gap: 12px !important; }
-    .swal2-confirm, .swal2-styled.swal2-confirm { background: linear-gradient(135deg, #52ead2, #2bc2a8) !important; color: #050711 !important; font-weight: 600 !important; border-radius: 8px !important; padding: 12px 28px !important; border: none !important; box-shadow: 0 8px 16px rgba(82, 234, 210, 0.2) !important; transition: all 0.3s ease !important; }
+    .swal2-cancel, .swal2-styled.swal2-cancel { font-weight: 700 !important; border-radius: 8px !important; padding: 10px 24px !important; transition: all 0.3s ease !important; }
+
+    /* Light Mode Overrides for SweetAlert2 */
+    body.light-mode div.swal2-popup,
+    html.light-mode div.swal2-popup {
+        background: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        color: #0f172a !important;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18) !important;
+    }
+    body.light-mode div.swal2-title,
+    html.light-mode div.swal2-title {
+        color: #0f172a !important;
+    }
+    body.light-mode div.swal2-html-container,
+    html.light-mode div.swal2-html-container {
+        color: #475569 !important;
+    }
+    
+    /* Cancel Button Hover Styling (Cyan-to-Blue Gradient) */
+    .swal2-cancel:hover,
+    .swal2-styled.swal2-cancel:hover,
+    .faq-modal-cancel-btn:hover,
+    .sub-modal-cancel-btn:hover,
+    .vendor-modal-cancel-btn:hover,
+    .btn-secondary:hover,
+    .btn-light:hover {
+        background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%) !important;
+        color: #051013 !important;
+        border-color: rgba(82, 234, 210, 0.8) !important;
+        font-weight: 700 !important;
+        box-shadow: 0 4px 14px rgba(82, 234, 210, 0.35) !important;
+    }
+
+    /* Table Action Buttons Custom Styling (Edit, Invoice, Delete) */
+    .btn-sub-edit,
+    button.btn-sub-edit {
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        color: #cbd5e1 !important;
+        width: 32px !important;
+        height: 32px !important;
+        border-radius: 8px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        transition: all 0.25s ease !important;
+        padding: 0 !important;
+    }
+    .btn-sub-edit:hover,
+    button.btn-sub-edit:hover {
+        background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%) !important;
+        color: #051013 !important;
+        border-color: transparent !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 4px 12px rgba(82, 234, 210, 0.3) !important;
+    }
+
+    .btn-sub-invoice,
+    a.btn-sub-invoice {
+        background: rgba(82, 234, 210, 0.12) !important;
+        color: #52ead2 !important;
+        border: 1px solid rgba(82, 234, 210, 0.3) !important;
+        width: 32px !important;
+        height: 32px !important;
+        border-radius: 8px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-decoration: none !important;
+        transition: all 0.25s ease !important;
+        padding: 0 !important;
+    }
+    .btn-sub-invoice:hover,
+    a.btn-sub-invoice:hover {
+        background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%) !important;
+        color: #051013 !important;
+        border-color: transparent !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 4px 12px rgba(82, 234, 210, 0.3) !important;
+    }
+
+    .btn-sub-delete,
+    button.btn-sub-delete {
+        background: rgba(243, 63, 63, 0.12) !important;
+        border: 1px solid rgba(243, 63, 63, 0.25) !important;
+        color: #f87171 !important;
+        width: 32px !important;
+        height: 32px !important;
+        border-radius: 8px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        transition: all 0.25s ease !important;
+        padding: 0 !important;
+    }
+    .btn-sub-delete:hover,
+    button.btn-sub-delete:hover {
+        background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%) !important;
+        color: #051013 !important;
+        border-color: transparent !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 4px 12px rgba(82, 234, 210, 0.3) !important;
+    }
+
+    /* Light Mode Overrides for Action Buttons */
+    body.light-mode .btn-sub-edit,
+    html.light-mode .btn-sub-edit {
+        background: #f1f5f9 !important;
+        border: 1px solid #cbd5e1 !important;
+        color: #334155 !important;
+    }
+    body.light-mode .btn-sub-invoice,
+    html.light-mode .btn-sub-invoice {
+        background: rgba(13, 148, 136, 0.1) !important;
+        border: 1px solid rgba(13, 148, 136, 0.3) !important;
+        color: #0d9488 !important;
+    }
+    body.light-mode .btn-sub-delete,
+    html.light-mode .btn-sub-delete {
+        background: #fee2e2 !important;
+        border: 1px solid #fca5a5 !important;
+        color: #dc2626 !important;
+    }
     
     /* Premium Global Scrollbar Customization */
     ::-webkit-scrollbar {

@@ -29,6 +29,17 @@ class ContactInquiryController extends Controller
         $unreadCount = ContactInquiry::where('status', 'unread')->count();
         $readCount   = ContactInquiry::where('status', 'read')->count();
 
+        if ($request->ajax() || $request->wantsJson()) {
+            $html = view('admin.contact_inquiries.partials.table', compact('inquiries', 'status'))->render();
+            return response()->json([
+                'success'     => true,
+                'html'        => $html,
+                'totalCount'  => $totalCount,
+                'unreadCount' => $unreadCount,
+                'readCount'   => $readCount,
+            ]);
+        }
+
         return view('admin.contact_inquiries.index', compact('inquiries', 'status', 'totalCount', 'unreadCount', 'readCount'));
     }
 
@@ -50,6 +61,14 @@ class ContactInquiryController extends Controller
         $newStatus = $inquiry->status === 'unread' ? 'read' : 'unread';
         $inquiry->update(['status' => $newStatus]);
 
+        if (request()->ajax() || request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Inquiry status updated successfully.',
+                'status' => $inquiry->status
+            ]);
+        }
+
         return redirect()->back()->with('success', 'Inquiry status updated successfully.');
     }
 
@@ -59,6 +78,13 @@ class ContactInquiryController extends Controller
     {
         $inquiry = ContactInquiry::findOrFail($id);
         $inquiry->delete();
+
+        if (request()->ajax() || request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Inquiry deleted successfully.'
+            ]);
+        }
 
         return redirect()->route('admin.contact-inquiries.index')->with('success', 'Inquiry deleted successfully.');
     }

@@ -332,6 +332,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
     // Subscriptions
     Route::get('/subscriptions', [\App\Http\Controllers\Admin\AdminSubscriptionController::class, 'index'])->name('admin.subscriptions.index');
+    Route::post('/subscriptions', [\App\Http\Controllers\Admin\AdminSubscriptionController::class, 'store'])->name('admin.subscriptions.store');
+    Route::put('/subscriptions/{id}', [\App\Http\Controllers\Admin\AdminSubscriptionController::class, 'update'])->name('admin.subscriptions.update');
+    Route::delete('/subscriptions/{id}', [\App\Http\Controllers\Admin\AdminSubscriptionController::class, 'destroy'])->name('admin.subscriptions.destroy');
     Route::get('/subscriptions/{id}/invoice', [\App\Http\Controllers\Admin\AdminSubscriptionController::class, 'subscriptionInvoice'])->name('admin.subscriptions.invoice');
 
     // SEO Settings

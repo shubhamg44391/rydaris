@@ -39,6 +39,13 @@ class AdminSettingController extends Controller
 
         Cache::forget('site_setting_global');
 
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Razorpay payment settings updated successfully.',
+            ]);
+        }
+
         return back()->with('success', 'Razorpay settings updated successfully.');
     }
 
@@ -76,6 +83,13 @@ class AdminSettingController extends Controller
         ]);
 
         Cache::forget('site_setting_global');
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Mail / SMTP settings updated successfully.',
+            ]);
+        }
 
         return back()->with('success', 'Mail / SMTP settings updated successfully.');
     }

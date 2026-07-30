@@ -45,6 +45,7 @@ class CommunityController extends Controller
         ]);
 
         if ($request->wantsJson() || $request->ajax()) {
+            session()->flash('success', 'Community post published successfully.');
             return response()->json([
                 'success' => true,
                 'message' => 'Community post published successfully.',
@@ -70,26 +71,61 @@ class CommunityController extends Controller
 
         $post = CommunityPost::findOrFail($id);
 
-        CommunityComment::create([
+        $comment = CommunityComment::create([
             'community_post_id' => $post->id,
             'user_id' => Auth::id(),
             'comment' => $request->comment,
         ]);
 
         if ($request->wantsJson() || $request->ajax()) {
+            $comment->load('user');
             return response()->json([
                 'success' => true,
-                'message' => 'Answer / Reply posted successfully.'
+                'message' => 'Answer / Reply posted successfully.',
+                'comment' => [
+                    'id' => $comment->id,
+                    'user_name' => $comment->user->name ?? 'User',
+                    'user_role' => $comment->user->role ?? 'user',
+                    'user_initials' => strtoupper(substr($comment->user->name ?? 'U', 0, 2)),
+                    'company_name' => $comment->user->company_name ?? '',
+                    'comment' => nl2br(e($comment->comment)),
+                    'created_at' => $comment->created_at->format('d M Y, h:i A'),
+                    'diff_for_humans' => $comment->created_at->diffForHumans(),
+                    'destroy_url' => route('admin.community.reply.destroy', $comment->id)
+                ]
             ]);
         }
 
         return redirect()->back()->with('success', 'Answer / Reply posted successfully.');
     }
 
+    public function destroyReply($id)
+    {
+        $comment = CommunityComment::findOrFail($id);
+        $comment->delete();
+
+        if (request()->wantsJson() || request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Answer / Reply deleted successfully.'
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Answer / Reply deleted successfully.');
+    }
+
     public function destroy($id)
     {
         $post = CommunityPost::findOrFail($id);
         $post->delete();
+
+        if (request()->wantsJson() || request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Post deleted successfully.',
+                'redirect' => route('admin.community.index')
+            ]);
+        }
 
         return redirect()->route('admin.community.index')->with('success', 'Post deleted successfully.');
     }

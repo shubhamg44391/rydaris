@@ -74,7 +74,6 @@
           <div class="panel-head">
             <div>
               <h2>Recent Vendor Registrations</h2>
-              <p class="panel-muted">Latest companies registered on Rydaris, contact details, status, and registration date.</p>
             </div>
             <a href="{{ route('admin.vendors.index') }}" class="btn-mint">
               View All Vendors
