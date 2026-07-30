@@ -245,8 +245,7 @@
                                     title: 'Success!',
                                     text: data.message,
                                     icon: 'success',
-                                    timer: 2000,
-                                    showConfirmButton: false
+                                    confirmButtonText: 'OK'
                                 });
                             } else {
                                 Swal.fire('Error!', data.message || 'Something went wrong.', 'error');
@@ -305,8 +304,7 @@
                                     title: 'Deleted!',
                                     text: data.message,
                                     icon: 'success',
-                                    timer: 2000,
-                                    showConfirmButton: false
+                                    confirmButtonText: 'OK'
                                 });
                             } else {
                                 Swal.fire('Error!', data.message || 'Something went wrong.', 'error');
@@ -375,15 +373,6 @@
             $('body').css('overflow', 'hidden');
         });
 
-        @if(session('success'))
-            Swal.fire({
-                title: 'Success!',
-                text: "{{ session('success') }}",
-                icon: 'success',
-                timer: 3000,
-                showConfirmButton: false
-            });
-        @endif
     });
 </script>
 @endsection

@@ -100,7 +100,7 @@
                 <div class="text-muted small">
                     Showing {{ $inquiries->firstItem() ?? 0 }} to {{ $inquiries->lastItem() ?? 0 }} of {{ $inquiries->total() }} results
                 </div>
-                <div>{{ $inquiries->links() }}</div>
+                <div>{{ $inquiries->links('vendor.pagination.custom') }}</div>
             </div>
         @endif
         </div>{{-- close #demoTableContainer --}}
@@ -289,7 +289,7 @@
                             if (data.success) {
                                 $row.css({ 'transition': 'opacity 0.3s ease, transform 0.3s ease', 'opacity': '0', 'transform': 'translateX(20px)' });
                                 setTimeout(function () { $row.remove(); }, 300);
-                                Swal.fire({ title: 'Deleted!', text: data.message, icon: 'success', timer: 2000, showConfirmButton: false });
+                                Swal.fire({ title: 'Deleted!', text: data.message, icon: 'success', confirmButtonText: 'OK' });
                             } else {
                                 Swal.fire('Error!', data.message || 'Something went wrong.', 'error');
                             }
@@ -301,10 +301,6 @@
                 }
             });
         });
-
-        @if(session('success'))
-            Swal.fire({ title: 'Success!', text: "{{ session('success') }}", icon: 'success', timer: 3000, showConfirmButton: false });
-        @endif
     });
 </script>
 @endsection

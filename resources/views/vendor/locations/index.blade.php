@@ -95,7 +95,7 @@
                 Showing {{ $locations->firstItem() ?? 0 }} to {{ $locations->lastItem() ?? 0 }}
                 of {{ $locations->total() }} results
             </div>
-            <div>{{ $locations->links() }}</div>
+            <div>{{ $locations->links('vendor.pagination.custom') }}</div>
         </div>
     </div>
 @endsection

@@ -244,6 +244,71 @@
         .light-mode .community-empty-title {
             color: #0f172a !important;
         }
+
+        /* --- COMMUNITY PAGINATION STYLES --- */
+        .community-pagination-wrap {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            flex-wrap: wrap !important;
+            gap: 16px !important;
+            width: 100% !important;
+        }
+        .community-pagination-links {
+            margin-left: auto !important;
+            display: flex !important;
+            justify-content: flex-end !important;
+        }
+        .community-pagination-wrap nav {
+            display: flex !important;
+            justify-content: flex-end !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        .community-pagination-wrap .pagination {
+            display: flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            list-style: none !important;
+        }
+        .community-pagination-wrap .page-item .page-link {
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            color: #cbd5e1 !important;
+            border-radius: 10px !important;
+            padding: 6px 12px !important;
+            font-size: 0.85rem !important;
+            font-weight: 700 !important;
+            transition: all 0.2s ease !important;
+            text-decoration: none !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            min-width: 34px !important;
+            height: 34px !important;
+        }
+        .community-pagination-wrap .page-item .page-link:hover {
+            background: rgba(82, 234, 210, 0.15) !important;
+            border-color: rgba(82, 234, 210, 0.4) !important;
+            color: #52ead2 !important;
+        }
+        .community-pagination-wrap .page-item.active .page-link {
+            background: linear-gradient(135deg, #80a7ff 0%, #52ead2 100%) !important;
+            border-color: transparent !important;
+            color: #061218 !important;
+            font-weight: 800 !important;
+        }
+        .community-pagination-wrap .page-item.disabled .page-link {
+            background: rgba(255, 255, 255, 0.02) !important;
+            border-color: rgba(255, 255, 255, 0.05) !important;
+            color: #475569 !important;
+            opacity: 0.5 !important;
+        }
     </style>
 
     <div class="admin-panel">
@@ -285,20 +350,32 @@
                             @endif
 
                             <div class="community-card-body">
-                                <!-- Author Header -->
-                                <div class="d-flex align-items-center gap-3 mb-3">
-                                    <div class="community-author-avatar">
-                                        {{ strtoupper(substr($post->user->name ?? 'V', 0, 2)) }}
+                                <!-- Author Header with Top-Right Delete Button -->
+                                <div class="d-flex align-items-center justify-content-between mb-3">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="community-author-avatar">
+                                            {{ strtoupper(substr($post->user->name ?? 'V', 0, 2)) }}
+                                        </div>
+                                        <div>
+                                            <h6 class="author-name-text">{{ $post->user->name ?? 'Vendor' }}</h6>
+                                            <span class="author-meta-text">
+                                                @if(!empty($post->user->company_name))
+                                                    {{ $post->user->company_name }} &bull;
+                                                @endif
+                                                {{ $post->created_at->diffForHumans() }}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <h6 class="author-name-text">{{ $post->user->name ?? 'Vendor' }}</h6>
-                                        <span class="author-meta-text">
-                                            @if(!empty($post->user->company_name))
-                                                {{ $post->user->company_name }} &bull;
-                                            @endif
-                                            {{ $post->created_at->diffForHumans() }}
-                                        </span>
-                                    </div>
+
+                                    @if($post->user_id === auth()->id() || auth()->user()->role === 'admin')
+                                        <form action="{{ route('vendor.community.destroy', $post->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this post?');" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-outline-danger btn-community-delete" title="Delete Post" style="border-radius: 8px; padding: 5px 9px;">
+                                                <i class="bx bx-trash" style="font-size: 1.1rem; vertical-align: middle;"></i>
+                                            </button>
+                                        </form>
+                                    @endif
                                 </div>
 
                                 <!-- Post Title -->
@@ -319,20 +396,10 @@
                                         {{ $post->comments->count() }} ANSWERS
                                     </span>
 
-                                    <div class="d-flex align-items-center gap-2">
+                                    <div>
                                         <a href="{{ route('vendor.community.show', $post->id) }}" class="btn btn-sm btn-community-view">
                                             View
                                         </a>
-
-                                        @if($post->user_id === auth()->id() || auth()->user()->role === 'admin')
-                                            <form action="{{ route('vendor.community.destroy', $post->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this post?');" class="d-inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-outline-danger btn-community-delete" title="Delete Post">
-                                                    <i class="bx bx-trash"></i>
-                                                </button>
-                                            </form>
-                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -350,12 +417,49 @@
             </div>
 
             @if($posts->hasPages())
-                <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
-                    <div>
-                        {{ $posts->links() }}
+                <div class="community-pagination-wrap">
+                    <div style="color: #94a3b8; font-size: 0.88rem; font-weight: 600;">
+                        Showing {{ $posts->firstItem() ?? 0 }} to {{ $posts->lastItem() ?? 0 }} of {{ $posts->total() }} results
+                    </div>
+                    <div class="community-pagination-links">
+                        {{ $posts->links('vendor.pagination.custom') }}
                     </div>
                 </div>
             @endif
         </div>
     </div>
+@endsection
+
+@section('js')
+<script>
+    $(document).ready(function () {
+        // AJAX Pagination (No Page Refresh)
+        $(document).on('click', '.community-pagination-wrap .pagination a', function (e) {
+            e.preventDefault();
+            var url = $(this).attr('href');
+            if (!url) return;
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'html',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                success: function (response) {
+                    var $newContent = $(response).find('.community-grid-wrap');
+                    if ($newContent.length) {
+                        $('.community-grid-wrap').replaceWith($newContent);
+                        $('html, body').animate({ scrollTop: $('.admin-panel').offset().top - 80 }, 300);
+                    } else {
+                        window.location.href = url;
+                    }
+                },
+                error: function () {
+                    window.location.href = url;
+                }
+            });
+        });
+    });
+</script>
 @endsection

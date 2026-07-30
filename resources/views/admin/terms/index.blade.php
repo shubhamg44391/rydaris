@@ -223,8 +223,7 @@
                             title: 'Success!',
                             text: data.message || 'Terms & Conditions saved successfully!',
                             icon: 'success',
-                            timer: 2000,
-                            showConfirmButton: false
+                            confirmButtonText: 'OK'
                         });
                     }
                 },

@@ -330,8 +330,7 @@
                             title: 'Success!',
                             text: data.message,
                             icon: 'success',
-                            timer: 2000,
-                            showConfirmButton: false
+                            confirmButtonText: 'OK'
                         });
                     }
                 },
@@ -413,8 +412,7 @@
                                     title: 'Deleted!',
                                     text: data.message,
                                     icon: 'success',
-                                    timer: 2000,
-                                    showConfirmButton: false
+                                    confirmButtonText: 'OK'
                                 });
                             } else {
                                 Swal.fire('Error!', data.message || 'Something went wrong.', 'error');

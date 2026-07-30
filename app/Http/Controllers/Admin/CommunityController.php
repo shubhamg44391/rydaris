@@ -45,7 +45,6 @@ class CommunityController extends Controller
         ]);
 
         if ($request->wantsJson() || $request->ajax()) {
-            session()->flash('success', 'Community post published successfully.');
             return response()->json([
                 'success' => true,
                 'message' => 'Community post published successfully.',

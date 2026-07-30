@@ -29,7 +29,7 @@ class ContactInquiryController extends Controller
         $unreadCount = ContactInquiry::where('status', 'unread')->count();
         $readCount   = ContactInquiry::where('status', 'read')->count();
 
-        if ($request->ajax() || $request->wantsJson()) {
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
             $html = view('admin.contact_inquiries.partials.table', compact('inquiries', 'status'))->render();
             return response()->json([
                 'success'     => true,

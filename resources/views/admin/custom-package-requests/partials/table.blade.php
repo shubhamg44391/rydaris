@@ -86,7 +86,7 @@
             Showing {{ $requests->firstItem() ?? 0 }} to {{ $requests->lastItem() ?? 0 }} of {{ $requests->total() }} results
         </div>
         <div>
-            {{ $requests->links() }}
+            {{ $requests->links('vendor.pagination.custom') }}
         </div>
     </div>
 @endif

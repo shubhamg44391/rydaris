@@ -111,7 +111,7 @@
                     Showing {{ $requests->firstItem() ?? 0 }} to {{ $requests->lastItem() ?? 0 }} of {{ $requests->total() }} results
                 </div>
                 <div>
-                    {{ $requests->links() }}
+                    {{ $requests->links('vendor.pagination.custom') }}
                 </div>
             </div>
         @endif
@@ -330,7 +330,7 @@
                             if (data.success) {
                                 $row.css({ 'transition': 'opacity 0.3s ease, transform 0.3s ease', 'opacity': '0', 'transform': 'translateX(20px)' });
                                 setTimeout(function () { $row.remove(); }, 300);
-                                Swal.fire({ title: 'Deleted!', text: data.message, icon: 'success', timer: 2000, showConfirmButton: false });
+                                Swal.fire({ title: 'Deleted!', text: data.message, icon: 'success', confirmButtonText: 'OK' });
                             }
                         },
                         error: function () {
@@ -340,10 +340,6 @@
                 }
             });
         });
-
-        @if(session('success'))
-            Swal.fire({ title: 'Success!', text: "{{ session('success') }}", icon: 'success', timer: 3000, showConfirmButton: false });
-        @endif
     });
 </script>
 @endsection

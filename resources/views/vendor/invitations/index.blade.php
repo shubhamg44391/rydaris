@@ -128,7 +128,7 @@
                     Showing {{ $invitations->firstItem() ?? 0 }} to {{ $invitations->lastItem() ?? 0 }} of {{ $invitations->total() }} entries
                 </div>
                 <div>
-                    {{ $invitations->links() }}
+                    {{ $invitations->links('vendor.pagination.custom') }}
                 </div>
             </div>
         @endif

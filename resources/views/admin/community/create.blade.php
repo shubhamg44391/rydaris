@@ -159,11 +159,10 @@
                 success: function (data) {
                     if (data.success) {
                         Swal.fire({
-                            title: 'Published!',
+                            title: 'Success!',
                             text: data.message || 'Community post published successfully.',
                             icon: 'success',
-                            timer: 2000,
-                            showConfirmButton: false
+                            confirmButtonText: 'OK'
                         }).then(function () {
                             window.location.href = data.redirect || "{{ route('admin.community.index') }}";
                         });

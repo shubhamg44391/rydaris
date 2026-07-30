@@ -208,11 +208,70 @@
   }
   .community-pagination-wrap {
     margin-top: 40px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 16px !important;
+    width: 100% !important;
+  }
+  .community-pagination-links {
+    margin-left: auto !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+  }
+  .community-pagination-wrap nav {
+    display: flex !important;
+    justify-content: flex-end !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .community-pagination-wrap .pagination {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+  }
+  .community-pagination-wrap .page-item .page-link {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    color: #cbd5e1 !important;
+    border-radius: 10px !important;
+    padding: 8px 14px !important;
+    font-size: 0.9rem !important;
+    font-weight: 700 !important;
+    transition: all 0.2s ease !important;
+    text-decoration: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 38px !important;
+    height: 38px !important;
+    box-shadow: none !important;
+  }
+  .community-pagination-wrap .page-item .page-link:hover {
+    background: rgba(82, 234, 210, 0.15) !important;
+    border-color: rgba(82, 234, 210, 0.4) !important;
+    color: #52ead2 !important;
+    transform: translateY(-1px);
+  }
+  .community-pagination-wrap .page-item.active .page-link {
+    background: linear-gradient(135deg, #80a7ff 0%, #52ead2 100%) !important;
+    border-color: transparent !important;
+    color: #061218 !important;
+    font-weight: 800 !important;
+    box-shadow: 0 4px 14px rgba(82, 234, 210, 0.35) !important;
+  }
+  .community-pagination-wrap .page-item.disabled .page-link {
+    background: rgba(255, 255, 255, 0.02) !important;
+    border-color: rgba(255, 255, 255, 0.05) !important;
+    color: #475569 !important;
+    cursor: not-allowed !important;
+    opacity: 0.5 !important;
   }
   .community-alert-error {
     margin-bottom: 24px;
@@ -272,6 +331,25 @@
   }
   body.light-mode .community-pagination-wrap {
     border-top: 1px solid #e2e8f0 !important;
+  }
+  body.light-mode .community-pagination-wrap .page-item .page-link {
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #334155 !important;
+  }
+  body.light-mode .community-pagination-wrap .page-item .page-link:hover {
+    background: rgba(82, 234, 210, 0.2) !important;
+    border-color: #52ead2 !important;
+    color: #0f766e !important;
+  }
+  body.light-mode .community-pagination-wrap .page-item.active .page-link {
+    background: linear-gradient(135deg, #80a7ff 0%, #52ead2 100%) !important;
+    color: #061218 !important;
+  }
+  body.light-mode .community-pagination-wrap .page-item.disabled .page-link {
+    background: #f1f5f9 !important;
+    border-color: #e2e8f0 !important;
+    color: #94a3b8 !important;
   }
 </style>
 
@@ -362,8 +440,8 @@
         <div style="color: #94a3b8; font-size: 0.9rem;">
           Showing {{ $posts->firstItem() ?? 0 }} to {{ $posts->lastItem() ?? 0 }} of {{ $posts->total() }} results
         </div>
-        <div>
-          {{ $posts->links() }}
+        <div class="community-pagination-links">
+          {{ $posts->links('vendor.pagination.custom') }}
         </div>
       </div>
     @endif

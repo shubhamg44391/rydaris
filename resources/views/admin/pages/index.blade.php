@@ -84,7 +84,7 @@
         
         @if($pages->hasPages())
             <div style="padding: 15px; display: flex; justify-content: flex-end;">
-                {{ $pages->links() }}
+                {{ $pages->links('vendor.pagination.custom') }}
             </div>
         @endif
     </div>
@@ -138,8 +138,7 @@
                                     title: 'Deleted!',
                                     text: data.message,
                                     icon: 'success',
-                                    timer: 2000,
-                                    showConfirmButton: false
+                                    confirmButtonText: 'OK'
                                 });
                             }
                         },
@@ -150,16 +149,6 @@
                 }
             });
         });
-
-        @if(session('success'))
-            Swal.fire({
-                title: 'Success!',
-                text: "{{ session('success') }}",
-                icon: 'success',
-                timer: 3000,
-                showConfirmButton: false
-            });
-        @endif
     });
 </script>
 @endsection

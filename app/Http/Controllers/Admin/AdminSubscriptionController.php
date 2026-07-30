@@ -31,7 +31,7 @@ class AdminSubscriptionController extends Controller
         $vendors = User::where('role', 'vendor')->orderBy('name')->get();
         $packages = Package::where('is_active', true)->orderBy('name')->get();
 
-        if ($request->ajax() || $request->wantsJson()) {
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
             return response()->json([
                 'success' => true,
                 'html' => view('admin.subscriptions.partials.table', compact('subscriptions', 'status'))->render(),

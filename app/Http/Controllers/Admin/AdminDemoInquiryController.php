@@ -26,7 +26,7 @@ class AdminDemoInquiryController extends Controller
         $unreadCount = DemoInquiry::where('status', 'unread')->count();
         $readCount   = DemoInquiry::where('status', 'read')->count();
 
-        if ($request->ajax() || $request->wantsJson()) {
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
             $html = view('admin.demo-inquiries.partials.table', compact('inquiries', 'status'))->render();
             return response()->json([
                 'success'     => true,

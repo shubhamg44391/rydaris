@@ -122,6 +122,6 @@
         Showing {{ $vendors->firstItem() ?? 0 }} to {{ $vendors->lastItem() ?? 0 }} of {{ $vendors->total() }} results
     </div>
     <div>
-        {{ $vendors->appends(['status' => $status])->links() }}
+        {{ $vendors->appends(['status' => $status])->links('vendor.pagination.custom') }}
     </div>
 </div>

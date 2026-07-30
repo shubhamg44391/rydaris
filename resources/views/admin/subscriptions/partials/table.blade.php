@@ -107,7 +107,7 @@
             Showing {{ $subscriptions->firstItem() ?? 0 }} to {{ $subscriptions->lastItem() ?? 0 }} of {{ $subscriptions->total() }} results
         </div>
         <div class="pagination-wrapper">
-            {{ $subscriptions->appends(['status' => $status])->links() }}
+            {{ $subscriptions->appends(['status' => $status])->links('vendor.pagination.custom') }}
         </div>
     </div>
 @endif

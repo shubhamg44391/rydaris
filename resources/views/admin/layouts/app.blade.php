@@ -41,6 +41,14 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.3.1/dist/sweetalert2.min.css">
   <link rel="stylesheet" href="{{ asset('assets/styles.css') }}?v={{ time() }}" />
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    });
+  </script>
 
   <style>
     /* Complete Global Bold Buttons & Typography Styling Across Admin Site */
@@ -102,6 +110,74 @@
     .nav-tabs .nav-link:hover {
         font-weight: 800 !important;
     }
+
+    /* --- GLOBAL PAGINATION STYLING MATCHING BLUE-TEAL CYAN GRADIENT --- */
+    .pagination {
+        display: flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        list-style: none !important;
+    }
+    .pagination .page-item .page-link {
+        background: rgba(255, 255, 255, 0.06) !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        color: #cbd5e1 !important;
+        border-radius: 10px !important;
+        padding: 6px 12px !important;
+        font-size: 0.85rem !important;
+        font-weight: 700 !important;
+        transition: all 0.2s ease !important;
+        text-decoration: none !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-width: 36px !important;
+        height: 36px !important;
+        box-shadow: none !important;
+    }
+    .pagination .page-item .page-link:hover {
+        background: rgba(82, 234, 210, 0.18) !important;
+        border-color: rgba(82, 234, 210, 0.45) !important;
+        color: #52ead2 !important;
+        transform: translateY(-1px);
+    }
+    .pagination .page-item.active .page-link {
+        background: linear-gradient(135deg, #80a7ff 0%, #52ead2 100%) !important;
+        border-color: transparent !important;
+        color: #061218 !important;
+        font-weight: 800 !important;
+        box-shadow: 0 4px 14px rgba(82, 234, 210, 0.38) !important;
+    }
+    .pagination .page-item.disabled .page-link {
+        background: rgba(255, 255, 255, 0.02) !important;
+        border-color: rgba(255, 255, 255, 0.05) !important;
+        color: #475569 !important;
+        opacity: 0.5 !important;
+        cursor: not-allowed !important;
+    }
+    body.light-mode .pagination .page-item .page-link,
+    html.light-mode .pagination .page-item .page-link,
+    .light-mode .pagination .page-item .page-link {
+        background: #f8fafc !important;
+        border: 1px solid #e2e8f0 !important;
+        color: #334155 !important;
+    }
+    body.light-mode .pagination .page-item .page-link:hover,
+    html.light-mode .pagination .page-item .page-link:hover,
+    .light-mode .pagination .page-item .page-link:hover {
+        background: rgba(82, 234, 210, 0.2) !important;
+        border-color: #52ead2 !important;
+        color: #0f766e !important;
+    }
+    body.light-mode .pagination .page-item.active .page-link,
+    html.light-mode .pagination .page-item.active .page-link,
+    .light-mode .pagination .page-item.active .page-link {
+        background: linear-gradient(135deg, #80a7ff 0%, #52ead2 100%) !important;
+        color: #061218 !important;
+    }
+
     /* Primary & Confirm Action Buttons Styling (Second Color: Cyan-to-Blue Gradient) */
     .btn-primary, 
     button[type="submit"].btn-primary, 
@@ -548,7 +624,6 @@
   
   
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.3.1/dist/sweetalert2.min.js"></script>
-  <script src="{{ asset('assets/admin/vendor/libs/jquery/jquery.js')}}"></script>
   <script src="{{ asset('assets/admin/vendor/libs/popper/popper.js')}}"></script>
   <script src="{{ asset('assets/admin/vendor/js/bootstrap.js')}}"></script>
   <script src="{{ asset('assets/admin/vendor/libs/perfect-scrollbar/perfect-scrollbar.js')}}"></script>

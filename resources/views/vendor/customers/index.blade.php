@@ -76,7 +76,7 @@
                 Showing {{ $customers->firstItem() ?? 0 }} to {{ $customers->lastItem() ?? 0 }} of {{ $customers->total() }} entries
             </div>
             <div>
-                {{ $customers->links() }}
+                {{ $customers->links('vendor.pagination.custom') }}
             </div>
         </div>
     </div>

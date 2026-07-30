@@ -19,7 +19,7 @@ class FaqController extends Controller
 
         $faqs = $query->orderBy('created_at', 'desc')->paginate(10)->appends(['category' => $category]);
 
-        if ($request->ajax() || $request->wantsJson()) {
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
             $heading_category = '';
             if ($category === 'product_basics') $heading_category = '- Product Basics';
             elseif ($category === 'onboarding') $heading_category = '- Onboarding';

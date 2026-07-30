@@ -66,7 +66,7 @@
                 Showing {{ $Variants->firstItem() ?? 0 }} to {{ $Variants->lastItem() ?? 0 }} of {{ $Variants->total() }} results
             </div>
             <div>
-                {{ $Variants->links() }}
+                {{ $Variants->links('vendor.pagination.custom') }}
             </div>
         </div>
     </div>

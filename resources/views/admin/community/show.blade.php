@@ -235,8 +235,7 @@
                             title: 'Success!',
                             text: data.message || 'Answer posted successfully.',
                             icon: 'success',
-                            timer: 2000,
-                            showConfirmButton: false
+                            confirmButtonText: 'OK'
                         });
                     }
                 },
@@ -291,8 +290,7 @@
                                     title: 'Deleted!',
                                     text: data.message || 'Answer deleted.',
                                     icon: 'success',
-                                    timer: 1800,
-                                    showConfirmButton: false
+                                    confirmButtonText: 'OK'
                                 });
                             }
                         },
@@ -337,8 +335,7 @@
                             title: 'Status Updated!',
                             text: data.message,
                             icon: 'success',
-                            timer: 1800,
-                            showConfirmButton: false
+                            confirmButtonText: 'OK'
                         });
                     }
                 }
@@ -379,8 +376,7 @@
                                     title: 'Deleted!',
                                     text: data.message,
                                     icon: 'success',
-                                    timer: 1500,
-                                    showConfirmButton: false
+                                    confirmButtonText: 'OK'
                                 }).then(function () {
                                     window.location.href = data.redirect || "{{ route('admin.community.index') }}";
                                 });

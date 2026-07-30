@@ -23,7 +23,7 @@ class AdminCustomPackageRequestController extends Controller
         $unreadCount = CustomPackageRequest::where('status', 'unread')->count();
         $readCount   = CustomPackageRequest::where('status', 'read')->count();
 
-        if ($request->ajax() || $request->wantsJson()) {
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
             $html = view('admin.custom-package-requests.partials.table', compact('requests', 'status'))->render();
             return response()->json([
                 'success'     => true,

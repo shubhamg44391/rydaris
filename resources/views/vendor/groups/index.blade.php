@@ -66,7 +66,7 @@
                 Showing {{ $groups->firstItem() ?? 0 }} to {{ $groups->lastItem() ?? 0 }} of {{ $groups->total() }} results
             </div>
             <div>
-                {{ $groups->links() }}
+                {{ $groups->links('vendor.pagination.custom') }}
             </div>
         </div>
     </div>

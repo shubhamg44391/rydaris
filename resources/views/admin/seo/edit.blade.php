@@ -154,8 +154,7 @@
                             title: 'Success!',
                             text: data.message || 'SEO Settings updated successfully.',
                             icon: 'success',
-                            timer: 2000,
-                            showConfirmButton: false,
+                            confirmButtonText: 'OK',
                             background: 'rgba(11, 16, 32, 0.95)',
                             color: '#f8fafc'
                         }).then(function () {

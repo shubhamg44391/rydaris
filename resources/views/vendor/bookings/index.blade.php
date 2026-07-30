@@ -323,8 +323,13 @@
             </div>
             
             @if($bookings->hasPages())
-                <div class="p-3 border-top" style="border-color: rgba(255,255,255,0.05) !important;">
-                    {{ $bookings->links('pagination::bootstrap-5') }}
+                <div class="p-3 border-top d-flex justify-content-between align-items-center" style="border-color: rgba(255,255,255,0.05) !important;">
+                    <div class="text-muted small">
+                        Showing {{ $bookings->firstItem() ?? 0 }} to {{ $bookings->lastItem() ?? 0 }} of {{ $bookings->total() }} results
+                    </div>
+                    <div>
+                        {{ $bookings->links('vendor.pagination.custom') }}
+                    </div>
                 </div>
             @endif
         </div>

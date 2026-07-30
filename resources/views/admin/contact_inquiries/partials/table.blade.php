@@ -93,7 +93,7 @@
             Showing {{ $inquiries->firstItem() ?? 0 }} to {{ $inquiries->lastItem() ?? 0 }} of {{ $inquiries->total() }} results
         </div>
         <div>
-            {{ $inquiries->links() }}
+            {{ $inquiries->links('vendor.pagination.custom') }}
         </div>
     </div>
 @endif

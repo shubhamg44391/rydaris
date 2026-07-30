@@ -71,7 +71,7 @@
             Showing {{ $faqs->firstItem() ?? 0 }} to {{ $faqs->lastItem() ?? 0 }} of {{ $faqs->total() }} results
         </div>
         <div class="pagination-wrapper">
-            {{ $faqs->appends(['category' => $category])->links() }}
+            {{ $faqs->appends(['category' => $category])->links('vendor.pagination.custom') }}
         </div>
     </div>
 @endif

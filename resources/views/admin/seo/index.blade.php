@@ -134,7 +134,7 @@
 
             @if($metadatas->hasPages())
                 <div style="padding-top: 15px; display: flex; justify-content: flex-end;">
-                    {{ $metadatas->appends(['type' => $type])->links() }}
+                    {{ $metadatas->appends(['type' => $type])->links('vendor.pagination.custom') }}
                 </div>
             @endif
 

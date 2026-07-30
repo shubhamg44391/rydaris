@@ -91,7 +91,7 @@
                 </table>
             </div>
             <div class="mt-3">
-                {{ $reviews->links() }}
+                {{ $reviews->links('vendor.pagination.custom') }}
             </div>
         @else
             <div class="text-center py-5">

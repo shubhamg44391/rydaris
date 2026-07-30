@@ -253,8 +253,7 @@
                                 title: 'Success!',
                                 text: data.message || 'Vendor updated successfully.',
                                 icon: 'success',
-                                timer: 1800,
-                                showConfirmButton: false
+                                confirmButtonText: 'OK'
                             }).then(function () {
                                 window.location.href = data.redirect || "{{ route('admin.vendors.index') }}";
                             });

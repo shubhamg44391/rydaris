@@ -15,7 +15,8 @@ class CommunityController extends Controller
         $posts = CommunityPost::with(['user', 'comments'])
             ->where('is_published', true)
             ->orderBy('created_at', 'desc')
-            ->paginate(12);
+            ->paginate(12)
+            ->withQueryString();
 
         return view('frontend.community.index', compact('posts'));
     }

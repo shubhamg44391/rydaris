@@ -42,110 +42,116 @@
               </div>
               
                 <ul class="list">
-                  @if($pkg->booking_menu)
-                    @if($pkg->no_of_bookings !== null && (int)$pkg->no_of_bookings === 0)
-                      <li><i class="bx bx-x-circle me-2" style="color: #ff4d4d; font-size: 1.2rem; font-weight: bold; vertical-align: middle; margin-right: 8px;"></i><span style="color: #94a3b8;">Bookings Not Included</span></li>
-                    @else
-                      <li><span class="check">✓</span><span>{{ $pkg->no_of_bookings !== null ? ($pkg->no_of_bookings . ' Bookings Included') : 'Unlimited Bookings' }}</span></li>
-                    @endif
+                  {{-- Bookings --}}
+                  @if($pkg->booking_menu && ($pkg->no_of_bookings === null || (int)$pkg->no_of_bookings > 0))
+                    <li><span class="check">✓</span><span>{{ $pkg->no_of_bookings !== null ? ($pkg->no_of_bookings . ' Bookings Included') : 'Unlimited Bookings' }}</span></li>
+                  @else
+                    <li><i class="bx bx-x-circle me-2" style="color: #ef4444; font-size: 1.1rem; vertical-align: middle;"></i><span style="color: #cbd5e1;">Bookings Not Included</span></li>
                   @endif
 
-                  @if($pkg->vehicles_menu)
-                    @if($pkg->no_of_vehicles !== null && (int)$pkg->no_of_vehicles === 0)
-                      <li><i class="bx bx-x-circle me-2" style="color: #ff4d4d; font-size: 1.2rem; font-weight: bold; vertical-align: middle; margin-right: 8px;"></i><span style="color: #94a3b8;">Vehicles Not Included</span></li>
-                    @else
-                      <li><span class="check">✓</span><span>{{ $pkg->no_of_vehicles !== null ? ($pkg->no_of_vehicles . ' Vehicles Included') : 'Unlimited Vehicles' }}</span></li>
-                    @endif
-
-                    @if($pkg->no_of_groups !== null && (int)$pkg->no_of_groups === 0)
-                      <li><i class="bx bx-x-circle me-2" style="color: #ff4d4d; font-size: 1.2rem; font-weight: bold; vertical-align: middle; margin-right: 8px;"></i><span style="color: #94a3b8;">Groups Not Included</span></li>
-                    @else
-                      <li><span class="check">✓</span><span>{{ $pkg->no_of_groups !== null ? ($pkg->no_of_groups . ' Groups Included') : 'Unlimited Groups' }}</span></li>
-                    @endif
+                  {{-- Vehicles --}}
+                  @if($pkg->vehicles_menu && ($pkg->no_of_vehicles === null || (int)$pkg->no_of_vehicles > 0))
+                    <li><span class="check">✓</span><span>{{ $pkg->no_of_vehicles !== null ? ($pkg->no_of_vehicles . ' Vehicles Included') : 'Unlimited Vehicles' }}</span></li>
+                  @else
+                    <li><i class="bx bx-x-circle me-2" style="color: #ef4444; font-size: 1.1rem; vertical-align: middle;"></i><span style="color: #cbd5e1;">Vehicles Not Included</span></li>
                   @endif
 
-                  @if($pkg->locations_menu)
-                    @if($pkg->no_of_locations !== null && (int)$pkg->no_of_locations === 0)
-                      <li><i class="bx bx-x-circle me-2" style="color: #ff4d4d; font-size: 1.2rem; font-weight: bold; vertical-align: middle; margin-right: 8px;"></i><span style="color: #94a3b8;">Locations Not Included</span></li>
-                    @else
-                      <li><span class="check">✓</span><span>{{ $pkg->no_of_locations !== null ? ($pkg->no_of_locations . ' Locations Included') : 'Unlimited Locations' }}</span></li>
-                    @endif
+                  {{-- Groups --}}
+                  @if($pkg->vehicles_menu && ($pkg->no_of_groups === null || (int)$pkg->no_of_groups > 0))
+                    <li><span class="check">✓</span><span>{{ $pkg->no_of_groups !== null ? ($pkg->no_of_groups . ' Groups Included') : 'Unlimited Groups' }}</span></li>
+                  @else
+                    <li><i class="bx bx-x-circle me-2" style="color: #ef4444; font-size: 1.1rem; vertical-align: middle;"></i><span style="color: #cbd5e1;">Groups Not Included</span></li>
                   @endif
 
-                  @if($pkg->customers_menu)
-                    @if($pkg->no_of_users !== null && (int)$pkg->no_of_users === 0)
-                      <li><i class="bx bx-x-circle me-2" style="color: #ff4d4d; font-size: 1.2rem; font-weight: bold; vertical-align: middle; margin-right: 8px;"></i><span style="color: #94a3b8;">Customers Not Included</span></li>
-                    @else
-                      <li><span class="check">✓</span><span>{{ $pkg->no_of_users !== null ? ($pkg->no_of_users . ' Customers Included') : 'Unlimited Customers' }}</span></li>
-                    @endif
-
-                    @if($pkg->no_of_invitations !== null && (int)$pkg->no_of_invitations === 0)
-                      <li><i class="bx bx-x-circle me-2" style="color: #ff4d4d; font-size: 1.2rem; font-weight: bold; vertical-align: middle; margin-right: 8px;"></i><span style="color: #94a3b8;">Invitations Not Included</span></li>
-                    @else
-                      <li><span class="check">✓</span><span>{{ $pkg->no_of_invitations !== null ? ($pkg->no_of_invitations . ' Invitations Included') : 'Unlimited Invitations' }}</span></li>
-                    @endif
+                  {{-- Locations --}}
+                  @if($pkg->locations_menu && ($pkg->no_of_locations === null || (int)$pkg->no_of_locations > 0))
+                    <li><span class="check">✓</span><span>{{ $pkg->no_of_locations !== null ? ($pkg->no_of_locations . ' Locations Included') : 'Unlimited Locations' }}</span></li>
+                  @else
+                    <li><i class="bx bx-x-circle me-2" style="color: #ef4444; font-size: 1.1rem; vertical-align: middle;"></i><span style="color: #cbd5e1;">Locations Not Included</span></li>
                   @endif
 
+                  {{-- Customers --}}
+                  @if($pkg->customers_menu && ($pkg->no_of_users === null || (int)$pkg->no_of_users > 0))
+                    <li><span class="check">✓</span><span>{{ $pkg->no_of_users !== null ? ($pkg->no_of_users . ' Customers Included') : 'Unlimited Customers' }}</span></li>
+                  @else
+                    <li><i class="bx bx-x-circle me-2" style="color: #ef4444; font-size: 1.1rem; vertical-align: middle;"></i><span style="color: #cbd5e1;">Customers Not Included</span></li>
+                  @endif
+
+                  {{-- Invitations --}}
+                  @if($pkg->customers_menu && ($pkg->no_of_invitations === null || (int)$pkg->no_of_invitations > 0))
+                    <li><span class="check">✓</span><span>{{ $pkg->no_of_invitations !== null ? ($pkg->no_of_invitations . ' Invitations Included') : 'Unlimited Invitations' }}</span></li>
+                  @else
+                    <li><i class="bx bx-x-circle me-2" style="color: #ef4444; font-size: 1.1rem; vertical-align: middle;"></i><span style="color: #cbd5e1;">Invitations Not Included</span></li>
+                  @endif
+
+                  {{-- Fleet Management --}}
                   @if($pkg->fleet_management_menu)
                     <li><span class="check">✓</span><span>Fleet Management Included</span></li>
+                  @else
+                    <li><i class="bx bx-x-circle me-2" style="color: #ef4444; font-size: 1.1rem; vertical-align: middle;"></i><span style="color: #cbd5e1;">Fleet Management Not Included</span></li>
                   @endif
 
-                  @if($pkg->maintenance_schedule_menu)
-                    @if($pkg->no_of_maintenance_schedules !== null && (int)$pkg->no_of_maintenance_schedules === 0)
-                      <li><i class="bx bx-x-circle me-2" style="color: #ff4d4d; font-size: 1.2rem; font-weight: bold; vertical-align: middle; margin-right: 8px;"></i><span style="color: #94a3b8;">Maintenance Schedules Not Included</span></li>
-                    @else
-                      <li><span class="check">✓</span><span>{{ $pkg->no_of_maintenance_schedules !== null ? ($pkg->no_of_maintenance_schedules . ' Maintenance Schedules Included') : 'Unlimited Maintenance Schedules' }}</span></li>
-                    @endif
+                  {{-- Maintenance Schedule --}}
+                  @if($pkg->maintenance_schedule_menu && ($pkg->no_of_maintenance_schedules === null || (int)$pkg->no_of_maintenance_schedules > 0))
+                    <li><span class="check">✓</span><span>{{ $pkg->no_of_maintenance_schedules !== null ? ($pkg->no_of_maintenance_schedules . ' Maintenance Schedules Included') : 'Unlimited Maintenance Schedules' }}</span></li>
+                  @else
+                    <li><i class="bx bx-x-circle me-2" style="color: #ef4444; font-size: 1.1rem; vertical-align: middle;"></i><span style="color: #cbd5e1;">Maintenance Schedules Not Included</span></li>
                   @endif
 
-                  @if($pkg->extras_menu)
-                    @if($pkg->no_of_extras !== null && (int)$pkg->no_of_extras === 0)
-                      <li><i class="bx bx-x-circle me-2" style="color: #ff4d4d; font-size: 1.2rem; font-weight: bold; vertical-align: middle; margin-right: 8px;"></i><span style="color: #94a3b8;">Extras Not Included</span></li>
-                    @else
-                      <li><span class="check">✓</span><span>{{ $pkg->no_of_extras !== null ? ($pkg->no_of_extras . ' Extras Included') : 'Unlimited Extras' }}</span></li>
-                    @endif
-
-                    @if($pkg->no_of_insurances !== null && (int)$pkg->no_of_insurances === 0)
-                      <li><i class="bx bx-x-circle me-2" style="color: #ff4d4d; font-size: 1.2rem; font-weight: bold; vertical-align: middle; margin-right: 8px;"></i><span style="color: #94a3b8;">Insurances Not Included</span></li>
-                    @else
-                      <li><span class="check">✓</span><span>{{ $pkg->no_of_insurances !== null ? ($pkg->no_of_insurances . ' Insurances Included') : 'Unlimited Insurances' }}</span></li>
-                    @endif
-
-                    @if($pkg->no_of_features !== null && (int)$pkg->no_of_features === 0)
-                      <li><i class="bx bx-x-circle me-2" style="color: #ff4d4d; font-size: 1.2rem; font-weight: bold; vertical-align: middle; margin-right: 8px;"></i><span style="color: #94a3b8;">Features Not Included</span></li>
-                    @else
-                      <li><span class="check">✓</span><span>{{ $pkg->no_of_features !== null ? ($pkg->no_of_features . ' Features Included') : 'Unlimited Features' }}</span></li>
-                    @endif
-
-                    @if($pkg->no_of_rules !== null && (int)$pkg->no_of_rules === 0)
-                      <li><i class="bx bx-x-circle me-2" style="color: #ff4d4d; font-size: 1.2rem; font-weight: bold; vertical-align: middle; margin-right: 8px;"></i><span style="color: #94a3b8;">Rules Not Included</span></li>
-                    @else
-                      <li><span class="check">✓</span><span>{{ $pkg->no_of_rules !== null ? ($pkg->no_of_rules . ' Rules Included') : 'Unlimited Rules' }}</span></li>
-                    @endif
+                  {{-- Extras --}}
+                  @if($pkg->extras_menu && ($pkg->no_of_extras === null || (int)$pkg->no_of_extras > 0))
+                    <li><span class="check">✓</span><span>{{ $pkg->no_of_extras !== null ? ($pkg->no_of_extras . ' Extras Included') : 'Unlimited Extras' }}</span></li>
+                  @else
+                    <li><i class="bx bx-x-circle me-2" style="color: #ef4444; font-size: 1.1rem; vertical-align: middle;"></i><span style="color: #cbd5e1;">Extras Not Included</span></li>
                   @endif
 
-                  @if($pkg->coupons_menu)
-                    @if($pkg->no_of_coupons !== null && (int)$pkg->no_of_coupons === 0)
-                      <li><i class="bx bx-x-circle me-2" style="color: #ff4d4d; font-size: 1.2rem; font-weight: bold; vertical-align: middle; margin-right: 8px;"></i><span style="color: #94a3b8;">Coupons Not Included</span></li>
-                    @else
-                      <li><span class="check">✓</span><span>{{ $pkg->no_of_coupons !== null ? ($pkg->no_of_coupons . ' Coupons Included') : 'Unlimited Coupons' }}</span></li>
-                    @endif
+                  {{-- Insurances --}}
+                  @if($pkg->extras_menu && ($pkg->no_of_insurances === null || (int)$pkg->no_of_insurances > 0))
+                    <li><span class="check">✓</span><span>{{ $pkg->no_of_insurances !== null ? ($pkg->no_of_insurances . ' Insurances Included') : 'Unlimited Insurances' }}</span></li>
+                  @else
+                    <li><i class="bx bx-x-circle me-2" style="color: #ef4444; font-size: 1.1rem; vertical-align: middle;"></i><span style="color: #cbd5e1;">Insurances Not Included</span></li>
                   @endif
 
-                  @if($pkg->support_ticket_menu)
-                    @if($pkg->no_of_support_tickets !== null && (int)$pkg->no_of_support_tickets === 0)
-                      <li><i class="bx bx-x-circle me-2" style="color: #ff4d4d; font-size: 1.2rem; font-weight: bold; vertical-align: middle; margin-right: 8px;"></i><span style="color: #94a3b8;">Support Tickets Not Included</span></li>
-                    @else
-                      <li><span class="check">✓</span><span>{{ $pkg->no_of_support_tickets !== null ? ($pkg->no_of_support_tickets . ' Support Tickets Included') : 'Unlimited Support Tickets' }}</span></li>
-                    @endif
+                  {{-- Features --}}
+                  @if($pkg->extras_menu && ($pkg->no_of_features === null || (int)$pkg->no_of_features > 0))
+                    <li><span class="check">✓</span><span>{{ $pkg->no_of_features !== null ? ($pkg->no_of_features . ' Features Included') : 'Unlimited Features' }}</span></li>
+                  @else
+                    <li><i class="bx bx-x-circle me-2" style="color: #ef4444; font-size: 1.1rem; vertical-align: middle;"></i><span style="color: #cbd5e1;">Features Not Included</span></li>
                   @endif
 
+                  {{-- Rules --}}
+                  @if($pkg->extras_menu && ($pkg->no_of_rules === null || (int)$pkg->no_of_rules > 0))
+                    <li><span class="check">✓</span><span>{{ $pkg->no_of_rules !== null ? ($pkg->no_of_rules . ' Rules Included') : 'Unlimited Rules' }}</span></li>
+                  @else
+                    <li><i class="bx bx-x-circle me-2" style="color: #ef4444; font-size: 1.1rem; vertical-align: middle;"></i><span style="color: #cbd5e1;">Rules Not Included</span></li>
+                  @endif
+
+                  {{-- Coupons --}}
+                  @if($pkg->coupons_menu && ($pkg->no_of_coupons === null || (int)$pkg->no_of_coupons > 0))
+                    <li><span class="check">✓</span><span>{{ $pkg->no_of_coupons !== null ? ($pkg->no_of_coupons . ' Coupons Included') : 'Unlimited Coupons' }}</span></li>
+                  @else
+                    <li><i class="bx bx-x-circle me-2" style="color: #ef4444; font-size: 1.1rem; vertical-align: middle;"></i><span style="color: #cbd5e1;">Coupons Not Included</span></li>
+                  @endif
+
+                  {{-- Support Tickets --}}
+                  @if($pkg->support_ticket_menu && ($pkg->no_of_support_tickets === null || (int)$pkg->no_of_support_tickets > 0))
+                    <li><span class="check">✓</span><span>{{ $pkg->no_of_support_tickets !== null ? ($pkg->no_of_support_tickets . ' Support Tickets Included') : 'Unlimited Support Tickets' }}</span></li>
+                  @else
+                    <li><i class="bx bx-x-circle me-2" style="color: #ef4444; font-size: 1.1rem; vertical-align: middle;"></i><span style="color: #cbd5e1;">Support Tickets Not Included</span></li>
+                  @endif
+
+                  {{-- Settings --}}
                   @if($pkg->settings_menu)
                     <li><span class="check">✓</span><span>System Settings Access</span></li>
+                  @else
+                    <li><i class="bx bx-x-circle me-2" style="color: #ef4444; font-size: 1.1rem; vertical-align: middle;"></i><span style="color: #cbd5e1;">System Settings Not Included</span></li>
                   @endif
 
+                  {{-- Community --}}
                   @if($pkg->community_menu)
                     <li><span class="check">✓</span><span>Community Access Included</span></li>
+                  @else
+                    <li><i class="bx bx-x-circle me-2" style="color: #ef4444; font-size: 1.1rem; vertical-align: middle;"></i><span style="color: #cbd5e1;">Community Access Not Included</span></li>
                   @endif
                 </ul>
 

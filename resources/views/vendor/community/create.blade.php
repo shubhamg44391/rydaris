@@ -119,7 +119,14 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    window.location.href = data.redirect || "{{ route('vendor.community.index') }}";
+                    Swal.fire({
+                        title: 'Success!',
+                        text: data.message || 'Community post published successfully.',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location.href = data.redirect || "{{ route('vendor.community.index') }}";
+                    });
                 } else {
                     alert(data.message || 'An error occurred while publishing the post.');
                     submitBtn.disabled = false;

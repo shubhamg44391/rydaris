@@ -165,8 +165,7 @@
                                 icon: 'success',
                                 title: 'Saved!',
                                 text: data.message || 'Payment settings updated successfully.',
-                                timer: 2500,
-                                showConfirmButton: false
+                                confirmButtonText: 'OK'
                             });
                         } else {
                             Swal.fire('Error!', data.message || 'Failed to save settings.', 'error');

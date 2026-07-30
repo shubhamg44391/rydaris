@@ -51,6 +51,8 @@ class PackageController extends Controller
             'no_of_rules' => ['nullable', 'integer'],
             'no_of_support_tickets' => ['nullable', 'integer'],
             'no_of_maintenance_schedules' => ['nullable', 'integer'],
+            'features' => ['nullable', 'array'],
+            'features.*' => ['nullable', 'string'],
             'booking_menu' => ['nullable', 'boolean'],
             'vehicles_menu' => ['nullable', 'boolean'],
             'locations_menu' => ['nullable', 'boolean'],
@@ -64,13 +66,20 @@ class PackageController extends Controller
             'community_menu' => ['nullable', 'boolean'],
         ]);
 
+        $features = $request->input('features', []);
+        if (is_array($features)) {
+            $features = array_values(array_filter(array_map('trim', $features)));
+        } else {
+            $features = [];
+        }
+
         Package::create([
             'name' => $request->name,
             'eyebrow' => $request->eyebrow,
             'description' => $request->description,
             'price' => $request->price,
             'billing_period' => $request->billing_period,
-            'features' => [], 
+            'features' => $features,
             'is_featured' => $request->has('is_featured'),
             'is_active' => $request->has('is_active'),
             'button_text' => $request->button_text,
@@ -150,6 +159,8 @@ class PackageController extends Controller
             'no_of_rules' => ['nullable', 'integer'],
             'no_of_support_tickets' => ['nullable', 'integer'],
             'no_of_maintenance_schedules' => ['nullable', 'integer'],
+            'features' => ['nullable', 'array'],
+            'features.*' => ['nullable', 'string'],
             'booking_menu' => ['nullable', 'boolean'],
             'vehicles_menu' => ['nullable', 'boolean'],
             'locations_menu' => ['nullable', 'boolean'],
@@ -163,13 +174,20 @@ class PackageController extends Controller
             'community_menu' => ['nullable', 'boolean'],
         ]);
 
+        $features = $request->input('features', []);
+        if (is_array($features)) {
+            $features = array_values(array_filter(array_map('trim', $features)));
+        } else {
+            $features = [];
+        }
+
         $package->update([
             'name' => $request->name,
             'eyebrow' => $request->eyebrow,
             'description' => $request->description,
             'price' => $request->price,
             'billing_period' => $request->billing_period,
-            'features' => [], 
+            'features' => $features,
             'is_featured' => $request->has('is_featured'),
             'is_active' => $request->has('is_active'),
             'button_text' => $request->button_text,

@@ -98,7 +98,7 @@
                 </div>
 
                 
-                <div class="mb-4" style="border: 1px solid var(--line, rgba(255, 255, 255, 0.12)); border-radius: var(--radius); padding: 24px; background: var(--bg-2, #0b1020);">
+                <div class="mb-4 menu-permissions-wrapper" style="border: 1px solid var(--line, rgba(255, 255, 255, 0.12)); border-radius: var(--radius); padding: 24px; background: var(--bg-2, #0b1020);">
                     <label class="form-label-custom d-block" style="font-weight: 700; margin-bottom: 20px; font-size: 1.1rem; color: var(--text, #f8fafc);">Menu Permissions & Limits</label>
                     
                     <div class="permissions-grid">
@@ -476,7 +476,8 @@
                     </div>
                 </div>
 
-                
+
+
                 <div class="mb-4" style="border: 1px solid var(--line, rgba(255, 255, 255, 0.12)); border-radius: var(--radius); padding: 16px 20px; background: rgba(255, 255, 255, 0.03); max-width: 600px;">
                     <div style="display: flex; align-items: center; gap: 15px;">
                         <label class="theme-switch" style="margin: 0;">
@@ -494,6 +495,15 @@
                 </div>
 
                 <style>
+                    .permissions-container {
+                        border: 1px solid var(--line, rgba(255, 255, 255, 0.12));
+                        border-radius: var(--radius, 8px);
+                        padding: 24px;
+                        background: var(--bg-2, #0b1020);
+                    }
+                    .menu-permission-card-heading {
+                        color: var(--text, #f8fafc);
+                    }
                     .permissions-grid {
                         display: grid;
                         grid-template-columns: 1fr 1fr;
@@ -579,6 +589,73 @@
                         transform: translateX(22px);
                     }
 
+                    /* Light Mode Overrides for Permissions Card & Toggle Switches */
+                    body.light-mode .menu-permissions-wrapper,
+                    html.light-mode .menu-permissions-wrapper {
+                        background: #ffffff !important;
+                        border: 1px solid #e2e8f0 !important;
+                    }
+                    body.light-mode .menu-permissions-wrapper > label,
+                    html.light-mode .menu-permissions-wrapper > label {
+                        color: #0f172a !important;
+                    }
+                    body.light-mode .menu-permission-card,
+                    html.light-mode .menu-permission-card {
+                        background: #f8fafc !important;
+                        border: 1px solid #cbd5e1 !important;
+                    }
+                    body.light-mode .menu-permission-card:hover,
+                    html.light-mode .menu-permission-card:hover {
+                        background: #ffffff !important;
+                        border-color: var(--brand, #52ead2) !important;
+                        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+                    }
+                    body.light-mode .menu-title-text,
+                    html.light-mode .menu-title-text {
+                        color: #1e293b !important;
+                    }
+                    body.light-mode .slider,
+                    html.light-mode .slider {
+                        background-color: #cbd5e1 !important;
+                    }
+                    body.light-mode .slider:before,
+                    html.light-mode .slider:before {
+                        background-color: #ffffff !important;
+                    }
+                    body.light-mode .theme-switch input:checked + .slider,
+                    html.light-mode .theme-switch input:checked + .slider {
+                        background-color: var(--brand, #52ead2) !important;
+                    }
+                    body.light-mode .segmented-control,
+                    html.light-mode .segmented-control {
+                        background: #e2e8f0 !important;
+                        border: 1px solid #cbd5e1 !important;
+                    }
+                    body.light-mode .segmented-control label,
+                    html.light-mode .segmented-control label {
+                        color: #64748b !important;
+                    }
+                    body.light-mode .segmented-control input[type="radio"]:checked + label,
+                    html.light-mode .segmented-control input[type="radio"]:checked + label {
+                        background: var(--brand, #52ead2) !important;
+                        color: #050711 !important;
+                    }
+                    body.light-mode .limit-input-label,
+                    html.light-mode .limit-input-label {
+                        color: #64748b !important;
+                    }
+                    body.light-mode .limit-input-field,
+                    html.light-mode .limit-input-field {
+                        background: #ffffff !important;
+                        border: 1px solid #cbd5e1 !important;
+                        color: #1e293b !important;
+                    }
+                    body.light-mode .limit-input-field:focus,
+                    html.light-mode .limit-input-field:focus {
+                        border-color: var(--brand, #52ead2) !important;
+                        background: #ffffff !important;
+                    }
+
                     /* Custom Segmented Control */
                     .segmented-control {
                         display: inline-flex;
@@ -653,6 +730,7 @@
                         border-color: rgba(255, 255, 255, 0.08) !important;
                         cursor: not-allowed;
                     }
+
                 </style>
 
                 <script>
@@ -893,8 +971,7 @@
                             title: 'Success!',
                             text: data.message || 'Package created successfully.',
                             icon: 'success',
-                            timer: 1800,
-                            showConfirmButton: false
+                            confirmButtonText: 'OK'
                         }).then(function () {
                             window.location.href = data.redirect || "{{ route('admin.packages.index') }}";
                         });

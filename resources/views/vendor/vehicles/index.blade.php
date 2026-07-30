@@ -91,7 +91,7 @@
                 Showing {{ $vehicles->firstItem() ?? 0 }} to {{ $vehicles->lastItem() ?? 0 }} of {{ $vehicles->total() }} results
             </div>
             <div>
-                {{ $vehicles->links() }}
+                {{ $vehicles->links('vendor.pagination.custom') }}
             </div>
         </div>
     </div>

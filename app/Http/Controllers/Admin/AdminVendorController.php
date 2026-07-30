@@ -21,7 +21,7 @@ class AdminVendorController extends Controller
 
         $vendors = $query->with(['activeSubscription.package', 'subscriptions.package'])->orderBy('created_at', 'desc')->paginate(10);
 
-        if ($request->ajax() || $request->wantsJson()) {
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
             return response()->json([
                 'success' => true,
                 'html' => view('admin.vendors.partials.table', compact('vendors', 'status'))->render(),

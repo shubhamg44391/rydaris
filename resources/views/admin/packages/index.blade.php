@@ -79,7 +79,7 @@
                     Showing {{ $packages->firstItem() ?? 0 }} to {{ $packages->lastItem() ?? 0 }} of {{ $packages->total() }} results
                 </div>
                 <div>
-                    {{ $packages->links() }}
+                    {{ $packages->links('vendor.pagination.custom') }}
                 </div>
             </div>
         @endif
@@ -133,8 +133,7 @@
                                     title: 'Deleted!',
                                     text: data.message,
                                     icon: 'success',
-                                    timer: 2000,
-                                    showConfirmButton: false
+                                    confirmButtonText: 'OK'
                                 });
                             }
                         },
@@ -145,16 +144,6 @@
                 }
             });
         });
-
-        @if(session('success'))
-            Swal.fire({
-                title: 'Success!',
-                text: "{{ session('success') }}",
-                icon: 'success',
-                timer: 3000,
-                showConfirmButton: false
-            });
-        @endif
     });
 </script>
 @endsection

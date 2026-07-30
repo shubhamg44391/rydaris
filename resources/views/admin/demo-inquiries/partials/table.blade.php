@@ -79,6 +79,6 @@
         <div class="text-muted small">
             Showing {{ $inquiries->firstItem() ?? 0 }} to {{ $inquiries->lastItem() ?? 0 }} of {{ $inquiries->total() }} results
         </div>
-        <div>{{ $inquiries->links() }}</div>
+        <div>{{ $inquiries->links('vendor.pagination.custom') }}</div>
     </div>
 @endif
