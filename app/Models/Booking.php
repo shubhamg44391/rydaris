@@ -13,7 +13,7 @@ class Booking extends Model
     use HasFactory;
 
     protected $fillable = [
-        'reservation_number', 'vendor_id', 'user_id', 'vehicle_id',
+        'reservation_number', 'vendor_id', 'user_id', 'vehicle_id', 'driver_id', 'assigned_at', 'assigned_by_vendor',
         'customer_fname', 'customer_lname', 'customer_email', 'customer_phone', 'customer_dob',
         'pickup_location_id', 'return_location_id', 'pickup_date', 'pickup_time', 'return_date', 'return_time',
         'total_amount', 'paid_amount', 'pending_amount',
@@ -34,6 +34,16 @@ class Booking extends Model
     public function vehicle()
     {
         return $this->belongsTo(Vehicle::class, 'vehicle_id');
+    }
+
+    public function driver()
+    {
+        return $this->belongsTo(Driver::class, 'driver_id');
+    }
+
+    public function assignedByVendor()
+    {
+        return $this->belongsTo(User::class, 'assigned_by_vendor');
     }
 
     public function pickupLocation()

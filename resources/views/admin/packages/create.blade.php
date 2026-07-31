@@ -463,6 +463,7 @@
                         </div>
 
                         
+                        <!-- Community Menu -->
                         <div class="menu-permission-card">
                             <div style="display: flex; align-items: center; gap: 12px; min-width: 260px; flex-shrink: 0;">
                                 <label class="theme-switch">
@@ -470,6 +471,56 @@
                                     <span class="slider round"></span>
                                 </label>
                                 <span class="menu-title-text" onclick="document.getElementById('community_menu').click();">Community Menu</span>
+                            </div>
+                        </div>
+
+                        <!-- Customer Reviews Menu & Limits -->
+                        <div class="menu-permission-card">
+                            <div style="display: flex; align-items: center; gap: 12px; min-width: 260px; flex-shrink: 0;">
+                                <label class="theme-switch">
+                                    <input type="checkbox" id="reviews_menu" name="reviews_menu" value="1" {{ old('reviews_menu', '1') ? 'checked' : '' }} />
+                                    <span class="slider round"></span>
+                                </label>
+                                <span class="menu-title-text" onclick="document.getElementById('reviews_menu').click();">Customer Reviews Menu</span>
+                            </div>
+
+                            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                                <div class="segmented-control">
+                                    <input type="radio" id="reviews_unlimited" name="reviews_limit_type" value="unlimited" {{ old('reviews_limit_type', 'unlimited') === 'unlimited' ? 'checked' : '' }} onchange="toggleLimitInput('no_of_reviews', this.value)" />
+                                    <label for="reviews_unlimited">Unlimited</label>
+
+                                    <input type="radio" id="reviews_limited" name="reviews_limit_type" value="limited" {{ old('reviews_limit_type') === 'limited' ? 'checked' : '' }} onchange="toggleLimitInput('no_of_reviews', this.value)" />
+                                    <label for="reviews_limited">Limited</label>
+                                </div>
+
+                                <div id="no_of_reviews_wrapper" style="display: {{ old('reviews_limit_type') === 'limited' ? 'block' : 'none' }};">
+                                    <input type="number" class="limit-input-field @error('no_of_reviews') is-invalid @enderror" id="no_of_reviews" name="no_of_reviews" value="{{ old('no_of_reviews') }}" placeholder="e.g. 50" min="1" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Drivers Menu & Limits -->
+                        <div class="menu-permission-card">
+                            <div style="display: flex; align-items: center; gap: 12px; min-width: 260px; flex-shrink: 0;">
+                                <label class="theme-switch">
+                                    <input type="checkbox" id="drivers_menu" name="drivers_menu" value="1" {{ old('drivers_menu', '1') ? 'checked' : '' }} />
+                                    <span class="slider round"></span>
+                                </label>
+                                <span class="menu-title-text" onclick="document.getElementById('drivers_menu').click();">Drivers Menu</span>
+                            </div>
+
+                            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                                <div class="segmented-control">
+                                    <input type="radio" id="drivers_unlimited" name="drivers_limit_type" value="unlimited" {{ old('drivers_limit_type', 'unlimited') === 'unlimited' ? 'checked' : '' }} onchange="toggleLimitInput('no_of_drivers', this.value)" />
+                                    <label for="drivers_unlimited">Unlimited</label>
+
+                                    <input type="radio" id="drivers_limited" name="drivers_limit_type" value="limited" {{ old('drivers_limit_type') === 'limited' ? 'checked' : '' }} onchange="toggleLimitInput('no_of_drivers', this.value)" />
+                                    <label for="drivers_limited">Limited</label>
+                                </div>
+
+                                <div id="no_of_drivers_wrapper" style="display: {{ old('drivers_limit_type') === 'limited' ? 'block' : 'none' }};">
+                                    <input type="number" class="limit-input-field @error('no_of_drivers') is-invalid @enderror" id="no_of_drivers" name="no_of_drivers" value="{{ old('no_of_drivers') }}" placeholder="e.g. 10" min="1" />
+                                </div>
                             </div>
                         </div>
 

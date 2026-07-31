@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use App\Models\Booking;
+use App\Models\Driver;
 use App\Models\VendorSmtpSetting;
 
 class BookingController extends Controller
@@ -16,7 +17,7 @@ class BookingController extends Controller
         
         auth()->user()->update(['last_checked_bookings_at' => now()]);
 
-        $bookings = Booking::with(['vehicle', 'pickupLocation', 'returnLocation', 'user', 'review'])
+        $bookings = Booking::with(['vehicle', 'pickupLocation', 'returnLocation', 'user', 'review', 'driver'])
             ->where('vendor_id', auth()->id())
             ->orderBy('created_at', 'desc')
             ->paginate(10);
@@ -26,7 +27,7 @@ class BookingController extends Controller
 
     public function payment()
     {
-        $bookings = Booking::with(['vehicle', 'review'])
+        $bookings = Booking::with(['vehicle', 'review', 'driver'])
             ->where('vendor_id', auth()->id())
             ->orderBy('created_at', 'desc')
             ->paginate(10);
@@ -108,12 +109,93 @@ class BookingController extends Controller
 
     public function show($id)
     {
-        $booking = Booking::with(['vehicle', 'pickupLocation', 'returnLocation', 'user'])
+        $booking = Booking::with(['vehicle', 'pickupLocation', 'returnLocation', 'user', 'driver'])
             ->where('vendor_id', auth()->id())
             ->where('id', $id)
             ->firstOrFail();
+
+        $activeDrivers = Driver::where('vendor_id', auth()->id())
+            ->where('status', 'active')
+            ->orderBy('name', 'asc')
+            ->get();
             
-        return view('vendor.bookings.show', compact('booking'));
+        return view('vendor.bookings.show', compact('booking', 'activeDrivers'));
+    }
+
+    public function assignDriver(Request $request, $id)
+    {
+        $booking = Booking::where('vendor_id', auth()->id())->findOrFail($id);
+
+        if (in_array(strtolower($booking->booking_status), ['completed', 'cancelled'])) {
+            $msg = 'Driver assignment cannot be modified for ' . strtolower($booking->booking_status) . ' bookings.';
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => $msg], 422);
+            }
+            return redirect()->back()->with('error', $msg);
+        }
+
+        $request->validate([
+            'driver_id' => [
+                'required',
+                \Illuminate\Validation\Rule::exists('drivers', 'id')->where(function ($query) {
+                    return $query->where('vendor_id', auth()->id())->where('status', 'active');
+                }),
+            ],
+        ], [
+            'driver_id.required' => 'Please select a driver.',
+            'driver_id.exists' => 'Selected driver is invalid or inactive.',
+        ]);
+
+        $driver = Driver::where('vendor_id', auth()->id())->where('status', 'active')->findOrFail($request->driver_id);
+
+        $booking->update([
+            'driver_id' => $driver->id,
+            'assigned_at' => now(),
+            'assigned_by_vendor' => auth()->id(),
+        ]);
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Driver assigned successfully.',
+                'driver' => [
+                    'id' => $driver->id,
+                    'name' => $driver->name,
+                    'phone' => $driver->phone,
+                    'address' => $driver->address,
+                ]
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Driver assigned successfully.');
+    }
+
+    public function removeDriver(Request $request, $id)
+    {
+        $booking = Booking::where('vendor_id', auth()->id())->findOrFail($id);
+
+        if (in_array(strtolower($booking->booking_status), ['completed', 'cancelled'])) {
+            $msg = 'Driver assignment cannot be modified for ' . strtolower($booking->booking_status) . ' bookings.';
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => $msg], 422);
+            }
+            return redirect()->back()->with('error', $msg);
+        }
+
+        $booking->update([
+            'driver_id' => null,
+            'assigned_at' => null,
+            'assigned_by_vendor' => null,
+        ]);
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Driver assignment removed successfully.'
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Driver assignment removed successfully.');
     }
 
     public function update(Request $request, $id)

@@ -269,6 +269,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::put('/vendor/{id}', [AdminVendorController::class, 'update'])->name('admin.vendors.update');
     Route::delete('/vendor/{id}', [AdminVendorController::class, 'destroy'])->name('admin.vendors.destroy');
 
+    // Customer Reviews Management (Admin)
+    Route::get('/reviews', [\App\Http\Controllers\Admin\AdminReviewController::class, 'index'])->name('admin.reviews.index');
+    Route::delete('/reviews/{id}', [\App\Http\Controllers\Admin\AdminReviewController::class, 'destroy'])->name('admin.reviews.destroy');
+
     Route::resource('faqs', AdminFaqController::class)->except(['show'])->names([
         'index' => 'admin.faqs.index',
         'create' => 'admin.faqs.create',
@@ -423,6 +427,8 @@ Route::middleware(['auth', 'vendor'])->prefix('vendor')->group(function () {
         Route::get('/bookings/export', [\App\Http\Controllers\Vendor\BookingController::class, 'exportCsv'])->name('vendor.bookings.export');
         Route::get('/bookings/{id}', [\App\Http\Controllers\Vendor\BookingController::class, 'show'])->name('vendor.bookings.show');
         Route::put('/bookings/{id}', [\App\Http\Controllers\Vendor\BookingController::class, 'update'])->name('vendor.bookings.update');
+        Route::post('/bookings/{id}/assign-driver', [\App\Http\Controllers\Vendor\BookingController::class, 'assignDriver'])->name('vendor.bookings.assign-driver');
+        Route::post('/bookings/{id}/remove-driver', [\App\Http\Controllers\Vendor\BookingController::class, 'removeDriver'])->name('vendor.bookings.remove-driver');
         
         // Profile & Settings
         Route::get('/profile', [VendorProfileController::class, 'index'])->name('vendor.profile.index');
@@ -508,6 +514,18 @@ Route::middleware(['auth', 'vendor'])->prefix('vendor')->group(function () {
             'update' => 'vendor.vehicles.update',
             'destroy' => 'vendor.vehicles.destroy',
         ]);
+
+        // Drivers Management Routes
+        Route::resource('drivers', \App\Http\Controllers\Vendor\DriverController::class)->names([
+            'index'   => 'vendor.drivers.index',
+            'create'  => 'vendor.drivers.create',
+            'store'   => 'vendor.drivers.store',
+            'show'    => 'vendor.drivers.show',
+            'edit'    => 'vendor.drivers.edit',
+            'update'  => 'vendor.drivers.update',
+            'destroy' => 'vendor.drivers.destroy',
+        ]);
+        Route::post('/drivers/{id}/toggle-status', [\App\Http\Controllers\Vendor\DriverController::class, 'toggleStatus'])->name('vendor.drivers.toggle-status');
 
         Route::resource('locations', VendorLocationController::class)->except(['show'])->names([
             'index'   => 'vendor.locations.index',

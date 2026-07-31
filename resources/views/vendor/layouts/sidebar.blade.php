@@ -145,6 +145,33 @@
     </div>
     @endif
  
+    {{-- DRIVERS --}}
+    @if(auth()->user()->activeSubscription)
+    <div class="admin-nav-group">
+        <a href="javascript:void(0);" class="nav-toggle" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); color: #aab7cb; font-size: 0.92rem; font-weight: 780; transition: background 0.2s; text-decoration: none;">
+            <span style="display: flex; align-items: center; gap: 10px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>Drivers
+            </span>
+            <svg class="chevron" viewBox="0 0 24 24" style="width: 14px; height: 14px; transition: transform 0.2s ease; {{ Request::is('vendor/drivers*') ? 'transform: rotate(180deg);' : '' }}"><path d="m6 9 6 6 6-6"/></svg>
+        </a>
+        <div class="admin-submenu" style="{{ Request::is('vendor/drivers*') ? 'display: flex;' : 'display: none;' }} padding-left: 20px; margin-top: 4px; flex-direction: column; gap: 4px;">
+            <a href="{{ route('vendor.drivers.index') }}" class="submenu-item {{ (Request::is('vendor/drivers*') && !Request::is('vendor/drivers/create')) ? 'active' : '' }}" style="text-decoration: none;">
+                <span class="dot"></span>
+                Driver List
+            </a>
+            <a href="{{ route('vendor.drivers.create') }}" class="submenu-item {{ Request::is('vendor/drivers/create') ? 'active' : '' }}" style="text-decoration: none;">
+                <span class="dot"></span>
+                Add Driver
+            </a>
+        </div>
+    </div>
+    @endif
+ 
     {{-- FLEET MANAGEMENT --}}
     @if(auth()->user()->hasMenuAccess('fleet_management'))
     <div class="admin-nav-group">

@@ -210,6 +210,11 @@ class User extends Authenticatable
         return $this->hasMany(Coupon::class, 'vendor_id');
     }
 
+    public function drivers()
+    {
+        return $this->hasMany(Driver::class, 'vendor_id');
+    }
+
     public function canAddCoupon()
     {
         if (!$this->hasMenuAccess('coupons')) {

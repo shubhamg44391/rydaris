@@ -34,6 +34,8 @@ class Package extends Model
         'no_of_rules',
         'no_of_support_tickets',
         'no_of_maintenance_schedules',
+        'no_of_reviews',
+        'no_of_drivers',
         'booking_menu',
         'vehicles_menu',
         'locations_menu',
@@ -45,6 +47,8 @@ class Package extends Model
         'support_ticket_menu',
         'settings_menu',
         'community_menu',
+        'reviews_menu',
+        'drivers_menu',
     ];
 
     protected $casts = [

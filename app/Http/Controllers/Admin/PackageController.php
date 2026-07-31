@@ -51,6 +51,8 @@ class PackageController extends Controller
             'no_of_rules' => ['nullable', 'integer'],
             'no_of_support_tickets' => ['nullable', 'integer'],
             'no_of_maintenance_schedules' => ['nullable', 'integer'],
+            'no_of_reviews' => ['nullable', 'integer'],
+            'no_of_drivers' => ['nullable', 'integer'],
             'features' => ['nullable', 'array'],
             'features.*' => ['nullable', 'string'],
             'booking_menu' => ['nullable', 'boolean'],
@@ -64,6 +66,8 @@ class PackageController extends Controller
             'support_ticket_menu' => ['nullable', 'boolean'],
             'settings_menu' => ['nullable', 'boolean'],
             'community_menu' => ['nullable', 'boolean'],
+            'reviews_menu' => ['nullable', 'boolean'],
+            'drivers_menu' => ['nullable', 'boolean'],
         ]);
 
         $features = $request->input('features', []);
@@ -98,6 +102,8 @@ class PackageController extends Controller
             'no_of_rules' => $this->getLimitValue($request, 'no_of_rules'),
             'no_of_support_tickets' => $this->getLimitValue($request, 'no_of_support_tickets'),
             'no_of_maintenance_schedules' => $this->getLimitValue($request, 'no_of_maintenance_schedules'),
+            'no_of_reviews' => $this->getLimitValue($request, 'no_of_reviews'),
+            'no_of_drivers' => $this->getLimitValue($request, 'no_of_drivers'),
             'booking_menu' => $request->has('booking_menu'),
             'vehicles_menu' => $request->has('vehicles_menu'),
             'locations_menu' => $request->has('locations_menu'),
@@ -109,6 +115,8 @@ class PackageController extends Controller
             'support_ticket_menu' => $request->has('support_ticket_menu'),
             'settings_menu' => $request->has('settings_menu'),
             'community_menu' => $request->has('community_menu'),
+            'reviews_menu' => $request->has('reviews_menu'),
+            'drivers_menu' => $request->has('drivers_menu'),
         ]);
 
         if ($request->wantsJson() || $request->ajax()) {
@@ -159,6 +167,8 @@ class PackageController extends Controller
             'no_of_rules' => ['nullable', 'integer'],
             'no_of_support_tickets' => ['nullable', 'integer'],
             'no_of_maintenance_schedules' => ['nullable', 'integer'],
+            'no_of_reviews' => ['nullable', 'integer'],
+            'no_of_drivers' => ['nullable', 'integer'],
             'features' => ['nullable', 'array'],
             'features.*' => ['nullable', 'string'],
             'booking_menu' => ['nullable', 'boolean'],
@@ -172,6 +182,8 @@ class PackageController extends Controller
             'support_ticket_menu' => ['nullable', 'boolean'],
             'settings_menu' => ['nullable', 'boolean'],
             'community_menu' => ['nullable', 'boolean'],
+            'reviews_menu' => ['nullable', 'boolean'],
+            'drivers_menu' => ['nullable', 'boolean'],
         ]);
 
         $features = $request->input('features', []);
@@ -206,6 +218,8 @@ class PackageController extends Controller
             'no_of_rules' => $this->getLimitValue($request, 'no_of_rules'),
             'no_of_support_tickets' => $this->getLimitValue($request, 'no_of_support_tickets'),
             'no_of_maintenance_schedules' => $this->getLimitValue($request, 'no_of_maintenance_schedules'),
+            'no_of_reviews' => $this->getLimitValue($request, 'no_of_reviews'),
+            'no_of_drivers' => $this->getLimitValue($request, 'no_of_drivers'),
             'booking_menu' => $request->has('booking_menu'),
             'vehicles_menu' => $request->has('vehicles_menu'),
             'locations_menu' => $request->has('locations_menu'),
@@ -217,6 +231,8 @@ class PackageController extends Controller
             'support_ticket_menu' => $request->has('support_ticket_menu'),
             'settings_menu' => $request->has('settings_menu'),
             'community_menu' => $request->has('community_menu'),
+            'reviews_menu' => $request->has('reviews_menu'),
+            'drivers_menu' => $request->has('drivers_menu'),
         ]);
 
         if ($request->wantsJson() || $request->ajax()) {

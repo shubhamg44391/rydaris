@@ -185,6 +185,7 @@
                         <th style="white-space: nowrap;">Reservation #</th>
                         <th style="white-space: nowrap;">Customer's name</th>
                         <th style="white-space: nowrap;">Vehicle type</th>
+                        <th style="white-space: nowrap;">Assigned Driver</th>
                         <th style="white-space: nowrap;">Pickup location</th>
                         <th style="white-space: nowrap;">Date & time of pickup</th>
                         <th style="white-space: nowrap;">Return location</th>
@@ -217,6 +218,13 @@
                             </td>
                             <td style="white-space: nowrap;">
                                 {{ $booking->vehicle->name ?? 'N/A' }}
+                            </td>
+                            <td style="white-space: nowrap;">
+                                @if($booking->driver)
+                                    <strong style="color: #52ead2;">{{ $booking->driver->name }}</strong>
+                                @else
+                                    <span style="color: #94a3b8; font-style: italic; font-size: 0.85rem;">Not Assigned</span>
+                                @endif
                             </td>
                             <td style="white-space: nowrap;">
                                 {{ $booking->pickupLocation->name ?? 'N/A' }}
@@ -305,7 +313,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="17" class="text-center" style="padding: 30px; color: #94a3b8;">
+                                <td colspan="19" class="text-center" style="padding: 30px; color: #94a3b8;">
                                     <div class="mb-3">
                                         <svg viewBox="0 0 24 24" style="width:48px;height:48px;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;">
                                             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
