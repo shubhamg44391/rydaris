@@ -74,12 +74,50 @@
       width: 80vw;
     }
     
+    /* Enforce Bold Font Weight for All Buttons Across User Site */
+    .btn, button, input[type="submit"], input[type="button"], a.btn, .btn-action, .btn-primary, .btn-secondary, .btn-success, .btn-danger, .btn-warning, .btn-info, .btn-outline-primary, .btn-outline-secondary {
+      font-weight: 800 !important;
+      letter-spacing: 0.02em;
+    }
+    
     /* Enforce Seamless Sidebar Dark Theme Color on Sneat Layout elements */
     body, html, .layout-wrapper, .layout-container, .layout-page, .content-wrapper {
       background-color: var(--bg-2, #0b1020) !important;
       color: var(--text) !important;
     }
+    /* ── Booking Flow: Dark Navy Card Style (shared across all booking steps) ── */
+    .booking-coverage-page .card {
+      background: rgba(11, 16, 32, 0.85) !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      border-radius: 16px !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+    }
+    .booking-coverage-page .card-header {
+      background: transparent !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+    }
+
+    /* ── Light Mode: Override dark card styles for booking flow ── */
+    body.light-mode .booking-coverage-page .card {
+      background: #ffffff !important;
+      border: 1px solid rgba(15, 23, 42, 0.1) !important;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08) !important;
+    }
+    body.light-mode .booking-coverage-page .card-header {
+      background: #f8fafc !important;
+      border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+    }
+    body.light-mode, body.light-mode html,
+    body.light-mode .admin-main,
+    body.light-mode .admin-content,
+    body.light-mode .admin-shell,
+    body.light-mode .booking-coverage-page {
+      background-color: #f1f5f9 !important;
+      color: #0f172a !important;
+    }
+
   </style>
+  @yield('css')
 </head>
 
 <body class="admin-body">

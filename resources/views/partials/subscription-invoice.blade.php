@@ -6,238 +6,237 @@
     <title>Invoice #INV-{{ $subscription->created_at->format('Y') }}-{{ str_pad($subscription->id, 4, '0', STR_PAD_LEFT) }}</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #050711;
-            color: #f8fafc;
-            margin: 0;
-            padding: 40px 20px;
+        html, body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+            background-color: #ffffff !important;
+            background: #ffffff !important;
+            color: #1e293b !important;
+            margin: 0 !important;
+            padding: 30px 20px !important;
         }
         .invoice-card {
-            max-width: 850px;
-            margin: 0 auto;
-            background: #0b1020;
-            border-radius: 16px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-            padding: 60px 80px;
-            box-sizing: border-box;
-            border: 1px solid rgba(82, 234, 210, 0.2);
+            max-width: 850px !important;
+            margin: 0 auto !important;
+            background-color: #ffffff !important;
+            background: #ffffff !important;
+            border-radius: 16px !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06) !important;
+            padding: 50px 60px !important;
+            box-sizing: border-box !important;
+            border: 1px solid #e2e8f0 !important;
+            color: #1e293b !important;
         }
         .invoice-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            padding-bottom: 40px;
-            margin-bottom: 40px;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: flex-start !important;
+            border-bottom: 2px solid #f1f5f9 !important;
+            padding-bottom: 30px !important;
+            margin-bottom: 30px !important;
         }
         .brand-section p {
-            margin: 4px 0 0 0;
-            font-size: 0.9rem;
-            color: #94a3b8;
+            margin: 4px 0 0 0 !important;
+            font-size: 0.9rem !important;
+            color: #64748b !important;
         }
         .company-details {
-            text-align: right;
+            text-align: right !important;
         }
         .company-details h3 {
-            margin: 0;
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #52ead2;
+            margin: 0 !important;
+            font-size: 1.1rem !important;
+            font-weight: 700 !important;
+            color: #0f172a !important;
         }
         .company-details p {
-            margin: 6px 0 0 0;
-            font-size: 0.85rem;
-            color: #94a3b8;
-            line-height: 1.5;
+            margin: 6px 0 0 0 !important;
+            font-size: 0.85rem !important;
+            color: #64748b !important;
+            line-height: 1.5 !important;
         }
         .invoice-meta {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 40px;
+            display: flex !important;
+            justify-content: space-between !important;
+            margin-bottom: 35px !important;
         }
         .meta-col h4 {
-            margin: 0 0 12px 0;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #52ead2;
+            margin: 0 0 12px 0 !important;
+            font-size: 0.78rem !important;
+            text-transform: uppercase !important;
+            letter-spacing: 1px !important;
+            color: #0d9488 !important;
+            font-weight: 700 !important;
         }
         .meta-col p {
-            margin: 4px 0;
-            font-size: 0.9rem;
-            line-height: 1.5;
-            color: #f1f5f9;
+            margin: 4px 0 !important;
+            font-size: 0.9rem !important;
+            line-height: 1.5 !important;
+            color: #334155 !important;
         }
         .meta-col p strong {
-            color: #ffffff;
-            font-size: 1rem;
+            color: #0f172a !important;
+            font-size: 1rem !important;
         }
         .details-col {
-            text-align: right;
+            text-align: right !important;
         }
         .details-grid {
-            display: grid;
-            grid-template-columns: auto auto;
-            gap: 8px 24px;
-            justify-content: right;
-            font-size: 0.9rem;
+            display: grid !important;
+            grid-template-columns: auto auto !important;
+            gap: 8px 24px !important;
+            justify-content: right !important;
+            font-size: 0.9rem !important;
         }
         .details-grid .label {
-            color: #94a3b8;
-            text-align: right;
+            color: #64748b !important;
+            text-align: right !important;
         }
         .details-grid .val {
-            font-weight: 600;
-            color: #ffffff;
-            text-align: left;
+            font-weight: 700 !important;
+            color: #0f172a !important;
+            text-align: left !important;
         }
         .invoice-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 40px;
+            width: 100% !important;
+            border-collapse: collapse !important;
+            margin-bottom: 35px !important;
         }
         .invoice-table th {
-            background-color: #0d1527;
-            color: #52ead2;
-            font-weight: 700;
-            font-size: 0.78rem;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            padding: 14px 16px;
-            text-align: left;
-            border-bottom: 1px solid rgba(82, 234, 210, 0.2);
-            white-space: nowrap;
+            background-color: #f8fafc !important;
+            color: #0f172a !important;
+            font-weight: 700 !important;
+            font-size: 0.78rem !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.8px !important;
+            padding: 14px 16px !important;
+            text-align: left !important;
+            border-bottom: 2px solid #e2e8f0 !important;
+            white-space: nowrap !important;
         }
         .invoice-table td {
-            padding: 20px 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            font-size: 0.9rem;
-            color: #f1f5f9;
+            padding: 18px 16px !important;
+            border-bottom: 1px solid #f1f5f9 !important;
+            font-size: 0.9rem !important;
+            color: #334155 !important;
         }
         .invoice-table th:nth-child(2), .invoice-table td:nth-child(2),
         .invoice-table th:nth-child(3), .invoice-table td:nth-child(3),
         .invoice-table th:nth-child(4), .invoice-table td:nth-child(4) {
-            text-align: right;
+            text-align: right !important;
         }
         .invoice-table td.desc strong {
-            display: block;
-            font-size: 0.95rem;
-            color: #ffffff;
-            margin-bottom: 4px;
+            display: block !important;
+            font-size: 0.95rem !important;
+            color: #0f172a !important;
+            margin-bottom: 4px !important;
         }
         .invoice-table td.desc span {
-            font-size: 0.8rem;
-            color: #94a3b8;
+            font-size: 0.8rem !important;
+            color: #0d9488 !important;
         }
         .summary-section {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 50px;
+            display: flex !important;
+            justify-content: flex-end !important;
+            margin-bottom: 40px !important;
         }
         .summary-table {
-            width: 320px;
-            font-size: 0.9rem;
+            width: 320px !important;
+            font-size: 0.9rem !important;
         }
         .summary-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            color: #94a3b8;
+            display: flex !important;
+            justify-content: space-between !important;
+            padding: 8px 0 !important;
+            color: #64748b !important;
         }
         .summary-row .val {
-            color: #ffffff;
-            font-weight: 600;
+            color: #0f172a !important;
+            font-weight: 600 !important;
         }
         .summary-row.total {
-            border-top: 1px solid rgba(82, 234, 210, 0.25);
-            padding-top: 14px;
-            margin-top: 6px;
-            color: #ffffff;
-            font-size: 1.1rem;
-            font-weight: 800;
+            border-top: 2px solid #e2e8f0 !important;
+            padding-top: 14px !important;
+            margin-top: 6px !important;
+            color: #0f172a !important;
+            font-size: 1.1rem !important;
+            font-weight: 800 !important;
         }
         .summary-row.total .val {
-            color: #52ead2;
+            color: #0d9488 !important;
         }
         .invoice-footer {
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            padding-top: 30px;
-            text-align: center;
+            border-top: 2px solid #f1f5f9 !important;
+            padding-top: 25px !important;
+            text-align: center !important;
         }
         .invoice-footer h5 {
-            margin: 0 0 8px 0;
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: #52ead2;
+            margin: 0 0 6px 0 !important;
+            font-size: 0.85rem !important;
+            font-weight: 700 !important;
+            color: #0f172a !important;
         }
         .invoice-footer p {
-            margin: 0;
-            font-size: 0.8rem;
-            color: #94a3b8;
-            line-height: 1.4;
+            margin: 0 !important;
+            font-size: 0.8rem !important;
+            color: #64748b !important;
+            line-height: 1.4 !important;
         }
         .invoice-footer .thank-you {
-            margin-top: 24px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #52ead2;
+            margin-top: 20px !important;
+            font-size: 0.95rem !important;
+            font-weight: 700 !important;
+            color: #0d9488 !important;
         }
         
         /* Interactive Controls */
         .controls {
-            max-width: 850px;
-            margin: 0 auto 20px auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            max-width: 850px !important;
+            margin: 0 auto 20px auto !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
         }
         .back-btn {
-            text-decoration: none;
-            color: #94a3b8;
-            font-size: 0.9rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: color 0.2s;
+            text-decoration: none !important;
+            color: #64748b !important;
+            font-size: 0.9rem !important;
+            font-weight: 600 !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            transition: color 0.2s !important;
         }
         .back-btn:hover {
-            color: #52ead2;
+            color: #0f172a !important;
         }
-        .print-btn {
-            background-color: #1e293b;
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.88rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            transition: all 0.2s;
+        .print-btn, #download-pdf-btn {
+            background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%) !important;
+            color: #051013 !important;
+            border: none !important;
+            padding: 10px 22px !important;
+            border-radius: 999px !important;
+            font-weight: 800 !important;
+            font-size: 0.88rem !important;
+            cursor: pointer !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            box-shadow: 0 4px 14px rgba(82, 234, 210, 0.35) !important;
+            transition: all 0.25s ease !important;
         }
-        .print-btn:hover {
-            background-color: #0f172a;
-        }
-        #download-pdf-btn {
-            background-color: #52ead2;
-            color: #050711;
-            border: none;
-            box-shadow: 0 2px 4px rgba(82, 234, 210, 0.25);
-        }
-        #download-pdf-btn:hover {
-            background-color: #2bc2a8;
+        .print-btn:hover, #download-pdf-btn:hover {
+            background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%) !important;
+            color: #051013 !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(82, 234, 210, 0.5) !important;
+            opacity: 0.95 !important;
         }
 
         @media print {
             body {
                 background-color: #ffffff !important;
                 color: #1e293b !important;
-                padding: 0;
+                padding: 0 !important;
             }
             .invoice-card {
                 background: #ffffff !important;
@@ -274,7 +273,7 @@
                 border-top: 1px solid #e2e8f0 !important;
             }
             .summary-row.total .val, .invoice-footer .thank-you {
-                color: #3b82f6 !important;
+                color: #0d9488 !important;
             }
             .no-print {
                 display: none !important;
@@ -290,11 +289,11 @@
         </a>
         <div style="display: flex; gap: 10px;">
             <button onclick="window.print();" class="print-btn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
                 Print Invoice
             </button>
             <button id="download-pdf-btn" class="print-btn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                 Download PDF
             </button>
         </div>
@@ -358,8 +357,6 @@
                     
                     <div class="label">Due Date:</div>
                     <div class="val">{{ $subscription->starts_at->format('F d, Y') }}</div>
-                    
-                    
                 </div>
             </div>
         </div>
@@ -376,20 +373,20 @@
             <tbody>
                 <tr>
                     <td class="desc">
-                        <strong style="display: block; font-size: 1.05rem; color: #ffffff; margin-bottom: 6px;">
+                        <strong style="display: block; font-size: 1.05rem; color: #0f172a; margin-bottom: 6px;">
                             {{ optional($subscription->package)->name ?? 'Standard Package' }} Plan
                         </strong>
                         @if(optional($subscription->package)->description)
-                            <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 8px; line-height: 1.4;">
+                            <div style="font-size: 0.85rem; color: #64748b; margin-bottom: 8px; line-height: 1.4;">
                                 {{ $subscription->package->description }}
                             </div>
                         @endif
-                        <span style="font-size: 0.8rem; color: #52ead2; display: block; font-weight: 500; margin-bottom: 8px;">
+                        <span style="font-size: 0.8rem; color: #0d9488; display: block; font-weight: 600; margin-bottom: 8px;">
                             Subscription Period: {{ $subscription->starts_at->format('d M Y') }} to {{ $subscription->ends_at->format('d M Y') }}
                         </span>
                         
                         @if(optional($subscription->package)->no_of_users || optional($subscription->package)->no_of_vehicles || optional($subscription->package)->no_of_locations)
-                            <div style="font-size: 0.78rem; color: #a8b3c5; line-height: 1.5; margin-top: 6px;">
+                            <div style="font-size: 0.78rem; color: #64748b; line-height: 1.5; margin-top: 6px;">
                                 @if(optional($subscription->package)->no_of_users)
                                     <span style="display: inline-block; margin-right: 12px;">• Max Users: {{ $subscription->package->no_of_users == -1 ? 'Unlimited' : $subscription->package->no_of_users }}</span>
                                 @endif

@@ -101,6 +101,57 @@
     .extra-item:hover {
         background: rgba(255,255,255,0.04);
     }
+
+    /* ═══════════════════════════════════════════════
+       LIGHT MODE OVERRIDES — EDIT BOOKING PAGE
+    ═══════════════════════════════════════════════ */
+    body.light-mode .dark-input {
+        background: #ffffff !important;
+        border: 1px solid rgba(15, 23, 42, 0.2) !important;
+        color: #0f172a !important;
+        -webkit-text-fill-color: #0f172a !important;
+    }
+    body.light-mode .dark-input option {
+        background: #ffffff !important;
+        color: #0f172a !important;
+    }
+    body.light-mode .dark-input:focus {
+        background: #f8fafc !important;
+        border-color: #0f766e !important;
+        box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.12) !important;
+        color: #0f172a !important;
+        -webkit-text-fill-color: #0f172a !important;
+    }
+    body.light-mode .dark-input[readonly] {
+        background: #f1f5f9 !important;
+        color: #64748b !important;
+        -webkit-text-fill-color: #64748b !important;
+    }
+    body.light-mode .dark-input::placeholder {
+        color: #94a3b8 !important;
+        -webkit-text-fill-color: #94a3b8 !important;
+    }
+    body.light-mode .dark-label {
+        color: #475569 !important;
+    }
+    body.light-mode .section-heading {
+        color: #0f172a !important;
+        border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+    }
+    body.light-mode .price-row {
+        color: #475569 !important;
+        border-bottom-color: rgba(15, 23, 42, 0.08) !important;
+    }
+    body.light-mode .price-row.total {
+        color: #0f172a !important;
+    }
+    body.light-mode .extra-item {
+        background: #f8fafc !important;
+        border: 1px solid rgba(15, 23, 42, 0.08) !important;
+    }
+    body.light-mode .extra-item:hover {
+        background: #f1f5f9 !important;
+    }
 </style>
 
 <div class="container-fluid p-4" style="min-width: 0; max-width: 100%; overflow-x: hidden;">

@@ -14,15 +14,20 @@ class BookingController extends Controller
 {
     public function index()
     {
-        
+        // Update last checked bookings timestamp to clear notification badge
         auth()->user()->update(['last_checked_bookings_at' => now()]);
 
         $bookings = Booking::with(['vehicle', 'pickupLocation', 'returnLocation', 'user', 'review', 'driver'])
             ->where('vendor_id', auth()->id())
             ->orderBy('created_at', 'desc')
             ->paginate(10);
-            
-        return view('vendor.bookings.index', compact('bookings'));
+
+        $activeDrivers = Driver::where('vendor_id', auth()->id())
+            ->where('status', 'active')
+            ->orderBy('name', 'asc')
+            ->get();
+
+        return view('vendor.bookings.index', compact('bookings', 'activeDrivers'));
     }
 
     public function payment()
@@ -114,12 +119,40 @@ class BookingController extends Controller
             ->where('id', $id)
             ->firstOrFail();
 
+        // Exclude drivers currently assigned to OTHER active bookings
+        $assignedDriverIds = Booking::where('vendor_id', auth()->id())
+            ->where('id', '!=', $id)
+            ->whereNotNull('driver_id')
+            ->whereNotIn('booking_status', ['completed', 'cancelled'])
+            ->pluck('driver_id')
+            ->toArray();
+
         $activeDrivers = Driver::where('vendor_id', auth()->id())
             ->where('status', 'active')
+            ->whereNotIn('id', $assignedDriverIds)
             ->orderBy('name', 'asc')
             ->get();
             
         return view('vendor.bookings.show', compact('booking', 'activeDrivers'));
+    }
+
+    public function invoice($id)
+    {
+        $booking = Booking::with([
+            'vehicle',
+            'pickupLocation',
+            'returnLocation',
+            'user',
+            'driver',
+            'extras',
+        ])
+            ->where('vendor_id', auth()->id())
+            ->where('id', $id)
+            ->firstOrFail();
+
+        $vendor = auth()->user();
+
+        return view('partials.booking-invoice', compact('booking', 'vendor'));
     }
 
     public function assignDriver(Request $request, $id)
@@ -154,7 +187,7 @@ class BookingController extends Controller
             'assigned_by_vendor' => auth()->id(),
         ]);
 
-        if ($request->ajax() || $request->wantsJson()) {
+        if ($request->ajax() || $request->wantsJson() || $request->expectsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
             return response()->json([
                 'success' => true,
                 'message' => 'Driver assigned successfully.',
@@ -176,7 +209,7 @@ class BookingController extends Controller
 
         if (in_array(strtolower($booking->booking_status), ['completed', 'cancelled'])) {
             $msg = 'Driver assignment cannot be modified for ' . strtolower($booking->booking_status) . ' bookings.';
-            if ($request->ajax() || $request->wantsJson()) {
+            if ($request->ajax() || $request->wantsJson() || $request->expectsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
                 return response()->json(['success' => false, 'message' => $msg], 422);
             }
             return redirect()->back()->with('error', $msg);
@@ -188,7 +221,7 @@ class BookingController extends Controller
             'assigned_by_vendor' => null,
         ]);
 
-        if ($request->ajax() || $request->wantsJson()) {
+        if ($request->ajax() || $request->wantsJson() || $request->expectsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
             return response()->json([
                 'success' => true,
                 'message' => 'Driver assignment removed successfully.'

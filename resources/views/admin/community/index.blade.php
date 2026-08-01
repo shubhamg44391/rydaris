@@ -394,7 +394,7 @@
 
                                 <!-- Post Title -->
                                 <h5 class="community-post-title-text">
-                                    <a href="{{ route('admin.community.show', $post->id) }}" class="card-title-link">
+                                    <a href="{{ route('admin.community.show', $post->slug ?? $post->id) }}" class="card-title-link">
                                         {{ $post->title }}
                                     </a>
                                 </h5>
@@ -426,7 +426,7 @@
                                     </div>
 
                                     <div>
-                                        <a href="{{ route('admin.community.show', $post->id) }}" class="btn btn-sm btn-community-view">
+                                        <a href="{{ route('admin.community.show', $post->slug ?? $post->id) }}" class="btn btn-sm btn-community-view">
                                             View 
                                         </a>
                                     </div>

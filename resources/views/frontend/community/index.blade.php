@@ -405,7 +405,7 @@
 
             <!-- Post Title -->
             <h3 class="community-card-title">
-              <a href="{{ route('community.show', $post->id) }}" class="card-title-link">
+              <a href="{{ route('community.show', $post->slug ?? $post->id) }}" class="card-title-link">
                 {{ $post->title }}
               </a>
             </h3>
@@ -421,7 +421,7 @@
                 {{ $post->comments->count() }} ANSWERS
               </span>
 
-              <a href="{{ route('community.show', $post->id) }}" class="btn-view-answers">
+              <a href="{{ route('community.show', $post->slug ?? $post->id) }}" class="btn-view-answers">
                 View & Answers &rarr;
               </a>
             </div>

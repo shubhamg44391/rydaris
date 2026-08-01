@@ -1,9 +1,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/19.2.16/css/intlTelInput.css"/>
 <style>
     /* intl-tel-input dark theme overrides */
-    .iti { width: 100%; display: block; }
-    .iti__dropdown-content { background: #111620 !important; border: 1px solid rgba(255,255,255,0.12) !important; color: #fff !important; border-radius: 8px !important; z-index: 9999 !important; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important; }
-    .iti__country-list { background: #111620 !important; border: none !important; color: #fff !important; z-index: 9999 !important; margin: 0 !important; }
+    .iti { width: 100%; display: block; position: relative; z-index: 100; }
+    .iti__dropdown-content { background: #111620 !important; border: 1px solid rgba(255,255,255,0.12) !important; color: #fff !important; border-radius: 8px !important; z-index: 999999 !important; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8) !important; }
+    .iti__country-list { background: #111620 !important; border: none !important; color: #fff !important; z-index: 999999 !important; margin: 0 !important; max-height: 200px !important; }
     .iti__country-list .iti__country:hover, .iti__country-list .iti__country.iti__highlight { background: rgba(82, 234, 210, 0.15) !important; }
     .iti__selected-flag { background: transparent !important; padding: 0 12px !important; border-right: 1px solid rgba(255, 255, 255, 0.12) !important; display: flex !important; flex-direction: row !important; align-items: center !important; flex-wrap: nowrap !important; gap: 6px !important; }
     .iti__flag { order: 1 !important; }
@@ -21,7 +21,7 @@
     .iti__country-name { display: none !important; }
     .iti__dial-code { margin-left: 8px !important; font-weight: 600 !important; color: #fff !important; }
     .iti__country { display: flex !important; align-items: center !important; padding: 8px 12px !important; gap: 4px !important; }
-    #custom_pkg_phone, #reg_phone, #demo_inquiry_phone { padding-left: 115px !important; }
+    #custom_pkg_phone, #reg_phone, #demo_inquiry_phone, #vendor_phone, #driver_phone_input, #phone { padding-left: 115px !important; }
 
     /* Dark Scrollbar overrides */
     .iti__country-list::-webkit-scrollbar {

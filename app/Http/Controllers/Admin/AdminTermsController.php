@@ -18,41 +18,42 @@ class AdminTermsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title'            => 'required|string|max:255',
-            'meta_title'       => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string|max:500',
-            'description'      => 'required|string',
+            'title'                 => 'required|string|max:255',
+            'meta_title'            => 'nullable|string|max:255',
+            'meta_description'      => 'nullable|string|max:500',
+            'description'           => 'required|string',
+            'agreement_title'       => 'nullable|string|max:255',
+            'agreement_description' => 'nullable|string',
         ], [
             'title.required'       => 'Title is required.',
-            'description.required' => 'Description / Content is required.',
+            'description.required' => 'Terms description / content is required.',
         ]);
 
         $page = AdminTermsCondition::first();
 
+        $data = [
+            'title'                 => $request->title,
+            'meta_title'            => $request->meta_title,
+            'meta_description'      => $request->meta_description,
+            'description'           => $request->description,
+            'agreement_title'       => $request->agreement_title,
+            'agreement_description' => $request->agreement_description,
+        ];
+
         if ($page) {
-            $page->update([
-                'title'            => $request->title,
-                'meta_title'       => $request->meta_title,
-                'meta_description' => $request->meta_description,
-                'description'      => $request->description,
-            ]);
+            $page->update($data);
         } else {
-            AdminTermsCondition::create([
-                'title'            => $request->title,
-                'meta_title'       => $request->meta_title,
-                'meta_description' => $request->meta_description,
-                'description'      => $request->description,
-            ]);
+            AdminTermsCondition::create($data);
         }
 
         if ($request->wantsJson() || $request->ajax()) {
             return response()->json([
                 'success' => true,
-                'message' => 'Terms & Conditions saved successfully!'
+                'message' => 'Terms & Conditions and Agreement saved successfully!'
             ]);
         }
 
         return redirect()->route('admin.terms.index')
-            ->with('success', 'Terms & Conditions saved successfully!');
+            ->with('success', 'Terms & Conditions and Agreement saved successfully!');
     }
 }

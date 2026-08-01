@@ -12,11 +12,35 @@ class CommunityPost extends Model
     protected $fillable = [
         'user_id',
         'title',
+        'slug',
         'content',
         'image',
         'is_published',
         'likes_count',
     ];
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+    protected static function booted()
+    {
+        static::saving(function ($post) {
+            if (empty($post->slug) && !empty($post->title)) {
+                $baseSlug = \Illuminate\Support\Str::slug($post->title);
+                $slug = $baseSlug ?: 'post';
+                $originalSlug = $slug;
+                $count = 1;
+
+                while (static::where('slug', $slug)->where('id', '!=', $post->id ?? 0)->exists()) {
+                    $slug = $originalSlug . '-' . $count++;
+                }
+
+                $post->slug = $slug;
+            }
+        });
+    }
 
     protected $casts = [
         'is_published' => 'boolean',

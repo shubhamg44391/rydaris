@@ -380,7 +380,7 @@
 
                                 <!-- Post Title -->
                                 <h5 class="community-post-title-text">
-                                    <a href="{{ route('vendor.community.show', $post->id) }}" class="card-title-link">
+                                    <a href="{{ route('vendor.community.show', $post->slug ?? $post->id) }}" class="card-title-link">
                                         {{ $post->title }}
                                     </a>
                                 </h5>
@@ -397,7 +397,7 @@
                                     </span>
 
                                     <div>
-                                        <a href="{{ route('vendor.community.show', $post->id) }}" class="btn btn-sm btn-community-view">
+                                        <a href="{{ route('vendor.community.show', $post->slug ?? $post->id) }}" class="btn btn-sm btn-community-view">
                                             View
                                         </a>
                                     </div>

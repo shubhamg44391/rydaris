@@ -118,13 +118,13 @@
 
     
     <div id="invoiceModal" style="display: none; position: fixed; inset: 0; z-index: 100000; padding: 16px; box-sizing: border-box; align-items: center; justify-content: center;">
-        <div style="position: absolute; inset: 0; background: rgba(5, 7, 17, 0.85); backdrop-filter: blur(8px);" onclick="closeInvoiceModal()"></div>
-        <div class="invoice-modal-card" style="position: relative; z-index: 1; width: 100%; max-width: 900px; height: calc(100vh - 40px); background: #050711; border-radius: 12px; overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,0.7); display: flex; flex-direction: column; border: 1px solid rgba(82, 234, 210, 0.25);">
-            <div class="invoice-modal-header" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; border-bottom: 1px solid rgba(82, 234, 210, 0.2); background: #0b1020;">
-                <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: #ffffff;">Package Invoice</h3>
-                <button type="button" class="subscription-modal-close" onclick="closeInvoiceModal()" style="background: none; border: none; font-size: 24px; color: #94a3b8; cursor: pointer; line-height: 1;">&times;</button>
+        <div style="position: absolute; inset: 0; background: rgba(5, 7, 17, 0.7); backdrop-filter: blur(8px);" onclick="closeInvoiceModal()"></div>
+        <div class="invoice-modal-card" style="position: relative; z-index: 1; width: 100%; max-width: 900px; height: calc(100vh - 40px); background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,0.3); display: flex; flex-direction: column; border: 1px solid #e2e8f0;">
+            <div class="invoice-modal-header" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; border-bottom: 1px solid #e2e8f0; background: #ffffff;">
+                <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: #0f172a;">Package Invoice</h3>
+                <button type="button" class="subscription-modal-close" onclick="closeInvoiceModal()" style="background: none; border: none; font-size: 24px; color: #64748b; cursor: pointer; line-height: 1;">&times;</button>
             </div>
-            <iframe id="invoiceIframe" style="width: 100%; height: 100%; border: none; background: #050711;"></iframe>
+            <iframe id="invoiceIframe" style="width: 100%; height: 100%; border: none; background: #f8fafc;"></iframe>
         </div>
     </div>
 

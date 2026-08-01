@@ -13,6 +13,8 @@ class VendorPage extends Model
         'vendor_id',
         'title',
         'description',
+        'agreement_title',
+        'agreement_description',
     ];
 
     public function vendor()

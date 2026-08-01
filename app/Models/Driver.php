@@ -17,6 +17,7 @@ class Driver extends Model
         'email',
         'license_number',
         'license_expiry',
+        'license_image',
         'photo',
         'notes',
         'status',

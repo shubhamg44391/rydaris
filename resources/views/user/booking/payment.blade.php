@@ -441,47 +441,73 @@
     }
 
     function submitBookingForm(paymentMethod, razorpayPaymentId = null) {
-        // Create a form dynamically to POST all data
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = `{{ url('/user/book') }}/{{ $vehicle->id }}/store`;
-
-        // Add CSRF token
-        const csrfInput = document.createElement('input');
-        csrfInput.type = 'hidden';
-        csrfInput.name = '_token';
-        csrfInput.value = '{{ csrf_token() }}';
-        form.appendChild(csrfInput);
-
-        // Add all URL parameters to the form
         const urlParams = new URLSearchParams(window.location.search);
         urlParams.set('payment_method', paymentMethod);
-        
-        for (const [key, value] of urlParams.entries()) {
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = key;
-            input.value = value;
-            form.appendChild(input);
-        }
-
-        // Add total price
-        const totalInput = document.createElement('input');
-        totalInput.type = 'hidden';
-        totalInput.name = 'total_price';
-        totalInput.value = '{{ $grandTotal }}';
-        form.appendChild(totalInput);
-
+        urlParams.set('total_price', '{{ $grandTotal }}');
         if (razorpayPaymentId) {
-            const rzpInput = document.createElement('input');
-            rzpInput.type = 'hidden';
-            rzpInput.name = 'razorpay_payment_id';
-            rzpInput.value = razorpayPaymentId;
-            form.appendChild(rzpInput);
+            urlParams.set('razorpay_payment_id', razorpayPaymentId);
         }
 
-        document.body.appendChild(form);
-        form.submit();
+        const dataObj = {};
+        for (const [key, value] of urlParams.entries()) {
+            dataObj[key] = value;
+        }
+        dataObj['_token'] = '{{ csrf_token() }}';
+
+        Swal.fire({
+            title: 'Processing Booking...',
+            text: 'Please wait while we finalize your reservation.',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            },
+            background: 'rgba(11, 16, 32, 0.95)'
+        });
+
+        $.ajax({
+            url: `{{ url('/user/book') }}/{{ $vehicle->id }}/store`,
+            type: 'POST',
+            data: dataObj,
+            dataType: 'json',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function(response) {
+                if (response.success && response.redirect_url) {
+                    window.location.href = response.redirect_url;
+                } else if (response.redirect_url) {
+                    window.location.href = response.redirect_url;
+                } else {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Booking Placed!',
+                        text: 'Redirecting to confirmation...',
+                        background: 'rgba(11, 16, 32, 0.95)',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.href = `{{ url('/user/book') }}/{{ $vehicle->id }}/bookingsucces?` + $.param(dataObj);
+                    });
+                }
+            },
+            error: function(xhr) {
+                let errorMsg = 'An error occurred while placing your booking. Please try again.';
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMsg = xhr.responseJSON.message;
+                } else if (xhr.responseText) {
+                    try {
+                        let res = JSON.parse(xhr.responseText);
+                        if (res.message) errorMsg = res.message;
+                    } catch(e){}
+                }
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Booking Failed',
+                    text: errorMsg,
+                    background: 'rgba(11, 16, 32, 0.95)'
+                });
+            }
+        });
     }
 </script>
 

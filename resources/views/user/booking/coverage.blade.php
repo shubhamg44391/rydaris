@@ -53,7 +53,7 @@
             <div class="col-lg-8">
                 
                 
-                <div class="card dark-card mb-4" style="background: linear-gradient(135deg, rgba(128, 167, 255, 0.15) 0%, rgba(82, 234, 210, 0.15) 100%), #08121c; border: 1px solid rgba(82, 234, 210, 0.35); border-radius: 16px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25), 0 0 25px rgba(82, 234, 210, 0.12); overflow: hidden; backdrop-filter: blur(16px);">
+                <div class="card dark-card mb-4" style="background: rgba(11, 16, 32, 0.75); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25); overflow: hidden; backdrop-filter: blur(16px);">
                     <div class="card-header border-0 p-4 pb-0" style="background: transparent;">
                         <h4 style="color: #f8fafc; font-weight: 800; font-size: 1.25rem;">Coverage</h4>
                     </div>
@@ -131,7 +131,7 @@
                 </div>
 
                 
-                <div class="card dark-card" style="background: linear-gradient(135deg, rgba(128, 167, 255, 0.15) 0%, rgba(82, 234, 210, 0.15) 100%), #08121c; border: 1px solid rgba(82, 234, 210, 0.35); border-radius: 16px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25), 0 0 25px rgba(82, 234, 210, 0.12); overflow: hidden; backdrop-filter: blur(16px);">
+                <div class="card dark-card" style="background: rgba(11, 16, 32, 0.75); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25); overflow: hidden; backdrop-filter: blur(16px);">
                     <div class="card-header border-0 p-4 pb-2" style="background: transparent;">
                         <h4 style="color: #f8fafc; font-weight: 800; font-size: 1.25rem;">Rental Car Equipment</h4>
                     </div>
@@ -179,69 +179,69 @@
             
             <div class="col-lg-4">
                 <div class="summary-sidebar sticky-top" style="top: 20px;">
-                    <div class="card dark-card" style="background: linear-gradient(135deg, rgba(128, 167, 255, 0.15) 0%, rgba(82, 234, 210, 0.15) 100%), #08121c; border: 1px solid rgba(82, 234, 210, 0.35); border-radius: 16px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.25), 0 0 25px rgba(82, 234, 210, 0.12); backdrop-filter: blur(16px);">
+                    <div class="booking-summary-card card" style="border-radius: 16px; overflow: hidden;">
                         
-                        
-                        <div style="background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 70%); height: 160px; display: flex; align-items: center; justify-content: center; padding: 20px;">
+                        <!-- Vehicle Image -->
+                        <div class="booking-summary-img" style="height: 160px; display: flex; align-items: center; justify-content: center; padding: 20px;">
                             @if($vehicle->image)
-                                <img src="{{ asset('storage/' . $vehicle->image) }}" alt="{{ $vehicle->name }}" style="max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.5));">
+                                <img src="{{ asset('storage/' . $vehicle->image) }}" alt="{{ $vehicle->name }}" style="max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.25));">
                             @endif
                         </div>
                         
-                        
+                        <!-- Vehicle Name -->
                         <div class="p-4 pb-0">
-                            <h3 style="font-weight: 800; color: #ffffff; font-size: 1.4rem;">{{ $vehicle->name }}</h3>
+                            <h3 class="booking-summary-title" style="font-weight: 800; font-size: 1.4rem; margin: 0;">{{ $vehicle->name }}</h3>
                         </div>
 
-                        
+                        <!-- Pickup / Return block -->
                         <div class="p-4">
-                            <div style="background: rgba(5, 11, 25, 0.4); border: 1px solid rgba(82, 234, 210, 0.2); border-radius: 12px; padding: 15px; margin-bottom: 25px;">
+                            <div class="booking-dates-block" style="border-radius: 12px; padding: 15px; margin-bottom: 25px;">
                                 <div class="mb-3">
-                                    <h6 style="color: #f8fafc; font-size: 0.8rem; font-weight: 700; margin-bottom: 5px;">Pick up</h6>
+                                    <h6 class="booking-label" style="font-size: 0.8rem; font-weight: 700; margin-bottom: 5px;">Pick up</h6>
                                     <div class="d-flex justify-content-between align-items-start">
-                                        <span style="color: #94a3b8; font-size: 0.75rem; max-width: 65%;">{{ $pickupLocation ? $pickupLocation->location : 'Selected Location' }}</span>
-                                        <span style="color: #cbd5e1; font-size: 0.75rem; text-align: right; font-weight: 600;">{{ $pickupDate ?? 'Today' }}<br>{{ $pickupTime }} Hrs</span>
+                                        <span class="booking-muted" style="font-size: 0.75rem; max-width: 65%;">{{ $pickupLocation ? $pickupLocation->location : 'Selected Location' }}</span>
+                                        <span class="booking-date-value" style="font-size: 0.75rem; text-align: right; font-weight: 600;">{{ $pickupDate ?? 'Today' }}<br>{{ $pickupTime }} Hrs</span>
                                     </div>
                                 </div>
-                                <div style="height: 1px; background: rgba(255,255,255,0.1); margin: 10px 0;"></div>
+                                <div class="booking-divider" style="height: 1px; margin: 10px 0;"></div>
                                 <div>
-                                    <h6 style="color: #f8fafc; font-size: 0.8rem; font-weight: 700; margin-bottom: 5px;">Return</h6>
+                                    <h6 class="booking-label" style="font-size: 0.8rem; font-weight: 700; margin-bottom: 5px;">Return</h6>
                                     <div class="d-flex justify-content-between align-items-start">
-                                        <span style="color: #94a3b8; font-size: 0.75rem; max-width: 65%;">{{ $returnLocation ? $returnLocation->location : 'Selected Location' }}</span>
-                                        <span style="color: #cbd5e1; font-size: 0.75rem; text-align: right; font-weight: 600;">{{ $returnDate ?? '+2 Days' }}<br>{{ $returnTime }} Hrs</span>
+                                        <span class="booking-muted" style="font-size: 0.75rem; max-width: 65%;">{{ $returnLocation ? $returnLocation->location : 'Selected Location' }}</span>
+                                        <span class="booking-date-value" style="font-size: 0.75rem; text-align: right; font-weight: 600;">{{ $returnDate ?? '+2 Days' }}<br>{{ $returnTime }} Hrs</span>
                                     </div>
                                 </div>
                             </div>
 
-                            
+                            <!-- Cost breakdown -->
                             <div class="cost-breakdown">
                                 <div class="d-flex justify-content-between mb-2">
-                                    <span style="color: #94a3b8; font-size: 0.8rem;">Rental Price ({{ $rentalDays }} Days)</span>
-                                    <span style="color: #f8fafc; font-weight: 600; font-size: 0.85rem;">${{ number_format($vehicle->total_price, 2) }}</span>
+                                    <span class="booking-muted" style="font-size: 0.8rem;">Rental Price ({{ $rentalDays }} Days)</span>
+                                    <span class="booking-value" style="font-weight: 600; font-size: 0.85rem;">${{ number_format($vehicle->total_price, 2) }}</span>
                                 </div>
                                 <div class="d-flex justify-content-between mb-2">
-                                    <span style="color: #94a3b8; font-size: 0.8rem; max-width: 75%;">Pickup Location Fee</span>
-                                    <span style="color: #f8fafc; font-weight: 600; font-size: 0.85rem;">$0.00</span>
+                                    <span class="booking-muted" style="font-size: 0.8rem; max-width: 75%;">Pickup Location Fee</span>
+                                    <span class="booking-value" style="font-weight: 600; font-size: 0.85rem;">$0.00</span>
                                 </div>
                                 <div class="d-flex justify-content-between mb-2">
-                                    <span style="color: #94a3b8; font-size: 0.8rem; max-width: 75%;">Return Location Fee</span>
-                                    <span style="color: #f8fafc; font-weight: 600; font-size: 0.85rem;">$0.00</span>
+                                    <span class="booking-muted" style="font-size: 0.8rem; max-width: 75%;">Return Location Fee</span>
+                                    <span class="booking-value" style="font-weight: 600; font-size: 0.85rem;">$0.00</span>
                                 </div>
                                 <div class="d-flex justify-content-between mb-2">
-                                    <span style="color: #94a3b8; font-size: 0.8rem;">Insurance</span>
-                                    <span style="color: #f8fafc; font-weight: 600; font-size: 0.85rem;" id="insurance-cost">$0.00</span>
+                                    <span class="booking-muted" style="font-size: 0.8rem;">Insurance</span>
+                                    <span class="booking-value" style="font-weight: 600; font-size: 0.85rem;" id="insurance-cost">$0.00</span>
                                 </div>
                                 <div class="d-flex justify-content-between mb-4">
-                                    <span style="color: #94a3b8; font-size: 0.8rem;">Extras</span>
-                                    <span style="color: #f8fafc; font-weight: 600; font-size: 0.85rem;" id="extras-cost">$0.00</span>
+                                    <span class="booking-muted" style="font-size: 0.8rem;">Extras</span>
+                                    <span class="booking-value" style="font-weight: 600; font-size: 0.85rem;" id="extras-cost">$0.00</span>
                                 </div>
                             </div>
                         </div>
 
-                        
-                        <div class="p-4" style="background: linear-gradient(135deg, rgba(82, 234, 210, 0.25) 0%, rgba(0, 164, 228, 0.25) 100%); border-top: 1px solid rgba(82, 234, 210, 0.35); display: flex; justify-content: space-between; align-items: center;">
-                            <span style="color: #ffffff; font-weight: 800; font-size: 1.25rem;">Total</span>
-                            <span style="color: #ffffff; font-weight: 900; font-size: 1.8rem;" id="grand-total">${{ number_format($vehicle->total_price, 2) }}</span>
+                        <!-- Total footer -->
+                        <div class="booking-total-bar p-4 d-flex justify-content-between align-items-center">
+                            <span style="font-weight: 800; font-size: 1.25rem;">Total</span>
+                            <span style="font-weight: 900; font-size: 1.8rem;" id="grand-total">${{ number_format($vehicle->total_price, 2) }}</span>
                         </div>
                     </div>
                 </div>
@@ -251,6 +251,22 @@
     </div>
     </div>
 </div>
+@endsection
+
+@section('css')
+<style>
+    /* Override Bootstrap .card background for booking flow - use dark navy style */
+    .booking-coverage-page .card {
+        background: rgba(11, 16, 32, 0.85) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 16px !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+    }
+    .booking-coverage-page .card-header {
+        background: transparent !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+    }
+</style>
 @endsection
 
 @section('js')

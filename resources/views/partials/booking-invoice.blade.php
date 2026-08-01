@@ -421,8 +421,8 @@
 
     
     <div class="controls">
-        <a href="javascript:void(0);" onclick="window.parent.closeInvoiceModal ? window.parent.closeInvoiceModal() : window.history.back();" class="back-btn">
-            <i class="fa fa-arrow-left"></i> Back to Dashboard
+        <a href="{{ route('vendor.bookings.index') }}" class="back-btn">
+            <i class="fa fa-arrow-left"></i> Back to Bookings
         </a>
         <div class="action-buttons">
             <button onclick="window.print()" class="btn-action btn-print">

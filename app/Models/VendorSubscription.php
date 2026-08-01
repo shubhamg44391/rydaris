@@ -40,20 +40,30 @@ class VendorSubscription extends Model
     {
         static::created(function ($subscription) {
             if ($subscription->status === 'active') {
-                try {
-                    
-                    SiteSetting::setMailConfig();
-
-                    $vendor = $subscription->vendor;
-                    if ($vendor && $vendor->email) {
-                        Mail::to($vendor->email)
-                            ->send(new PlanActivationMail($subscription));
-                    }
-                } catch (\Exception $e) {
-                    Log::error("Failed to send subscription activation email to vendor: " . $e->getMessage());
-                }
+                self::dispatchActivationEmail($subscription);
             }
         });
+
+        static::updated(function ($subscription) {
+            if ($subscription->wasChanged('status') && $subscription->status === 'active') {
+                self::dispatchActivationEmail($subscription);
+            }
+        });
+    }
+
+    public static function dispatchActivationEmail($subscription)
+    {
+        try {
+            SiteSetting::setMailConfig();
+            $subscription->loadMissing(['vendor', 'package']);
+            $vendor = $subscription->vendor;
+
+            if ($vendor && $vendor->email) {
+                Mail::to($vendor->email)->send(new PlanActivationMail($subscription));
+            }
+        } catch (\Throwable $e) {
+            Log::error("Failed to send subscription activation invoice email to vendor: " . $e->getMessage());
+        }
     }
 
     public function vendor()

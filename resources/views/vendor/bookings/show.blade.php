@@ -75,7 +75,34 @@
                         border-color: #3b82f6 !important;
                         box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25) !important;
                     }
-                    input[type="date"], input[type="time"] {
+                    /* Custom calendar icon — replaces native browser icon */
+                    input[type="date"],
+                    input[type="date"].dark-input {
+                        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%2352ead2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E") !important;
+                        background-repeat: no-repeat !important;
+                        background-position: right 12px center !important;
+                        background-size: 18px 18px !important;
+                        padding-right: 40px !important;
+                        cursor: pointer !important;
+                    }
+                    input[type="date"]::-webkit-calendar-picker-indicator {
+                        opacity: 0 !important;
+                        position: absolute;
+                        right: 0;
+                        width: 40px;
+                        height: 100%;
+                        cursor: pointer !important;
+                    }
+                    body.light-mode input[type="date"],
+                    body.light-mode input[type="date"].dark-input {
+                        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%230f766e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E") !important;
+                        background-repeat: no-repeat !important;
+                        background-position: right 12px center !important;
+                        background-size: 18px 18px !important;
+                        color: #0f172a !important;
+                        -webkit-text-fill-color: #0f172a !important;
+                    }
+                    input[type="time"] {
                         cursor: pointer !important;
                     }
                     .dark-label {
@@ -83,6 +110,15 @@
                         font-size: 0.85rem;
                         font-weight: 600;
                         margin-bottom: 8px;
+                    }
+
+                    .assigned-driver-name {
+                        color: #52ead2 !important;
+                        -webkit-text-fill-color: #52ead2 !important;
+                    }
+                    body.light-mode .assigned-driver-name {
+                        color: #0f766e !important;
+                        -webkit-text-fill-color: #0f766e !important;
                     }
 
                     /* Light Mode Overrides */
@@ -115,11 +151,23 @@
                         background: #ffffff !important;
                         border: 1px solid #cbd5e1 !important;
                         color: #0f172a !important;
+                        -webkit-text-fill-color: #0f172a !important;
+                    }
+                    body.light-mode .dark-input::placeholder {
+                        color: #94a3b8 !important;
+                        -webkit-text-fill-color: #94a3b8 !important;
                     }
                     body.light-mode input.dark-input[readonly],
                     body.light-mode textarea.dark-input[readonly] {
                         background: #f8fafc !important;
                         color: #0f172a !important;
+                        -webkit-text-fill-color: #64748b !important;
+                    }
+                    body.light-mode input[type="date"].dark-input,
+                    body.light-mode input[type="time"].dark-input {
+                        color: #0f172a !important;
+                        -webkit-text-fill-color: #0f172a !important;
+                        background: #ffffff !important;
                     }
                     body.light-mode input.dark-input[style*="#52ead2"] {
                         color: #0f766e !important;
@@ -163,7 +211,19 @@
                     </div>
                     <div class="col-md-6">
                         <label class="dark-label">Phone Number *</label>
-                        <input type="tel" name="customer_phone" id="vendor_phone" class="form-control dark-input" value="{{ old('customer_phone', $booking->customer_phone) }}" required style="width: 100%;">
+                        @include('partials.phone-input')
+                        <input type="tel" id="vendor_phone" class="form-control dark-input" value="{{ old('customer_phone', $booking->customer_phone) }}" required style="width: 100%;">
+                        <input type="hidden" name="country_code" id="hidden_country_code" value="{{ old('country_code', $booking->country_code ?? '') }}">
+                        <input type="hidden" name="customer_phone" id="hidden_contact_number" value="{{ old('customer_phone', $booking->customer_phone) }}">
+                        <script>
+                            (function setupVendorPhone() {
+                                if (typeof initializeIntlTelInput === 'function') {
+                                    initializeIntlTelInput('vendor_phone', 'hidden_country_code', 'hidden_contact_number');
+                                } else {
+                                    setTimeout(setupVendorPhone, 50);
+                                }
+                            })();
+                        </script>
                     </div>
                     
                     <div class="col-md-3 mt-4">
@@ -200,7 +260,11 @@
                     </div>
                     <div class="col-md-3">
                         <label class="dark-label">Pickup Date *</label>
-                        <input type="date" name="pickup_date" class="form-control dark-input" value="{{ old('pickup_date', $booking->pickup_date ? date('Y-m-d', strtotime($booking->pickup_date)) : '') }}" required>
+                        @php
+                            $pTimestamp = $booking->pickup_date ? strtotime($booking->pickup_date) : false;
+                            $pDate = ($pTimestamp && $pTimestamp > 0) ? date('Y-m-d', $pTimestamp) : '';
+                        @endphp
+                        <input type="date" name="pickup_date" class="form-control dark-input" value="{{ old('pickup_date', $pDate) }}" required>
                     </div>
                     <div class="col-md-3">
                         <label class="dark-label">Pickup Time *</label>
@@ -213,7 +277,11 @@
                     </div>
                     <div class="col-md-3 mt-4">
                         <label class="dark-label">Return Date *</label>
-                        <input type="date" name="return_date" class="form-control dark-input" value="{{ old('return_date', $booking->return_date ? date('Y-m-d', strtotime($booking->return_date)) : '') }}" required>
+                        @php
+                            $rTimestamp = $booking->return_date ? strtotime($booking->return_date) : false;
+                            $rDate = ($rTimestamp && $rTimestamp > 0) ? date('Y-m-d', $rTimestamp) : '';
+                        @endphp
+                        <input type="date" name="return_date" class="form-control dark-input" value="{{ old('return_date', $rDate) }}" required>
                     </div>
                     <div class="col-md-3 mt-4">
                         <label class="dark-label">Return Time *</label>
@@ -278,15 +346,15 @@
                     <div class="row g-4 align-items-end" id="driverDetailsBlock">
                         <div class="col-md-3">
                             <label class="dark-label">Driver Name</label>
-                            <input type="text" class="form-control dark-input" value="{{ $booking->driver->name }}" readonly style="background: rgba(255,255,255,0.02) !important; font-weight: 600; color: #52ead2 !important;">
+                            <input type="text" class="form-control dark-input assigned-driver-name" value="{{ $booking->driver->name }}" readonly style="font-weight: 600;">
                         </div>
                         <div class="col-md-3">
                             <label class="dark-label">Contact Number</label>
-                            <input type="text" class="form-control dark-input" value="{{ $booking->driver->phone }}" readonly style="background: rgba(255,255,255,0.02) !important;">
+                            <input type="text" class="form-control dark-input" value="{{ $booking->driver->phone }}" readonly>
                         </div>
                         <div class="col-md-4">
                             <label class="dark-label">Address</label>
-                            <input type="text" class="form-control dark-input" value="{{ $booking->driver->address }}" readonly style="background: rgba(255,255,255,0.02) !important;">
+                            <input type="text" class="form-control dark-input" value="{{ $booking->driver->address }}" readonly>
                         </div>
                         <div class="col-md-2 text-end d-flex align-items-center justify-content-end" style="height: 38px;">
                             <div class="d-flex gap-2 justify-content-end w-100">
@@ -301,12 +369,12 @@
                     </div>
                 @else
                     <div class="row g-4 align-items-end" id="noDriverBlock">
-                        <div class="col-md-10">
+                        <div class="col-md-9 col-lg-10">
                             <label class="dark-label">Driver Status</label>
-                            <input type="text" class="form-control dark-input" value="No Driver Assigned" readonly style="background: rgba(255,255,255,0.02) !important; color: #94a3b8 !important; font-style: italic;">
+                            <input type="text" class="form-control dark-input" value="No Driver Assigned" readonly style="font-style: italic;">
                         </div>
-                        <div class="col-md-2 text-end d-flex align-items-center justify-content-end" style="height: 38px;">
-                            <button type="button" class="btn btn-sm w-100" onclick="openAssignDriverModal()" style="background: var(--brand, #52ead2); color: #061218; font-weight: 700; border: none; border-radius: 6px; padding: 9px 18px;">
+                        <div class="col-md-3 col-lg-2 text-end d-flex align-items-center justify-content-end" style="height: 38px;">
+                            <button type="button" class="btn" onclick="openAssignDriverModal()" style="background: linear-gradient(135deg, #80a7ff 0%, #52ead2 100%); color: #051013; font-weight: 700; border: none; border-radius: 999px; padding: 8px 24px; white-space: nowrap; width: 100%;">
                                 Assign Driver
                             </button>
                         </div>
@@ -421,7 +489,7 @@
             </h5>
             <button type="button" onclick="closeAssignDriverModal()" style="background: none; border: none; color: #94a3b8; font-size: 1.4rem; cursor: pointer; line-height: 1;">&times;</button>
         </div>
-        <form id="assignDriverForm">
+        <form id="assignDriverForm" onsubmit="event.preventDefault(); submitAssignDriverForm();">
             @csrf
             <div style="padding: 20px;">
                 <label style="color: #94a3b8; font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 8px;">Select Driver *</label>
@@ -436,12 +504,12 @@
                     @endif
                 </select>
                 @if(isset($activeDrivers) && $activeDrivers->isEmpty())
-                    <p style="color: #f87171; font-size: 0.82rem; margin-top: 8px; margin-bottom: 0;">No active drivers available. Please add or activate a driver first.</p>
+                    <p style="color: #f87171; font-size: 0.82rem; margin-top: 8px; margin-bottom: 0;">No available unassigned drivers. All active drivers are currently assigned to active trips.</p>
                 @endif
             </div>
             <div style="padding: 14px 20px; border-top: 1px solid var(--line, #334155); display: flex; justify-content: flex-end; gap: 10px;">
                 <button type="button" onclick="closeAssignDriverModal()" class="btn btn-secondary rounded-pill px-4" style="font-weight: 700;">Cancel</button>
-                <button type="submit" id="btnAssignDriverSubmit" class="btn btn-primary rounded-pill px-4" style="background: var(--brand, #52ead2); color: #061218; border: none; font-weight: 700;" {{ (isset($activeDrivers) && $activeDrivers->isEmpty()) ? 'disabled' : '' }}>Assign</button>
+                <button type="button" id="btnAssignDriverSubmit" onclick="submitAssignDriverForm()" class="btn rounded-pill px-4" style="background: linear-gradient(135deg, #80a7ff 0%, #52ead2 100%); color: #051013; border: none; font-weight: 700;" {{ (isset($activeDrivers) && $activeDrivers->isEmpty()) ? 'disabled' : '' }}>Assign</button>
             </div>
         </form>
     </div>
@@ -595,16 +663,25 @@
     /* intl-tel-input Dark Mode & Light Mode Styles */
     .iti { width: 100%; display: block; }
     
-    .iti__selected-flag {
+    .iti__selected-flag,
+    .iti__selected-country {
         background: transparent !important;
         padding: 0 12px !important;
         border-right: 1px solid rgba(255, 255, 255, 0.12) !important;
         display: flex !important;
+        flex-direction: row !important;
         align-items: center !important;
         gap: 6px !important;
     }
     .iti__flag { order: 1 !important; }
-    .iti__selected-dial-code { color: #f8fafc !important; margin-left: 6px; order: 2 !important; font-weight: 600; }
+    .iti__selected-dial-code {
+        color: #f8fafc !important;
+        -webkit-text-fill-color: #f8fafc !important;
+        margin-left: 6px;
+        order: 2 !important;
+        font-weight: 600;
+        display: inline-block !important;
+    }
     .iti__arrow { border-top-color: #94a3b8 !important; order: 3 !important; }
     .iti__arrow--up { border-bottom-color: #94a3b8 !important; }
     #vendor_phone { padding-left: 115px !important; }
@@ -650,8 +727,12 @@
     }
 
     /* ===== Light Mode Overrides ===== */
-    body.light-mode .iti__selected-flag { border-right: 1px solid #cbd5e1 !important; }
-    body.light-mode .iti__selected-dial-code { color: #0f172a !important; }
+    body.light-mode .iti__selected-flag,
+    body.light-mode .iti__selected-country { border-right: 1px solid #cbd5e1 !important; }
+    body.light-mode .iti__selected-dial-code {
+        color: #0f172a !important;
+        -webkit-text-fill-color: #0f172a !important;
+    }
     body.light-mode .iti__arrow { border-top-color: #475569 !important; }
     body.light-mode .iti__arrow--up { border-bottom-color: #475569 !important; }
     body.light-mode .iti__dropdown-content,
@@ -738,91 +819,60 @@
         });
     }
 
-    document.addEventListener("DOMContentLoaded", function() {
-        const phoneInputField = document.getElementById('vendor_phone');
-        if (phoneInputField) {
-            const storedPhone = phoneInputField.value || '';
-            const options = {
-                preferredCountries: ["ae", "sa", "in", "us", "gb", "au"],
-                initialCountry: "ae", // Instantly show UAE (no grey box!)
-                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/19.2.16/js/utils.js",
-                showSelectedDialCode: true,
-                formatOnDisplay: true,
-                countrySearch: true
-            };
-            
-            // Only allow numbers to be entered
-            phoneInputField.addEventListener('input', function(e) {
-                this.value = this.value.replace(/[^0-9]/g, '');
-            });
-
-            const iti = window.intlTelInput(phoneInputField, options);
-
-            // Fetch IP country in the background if number has no prefix
-            if (!storedPhone.startsWith('+')) {
-                fetch('https://ipapi.co/json/')
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data && data.country_code) {
-                            iti.setCountry(data.country_code.toLowerCase());
-                        }
-                    })
-                    .catch(() => console.log('IP lookup failed, using fallback UAE.'));
-            }
-
-            // On form submit, replace input value with full international number
-            const form = document.getElementById('vendorBookingForm');
-            if (form) {
-                form.addEventListener('submit', function() {
-                    if (iti.getNumber()) {
-                        phoneInputField.value = iti.getNumber();
-                    }
-                });
-            }
+    document.addEventListener("DOMContentLoaded", function () {
+        if (typeof initializeIntlTelInput === 'function') {
+            initializeIntlTelInput('vendor_phone', 'hidden_country_code', 'hidden_contact_number');
         }
+    });
 
-        // Assign Driver Form Submit AJAX
-        $('#assignDriverForm').on('submit', function(e) {
-            e.preventDefault();
-            var driverId = $('#assign_driver_id').val();
-            if (!driverId) {
-                Swal.fire('Error!', 'Please select a driver.', 'error');
-                return;
-            }
-            $('#btnAssignDriverSubmit').prop('disabled', true);
+    // Assign Driver Form Submit Handler
+    function submitAssignDriverForm() {
+        var driverId = $('#assign_driver_id').val();
+        if (!driverId) {
+            Swal.fire('Error!', 'Please select a driver.', 'error');
+            return;
+        }
+        $('#btnAssignDriverSubmit').prop('disabled', true);
 
-            $.ajax({
-                url: "{{ route('vendor.bookings.assign-driver', $booking->id) }}",
-                type: 'POST',
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    driver_id: driverId
-                },
-                dataType: 'json',
-                headers: { 'X-Requested-With': 'XMLHttpRequest' },
-                success: function(data) {
-                    if (data.success) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success!',
-                            text: data.message,
-                            timer: 1500,
-                            showConfirmButton: false
-                        }).then(function() {
-                            window.location.reload();
-                        });
-                    } else {
-                        Swal.fire('Error!', data.message || 'Failed to assign driver.', 'error');
-                    }
-                },
-                error: function(xhr) {
-                    var msg = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'An error occurred while assigning driver.';
-                    Swal.fire('Error!', msg, 'error');
-                },
-                complete: function() {
-                    $('#btnAssignDriverSubmit').prop('disabled', false);
+        $.ajax({
+            url: "{{ route('vendor.bookings.assign-driver', $booking->id) }}",
+            type: 'POST',
+            data: {
+                _token: "{{ csrf_token() }}",
+                driver_id: driverId
+            },
+            dataType: 'json',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            },
+            success: function(data) {
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: data.message || 'Driver assigned successfully.',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(function() {
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire('Error!', data.message || 'Failed to assign driver.', 'error');
                 }
-            });
+            },
+            error: function(xhr) {
+                var msg = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'An error occurred while assigning driver.';
+                Swal.fire('Error!', msg, 'error');
+            },
+            complete: function() {
+                $('#btnAssignDriverSubmit').prop('disabled', false);
+            }
         });
+    }
+
+    $(document).on('submit', '#assignDriverForm', function(e) {
+        e.preventDefault();
+        submitAssignDriverForm();
     });
 </script>

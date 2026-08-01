@@ -420,6 +420,14 @@ class UserBookingController extends Controller
         $urlParams['reservation_number'] = $reservationNumber;
         $queryString = http_build_query($urlParams);
 
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'success' => true,
+                'message' => 'Booking placed successfully!',
+                'redirect_url' => url("/user/book/{$vehicle_id}/bookingsucces?{$queryString}")
+            ]);
+        }
+
         return redirect()->to("/user/book/{$vehicle_id}/bookingsucces?{$queryString}");
     }
 
@@ -663,7 +671,7 @@ class UserBookingController extends Controller
 
     public function checkinForm($id)
     {
-        $booking = Booking::with(['vehicle', 'pickupLocation', 'returnLocation', 'vendor', 'extras.vendorExtra'])
+        $booking = Booking::with(['vehicle', 'pickupLocation', 'returnLocation', 'vendor', 'driver', 'extras.vendorExtra'])
             ->where('user_id', auth()->id())
             ->findOrFail($id);
 
@@ -820,7 +828,7 @@ class UserBookingController extends Controller
 
     public function invoice($id)
     {
-        $booking = Booking::with(['vehicle.vendor', 'pickupLocation', 'returnLocation', 'extras.vendorExtra'])
+        $booking = Booking::with(['vehicle.vendor', 'pickupLocation', 'returnLocation', 'driver', 'extras.vendorExtra'])
             ->where('user_id', auth()->id())
             ->findOrFail($id);
 

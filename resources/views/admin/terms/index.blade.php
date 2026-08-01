@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Terms & Conditions')
+@section('title', 'Terms & Conditions Management')
 
 @section('main-content')
 
@@ -15,8 +15,11 @@
                 <line x1="16" y1="17" x2="8" y2="17"/>
                 <polyline points="10 9 9 9 8 9"/>
             </svg>
-            Terms &amp; Conditions
+            Terms &amp; Conditions Management
         </h1>
+        <p style="color: var(--muted); font-size: 0.92rem; margin: 0;">
+            Manage platform global Terms &amp; Conditions content and SEO metadata.
+        </p>
     </div>
 
     @if(session('success'))
@@ -31,77 +34,93 @@
         <form action="{{ route('admin.terms.store') }}" method="POST" id="tc-form" novalidate>
             @csrf
 
-            <div style="margin-bottom: 22px;">
-                <label style="display: block; font-size: 0.84rem; font-weight: 600; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.03em; text-transform: uppercase;">
-                    Title <span style="color: #fb7185; font-size: 1rem;">*</span>
-                </label>
-                <input
-                    type="text"
-                    name="title"
-                    id="tc_title"
-                    value="{{ old('title', $page->title ?? 'Terms & Conditions') }}"
-                    placeholder="e.g., Terms & Conditions"
-                    style="width: 100%; padding: 12px 16px; background: var(--bg-2, rgba(255,255,255,0.04)); border: 1px solid {{ $errors->has('title') ? '#fb7185' : 'var(--line, rgba(255,255,255,0.1))' }}; border-radius: 9px; color: var(--text, #f1f5f9); font-size: 0.95rem; outline: none; box-sizing: border-box; transition: border-color 0.2s;"
-                />
-                @error('title')
-                    <p style="color: #fb7185; font-size: 0.82rem; margin: 6px 0 0 2px;">{{ $message }}</p>
-                @enderror
+            <!-- Terms & Conditions Section -->
+            <div style="margin-bottom: 35px; border-bottom: 1px solid var(--line, rgba(255,255,255,0.08)); padding-bottom: 30px;">
+                <h4 style="font-size: 1.15rem; font-weight: 700; color: var(--brand, #52ead2); margin: 0 0 20px 0; display: flex; align-items: center; gap: 8px;">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                    Terms &amp; Conditions
+                </h4>
+
+                <div style="margin-bottom: 22px;">
+                    <label style="display: block; font-size: 0.84rem; font-weight: 600; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.03em; text-transform: uppercase;">
+                        Title <span style="color: #fb7185; font-size: 1rem;">*</span>
+                    </label>
+                    <input
+                        type="text"
+                        name="title"
+                        id="tc_title"
+                        value="{{ old('title', $page->title ?? 'Terms & Conditions') }}"
+                        placeholder="e.g., Terms & Conditions"
+                        style="width: 100%; padding: 12px 16px; background: var(--bg-2, rgba(255,255,255,0.04)); border: 1px solid {{ $errors->has('title') ? '#fb7185' : 'var(--line, rgba(255,255,255,0.1))' }}; border-radius: 999px; color: var(--text, #f1f5f9); font-size: 0.95rem; outline: none; box-sizing: border-box; transition: border-color 0.2s;"
+                    />
+                    @error('title')
+                        <p style="color: #fb7185; font-size: 0.82rem; margin: 6px 0 0 2px;">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div style="margin-bottom: 22px;">
+                    <label style="display: block; font-size: 0.84rem; font-weight: 600; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.03em; text-transform: uppercase;">
+                        Content / Description (Rich Text Editor) <span style="color: #fb7185; font-size: 1rem;">*</span>
+                    </label>
+
+                    <textarea
+                        name="description"
+                        id="tc_description"
+                        rows="14"
+                        placeholder="Write your platform terms & conditions details..."
+                        style="width: 100%; box-sizing: border-box;"
+                    >{{ old('description', $page->description ?? '') }}</textarea>
+
+                    @error('description')
+                        <p style="color: #fb7185; font-size: 0.82rem; margin: 6px 0 0 2px;">{{ $message }}</p>
+                    @enderror
+                </div>
             </div>
 
-            <div style="margin-bottom: 22px;">
-                <label style="display: block; font-size: 0.84rem; font-weight: 600; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.03em; text-transform: uppercase;">
-                    Meta Title
-                </label>
-                <input
-                    type="text"
-                    name="meta_title"
-                    id="tc_meta_title"
-                    value="{{ old('meta_title', $page->meta_title ?? '') }}"
-                    placeholder="SEO title for search engines"
-                    style="width: 100%; padding: 12px 16px; background: var(--bg-2, rgba(255,255,255,0.04)); border: 1px solid {{ $errors->has('meta_title') ? '#fb7185' : 'var(--line, rgba(255,255,255,0.1))' }}; border-radius: 9px; color: var(--text, #f1f5f9); font-size: 0.95rem; outline: none; box-sizing: border-box; transition: border-color 0.2s;"
-                />
-                @error('meta_title')
-                    <p style="color: #fb7185; font-size: 0.82rem; margin: 6px 0 0 2px;">{{ $message }}</p>
-                @enderror
+            <!-- SEO Meta Settings -->
+            <div style="margin-bottom: 25px;">
+                <h4 style="font-size: 1.15rem; font-weight: 700; color: var(--brand, #52ead2); margin: 0 0 20px 0; display: flex; align-items: center; gap: 8px;">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    SEO Meta Settings
+                </h4>
+
+                <div style="margin-bottom: 22px;">
+                    <label style="display: block; font-size: 0.84rem; font-weight: 600; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.03em; text-transform: uppercase;">
+                        Meta Title
+                    </label>
+                    <input
+                        type="text"
+                        name="meta_title"
+                        id="tc_meta_title"
+                        value="{{ old('meta_title', $page->meta_title ?? '') }}"
+                        placeholder="SEO title for search engines"
+                        style="width: 100%; padding: 12px 16px; background: var(--bg-2, rgba(255,255,255,0.04)); border: 1px solid {{ $errors->has('meta_title') ? '#fb7185' : 'var(--line, rgba(255,255,255,0.1))' }}; border-radius: 999px; color: var(--text, #f1f5f9); font-size: 0.95rem; outline: none; box-sizing: border-box; transition: border-color 0.2s;"
+                    />
+                    @error('meta_title')
+                        <p style="color: #fb7185; font-size: 0.82rem; margin: 6px 0 0 2px;">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div style="margin-bottom: 22px;">
+                    <label style="display: block; font-size: 0.84rem; font-weight: 600; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.03em; text-transform: uppercase;">
+                        Meta Description
+                    </label>
+                    <textarea
+                        name="meta_description"
+                        id="tc_meta_description"
+                        rows="3"
+                        maxlength="500"
+                        placeholder="Short SEO description for search engines (max 500 characters)"
+                        style="width: 100%; padding: 12px 16px; background: var(--bg-2, rgba(255,255,255,0.04)); border: 1px solid {{ $errors->has('meta_description') ? '#fb7185' : 'var(--line, rgba(255,255,255,0.1))' }}; border-radius: 12px; color: var(--text, #f1f5f9); font-size: 0.95rem; outline: none; box-sizing: border-box; resize: vertical; transition: border-color 0.2s;"
+                    >{{ old('meta_description', $page->meta_description ?? '') }}</textarea>
+                    @error('meta_description')
+                        <p style="color: #fb7185; font-size: 0.82rem; margin: 6px 0 0 2px;">{{ $message }}</p>
+                    @enderror
+                </div>
             </div>
 
-            <div style="margin-bottom: 22px;">
-                <label style="display: block; font-size: 0.84rem; font-weight: 600; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.03em; text-transform: uppercase;">
-                    Meta Description
-                </label>
-                <textarea
-                    name="meta_description"
-                    id="tc_meta_description"
-                    rows="3"
-                    maxlength="500"
-                    placeholder="Short SEO description for search engines (max 500 characters)"
-                    style="width: 100%; padding: 12px 16px; background: var(--bg-2, rgba(255,255,255,0.04)); border: 1px solid {{ $errors->has('meta_description') ? '#fb7185' : 'var(--line, rgba(255,255,255,0.1))' }}; border-radius: 9px; color: var(--text, #f1f5f9); font-size: 0.95rem; outline: none; box-sizing: border-box; resize: vertical; transition: border-color 0.2s;"
-                >{{ old('meta_description', $page->meta_description ?? '') }}</textarea>
-                @error('meta_description')
-                    <p style="color: #fb7185; font-size: 0.82rem; margin: 6px 0 0 2px;">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <div style="margin-bottom: 22px;">
-                <label style="display: block; font-size: 0.84rem; font-weight: 600; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.03em; text-transform: uppercase;">
-                    Content / Description <span style="color: #fb7185; font-size: 1rem;">*</span>
-                </label>
-
-                <textarea
-                    name="description"
-                    id="tc_description"
-                    rows="12"
-                    placeholder="Write your full terms and conditions content here..."
-                    style="width: 100%; box-sizing: border-box;"
-                >{{ old('description', $page->description ?? '') }}</textarea>
-
-                @error('description')
-                    <p style="color: #fb7185; font-size: 0.82rem; margin: 6px 0 0 2px;">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <div style="display: flex; align-items: center; gap: 12px; padding-top: 8px;">
-                <button type="submit" id="tcSubmitBtn" class="btn btn-primary rounded-pill px-4" style="font-weight: 800 !important;">
+            <div style="display: flex; align-items: center; gap: 12px; padding-top: 15px;">
+                <button type="submit" id="tcSubmitBtn" class="btn btn-primary rounded-pill px-4" style="font-weight: 800 !important; background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%) !important; color: #051013 !important; border: none !important;">
                     <svg viewBox="0 0 24 24" style="width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2.5;">
                         <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
                         <polyline points="17 21 17 13 7 13 7 21"/>
@@ -110,7 +129,7 @@
                     {{ $page ? 'Update Terms & Conditions' : 'Save Terms & Conditions' }}
                 </button>
 
-                @if($page)
+                @if($page && $page->updated_at)
                     <span style="color: var(--muted); font-size: 0.82rem;">
                         Last updated: {{ $page->updated_at->format('d M Y, h:i A') }}
                     </span>
@@ -121,6 +140,7 @@
     </div>
 
 </div>
+@endsection
 
 @section('js')
 <script src="https://cdn.ckeditor.com/4.22.1/full/ckeditor.js"></script>
@@ -129,14 +149,16 @@
         if (typeof CKEDITOR !== 'undefined') {
             try {
                 const isLightMode = document.body.classList.contains('light-mode');
-                const editor = CKEDITOR.replace('tc_description', {
+                const editorOptions = {
                     height: 480,
                     versionCheck: false,
                     uiColor: isLightMode ? '#f1f5f9' : '#2a3248',
                     contentsCss: isLightMode 
                         ? 'body { background-color: #ffffff; color: #0f172a; font-family: Inter, sans-serif; } a { color: #0284c7; }' 
                         : 'body { background-color: #050711; color: #f8fafc; font-family: Inter, sans-serif; } a { color: #52ead2; }'
-                });
+                };
+
+                const editor = CKEDITOR.replace('tc_description', editorOptions);
 
                 const updateEditorTheme = () => {
                     if (editor && editor.document) {
@@ -155,6 +177,7 @@
                 };
 
                 editor.on('instanceReady', updateEditorTheme);
+
                 const observer = new MutationObserver(updateEditorTheme);
                 observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
             } catch (err) {
@@ -175,7 +198,6 @@
             e.preventDefault();
             var $form = $(this);
             var $submitBtn = $('#tcSubmitBtn');
-            var origText = $submitBtn.text();
 
             if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances.tc_description) {
                 CKEDITOR.instances.tc_description.updateElement();
@@ -204,6 +226,9 @@
             $submitBtn.prop('disabled', true).css('opacity', '0.65');
 
             var formData = new FormData(this);
+            if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances.tc_description) {
+                formData.set('description', CKEDITOR.instances.tc_description.getData());
+            }
 
             $.ajax({
                 url: $form.attr('action'),
@@ -224,6 +249,8 @@
                             text: data.message || 'Terms & Conditions saved successfully!',
                             icon: 'success',
                             confirmButtonText: 'OK'
+                        }).then(function() {
+                            window.location.reload();
                         });
                     }
                 },
@@ -249,6 +276,4 @@
         });
     });
 </script>
-@endsection
-
 @endsection

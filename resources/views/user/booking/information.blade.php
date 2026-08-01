@@ -56,34 +56,34 @@
                 
                 <div id="step-4-content">
                     
-                    <div class="card mb-5" style="background: rgba(11, 16, 32, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px;">
+                    <div class="card mb-5" style="background: rgba(11, 16, 32, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; position: relative; z-index: 5; overflow: visible !important;">
                         <div class="card-header border-0 p-4 pb-2" style="background: transparent;">
                             <h4 style="color: #f8fafc; font-weight: 800; font-size: 1.25rem;">Personal Information</h4>
                         </div>
                         <div class="card-body p-4 pt-2">
                             <div class="row g-4">
                                 <div class="col-md-6">
-                                    <label style="display: block; margin-bottom: 8px; color: #e2e8f0; font-size: 0.88rem; font-weight: 700;">First Name *</label>
+                                    <label style="display: block; margin-bottom: 8px; color: #e2e8f0; font-size: 0.88rem; font-weight: 700;">First Name <span style="color: #ef4444;">*</span></label>
                                     <input type="text" id="first_name" class="form-control" placeholder="John" style="background: rgba(11, 16, 32, 0.8); border: 1px solid rgba(82, 234, 210, 0.3); color: #ffffff; font-weight: 600; padding: 12px 15px; border-radius: 8px;" value="{{ auth()->check() ? (auth()->user()->first_name ?? (str_contains(auth()->user()->name, ' ') ? explode(' ', auth()->user()->name, 2)[0] : auth()->user()->name)) : '' }}" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label style="display: block; margin-bottom: 8px; color: #e2e8f0; font-size: 0.88rem; font-weight: 700;">Last Name *</label>
+                                    <label style="display: block; margin-bottom: 8px; color: #e2e8f0; font-size: 0.88rem; font-weight: 700;">Last Name <span style="color: #ef4444;">*</span></label>
                                     <input type="text" id="last_name" class="form-control" placeholder="Doe" style="background: rgba(11, 16, 32, 0.8); border: 1px solid rgba(82, 234, 210, 0.3); color: #ffffff; font-weight: 600; padding: 12px 15px; border-radius: 8px;" value="{{ auth()->check() ? (auth()->user()->last_name ?? (str_contains(auth()->user()->name, ' ') ? explode(' ', auth()->user()->name, 2)[1] : '-')) : '' }}" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label style="display: block; margin-bottom: 8px; color: #e2e8f0; font-size: 0.88rem; font-weight: 700;">Email *</label>
+                                    <label style="display: block; margin-bottom: 8px; color: #e2e8f0; font-size: 0.88rem; font-weight: 700;">Email <span style="color: #ef4444;">*</span></label>
                                     <input type="email" id="email" class="form-control" placeholder="john.doe@example.com" oncopy="return false" onpaste="return false" style="background: rgba(11, 16, 32, 0.8); border: 1px solid rgba(82, 234, 210, 0.3); color: #ffffff; font-weight: 600; padding: 12px 15px; border-radius: 8px;" value="{{ auth()->check() ? auth()->user()->email : '' }}" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label style="display: block; margin-bottom: 8px; color: #e2e8f0; font-size: 0.88rem; font-weight: 700;">Confirm Email *</label>
+                                    <label style="display: block; margin-bottom: 8px; color: #e2e8f0; font-size: 0.88rem; font-weight: 700;">Confirm Email <span style="color: #ef4444;">*</span></label>
                                     <input type="email" id="confirm_email" class="form-control" placeholder="john.doe@example.com" oncopy="return false" onpaste="return false" style="background: rgba(11, 16, 32, 0.8); border: 1px solid rgba(82, 234, 210, 0.3); color: #ffffff; font-weight: 600; padding: 12px 15px; border-radius: 8px;" value="{{ auth()->check() ? auth()->user()->email : '' }}" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label style="display: block; margin-bottom: 8px; color: #e2e8f0; font-size: 0.88rem; font-weight: 700;">Phone Number *</label>
-                                    <input type="tel" id="phone" name="phone" class="form-control w-100" style="background: rgba(11, 16, 32, 0.8); border: 1px solid rgba(82, 234, 210, 0.3); color: #ffffff; font-weight: 600; padding: 12px 15px 12px 50px; border-radius: 8px;" value="{{ auth()->check() ? (auth()->user()->country_code . auth()->user()->contact_number) : '' }}" required>
+                                    <label style="display: block; margin-bottom: 8px; color: #e2e8f0; font-size: 0.88rem; font-weight: 700;">Phone Number <span style="color: #ef4444;">*</span></label>
+                                    <input type="tel" id="phone" name="phone" class="form-control w-100" style="background: rgba(11, 16, 32, 0.8); border: 1px solid rgba(82, 234, 210, 0.3); color: #ffffff; font-weight: 600; padding: 12px 15px 12px 115px !important; border-radius: 8px;" value="{{ auth()->check() ? (auth()->user()->country_code . auth()->user()->contact_number) : '' }}" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label style="display: block; margin-bottom: 8px; color: #e2e8f0; font-size: 0.88rem; font-weight: 700;">Date of Birth *</label>
+                                    <label style="display: block; margin-bottom: 8px; color: #e2e8f0; font-size: 0.88rem; font-weight: 700;">Date of Birth <span style="color: #ef4444;">*</span></label>
                                     <input type="text" id="dob" class="form-control" placeholder="Select Date" style="background: rgba(11, 16, 32, 0.8); border: 1px solid rgba(82, 234, 210, 0.3); color: #ffffff; font-weight: 600; padding: 12px 15px; border-radius: 8px;" value="{{ auth()->check() ? (auth()->user()->dob ?? date('Y-m-d', strtotime('-21 years'))) : '' }}" required>
                                 </div>
                             </div>
@@ -272,6 +272,60 @@
     .iti__country-list { background: #0b1020 !important; border: 1px solid rgba(82, 234, 210, 0.3) !important; color: #ffffff !important; }
     .iti__country-list .iti__country-name, .iti__country-list .iti__dial-code { color: #ffffff !important; }
     .iti__country-list .iti__country.iti__highlight { background: rgba(82, 234, 210, 0.2) !important; }
+
+    /* ═══════════════════════════════════════════════
+       LIGHT MODE OVERRIDES — INFORMATION PAGE
+    ═══════════════════════════════════════════════ */
+    body.light-mode .form-control,
+    body.light-mode input,
+    body.light-mode select,
+    body.light-mode textarea {
+        color: #0f172a !important;
+        -webkit-text-fill-color: #0f172a !important;
+        background: #ffffff !important;
+        border: 1px solid rgba(15, 23, 42, 0.2) !important;
+    }
+    body.light-mode .form-control::placeholder,
+    body.light-mode input::placeholder {
+        color: #94a3b8 !important;
+        -webkit-text-fill-color: #94a3b8 !important;
+    }
+    body.light-mode .form-control:focus,
+    body.light-mode input:focus {
+        background: #f8fafc !important;
+        border-color: #0f766e !important;
+        box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.12) !important;
+        color: #0f172a !important;
+        -webkit-text-fill-color: #0f172a !important;
+    }
+    body.light-mode .card label {
+        color: #0f172a !important;
+    }
+    /* Flatpickr calendar — light mode */
+    body.light-mode .flatpickr-calendar {
+        background: #ffffff !important;
+        border: 1px solid rgba(15, 23, 42, 0.12) !important;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
+        color: #0f172a !important;
+    }
+    body.light-mode .flatpickr-day { color: #0f172a !important; }
+    body.light-mode .flatpickr-day:hover { background: rgba(15, 118, 110, 0.12) !important; color: #0f172a !important; }
+    body.light-mode .flatpickr-day.selected, body.light-mode .flatpickr-day.selected:hover { background: #0f766e !important; border-color: #0f766e !important; color: #ffffff !important; }
+    body.light-mode .flatpickr-day.flatpickr-disabled, body.light-mode .flatpickr-day.flatpickr-disabled:hover { color: #cbd5e1 !important; }
+    body.light-mode .flatpickr-day.today { border-color: #0f766e !important; }
+    body.light-mode .flatpickr-month, body.light-mode .flatpickr-current-month { color: #0f172a !important; fill: #0f172a !important; }
+    body.light-mode .flatpickr-current-month input.cur-year { color: #0f172a !important; }
+    body.light-mode .flatpickr-current-month .flatpickr-monthDropdown-months { background: #ffffff !important; color: #0f172a !important; }
+    body.light-mode .flatpickr-weekday { color: #0f766e !important; }
+    body.light-mode .flatpickr-months .flatpickr-prev-month svg,
+    body.light-mode .flatpickr-months .flatpickr-next-month svg { fill: #0f172a !important; }
+    /* Phone input — light mode */
+    body.light-mode .iti__selected-flag { background: #f8fafc !important; border-right: 1px solid rgba(15,23,42,0.1) !important; }
+    body.light-mode .iti__selected-dial-code { color: #0f172a !important; }
+    body.light-mode .iti__arrow { border-top-color: #0f172a !important; }
+    body.light-mode .iti__country-list { background: #ffffff !important; border: 1px solid rgba(15,23,42,0.12) !important; color: #0f172a !important; box-shadow: 0 8px 24px rgba(0,0,0,0.1) !important; }
+    body.light-mode .iti__country-list .iti__country-name, body.light-mode .iti__country-list .iti__dial-code { color: #0f172a !important; }
+    body.light-mode .iti__search-input { background: #f8fafc !important; border-color: rgba(15,23,42,0.15) !important; color: #0f172a !important; }
 </style>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -325,36 +379,74 @@
     });
 
     function validateAndSubmit() {
-        const email = document.getElementById('email').value;
-        const confirmEmail = document.getElementById('confirm_email').value;
-        const phone = document.getElementById('phone').value;
-        const dob = document.getElementById('dob').value;
+        const fnameInput = $('#first_name');
+        const lnameInput = $('#last_name');
+        const emailInput = $('#email');
+        const confirmEmailInput = $('#confirm_email');
+        const phoneInput = $('#phone');
+        const dobInput = $('#dob');
 
-        const fname = document.getElementById('first_name').value;
-        const lname = document.getElementById('last_name').value;
+        let isValid = true;
+        let firstInvalidField = null;
 
-        if (!fname || !lname || !email || !confirmEmail || !phone || !dob) {
+        // Reset previous validation styles & error messages
+        $('.form-control').css('border-color', 'rgba(82, 234, 210, 0.3)');
+        $('.input-error-msg').remove();
+
+        function showError(field, message) {
+            field.css('border-color', '#ef4444');
+            field.after(`<div class="input-error-msg" style="color: #ef4444; font-size: 0.78rem; font-weight: 600; margin-top: 4px;">${message}</div>`);
+            if (!firstInvalidField) firstInvalidField = field;
+            isValid = false;
+        }
+
+        const fname = fnameInput.val() ? fnameInput.val().trim() : '';
+        const lname = lnameInput.val() ? lnameInput.val().trim() : '';
+        const email = emailInput.val() ? emailInput.val().trim() : '';
+        const confirmEmail = confirmEmailInput.val() ? confirmEmailInput.val().trim() : '';
+        const phone = phoneInput.val() ? phoneInput.val().trim() : '';
+        const dob = dobInput.val() ? dobInput.val().trim() : '';
+
+        if (!fname) showError(fnameInput, 'First name is required.');
+        if (!lname) showError(lnameInput, 'Last name is required.');
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email) {
+            showError(emailInput, 'Email address is required.');
+        } else if (!emailRegex.test(email)) {
+            showError(emailInput, 'Please enter a valid email address.');
+        }
+
+        if (!confirmEmail) {
+            showError(confirmEmailInput, 'Please confirm your email.');
+        } else if (email && confirmEmail !== email) {
+            showError(confirmEmailInput, 'Confirm email does not match.');
+        }
+
+        if (!phone) {
+            showError(phoneInput, 'Phone number is required.');
+        } else if (phone.replace(/\D/g, '').length < 6) {
+            showError(phoneInput, 'Please enter a valid phone number.');
+        }
+
+        if (!dob) showError(dobInput, 'Date of birth is required.');
+
+        if (!isValid) {
+            if (firstInvalidField) {
+                firstInvalidField.focus();
+            }
             Swal.fire({
                 icon: 'error',
-                title: 'Missing Fields',
-                text: 'Please fill out all required Personal Information fields (First Name, Last Name, Email, Phone, DOB).',
-                background: 'rgba(11, 16, 32, 0.95)'
+                title: 'Validation Error',
+                text: 'Please correct the highlighted fields before proceeding.',
+                background: 'rgba(11, 16, 32, 0.95)',
+                confirmButtonColor: '#52ead2'
             });
             return;
         }
 
-        if (email !== confirmEmail) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Email Mismatch',
-                text: 'Email and Confirm Email do not match!',
-                background: 'rgba(11, 16, 32, 0.95)'
-            });
-            return;
-        }
-
-        const flight_number = document.getElementById('flight_number') ? document.getElementById('flight_number').value : '';
-        const special_comments = document.getElementById('special_comments') ? document.getElementById('special_comments').value : '';
+        const flight_number = $('#flight_number').length ? $('#flight_number').val().trim() : '';
+        const special_comments = $('#special_comments').length ? $('#special_comments').val().trim() : '';
 
         const urlParams = new URLSearchParams(window.location.search);
         urlParams.set('fname', fname);

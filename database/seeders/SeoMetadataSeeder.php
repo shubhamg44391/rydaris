@@ -94,6 +94,13 @@ class SeoMetadataSeeder extends Seeder
                 'meta_description' => 'Log in to your Rydaris Vendor dashboard to monitor fleet activity, branches, and payments.',
                 'portal_type' => 'frontend',
             ],
+            [
+                'url_path' => 'community',
+                'page_name' => 'Community Page',
+                'meta_title' => 'Community | Rydaris',
+                'meta_description' => 'Join the Rydaris car rental community to connect with operators, read articles, and share industry insights.',
+                'portal_type' => 'frontend',
+            ],
 
             // Vendor Portal — Dashboard
             [
@@ -168,6 +175,22 @@ class SeoMetadataSeeder extends Seeder
                 'portal_type' => 'vendor',
             ],
 
+            // Vendor Portal — Drivers
+            [
+                'url_path' => 'vendor/drivers',
+                'page_name' => 'Drivers - Driver List',
+                'meta_title' => 'Driver List | Rydaris Vendor',
+                'meta_description' => 'Manage driver profiles, licenses, contact details, and assigned status for your rental fleet.',
+                'portal_type' => 'vendor',
+            ],
+            [
+                'url_path' => 'vendor/drivers/create',
+                'page_name' => 'Drivers - Add Driver',
+                'meta_title' => 'Add New Driver | Rydaris Vendor',
+                'meta_description' => 'Add a new driver to your rental operations with contact and license details.',
+                'portal_type' => 'vendor',
+            ],
+
             // Vendor Portal — Fleet Management
             [
                 'url_path' => 'vendor/availability',
@@ -222,6 +245,22 @@ class SeoMetadataSeeder extends Seeder
                 'page_name' => 'Support Ticket - Support Ticket',
                 'meta_title' => 'Vendor Support Tickets | Rydaris',
                 'meta_description' => 'View and respond to customer support tickets. Track resolution status and conversation threads.',
+                'portal_type' => 'vendor',
+            ],
+
+            // Vendor Portal — Community
+            [
+                'url_path' => 'vendor/community',
+                'page_name' => 'Community - Community Posts',
+                'meta_title' => 'Vendor Community | Rydaris',
+                'meta_description' => 'Participate in the Rydaris rental community, share insights, ask questions, and engage with other rental operators.',
+                'portal_type' => 'vendor',
+            ],
+            [
+                'url_path' => 'vendor/community/create',
+                'page_name' => 'Community - Create Post',
+                'meta_title' => 'Create Community Post | Rydaris Vendor',
+                'meta_description' => 'Create and publish a new post to share updates or engage with the rental community.',
                 'portal_type' => 'vendor',
             ],
 

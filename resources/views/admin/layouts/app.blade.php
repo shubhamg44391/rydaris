@@ -596,6 +596,11 @@
                       <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--brand, #52ead2); flex-shrink: 0;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                       My Profile
                   </a>
+                  @elseif(Auth::check() && Auth::user()->role === 'admin')
+                  <a href="{{ route('admin.profile.index') }}" style="display: flex; align-items: center; gap: 10px; padding: 10px 16px; color: var(--text, #f8fafc); text-decoration: none; font-size: 0.85rem; transition: background 0.15s; text-align: left;" onmouseover="this.style.background='rgba(82, 234, 210, 0.08)';" onmouseout="this.style.background='transparent';">
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--brand, #52ead2); flex-shrink: 0;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                      Admin Profile
+                  </a>
                   @endif
 
                   <div style="border-top: 1px solid var(--line, rgba(255,255,255,0.05)); margin-top: 5px; padding-top: 5px;">
@@ -797,6 +802,7 @@
       });
     }
   </script>
+  @stack('js')
 </body>
 
 </html>

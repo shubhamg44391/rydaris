@@ -69,6 +69,7 @@ class DriverController extends Controller
             'email' => 'nullable|email|max:255',
             'license_number' => 'nullable|string|max:100',
             'license_expiry' => 'nullable|date',
+            'license_image' => 'nullable|file|mimes:jpeg,png,jpg,gif,webp,pdf|max:5120',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
             'notes' => 'nullable|string',
             'status' => 'required|in:active,inactive',
@@ -84,6 +85,11 @@ class DriverController extends Controller
             $photoPath = $request->file('photo')->store('drivers', 'public');
         }
 
+        $licenseImagePath = null;
+        if ($request->hasFile('license_image')) {
+            $licenseImagePath = $request->file('license_image')->store('drivers/licenses', 'public');
+        }
+
         $driver = Driver::create([
             'vendor_id' => Auth::id(),
             'name' => $request->name,
@@ -92,6 +98,7 @@ class DriverController extends Controller
             'email' => $request->email,
             'license_number' => $request->license_number,
             'license_expiry' => $request->license_expiry,
+            'license_image' => $licenseImagePath,
             'photo' => $photoPath,
             'notes' => $request->notes,
             'status' => $request->status,
@@ -110,7 +117,11 @@ class DriverController extends Controller
 
     public function show($id)
     {
-        $driver = Driver::where('vendor_id', Auth::id())->findOrFail($id);
+        $driver = Driver::with(['bookings' => function($q) {
+            $q->with(['vehicle', 'pickupLocation', 'returnLocation', 'user'])->orderBy('created_at', 'desc');
+        }])->where('vendor_id', Auth::id())->findOrFail($id);
+
+        $bookings = $driver->bookings;
         
         if (request()->ajax() || request()->wantsJson() || request()->header('X-Requested-With') === 'XMLHttpRequest') {
             return response()->json([
@@ -123,6 +134,7 @@ class DriverController extends Controller
                     'address' => $driver->address,
                     'license_number' => $driver->license_number ?? 'N/A',
                     'license_expiry' => $driver->license_expiry ? \Carbon\Carbon::parse($driver->license_expiry)->format('Y-m-d') : 'N/A',
+                    'license_image_url' => $driver->license_image ? asset('storage/' . $driver->license_image) : null,
                     'notes' => $driver->notes ?? 'N/A',
                     'status' => ucfirst($driver->status),
                     'photo_url' => $driver->photo ? asset('storage/' . $driver->photo) : null,
@@ -131,7 +143,7 @@ class DriverController extends Controller
             ]);
         }
 
-        return view('vendor.drivers.show', compact('driver'));
+        return view('vendor.drivers.show', compact('driver', 'bookings'));
     }
 
     public function edit($id)
@@ -158,6 +170,7 @@ class DriverController extends Controller
             'email' => 'nullable|email|max:255',
             'license_number' => 'nullable|string|max:100',
             'license_expiry' => 'nullable|date',
+            'license_image' => 'nullable|file|mimes:jpeg,png,jpg,gif,webp,pdf|max:5120',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
             'notes' => 'nullable|string',
             'status' => 'required|in:active,inactive',
@@ -176,6 +189,14 @@ class DriverController extends Controller
             $photoPath = $request->file('photo')->store('drivers', 'public');
         }
 
+        $licenseImagePath = $driver->license_image;
+        if ($request->hasFile('license_image')) {
+            if ($driver->license_image && Storage::disk('public')->exists($driver->license_image)) {
+                Storage::disk('public')->delete($driver->license_image);
+            }
+            $licenseImagePath = $request->file('license_image')->store('drivers/licenses', 'public');
+        }
+
         $driver->update([
             'name' => $request->name,
             'phone' => $request->phone,
@@ -183,6 +204,7 @@ class DriverController extends Controller
             'email' => $request->email,
             'license_number' => $request->license_number,
             'license_expiry' => $request->license_expiry,
+            'license_image' => $licenseImagePath,
             'photo' => $photoPath,
             'notes' => $request->notes,
             'status' => $request->status,
@@ -220,6 +242,10 @@ class DriverController extends Controller
 
         if ($driver->photo && Storage::disk('public')->exists($driver->photo)) {
             Storage::disk('public')->delete($driver->photo);
+        }
+
+        if ($driver->license_image && Storage::disk('public')->exists($driver->license_image)) {
+            Storage::disk('public')->delete($driver->license_image);
         }
 
         $driver->delete();

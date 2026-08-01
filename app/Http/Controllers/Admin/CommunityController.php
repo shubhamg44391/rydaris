@@ -57,7 +57,7 @@ class CommunityController extends Controller
 
     public function show($id)
     {
-        $post = CommunityPost::with(['user', 'comments.user'])->findOrFail($id);
+        $post = CommunityPost::with(['user', 'comments.user'])->where('slug', $id)->orWhere('id', $id)->firstOrFail();
 
         return view('admin.community.show', compact('post'));
     }
@@ -68,7 +68,7 @@ class CommunityController extends Controller
             'comment' => 'required|string|max:2000',
         ]);
 
-        $post = CommunityPost::findOrFail($id);
+        $post = CommunityPost::where('slug', $id)->orWhere('id', $id)->firstOrFail();
 
         $comment = CommunityComment::create([
             'community_post_id' => $post->id,
@@ -115,7 +115,7 @@ class CommunityController extends Controller
 
     public function destroy($id)
     {
-        $post = CommunityPost::findOrFail($id);
+        $post = CommunityPost::where('slug', $id)->orWhere('id', $id)->firstOrFail();
         $post->delete();
 
         if (request()->wantsJson() || request()->ajax()) {
@@ -131,7 +131,7 @@ class CommunityController extends Controller
 
     public function toggleStatus($id)
     {
-        $post = CommunityPost::findOrFail($id);
+        $post = CommunityPost::where('slug', $id)->orWhere('id', $id)->firstOrFail();
         $post->is_published = !$post->is_published;
         $post->save();
 

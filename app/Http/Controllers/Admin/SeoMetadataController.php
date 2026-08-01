@@ -23,8 +23,8 @@ class SeoMetadataController extends Controller
             
             $groupOrder = [
                 'Dashboard', 'Booking', 'Vehicles', 'Locations',
-                'Customers', 'Fleet Management', 'Extras',
-                'Coupons', 'Support Ticket', 'Subscription',
+                'Customers', 'Drivers', 'Fleet Management', 'Extras',
+                'Coupons', 'Support Ticket', 'Community', 'Subscription',
                 'Terms & Conditions', 'Settings',
             ];
 

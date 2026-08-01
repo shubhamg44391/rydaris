@@ -26,11 +26,22 @@
 
                     <!-- Mobile Number (Mandatory) -->
                     <div class="col-md-6 mb-4">
-                        <label for="phone" class="form-label-custom">Mobile Number <span style="color: #ef4444;">*</span></label>
-                        <input type="text" class="form-control form-input-custom @error('phone') is-invalid @enderror" id="phone" name="phone"
-                            value="{{ old('phone') }}" required placeholder="e.g. +91 9876543210" />
+                        <label for="driver_phone_input" class="form-label-custom">Mobile Number <span style="color: #ef4444;">*</span></label>
+                        @include('partials.phone-input')
+                        <input type="tel" id="driver_phone_input" class="form-control form-input-custom @error('phone') is-invalid @enderror" placeholder="e.g. 9876543210" value="{{ old('phone') }}" required style="width: 100%;">
+                        <input type="hidden" name="country_code" id="hidden_country_code" value="{{ old('country_code', '+91') }}">
+                        <input type="hidden" name="phone" id="hidden_phone" value="{{ old('phone') }}">
+                        <script>
+                            (function setupDriverPhone() {
+                                if (typeof initializeIntlTelInput === 'function') {
+                                    initializeIntlTelInput('driver_phone_input', 'hidden_country_code', 'hidden_phone');
+                                } else {
+                                    setTimeout(setupDriverPhone, 50);
+                                }
+                            })();
+                        </script>
                         @error('phone')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
                         @enderror
                     </div>
 
@@ -73,6 +84,36 @@
                             value="{{ old('license_expiry') }}" style="cursor: pointer;" onclick="try{ if(typeof this.showPicker === 'function'){ this.showPicker(); } }catch(e){}" />
                         @error('license_expiry')
                             <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Driver License Document / Image (Optional) -->
+                    <div class="col-md-12 mb-4">
+                        <label class="form-label-custom">Driver License Image / Document <span class="text-muted font-weight-normal">(Optional)</span></label>
+
+                        <div id="license-upload-box" style="border: 2px dashed var(--line, #cbd5e1); border-radius: var(--radius, 10px); padding: 24px; text-align: center; background: var(--bg-2, #f8fafc); cursor: pointer; transition: border-color 0.2s;" onclick="document.getElementById('license_image').click();">
+                            <input type="file" id="license_image" name="license_image" accept="image/*,application/pdf" class="d-none" style="display: none;" onchange="handleLicensePreview(this)" />
+
+                            <div id="license-upload-prompt">
+                                <svg viewBox="0 0 24 24" style="width: 40px; height: 40px; fill: none; stroke: var(--brand, #52ead2); stroke-width: 2; margin-bottom: 8px;">
+                                    <rect x="3" y="4" width="18" height="16" rx="2" ry="2"></rect>
+                                    <circle cx="9" cy="10" r="2"></circle>
+                                    <line x1="15" y1="8" x2="19" y2="8"></line>
+                                    <line x1="15" y1="12" x2="19" y2="12"></line>
+                                    <line x1="7" y1="16" x2="17" y2="16"></line>
+                                </svg>
+                                <p style="margin: 0 0 4px 0; font-weight: 700; color: var(--text, #1e293b); font-size: 0.95rem;">Click to upload driver license photo or PDF</p>
+                                <p style="margin: 0; color: #94a3b8; font-size: 0.8rem;">PNG, JPG, WEBP, or PDF (Max: 5MB)</p>
+                            </div>
+
+                            <div id="license-preview-container" style="display: none; align-items: center; justify-content: center; flex-direction: column; gap: 8px;">
+                                <img id="license-preview-img" src="" alt="License Preview" style="max-height: 140px; border-radius: 8px; object-fit: contain;" />
+                                <span id="license-file-name" style="font-weight: 600; font-size: 0.85rem; color: var(--text, #f8fafc);"></span>
+                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="event.stopPropagation(); removeLicensePreview();" style="border-radius: 6px; padding: 4px 12px; font-weight: 700;">Remove</button>
+                            </div>
+                        </div>
+                        @error('license_image')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
                         @enderror
                     </div>
 
@@ -155,6 +196,11 @@
     body.light-mode input[type="date"],
     body.light-mode input.flatpickr-input {
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%230f766e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E") !important;
+        background-repeat: no-repeat !important;
+        background-position: right 14px center !important;
+        background-size: 18px 18px !important;
+        color: #0f172a !important;
+        -webkit-text-fill-color: #0f172a !important;
     }
 
     /* Flatpickr Calendar Styling Fixes */
@@ -405,5 +451,29 @@
             });
         });
     });
+
+    function handleLicensePreview(input) {
+        if (input.files && input.files[0]) {
+            var file = input.files[0];
+            $('#license-file-name').text(file.name);
+            if (file.type.startsWith('image/')) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#license-preview-img').attr('src', e.target.result).show();
+                }
+                reader.readAsDataURL(file);
+            } else {
+                $('#license-preview-img').hide();
+            }
+            $('#license-upload-prompt').hide();
+            $('#license-preview-container').css('display', 'flex');
+        }
+    }
+
+    function removeLicensePreview() {
+        $('#license_image').val('');
+        $('#license-preview-container').hide();
+        $('#license-upload-prompt').show();
+    }
 </script>
 @endsection

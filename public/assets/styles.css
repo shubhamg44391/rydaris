@@ -7824,3 +7824,336 @@ button:active,
 .btn:active {
   font-weight: 800 !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   BOOKING FLOW — LIGHT MODE OVERRIDES
+   Fixes all invisible/white-on-white text across booking pages
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Page background ── */
+body.light-mode .booking-coverage-page {
+  background: #f1f5f9 !important;
+}
+
+/* ── Stepper wrapper ── */
+body.light-mode .booking-coverage-page .stepper-wrapper {
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.1) !important;
+}
+body.light-mode .booking-coverage-page .stepper-wrapper [style*="background: rgba(255, 255, 255, 0.1)"],
+body.light-mode .booking-coverage-page .stepper-wrapper [style*="rgba(255,255,255,0.1)"] {
+  background: rgba(15, 23, 42, 0.15) !important;
+}
+
+/* ── Cards ── */
+body.light-mode .booking-coverage-page .card {
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.1) !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08) !important;
+}
+body.light-mode .booking-coverage-page .card-header {
+  background: #f8fafc !important;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+}
+
+/* ── All text inside booking flow ── */
+body.light-mode .booking-coverage-page h1,
+body.light-mode .booking-coverage-page h2,
+body.light-mode .booking-coverage-page h3,
+body.light-mode .booking-coverage-page h4,
+body.light-mode .booking-coverage-page h5,
+body.light-mode .booking-coverage-page h6,
+body.light-mode .booking-coverage-page p,
+body.light-mode .booking-coverage-page span:not(.badge):not([class*="brand"]),
+body.light-mode .booking-coverage-page label,
+body.light-mode .booking-coverage-page small,
+body.light-mode .booking-coverage-page li {
+  color: #0f172a !important;
+}
+
+/* Keep brand teal color for active stepper elements */
+body.light-mode .booking-coverage-page [style*="color: var(--brand)"],
+body.light-mode .booking-coverage-page [style*="color:var(--brand)"] {
+  color: #0f766e !important;
+}
+
+/* ── Muted / secondary text ── */
+body.light-mode .booking-coverage-page [style*="color: #94a3b8"],
+body.light-mode .booking-coverage-page [style*="color:#94a3b8"],
+body.light-mode .booking-coverage-page [style*="color: #a8b3c5"],
+body.light-mode .booking-coverage-page [style*="color: #aab7cb"],
+body.light-mode .booking-coverage-page [style*="color: rgba(255"],
+body.light-mode .booking-coverage-page [style*="color: #64748b"] {
+  color: #475569 !important;
+}
+
+/* ── Form inputs & selects ── */
+body.light-mode .booking-coverage-page input,
+body.light-mode .booking-coverage-page select,
+body.light-mode .booking-coverage-page textarea,
+body.light-mode .booking-coverage-page .form-control,
+body.light-mode .booking-coverage-page .form-select {
+  background: #f8fafc !important;
+  border: 1px solid rgba(15, 23, 42, 0.2) !important;
+  color: #0f172a !important;
+}
+body.light-mode .booking-coverage-page input::placeholder,
+body.light-mode .booking-coverage-page textarea::placeholder {
+  color: #94a3b8 !important;
+}
+body.light-mode .booking-coverage-page input:focus,
+body.light-mode .booking-coverage-page select:focus,
+body.light-mode .booking-coverage-page textarea:focus,
+body.light-mode .booking-coverage-page .form-control:focus {
+  background: #ffffff !important;
+  border-color: #0f766e !important;
+  color: #0f172a !important;
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.12) !important;
+}
+
+/* ── Insurance / extra option cards (inner cards) ── */
+body.light-mode .booking-coverage-page [style*="background: rgba(11, 16, 32"],
+body.light-mode .booking-coverage-page [style*="background:rgba(11,16,32"],
+body.light-mode .booking-coverage-page [style*="background: rgba(15, 23, 42"] {
+  background: #f1f5f9 !important;
+}
+
+/* ── Order summary sidebar ── */
+body.light-mode .booking-coverage-page [style*="background: rgba(82, 234, 210, 0.05)"],
+body.light-mode .booking-coverage-page [style*="background: rgba(82,234,210,0.05)"] {
+  background: rgba(15, 118, 110, 0.06) !important;
+}
+
+/* ── Dividers / separators ── */
+body.light-mode .booking-coverage-page hr,
+body.light-mode .booking-coverage-page [style*="background: rgba(255, 255, 255, 0.05)"],
+body.light-mode .booking-coverage-page [style*="background: rgba(255, 255, 255, 0.08)"],
+body.light-mode .booking-coverage-page [style*="border-top: 1px solid rgba(255"],
+body.light-mode .booking-coverage-page [style*="border-bottom: 1px solid rgba(255"] {
+  border-color: rgba(15, 23, 42, 0.1) !important;
+}
+
+/* ── Outline/secondary buttons in booking flow ── */
+body.light-mode .booking-coverage-page .btn-outline-light {
+  border-color: rgba(15, 23, 42, 0.25) !important;
+  color: #0f172a !important;
+  background: transparent !important;
+}
+body.light-mode .booking-coverage-page .btn-outline-light:hover {
+  background: rgba(15, 23, 42, 0.06) !important;
+}
+
+/* ── Admin sidebar & layout shell in light mode (booking flow uses user layout) ── */
+body.light-mode .admin-sidebar {
+  background: #ffffff !important;
+  border-right: 1px solid rgba(15, 23, 42, 0.08) !important;
+}
+body.light-mode .admin-topbar {
+  background: #ffffff !important;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+}
+body.light-mode .admin-main,
+body.light-mode .admin-content {
+  background: #f1f5f9 !important;
+}
+body.light-mode .admin-shell {
+  background: #f1f5f9 !important;
+}
+body.light-mode .admin-sidebar .nav-link,
+body.light-mode .admin-sidebar .sidebar-label,
+body.light-mode .admin-sidebar a,
+body.light-mode .admin-sidebar span {
+  color: #0f172a !important;
+}
+body.light-mode .admin-sidebar .nav-link:hover,
+body.light-mode .admin-sidebar .nav-link.active {
+  background: rgba(15, 118, 110, 0.1) !important;
+  color: #0f766e !important;
+}
+body.light-mode .admin-topbar .user-greeting,
+body.light-mode .admin-topbar span {
+  color: #0f172a !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BOOKING SUMMARY SIDEBAR CARD — Semantic Class System
+   Works for both dark mode (default) and light mode
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── DARK MODE (default) ── */
+.booking-summary-card {
+  background: rgba(11, 16, 32, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35) !important;
+  backdrop-filter: blur(16px);
+}
+.booking-summary-img {
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 70%);
+}
+.booking-summary-title {
+  color: #ffffff;
+}
+.booking-dates-block {
+  background: rgba(5, 11, 25, 0.5);
+  border: 1px solid rgba(82, 234, 210, 0.2);
+}
+.booking-label {
+  color: #f8fafc;
+}
+.booking-muted {
+  color: #94a3b8;
+}
+.booking-date-value {
+  color: #cbd5e1;
+}
+.booking-divider {
+  background: rgba(255, 255, 255, 0.1);
+}
+.booking-value {
+  color: #f8fafc;
+}
+.booking-total-bar {
+  background: linear-gradient(135deg, rgba(82, 234, 210, 0.25) 0%, rgba(0, 164, 228, 0.25) 100%);
+  border-top: 1px solid rgba(82, 234, 210, 0.35);
+  color: #ffffff;
+}
+
+/* ── LIGHT MODE overrides ── */
+body.light-mode .booking-summary-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.1) !important;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08) !important;
+  backdrop-filter: none !important;
+}
+body.light-mode .booking-summary-img {
+  background: #f8fafc;
+}
+body.light-mode .booking-summary-title {
+  color: #0f172a !important;
+}
+body.light-mode .booking-dates-block {
+  background: #f1f5f9 !important;
+  border: 1px solid rgba(15, 23, 42, 0.1) !important;
+}
+body.light-mode .booking-label {
+  color: #0f172a !important;
+}
+body.light-mode .booking-muted {
+  color: #64748b !important;
+}
+body.light-mode .booking-date-value {
+  color: #334155 !important;
+}
+body.light-mode .booking-divider {
+  background: rgba(15, 23, 42, 0.1) !important;
+}
+body.light-mode .booking-value {
+  color: #0f172a !important;
+}
+body.light-mode .booking-total-bar {
+  background: linear-gradient(135deg, rgba(15, 118, 110, 0.12) 0%, rgba(0, 100, 170, 0.1) 100%) !important;
+  border-top: 1px solid rgba(15, 118, 110, 0.2) !important;
+  color: #0f172a !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   GLOBAL FLATPICKR — LIGHT MODE OVERRIDES
+   Fixes repeating calendar icon / invisible text in all date pickers
+   ═══════════════════════════════════════════════════════════════ */
+body.light-mode .flatpickr-calendar {
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.12) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+  color: #0f172a !important;
+}
+body.light-mode .flatpickr-day {
+  color: #0f172a !important;
+}
+body.light-mode .flatpickr-day:hover {
+  background: rgba(15, 118, 110, 0.1) !important;
+  color: #0f172a !important;
+  border-color: transparent !important;
+}
+body.light-mode .flatpickr-day.selected,
+body.light-mode .flatpickr-day.selected:hover {
+  background: #0f766e !important;
+  border-color: #0f766e !important;
+  color: #ffffff !important;
+}
+body.light-mode .flatpickr-day.today {
+  border-color: #0f766e !important;
+}
+body.light-mode .flatpickr-day.flatpickr-disabled,
+body.light-mode .flatpickr-day.flatpickr-disabled:hover {
+  color: #cbd5e1 !important;
+  background: transparent !important;
+}
+body.light-mode .flatpickr-month,
+body.light-mode .flatpickr-current-month {
+  color: #0f172a !important;
+  fill: #0f172a !important;
+}
+body.light-mode .flatpickr-current-month input.cur-year {
+  color: #0f172a !important;
+}
+body.light-mode .flatpickr-current-month .flatpickr-monthDropdown-months {
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+body.light-mode .flatpickr-weekday {
+  color: #0f766e !important;
+  background: #ffffff !important;
+}
+body.light-mode .flatpickr-months .flatpickr-prev-month svg,
+body.light-mode .flatpickr-months .flatpickr-next-month svg {
+  fill: #0f172a !important;
+}
+body.light-mode .flatpickr-calendar.arrowTop:before {
+  border-bottom-color: rgba(15, 23, 42, 0.12) !important;
+}
+body.light-mode .flatpickr-calendar.arrowTop:after {
+  border-bottom-color: #ffffff !important;
+}
+/* Fix: date/time input text color in light mode (prevents invisible text & repeating icons) */
+body.light-mode input[type="date"],
+body.light-mode input[type="time"],
+body.light-mode input[type="datetime-local"] {
+  color: #0f172a !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.2) !important;
+  -webkit-text-fill-color: #0f172a !important;
+}
+body.light-mode input[type="date"]::-webkit-calendar-picker-indicator,
+body.light-mode input[type="time"]::-webkit-calendar-picker-indicator,
+body.light-mode input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  filter: invert(0) !important;
+  opacity: 0.6;
+  cursor: pointer;
+}
+/* Global fix: prevent white-on-white text on ALL inputs in light mode */
+body.light-mode input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="range"]),
+body.light-mode select,
+body.light-mode textarea {
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+}
+body.light-mode input::placeholder,
+body.light-mode textarea::placeholder {
+  color: #94a3b8 !important;
+  -webkit-text-fill-color: #94a3b8 !important;
+  opacity: 1 !important;
+}
+/* Global fix specifically for flatpickr inputs — dark.css theme forces color: #fff */
+body.light-mode .flatpickr-input,
+body.light-mode .flatpickr-alt-input,
+body.light-mode input.flatpickr-input,
+body.light-mode input.flatpickr-alt-input {
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+  background-color: #ffffff !important;
+}
+body.light-mode .flatpickr-input::placeholder,
+body.light-mode .flatpickr-alt-input::placeholder {
+  color: #94a3b8 !important;
+  -webkit-text-fill-color: #94a3b8 !important;
+}

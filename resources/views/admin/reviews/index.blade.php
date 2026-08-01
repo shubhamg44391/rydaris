@@ -1,8 +1,8 @@
 @extends('admin.layouts.app')
 
 @section('main-content')
-    <div class="admin-panel">
-        <div class="panel-head d-flex justify-content-between align-items-center mb-4" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
+    <div class="admin-panel" style="padding: 24px;">
+        <div class="panel-head d-flex justify-content-between align-items-center mb-4" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 15px; padding-bottom: 16px; border-bottom: 1px solid var(--line, rgba(255,255,255,0.08));">
             <div>
                 <h2 style="margin: 0; font-weight: 800; font-size: 1.5rem; color: var(--text, #f8fafc);">
                     Customer Reviews Management
@@ -11,11 +11,11 @@
             </div>
         </div>
 
-        <!-- Filter & Search Controls Bar -->
-        <div class="d-flex justify-content-between align-items-center mb-4" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
-            <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+        <!-- Filter & Search Controls Bar in 1 Line with Proper Spacing -->
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; flex-wrap: nowrap; width: 100%; box-sizing: border-box;">
+            <div style="display: flex; align-items: center; gap: 12px; flex-shrink: 0;">
                 <!-- Vendor Filter Dropdown -->
-                <select id="reviewVendorFilter" style="border: 1px solid var(--line, rgba(255,255,255,0.12)); background: var(--bg-card, #121e28); color: var(--text, #f8fafc); border-radius: var(--radius, 8px); padding: 8px 14px; font-size: 0.88rem;">
+                <select id="reviewVendorFilter" style="border: 1px solid var(--line, rgba(255,255,255,0.12)); background: var(--bg-card, #121e28); color: var(--text, #f8fafc); border-radius: var(--radius, 8px); padding: 0 14px; font-size: 0.88rem; min-width: 160px; height: 38px; width: auto; display: inline-block;">
                     <option value="">All Vendors</option>
                     @foreach($vendors as $v)
                         <option value="{{ $v->id }}" {{ ($vendorId == $v->id) ? 'selected' : '' }}>{{ $v->name }}</option>
@@ -23,7 +23,7 @@
                 </select>
 
                 <!-- Rating Filter Dropdown -->
-                <select id="reviewRatingFilter" style="border: 1px solid var(--line, rgba(255,255,255,0.12)); background: var(--bg-card, #121e28); color: var(--text, #f8fafc); border-radius: var(--radius, 8px); padding: 8px 14px; font-size: 0.88rem;">
+                <select id="reviewRatingFilter" style="border: 1px solid var(--line, rgba(255,255,255,0.12)); background: var(--bg-card, #121e28); color: var(--text, #f8fafc); border-radius: var(--radius, 8px); padding: 0 14px; font-size: 0.88rem; min-width: 150px; height: 38px; width: auto; display: inline-block;">
                     <option value="">All Ratings</option>
                     <option value="5" {{ ($rating == 5) ? 'selected' : '' }}>5 Stars ★★★★★</option>
                     <option value="4" {{ ($rating == 4) ? 'selected' : '' }}>4 Stars ★★★★</option>
@@ -34,8 +34,8 @@
             </div>
 
             <!-- Search Form -->
-            <div style="position: relative; min-width: 280px;">
-                <input type="text" id="reviewSearchInput" value="{{ $search ?? '' }}" placeholder="Search comment, customer, vendor..." style="width: 100%; border: 1px solid var(--line, rgba(255,255,255,0.12)); background: var(--bg-card, #121e28); color: var(--text, #f8fafc); border-radius: var(--radius, 8px); padding: 8px 36px 8px 14px; font-size: 0.88rem;" />
+            <div style="position: relative; width: 320px; max-width: 100%; flex-shrink: 0;">
+                <input type="text" id="reviewSearchInput" value="{{ $search ?? '' }}" placeholder="Search comment, customer, vendor..." style="width: 100%; height: 38px; border: 1px solid var(--line, rgba(255,255,255,0.12)); background: var(--bg-card, #121e28); color: var(--text, #f8fafc); border-radius: var(--radius, 8px); padding: 0 36px 0 14px; font-size: 0.88rem; box-sizing: border-box;" />
                 <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; position: absolute; right: 12px; top: 50%; transform: translateY(-50%); fill: none; stroke: #94a3b8; stroke-width: 2; pointer-events: none;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
             </div>
         </div>

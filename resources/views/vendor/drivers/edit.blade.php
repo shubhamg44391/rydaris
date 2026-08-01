@@ -26,11 +26,22 @@
 
                     <!-- Mobile Number (Mandatory) -->
                     <div class="col-md-6 mb-4">
-                        <label for="phone" class="form-label-custom">Mobile Number <span style="color: #ef4444;">*</span></label>
-                        <input type="text" class="form-control form-input-custom @error('phone') is-invalid @enderror" id="phone" name="phone"
-                            value="{{ old('phone', $driver->phone) }}" required placeholder="e.g. +91 9876543210" />
+                        <label for="driver_phone_input" class="form-label-custom">Mobile Number <span style="color: #ef4444;">*</span></label>
+                        @include('partials.phone-input')
+                        <input type="tel" id="driver_phone_input" class="form-control form-input-custom @error('phone') is-invalid @enderror" placeholder="e.g. 9876543210" value="{{ old('phone', $driver->phone) }}" required style="width: 100%;">
+                        <input type="hidden" name="country_code" id="hidden_country_code" value="{{ old('country_code', '+91') }}">
+                        <input type="hidden" name="phone" id="hidden_phone" value="{{ old('phone', $driver->phone) }}">
+                        <script>
+                            (function setupDriverEditPhone() {
+                                if (typeof initializeIntlTelInput === 'function') {
+                                    initializeIntlTelInput('driver_phone_input', 'hidden_country_code', 'hidden_phone');
+                                } else {
+                                    setTimeout(setupDriverEditPhone, 50);
+                                }
+                            })();
+                        </script>
                         @error('phone')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
                         @enderror
                     </div>
 
@@ -73,6 +84,45 @@
                             value="{{ old('license_expiry', $driver->license_expiry) }}" style="cursor: pointer;" onclick="try{ if(typeof this.showPicker === 'function'){ this.showPicker(); } }catch(e){}" />
                         @error('license_expiry')
                             <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Driver License Document / Image (Optional) -->
+                    <div class="col-md-12 mb-4">
+                        <label class="form-label-custom">Driver License Image / Document <span class="text-muted font-weight-normal">(Optional)</span></label>
+
+                        <div id="license-upload-box" style="border: 2px dashed var(--line, #cbd5e1); border-radius: var(--radius, 10px); padding: 24px; text-align: center; background: var(--bg-2, #f8fafc); cursor: pointer; transition: border-color 0.2s;" onclick="document.getElementById('license_image').click();">
+                            <input type="file" id="license_image" name="license_image" accept="image/*,application/pdf" class="d-none" style="display: none;" onchange="handleLicensePreview(this)" />
+
+                            <div id="license-upload-prompt" style="{{ $driver->license_image ? 'display: none;' : 'display: block;' }}">
+                                <svg viewBox="0 0 24 24" style="width: 40px; height: 40px; fill: none; stroke: var(--brand, #52ead2); stroke-width: 2; margin-bottom: 8px;">
+                                    <rect x="3" y="4" width="18" height="16" rx="2" ry="2"></rect>
+                                    <circle cx="9" cy="10" r="2"></circle>
+                                    <line x1="15" y1="8" x2="19" y2="8"></line>
+                                    <line x1="15" y1="12" x2="19" y2="12"></line>
+                                    <line x1="7" y1="16" x2="17" y2="16"></line>
+                                </svg>
+                                <p style="margin: 0 0 4px 0; font-weight: 700; color: var(--text, #1e293b); font-size: 0.95rem;">Click to upload or change driver license photo or PDF</p>
+                                <p style="margin: 0; color: #94a3b8; font-size: 0.8rem;">PNG, JPG, WEBP, or PDF (Max: 5MB)</p>
+                            </div>
+
+                            <div id="license-preview-container" style="{{ $driver->license_image ? 'display: flex;' : 'display: none;' }} align-items: center; justify-content: center; flex-direction: column; gap: 8px;">
+                                @if($driver->license_image)
+                                    @php $ext = pathinfo($driver->license_image, PATHINFO_EXTENSION); @endphp
+                                    @if(strtolower($ext) === 'pdf')
+                                        <a href="{{ asset('storage/' . $driver->license_image) }}" target="_blank" class="btn btn-sm btn-outline-info" onclick="event.stopPropagation();" style="border-radius: 6px; padding: 4px 12px; font-weight: 700; text-decoration: none;">View Current License PDF</a>
+                                    @else
+                                        <img id="license-preview-img" src="{{ asset('storage/' . $driver->license_image) }}" alt="License Preview" style="max-height: 140px; border-radius: 8px; object-fit: contain;" />
+                                    @endif
+                                @else
+                                    <img id="license-preview-img" src="" alt="License Preview" style="max-height: 140px; border-radius: 8px; object-fit: contain; display: none;" />
+                                @endif
+                                <span id="license-file-name" style="font-weight: 600; font-size: 0.85rem; color: var(--text, #f8fafc);"></span>
+                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="event.stopPropagation(); removeLicensePreview();" style="border-radius: 6px; padding: 4px 12px; font-weight: 700;">Remove / Change License</button>
+                            </div>
+                        </div>
+                        @error('license_image')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
                         @enderror
                     </div>
 
@@ -405,5 +455,29 @@
             });
         });
     });
+
+    function handleLicensePreview(input) {
+        if (input.files && input.files[0]) {
+            var file = input.files[0];
+            $('#license-file-name').text(file.name);
+            if (file.type.startsWith('image/')) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#license-preview-img').attr('src', e.target.result).show();
+                }
+                reader.readAsDataURL(file);
+            } else {
+                $('#license-preview-img').hide();
+            }
+            $('#license-upload-prompt').hide();
+            $('#license-preview-container').css('display', 'flex');
+        }
+    }
+
+    function removeLicensePreview() {
+        $('#license_image').val('');
+        $('#license-preview-container').hide();
+        $('#license-upload-prompt').show();
+    }
 </script>
 @endsection

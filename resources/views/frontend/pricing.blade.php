@@ -368,27 +368,22 @@
       }
     </script>
 
-    
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
-    
     <div id="confirmDetailsModal" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.85); align-items: center; justify-content: center; backdrop-filter: blur(8px); padding: 20px;">
         <div style="background: #111620; border: 1px solid rgba(82, 234, 210, 0.25); border-radius: 16px; width: 100%; max-width: 750px; max-height: 90vh; overflow-y: auto; padding: 25px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); position: relative; font-family: 'Inter', sans-serif; color: #f8fafc; text-align: left; box-sizing: border-box;">
-            
             
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 15px;">
                 <h3 style="margin: 0; font-size: 1.35rem; font-weight: 700; color: #ffffff;">Confirm Your Details</h3>
                 <button onclick="closeDetailsModal()" style="background: none; border: none; color: #a0aec0; cursor: pointer; font-size: 1.8rem; display: flex; align-items: center; justify-content: center; padding: 0; line-height: 1;">&times;</button>
             </div>
 
-            
             <div style="background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(82, 234, 210, 0.3); border-radius: 12px; padding: 15px 20px; margin-bottom: 20px; font-size: 0.95rem; line-height: 1.6;">
                 <div><span style="color: #a0aec0;">Selected Package:</span> <strong id="modalPackageName" style="color: #ffffff;">Standard</strong></div>
                 <div><span style="color: #a0aec0;">Billing Cycle:</span> <strong id="modalBillingCycle" style="color: #ffffff;">Monthly</strong></div>
-                <div style="margin-top: 4px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.05);"><span style="color: #a0aec0;">Total Price (incl. {{ \App\Models\SiteSetting::first()?->tax_percentage ?? 18 }}% tax):</span> <strong id="modalTotalPrice" style="color: var(--brand);">₹74,282.82 / Monthly</strong></div>
+                <div style="margin-top: 4px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.05);"><span style="color: #a0aec0;">Total Price (incl. {{ \App\Models\SiteSetting::first()?->tax_percentage ?? 18 }}% tax):</span> <strong id="modalTotalPrice" style="color: #52ead2;">₹74,282.82 / Monthly</strong></div>
             </div>
 
-            
             <div class="confirm-fields-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
                 
                 <div style="display: flex; flex-direction: column; gap: 15px;">
@@ -422,36 +417,36 @@
                 <div style="display: flex; flex-direction: column; gap: 15px;">
                     <div style="position: relative;">
                         <label style="display: block; margin-bottom: 6px; color: #a0aec0; font-size: 0.85rem; font-weight: 500;">Street Address <span style="color: #ff4d4d;">*</span></label>
-                        <input type="text" id="custStreetAddress" value="{{ auth()->check() ? auth()->user()->street_address : '' }}" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: #ffffff; font-size: 0.95rem; outline: none; border-color: rgba(255, 255, 255, 0.12);" placeholder="Start typing your street address..." autocomplete="off" />
+                        <input type="text" id="custStreetAddress" value="{{ auth()->check() ? (auth()->user()->street_address ?? auth()->user()->subscription?->street_address ?? '') : '' }}" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: #ffffff; font-size: 0.95rem; outline: none; border-color: rgba(255, 255, 255, 0.12);" placeholder="Start typing your street address..." autocomplete="off" />
                         <div id="addrSuggestions" style="display: none; position: absolute; left: 0; right: 0; top: 100%; background: #111620; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 8px; margin-top: 4px; max-height: 200px; overflow-y: auto; z-index: 10000; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);"></div>
                     </div>
 
                     <div>
                         <label style="display: block; margin-bottom: 6px; color: #a0aec0; font-size: 0.85rem; font-weight: 500;">Landmark <span style="color: #ff4d4d;">*</span></label>
-                        <input type="text" id="custLandmark" value="{{ auth()->check() ? auth()->user()->landmark : '' }}" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: #ffffff; font-size: 0.95rem; outline: none; border-color: rgba(255, 255, 255, 0.12);" placeholder="Landmark (e.g. near metro station)" />
+                        <input type="text" id="custLandmark" value="{{ auth()->check() ? (auth()->user()->landmark ?? auth()->user()->subscription?->landmark ?? '') : '' }}" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: #ffffff; font-size: 0.95rem; outline: none; border-color: rgba(255, 255, 255, 0.12);" placeholder="Landmark (e.g. near metro station)" />
                     </div>
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
                         <div>
                             <label style="display: block; margin-bottom: 6px; color: #a0aec0; font-size: 0.85rem; font-weight: 500;">Pincode <span style="color: #ff4d4d;">*</span></label>
-                            <input type="text" id="custPincode" value="{{ auth()->check() ? auth()->user()->pincode : '' }}" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: #ffffff; font-size: 0.95rem; outline: none; border-color: rgba(255, 255, 255, 0.12);" placeholder="Pincode" />
+                            <input type="text" id="custPincode" value="{{ auth()->check() ? (auth()->user()->pincode ?? auth()->user()->subscription?->pincode ?? '') : '' }}" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: #ffffff; font-size: 0.95rem; outline: none; border-color: rgba(255, 255, 255, 0.12);" placeholder="Pincode" />
                         </div>
                         <div>
                             <label style="display: block; margin-bottom: 6px; color: #a0aec0; font-size: 0.85rem; font-weight: 500;">City <span style="color: #ff4d4d;">*</span></label>
-                            <input type="text" id="custCity" value="{{ auth()->check() ? auth()->user()->city : '' }}" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: #ffffff; font-size: 0.95rem; outline: none; border-color: rgba(255, 255, 255, 0.12);" placeholder="City" />
+                            <input type="text" id="custCity" value="{{ auth()->check() ? (auth()->user()->city ?? auth()->user()->subscription?->city ?? '') : '' }}" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: #ffffff; font-size: 0.95rem; outline: none; border-color: rgba(255, 255, 255, 0.12);" placeholder="City" />
                         </div>
                         <div>
                             <label style="display: block; margin-bottom: 6px; color: #a0aec0; font-size: 0.85rem; font-weight: 500;">Country <span style="color: #ff4d4d;">*</span></label>
-                            <input type="text" id="custCountry" value="{{ auth()->check() ? auth()->user()->country : '' }}" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: #ffffff; font-size: 0.95rem; outline: none; border-color: rgba(255, 255, 255, 0.12);" placeholder="Country" />
+                            <input type="text" id="custCountry" value="{{ auth()->check() ? (auth()->user()->country ?? auth()->user()->subscription?->country ?? '') : '' }}" required style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; color: #ffffff; font-size: 0.95rem; outline: none; border-color: rgba(255, 255, 255, 0.12);" placeholder="Country" />
                         </div>
                     </div>
                 </div>
             </div>
 
             
-            <button onclick="proceedToPay()" id="proceedPayBtn" style="width: 100%; margin-top: 15px; padding: 14px; background: #ff5429; color: #ffffff; border: none; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <button onclick="proceedToPay()" id="proceedPayBtn" style="width: 100%; margin-top: 15px; padding: 16px; background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%); color: #051013; border: none; border-radius: 999px; font-weight: 800; font-size: 1.05rem; cursor: pointer; transition: all 0.25s ease; box-shadow: 0 4px 20px rgba(82, 234, 210, 0.35); display: flex; align-items: center; justify-content: center; gap: 8px;">
                 <span id="btnText">Proceed to Pay</span>
-                <span id="btnLoader" style="display: none; width: 18px; height: 18px; border: 2px solid #ffffff; border-top: 2px solid transparent; border-radius: 50%; animation: spin 0.8s linear infinite;"></span>
+                <span id="btnLoader" style="display: none; width: 18px; height: 18px; border: 2px solid #051013; border-top: 2px solid transparent; border-radius: 50%; animation: spin 0.8s linear infinite;"></span>
             </button>
         </div>
     </div>
@@ -462,7 +457,9 @@
         100% { transform: rotate(360deg); }
     }
     #proceedPayBtn:hover {
-        background: #e0441d;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(82, 234, 210, 0.5);
+        opacity: 0.95;
     }
     </style>
 

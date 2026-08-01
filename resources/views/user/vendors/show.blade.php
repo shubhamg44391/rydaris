@@ -164,8 +164,8 @@
 
                 
                 <div class="col-md-4">
-                    <button type="submit" class="btn" style="width: 100%; padding: 12px; background: var(--brand); color: #0b1020; border: none; border-radius: 8px; font-weight: 700; font-size: 1rem; transition: all 0.2s; box-shadow: 0 4px 15px rgba(82, 234, 210, 0.3);">
-                        Search Now
+                    <button type="submit" class="btn" style="width: 100%; padding: 12px 24px; background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%); color: #0b1020; border: none; border-radius: 999px; font-weight: 800 !important; font-size: 1rem; transition: all 0.2s; box-shadow: 0 4px 15px rgba(82, 234, 210, 0.3);">
+                        <strong style="font-weight: 800 !important; color: #0b1020;">Search Now</strong>
                     </button>
                 </div>
 
@@ -307,11 +307,12 @@
 
                                         
                                         <div style="display: flex; justify-content: center; width: 100%; margin-top: 18px;">
-                                            <button onclick="bookNow('{{ $vehicle->id }}')" class="btn" 
-                                                    style="background: linear-gradient(135deg, #52ead2 0%, #00a4e4 100%); color: #0b1020; font-weight: 800; padding: 10px 28px; border-radius: 8px; border: none; font-size: 0.8rem; text-transform: uppercase; box-shadow: 0 4px 15px rgba(82, 234, 210, 0.2); transition: all 0.2s; width: 100%; max-width: 240px; text-align: center;"
-                                                    onmouseover="this.style.background='linear-gradient(135deg, #00a4e4 0%, #52ead2 100%)'; this.style.transform='scale(1.02)';"
-                                                    onmouseout="this.style.background='linear-gradient(135deg, #52ead2 0%, #00a4e4 100%)'; this.style.transform='scale(1)';">
-                                                BOOK NOW
+                                            <button onclick="bookNow('{{ $vehicle->id }}')" class="btn rounded-pill" 
+                                                    style="background: linear-gradient(135deg, #52ead2 0%, #00a4e4 100%); color: #0b1020; font-weight: 800 !important; padding: 12px 28px; border-radius: 999px !important; border: none; font-size: 0.85rem; text-transform: uppercase; box-shadow: 0 4px 15px rgba(82, 234, 210, 0.25); transition: transform 0.2s ease, box-shadow 0.2s ease; width: 100%; max-width: 240px; text-align: center;"
+                                                    onmouseover="this.style.transform='scale(1.04)'; this.style.boxShadow='0 8px 25px rgba(82, 234, 210, 0.45)';"
+                                                    onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 15px rgba(82, 234, 210, 0.25)';"
+                                            >
+                                                <strong style="font-weight: 800 !important; color: #0b1020;">BOOK NOW</strong>
                                             </button>
                                         </div>
 

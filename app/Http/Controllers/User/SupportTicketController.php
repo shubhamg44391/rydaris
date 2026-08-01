@@ -64,6 +64,14 @@ class SupportTicketController extends Controller
             'attachment' => $attachmentPath
         ]);
 
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'success' => true,
+                'message' => 'Support ticket created successfully!',
+                'redirect_url' => route('user.support-tickets.index')
+            ]);
+        }
+
         return redirect()->route('user.support-tickets.index')->with('success', 'Support ticket created successfully!');
     }
 
@@ -90,7 +98,7 @@ class SupportTicketController extends Controller
             $attachmentPath = $request->file('attachment')->store('tickets', 'public');
         }
 
-        SupportTicketReply::create([
+        $reply = SupportTicketReply::create([
             'support_ticket_id' => $ticket->id,
             'user_id' => auth()->id(),
             'message' => $request->input('message'),
@@ -100,6 +108,18 @@ class SupportTicketController extends Controller
         
         if ($ticket->status === 'closed') {
             $ticket->update(['status' => 'open']);
+        }
+
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'success' => true,
+                'message' => 'Reply submitted successfully!',
+                'reply' => [
+                    'message' => $reply->message,
+                    'attachment_url' => $reply->attachment ? asset('storage/' . $reply->attachment) : null,
+                    'time' => $reply->created_at->diffForHumans()
+                ]
+            ]);
         }
 
         return redirect()->back()->with('success', 'Reply submitted successfully!');

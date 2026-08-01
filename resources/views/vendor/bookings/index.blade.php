@@ -145,6 +145,20 @@
             color: #475569 !important;
             border-color: rgba(15, 23, 42, 0.12) !important;
         }
+
+        /* Export button hover fix */
+        #btn-export-bookings {
+            transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s !important;
+        }
+        #btn-export-bookings:hover {
+            opacity: 0.85;
+            transform: translateY(-1px);
+        }
+        body.light-mode #btn-export-bookings:hover {
+            opacity: 1 !important;
+            box-shadow: 0 6px 20px rgba(15, 118, 110, 0.35) !important;
+            transform: translateY(-1px) !important;
+        }
     </style>
     <div class="panel-head d-flex justify-content-between align-items-center" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
         <div>
@@ -152,8 +166,7 @@
         </div>
         <div style="display: flex; gap: 10px; align-items: center;">
             <a href="{{ route('vendor.bookings.export') }}" id="btn-export-bookings"
-               style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: linear-gradient(135deg, #52ead2, #2bc2a8); color: #051013; border-radius: 8px; font-weight: 700; font-size: 0.875rem; text-decoration: none; box-shadow: 0 2px 12px rgba(82,234,210,0.25); transition: opacity 0.2s;"
-               onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+               style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: linear-gradient(135deg, #52ead2, #2bc2a8); color: #051013; border-radius: 8px; font-weight: 700; font-size: 0.875rem; text-decoration: none; box-shadow: 0 2px 12px rgba(82,234,210,0.25);">
                 <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                     <polyline points="7 10 12 15 17 10"/>
@@ -221,9 +234,11 @@
                             </td>
                             <td style="white-space: nowrap;">
                                 @if($booking->driver)
-                                    <strong style="color: #52ead2;">{{ $booking->driver->name }}</strong>
+                                    <span class="badge" style="background: rgba(82, 234, 210, 0.1); color: var(--brand, #52ead2); border: 1px solid rgba(82, 234, 210, 0.2); font-weight: 700; padding: 5px 10px; border-radius: 6px;">
+                                        <i class="fa fa-user me-1"></i>{{ $booking->driver->name }}
+                                    </span>
                                 @else
-                                    <span style="color: #94a3b8; font-style: italic; font-size: 0.85rem;">Not Assigned</span>
+                                    <span style="color: #64748b; font-style: italic; font-size: 0.85rem;">Not Assigned</span>
                                 @endif
                             </td>
                             <td style="white-space: nowrap;">
@@ -302,13 +317,28 @@
                                         View T&C
                                     </a>
                                 </td>
-                                <td style="padding: 15px 20px; text-align: right;">
-                                    <a href="{{ route('vendor.bookings.show', $booking->id) }}" class="btn btn-sm" title="Edit" style="background: rgba(255,255,255,0.05); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); text-decoration: none; display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0; border-radius: 4px;">
-                                        <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2;">
-                                            <path d="M12 20h9"/>
-                                            <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>
-                                        </svg>
-                                    </a>
+                                <td style="padding: 15px 20px; text-align: right; white-space: nowrap;">
+                                    <div style="display: inline-flex; align-items: center; gap: 8px;">
+                                        <a href="{{ route('vendor.bookings.invoice', $booking->id) }}" target="_blank"
+                                           title="View Booking Invoice"
+                                           style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0; background: rgba(82,234,210,0.1); color: #52ead2; border: 1px solid rgba(82,234,210,0.3); border-radius: 4px; transition: all 0.2s;"
+                                           onmouseover="this.style.background='rgba(82,234,210,0.2)';"
+                                           onmouseout="this.style.background='rgba(82,234,210,0.1)';"
+                                        >
+                                            <svg viewBox="0 0 24 24" style="width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;">
+                                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                                <polyline points="14 2 14 8 20 8"/>
+                                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                                <line x1="16" y1="17" x2="8" y2="17"/>
+                                            </svg>
+                                        </a>
+                                        <a href="{{ route('vendor.bookings.show', $booking->id) }}" class="btn btn-sm" title="Edit" style="background: rgba(255,255,255,0.05); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); text-decoration: none; display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0; border-radius: 4px;">
+                                            <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2;">
+                                                <path d="M12 20h9"/>
+                                                <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>
+                                            </svg>
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                         @empty
@@ -432,5 +462,96 @@
             dropdown.setAttribute('data-current-status', dropdown.value);
         });
     });
+
+    function openTableAssignDriverModal(bookingId, currentDriverId) {
+        $('#table_booking_id').val(bookingId);
+        $('#table_driver_id').val(currentDriverId || '');
+        $('#tableAssignDriverModalTitle').text(currentDriverId ? 'Change Driver' : 'Assign Driver');
+        $('#tableAssignDriverModal').css('display', 'flex');
+    }
+
+    function closeTableAssignDriverModal() {
+        $('#tableAssignDriverModal').css('display', 'none');
+    }
+
+    $('#tableAssignDriverForm').on('submit', function(e) {
+        e.preventDefault();
+        var bookingId = $('#table_booking_id').val();
+        var driverId = $('#table_driver_id').val();
+        if (!driverId) {
+            Swal.fire('Error!', 'Please select a driver.', 'error');
+            return;
+        }
+        $('#btnTableAssignDriverSubmit').prop('disabled', true);
+
+        $.ajax({
+            url: "/vendor/bookings/" + bookingId + "/assign-driver",
+            type: 'POST',
+            data: {
+                _token: "{{ csrf_token() }}",
+                driver_id: driverId
+            },
+            dataType: 'json',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            success: function(data) {
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: data.message,
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(function() {
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire('Error!', data.message || 'Failed to assign driver.', 'error');
+                }
+            },
+            error: function(xhr) {
+                var msg = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'An error occurred while assigning driver.';
+                Swal.fire('Error!', msg, 'error');
+            },
+            complete: function() {
+                $('#btnTableAssignDriverSubmit').prop('disabled', false);
+            }
+        });
+    });
 </script>
+
+<!-- Table Assign Driver Popup Modal -->
+<div id="tableAssignDriverModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 99999; align-items: center; justify-content: center; padding: 20px;">
+    <div style="background: var(--bg-card, #1e293b); border: 1px solid var(--line, #334155); border-radius: 12px; width: 100%; max-width: 480px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); overflow: hidden;">
+        <div style="padding: 16px 20px; border-bottom: 1px solid var(--line, #334155); display: flex; justify-content: space-between; align-items: center;">
+            <h5 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: var(--text, #f8fafc);" id="tableAssignDriverModalTitle">
+                Assign Driver
+            </h5>
+            <button type="button" onclick="closeTableAssignDriverModal()" style="background: none; border: none; color: #94a3b8; font-size: 1.4rem; cursor: pointer; line-height: 1;">&times;</button>
+        </div>
+        <form id="tableAssignDriverForm">
+            @csrf
+            <input type="hidden" id="table_booking_id" value="">
+            <div style="padding: 20px;">
+                <label style="color: #94a3b8; font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 8px;">Select Driver *</label>
+                <select name="driver_id" id="table_driver_id" class="form-select dark-input" style="width: 100%; font-weight: 600;" required>
+                    <option value="">-- Select Driver --</option>
+                    @if(isset($activeDrivers))
+                        @foreach($activeDrivers as $drv)
+                            <option value="{{ $drv->id }}">
+                                {{ $drv->name }} | {{ $drv->phone }}
+                            </option>
+                        @endforeach
+                    @endif
+                </select>
+                @if(isset($activeDrivers) && $activeDrivers->isEmpty())
+                    <p style="color: #f87171; font-size: 0.82rem; margin-top: 8px; margin-bottom: 0;">No active drivers available. Please add or activate a driver first.</p>
+                @endif
+            </div>
+            <div style="padding: 14px 20px; border-top: 1px solid var(--line, #334155); display: flex; justify-content: flex-end; gap: 10px;">
+                <button type="button" onclick="closeTableAssignDriverModal()" class="btn btn-secondary rounded-pill px-4" style="font-weight: 700;">Cancel</button>
+                <button type="submit" id="btnTableAssignDriverSubmit" class="btn btn-primary rounded-pill px-4" style="background: var(--brand, #52ead2); color: #061218; border: none; font-weight: 700;" {{ (isset($activeDrivers) && $activeDrivers->isEmpty()) ? 'disabled' : '' }}>Assign</button>
+            </div>
+        </form>
+    </div>
+</div>
 @endsection

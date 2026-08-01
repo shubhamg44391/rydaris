@@ -87,6 +87,10 @@
                         <span style="color: #94a3b8; font-size: 0.78rem; text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 2px;">Address</span>
                         <span id="modalDriverAddress" style="color: var(--text, #cbd5e1);"></span>
                     </div>
+                    <div style="grid-column: span 2;" id="modalLicenseImageBlock">
+                        <span style="color: #94a3b8; font-size: 0.78rem; text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 4px;">License Document</span>
+                        <div id="modalLicenseImageContent"></div>
+                    </div>
                     <div style="grid-column: span 2;">
                         <span style="color: #94a3b8; font-size: 0.78rem; text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 2px;">Notes</span>
                         <span id="modalDriverNotes" style="color: var(--text, #cbd5e1); font-style: italic;"></span>
@@ -118,6 +122,18 @@
                     $('#modalDriverLicense').text(d.license_number);
                     $('#modalDriverExpiry').text(d.license_expiry);
                     $('#modalDriverNotes').text(d.notes);
+                    
+                    if (d.license_image_url) {
+                        var ext = d.license_image_url.split('.').pop().toLowerCase();
+                        if (ext === 'pdf') {
+                            $('#modalLicenseImageContent').html('<a href="' + d.license_image_url + '" target="_blank" class="btn btn-sm btn-outline-info" style="font-weight: 700; text-decoration: none;">View License PDF Document</a>');
+                        } else {
+                            $('#modalLicenseImageContent').html('<a href="' + d.license_image_url + '" target="_blank"><img src="' + d.license_image_url + '" style="max-height: 120px; border-radius: 8px; border: 1px solid var(--line, #334155);" alt="License Document"/></a>');
+                        }
+                        $('#modalLicenseImageBlock').show();
+                    } else {
+                        $('#modalLicenseImageBlock').hide();
+                    }
                     
                     if (d.status === 'Active') {
                         $('#modalDriverStatus').attr('class', 'status-badge-active').text('Active');

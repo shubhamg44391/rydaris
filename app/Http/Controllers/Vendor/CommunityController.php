@@ -78,7 +78,7 @@ class CommunityController extends Controller
     {
         $this->checkMenuAccess();
 
-        $post = CommunityPost::with(['user', 'comments.user', 'likes'])->findOrFail($id);
+        $post = CommunityPost::with(['user', 'comments.user', 'likes'])->where('slug', $id)->orWhere('id', $id)->firstOrFail();
 
         if (!$post->is_published && $post->user_id !== Auth::id() && Auth::user()->role !== 'admin') {
             abort(404, 'Post not found or unpublished.');
@@ -95,7 +95,7 @@ class CommunityController extends Controller
             'comment' => 'required|string|max:2000',
         ]);
 
-        $post = CommunityPost::findOrFail($id);
+        $post = CommunityPost::where('slug', $id)->orWhere('id', $id)->firstOrFail();
 
         CommunityComment::create([
             'community_post_id' => $post->id,
@@ -110,7 +110,7 @@ class CommunityController extends Controller
     {
         $this->checkMenuAccess();
 
-        $post = CommunityPost::findOrFail($id);
+        $post = CommunityPost::where('slug', $id)->orWhere('id', $id)->firstOrFail();
         $userId = Auth::id();
 
         $existingLike = CommunityLike::where('community_post_id', $post->id)
@@ -145,7 +145,7 @@ class CommunityController extends Controller
     {
         $this->checkMenuAccess();
 
-        $post = CommunityPost::findOrFail($id);
+        $post = CommunityPost::where('slug', $id)->orWhere('id', $id)->firstOrFail();
 
         if ($post->user_id !== Auth::id() && Auth::user()->role !== 'admin') {
             return redirect()->back()->with('error', 'You are not authorized to delete this post.');

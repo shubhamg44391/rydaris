@@ -16,5 +16,7 @@ class AdminTermsCondition extends Model
         'meta_title',
         'meta_description',
         'description',
+        'agreement_title',
+        'agreement_description',
     ];
 }

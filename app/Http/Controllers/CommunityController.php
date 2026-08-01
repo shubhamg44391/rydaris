@@ -25,7 +25,10 @@ class CommunityController extends Controller
     {
         $post = CommunityPost::with(['user', 'comments.user'])
             ->where('is_published', true)
-            ->findOrFail($id);
+            ->where(function ($query) use ($id) {
+                $query->where('slug', $id)->orWhere('id', $id);
+            })
+            ->firstOrFail();
 
         return view('frontend.community.show', compact('post'));
     }
@@ -45,7 +48,11 @@ class CommunityController extends Controller
             'comment' => 'required|string|max:2000',
         ]);
 
-        $post = CommunityPost::where('is_published', true)->findOrFail($id);
+        $post = CommunityPost::where('is_published', true)
+            ->where(function ($query) use ($id) {
+                $query->where('slug', $id)->orWhere('id', $id);
+            })
+            ->firstOrFail();
 
         CommunityComment::create([
             'community_post_id' => $post->id,

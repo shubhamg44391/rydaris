@@ -349,6 +349,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     ])->parameters([
         'seo-settings' => 'seoMetadata'
     ]);
+
+    // Admin Profile Settings
+    Route::get('/profile', [\App\Http\Controllers\Admin\AdminProfileController::class, 'index'])->name('admin.profile.index');
+    Route::post('/profile', [\App\Http\Controllers\Admin\AdminProfileController::class, 'update'])->name('admin.profile.update');
+    Route::post('/profile/password', [\App\Http\Controllers\Admin\AdminProfileController::class, 'updatePassword'])->name('admin.profile.password');
 });
 
 // Vendor registration
@@ -426,6 +431,7 @@ Route::middleware(['auth', 'vendor'])->prefix('vendor')->group(function () {
         Route::get('/bookings/payment', [\App\Http\Controllers\Vendor\BookingController::class, 'payment'])->name('vendor.bookings.payment');
         Route::get('/bookings/export', [\App\Http\Controllers\Vendor\BookingController::class, 'exportCsv'])->name('vendor.bookings.export');
         Route::get('/bookings/{id}', [\App\Http\Controllers\Vendor\BookingController::class, 'show'])->name('vendor.bookings.show');
+        Route::get('/bookings/{id}/invoice', [\App\Http\Controllers\Vendor\BookingController::class, 'invoice'])->name('vendor.bookings.invoice');
         Route::put('/bookings/{id}', [\App\Http\Controllers\Vendor\BookingController::class, 'update'])->name('vendor.bookings.update');
         Route::post('/bookings/{id}/assign-driver', [\App\Http\Controllers\Vendor\BookingController::class, 'assignDriver'])->name('vendor.bookings.assign-driver');
         Route::post('/bookings/{id}/remove-driver', [\App\Http\Controllers\Vendor\BookingController::class, 'removeDriver'])->name('vendor.bookings.remove-driver');
@@ -482,6 +488,7 @@ Route::middleware(['auth', 'vendor'])->prefix('vendor')->group(function () {
             'update'  => 'vendor.invitations.update',
             'destroy' => 'vendor.invitations.destroy',
         ]);
+        Route::post('/invitations/{id}/resend', [\App\Http\Controllers\Vendor\VendorInvitationController::class, 'resend'])->name('vendor.invitations.resend');
         // Maintenance Schedules
         Route::get('/maintenance-schedules', [\App\Http\Controllers\Vendor\VendorMaintenanceScheduleController::class, 'schedulesIndex'])->name('vendor.maintenance-schedules.index');
         Route::get('/maintenance-schedules/create', [\App\Http\Controllers\Vendor\VendorMaintenanceScheduleController::class, 'schedulesCreate'])->name('vendor.maintenance-schedules.create');

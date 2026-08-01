@@ -230,6 +230,7 @@
         background: #ffffff !important;
         border: 1px solid rgba(15, 23, 42, 0.15) !important;
         color: #0f172a !important;
+        -webkit-text-fill-color: #0f172a !important;
     }
 
     body.light-mode .dark-input:focus {
@@ -237,16 +238,19 @@
         border-color: #0f766e !important;
         box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.12) !important;
         color: #0f172a !important;
+        -webkit-text-fill-color: #0f172a !important;
     }
 
     body.light-mode .dark-input::placeholder {
         color: #94a3b8 !important;
+        -webkit-text-fill-color: #94a3b8 !important;
     }
 
     body.light-mode .dark-input:disabled,
     body.light-mode .dark-input[readonly] {
         background: #f1f5f9 !important;
         color: #64748b !important;
+        -webkit-text-fill-color: #64748b !important;
         cursor: not-allowed !important;
     }
 
@@ -399,6 +403,21 @@
         fill: #0f766e !important;
     }
 
+    /* Fix flatpickr input field itself in light mode — dark.css sets color: #fff on .flatpickr-input */
+    body.light-mode .flatpickr-input,
+    body.light-mode .flatpickr-alt-input,
+    body.light-mode input.flatpickr-input,
+    body.light-mode input.dark-input.flatpickr-input {
+        color: #0f172a !important;
+        -webkit-text-fill-color: #0f172a !important;
+        background-color: #ffffff !important;
+    }
+    body.light-mode .flatpickr-input::placeholder,
+    body.light-mode .flatpickr-alt-input::placeholder {
+        color: #94a3b8 !important;
+        -webkit-text-fill-color: #94a3b8 !important;
+    }
+
     /* Checkbox light mode */
     body.light-mode .checkbox-custom {
         border-color: #0f766e !important;
@@ -549,7 +568,48 @@
                     </div>
                 </div>
 
-                
+                <!-- Assigned Driver Details Card -->
+                <div class="dark-card p-4">
+                    <h5 class="section-heading">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        Assigned Driver Details
+                    </h5>
+                    @if($booking->driver)
+                        <div class="d-flex align-items-center gap-3 p-3" style="background: rgba(82, 234, 210, 0.04); border: 1px solid rgba(82, 234, 210, 0.2); border-radius: 10px; flex-wrap: wrap;">
+                            @if($booking->driver->photo)
+                                <img src="{{ asset('storage/' . $booking->driver->photo) }}" alt="{{ $booking->driver->name }}" style="width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 2px solid #52ead2;">
+                            @else
+                                <div style="width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #80a7ff 0%, #52ead2 100%); color: #051013; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.3rem;">
+                                    {{ strtoupper(substr($booking->driver->name, 0, 1)) }}
+                                </div>
+                            @endif
+                            <div style="flex: 1; min-width: 200px;">
+                                <div class="d-flex align-items-center gap-2 mb-1" style="gap: 8px;">
+                                    <h6 style="margin: 0; color: #f8fafc; font-weight: 700; font-size: 1.05rem;">{{ $booking->driver->name }}</h6>
+                                    
+                                </div>
+                                <div class="d-flex flex-wrap gap-3" style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px; gap: 12px;">
+                                    <span><i class="fa fa-phone me-1" style="color: #52ead2;"></i> Mobile: <strong style="color: #52ead2;">{{ $booking->driver->phone }}</strong></span>
+                                    @if($booking->driver->license_number)
+                                        <span><i class="fa fa-id-card me-1" style="color: #cbd5e1;"></i> License: <span style="color: #cbd5e1;">{{ $booking->driver->license_number }}</span></span>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="ms-auto text-end" style="margin-left: auto;">
+                                <a href="tel:{{ $booking->driver->phone }}" class="btn btn-sm" style="background: rgba(82, 234, 210, 0.15); color: #52ead2; border: 1px solid rgba(82, 234, 210, 0.3); font-weight: 700; border-radius: 8px; padding: 8px 16px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                                    <i class="fa fa-phone"></i> Call Driver
+                                </a>
+                            </div>
+                        </div>
+                    @else
+                        <div class="p-3 text-center" style="background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1); border-radius: 10px; color: #94a3b8; font-size: 0.88rem; font-style: italic;">
+                            <i class="fa fa-info-circle me-1" style="color: #fbbf24;"></i> No driver assigned yet. The vendor will allocate a driver to your booking prior to vehicle pickup.
+                        </div>
+                    @endif
+                </div>
                 <div class="dark-card p-4">
                     <h5 class="section-heading">
                         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>

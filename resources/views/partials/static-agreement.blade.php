@@ -38,19 +38,23 @@
                 Lender (Vehicle Provider) Details
             </h4>
             @php
+                $custFullName = isset($booking) 
+                    ? trim(($booking->customer_fname ?? '') . ' ' . ($booking->customer_lname ?? '')) 
+                    : (request()->input('fname') ? trim(request()->input('fname') . ' ' . request()->input('lname')) : (auth()->user()->name ?? 'Guest Customer'));
+                
+                $uWords = preg_split('/\s+/', trim($custFullName));
+                $userInitials = '';
+                foreach ($uWords as $w) {
+                    if (!empty($w)) {
+                        $userInitials .= strtoupper(substr($w, 0, 1));
+                    }
+                }
+                $userInitials = !empty($userInitials) ? $userInitials : 'U';
+
                 $v = isset($booking) ? ($booking->vehicle->vendor ?? null) : (isset($vehicle) ? ($vehicle->vendor ?? null) : ($vendor ?? null));
                 $vName = $v->company_name ?? $v->name ?? 'Rydaris Fleet Operations';
                 $vEmail = $v->email ?? ($site_setting->contact_email ?? 'support@rydaris.com');
                 $vPhone = $v->contact_number ?? $v->phone ?? ($site_setting->contact_phone ?? '+918882688646');
-                
-                $vWords = preg_split('/\s+/', trim($vName));
-                $vInitials = '';
-                foreach ($vWords as $w) {
-                    if (!empty($w)) {
-                        $vInitials .= strtoupper(substr($w, 0, 1));
-                    }
-                }
-                $vInitials = !empty($vInitials) ? $vInitials : 'R';
             @endphp
             <div class="agr-details-list" style="font-size: 0.82rem; display: flex; flex-direction: column; gap: 3px;">
                 <div><strong class="agr-strong">Provider:</strong> <span class="agr-val">{{ $vName }}</span></div>
@@ -61,36 +65,73 @@
 
     </div>
 
-    <!-- TERMS AND CONDITIONS ARTICLES -->
+    <!-- TERMS AND CONDITIONS / AGREEMENT ARTICLES -->
+    @php
+        $vendorPage = $v ? \App\Models\VendorPage::where('vendor_id', $v->id)->first() : null;
+        $adminTerms = \App\Models\AdminTermsCondition::first();
+
+        $agrTitle = null;
+        $agrContent = null;
+
+        // 1. Prioritize Vendor Agreement Specific Fields (agreement_title & agreement_description)
+        if ($vendorPage && !empty(trim(strip_tags($vendorPage->agreement_description ?? '')))) {
+            $agrTitle = $vendorPage->agreement_title ?: 'Terms & Conditions of Vehicle Rental';
+            $agrContent = $vendorPage->agreement_description;
+        } 
+        // 2. Fallback to Admin Agreement Specific Fields
+        elseif ($adminTerms && !empty(trim(strip_tags($adminTerms->agreement_description ?? '')))) {
+            $agrTitle = $adminTerms->agreement_title ?: 'Terms & Conditions of Vehicle Rental';
+            $agrContent = $adminTerms->agreement_description;
+        } 
+        // 3. Fallback to Vendor General Description
+        elseif ($vendorPage && !empty(trim(strip_tags($vendorPage->description ?? '')))) {
+            $agrTitle = $vendorPage->title ?: 'Terms & Conditions of Vehicle Rental';
+            $agrContent = $vendorPage->description;
+        } 
+        // 4. Fallback to Admin General Description
+        elseif ($adminTerms && !empty(trim(strip_tags($adminTerms->description ?? '')))) {
+            $agrTitle = $adminTerms->title ?: 'Terms & Conditions of Vehicle Rental';
+            $agrContent = $adminTerms->description;
+        }
+    @endphp
+
     <div style="margin-bottom: 20px;">
-        <h4 class="agr-section-head" style="margin: 0 0 12px 0; font-size: 0.9rem; font-weight: 700;">Terms & Conditions of Vehicle Rental</h4>
+        <h4 class="agr-section-head" style="margin: 0 0 12px 0; font-size: 0.9rem; font-weight: 700; color: var(--brand, #52ead2);">
+            {{ $agrTitle ?? 'Terms & Conditions of Vehicle Rental' }}
+        </h4>
         
-        <div class="agr-terms-list" style="display: flex; flex-direction: column; gap: 10px; font-size: 0.8rem;">
-            <div>
-                <strong class="agr-term-num">1. Vehicle Operation & Driver Qualification:</strong> 
-                The Renter warrants holding a valid government-issued Driver's License and promises that the vehicle will only be operated by authorized drivers listed in the reservation. Sub-leasing or transferring the vehicle to third parties is strictly prohibited.
+        @if(!empty($agrContent))
+            <div class="agr-terms-content" style="font-size: 0.82rem; line-height: 1.6; color: var(--text, #f8fafc);">
+                {!! $agrContent !!}
             </div>
+        @else
+            <div class="agr-terms-list" style="display: flex; flex-direction: column; gap: 10px; font-size: 0.8rem;">
+                <div>
+                    <strong class="agr-term-num">1. Vehicle Operation & Driver Qualification:</strong> 
+                    The Renter warrants holding a valid government-issued Driver's License and promises that the vehicle will only be operated by authorized drivers listed in the reservation. Sub-leasing or transferring the vehicle to third parties is strictly prohibited.
+                </div>
 
-            <div>
-                <strong class="agr-term-num">2. Vehicle Inspection & Fuel Policy:</strong> 
-                The Renter acknowledges inspecting the vehicle prior to departure. The vehicle must be returned with the same fuel level as provided at pickup and in a clean condition. Fuel shortages will be charged as per vendor branch rate.
-            </div>
+                <div>
+                    <strong class="agr-term-num">2. Vehicle Inspection & Fuel Policy:</strong> 
+                    The Renter acknowledges inspecting the vehicle prior to departure. The vehicle must be returned with the same fuel level as provided at pickup and in a clean condition. Fuel shortages will be charged as per vendor branch rate.
+                </div>
 
-            <div>
-                <strong class="agr-term-num">3. Security Deposit & Damage Liability:</strong> 
-                Any traffic violations, toll charges, towing fees, or accidental physical damages incurred during the rental period are the sole liability of the Renter and will be deducted from the security deposit or billed directly.
-            </div>
+                <div>
+                    <strong class="agr-term-num">3. Security Deposit & Damage Liability:</strong> 
+                    Any traffic violations, toll charges, towing fees, or accidental physical damages incurred during the rental period are the sole liability of the Renter and will be deducted from the security deposit or billed directly.
+                </div>
 
-            <div>
-                <strong class="agr-term-num">4. Return Schedule & Late Penalty:</strong> 
-                The vehicle must be returned at the agreed return location and time. Overstaying beyond the scheduled return time without prior vendor authorization will incur hourly/daily penalty charges.
-            </div>
+                <div>
+                    <strong class="agr-term-num">4. Return Schedule & Late Penalty:</strong> 
+                    The vehicle must be returned at the agreed return location and time. Overstaying beyond the scheduled return time without prior vendor authorization will incur hourly/daily penalty charges.
+                </div>
 
-            <div>
-                <strong class="agr-term-num">5. Prohibited Use & Safety Compliance:</strong> 
-                Vehicle shall not be used for illegal activities, speed contests, off-road driving, or transporting hazardous materials. Renter agrees to adhere to all municipal and national highway traffic laws.
+                <div>
+                    <strong class="agr-term-num">5. Prohibited Use & Safety Compliance:</strong> 
+                    Vehicle shall not be used for illegal activities, speed contests, off-road driving, or transporting hazardous materials. Renter agrees to adhere to all municipal and national highway traffic laws.
+                </div>
             </div>
-        </div>
+        @endif
     </div>
 
     <!-- DIGITAL SIGNATURE FOOTER -->
@@ -101,7 +142,7 @@
         </div>
         
         <div class="agr-initial" style="font-weight: 600; font-size: 0.78rem;">
-            Initialized: {{ $vInitials }}
+            Initialized: {{ $userInitials }}
         </div>
 
         <div class="agr-hash" style="font-size: 0.72rem;">
