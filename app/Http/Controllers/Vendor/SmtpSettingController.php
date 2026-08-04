@@ -39,6 +39,13 @@ class SmtpSettingController extends Controller
         
         $setting->save();
 
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'SMTP settings updated successfully.'
+            ]);
+        }
+
         return redirect()->back()->with('success', 'SMTP settings updated successfully.');
     }
 }

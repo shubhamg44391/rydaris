@@ -15,17 +15,39 @@ class VendorInvitationController extends Controller
 {
     
 
-    public function index()
+    public function index(Request $request)
     {
         $vendorId = auth()->id();
-        
-        $invitations = UserInvitation::where('vendor_id', $vendorId)
-            ->orderBy('created_at', 'desc')
-            ->paginate(15);
+        $query = UserInvitation::where('vendor_id', $vendorId);
+
+        if ($search = $request->query('search')) {
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        if ($status = $request->query('status')) {
+            if ($status !== 'all') {
+                $query->where('status', $status);
+            }
+        }
+
+        $invitations = $query->orderBy('created_at', 'desc')->paginate(15);
 
         $totalCount = UserInvitation::where('vendor_id', $vendorId)->count();
         $acceptedCount = UserInvitation::where('vendor_id', $vendorId)->where('status', 'accepted')->count();
         $pendingCount = UserInvitation::where('vendor_id', $vendorId)->where('status', 'pending')->count();
+
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'success' => true,
+                'html' => view('vendor.invitations.index', compact('invitations', 'totalCount', 'acceptedCount', 'pendingCount'))->renderSections()['invitations_table_section'] ?? '',
+                'totalCount' => $totalCount,
+                'acceptedCount' => $acceptedCount,
+                'pendingCount' => $pendingCount
+            ]);
+        }
 
         return view('vendor.invitations.index', compact('invitations', 'totalCount', 'acceptedCount', 'pendingCount'));
     }
@@ -44,27 +66,45 @@ class VendorInvitationController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email|max:255|unique:users,email',
-            'name'  => 'nullable|string|max:255',
-        ], [
-            'email.unique' => 'A registered user already exists with this email address.',
-        ]);
+        $isAjax = $request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest';
 
-        
+        try {
+            $request->validate([
+                'email' => 'required|email|max:255|unique:users,email',
+                'name'  => 'nullable|string|max:255',
+            ], [
+                'email.unique' => 'A registered user already exists with this email address.',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            if ($isAjax) {
+                return response()->json([
+                    'success' => false,
+                    'message' => collect($e->errors())->first()[0] ?? 'Validation failed.'
+                ], 422);
+            }
+            throw $e;
+        }
+
         $existing = UserInvitation::where('vendor_id', auth()->id())
             ->where('email', $request->email)
             ->where('status', 'pending')
             ->first();
 
         if ($existing) {
-            return back()->withInput()->withErrors(['email' => 'A pending invitation has already been sent to this email address.']);
+            $msg = 'A pending invitation has already been sent to this email address.';
+            if ($isAjax) {
+                return response()->json(['success' => false, 'message' => $msg], 422);
+            }
+            return back()->withInput()->withErrors(['email' => $msg]);
         }
 
-        
         $vendor = auth()->user();
         if (!$vendor->canAddInvitation()) {
-            return back()->withInput()->withErrors(['email' => 'You have reached your maximum invitation capacity based on your current plan. Upgrade your plan to send more invitations.']);
+            $msg = 'You have reached your maximum invitation capacity based on your current plan. Upgrade your plan to send more invitations.';
+            if ($isAjax) {
+                return response()->json(['success' => false, 'message' => $msg], 422);
+            }
+            return back()->withInput()->withErrors(['email' => $msg]);
         }
 
         $vendor->load(['subscription' => function($q) {
@@ -80,12 +120,15 @@ class VendorInvitationController extends Controller
                 $currentUsers = User::where('vendor_id', $vendor->id)->where('role', 'user')->count();
                 
                 if ($currentUsers >= $maxUsers) {
-                    return back()->withInput()->withErrors(['email' => 'You have reached your maximum user capacity based on your current plan. Upgrade your plan to invite more users.']);
+                    $msg = 'You have reached your maximum user capacity based on your current plan. Upgrade your plan to invite more users.';
+                    if ($isAjax) {
+                        return response()->json(['success' => false, 'message' => $msg], 422);
+                    }
+                    return back()->withInput()->withErrors(['email' => $msg]);
                 }
             }
         }
 
-        
         $invitation = UserInvitation::create([
             'vendor_id' => auth()->id(),
             'email'     => $request->email,
@@ -94,47 +137,71 @@ class VendorInvitationController extends Controller
             'status'    => 'pending',
         ]);
 
-        
         VendorSmtpSetting::setMailConfig(auth()->id());
         
         try {
             Mail::to($invitation->email)->send(new InviteUserMail($invitation));
         } catch (\Exception $e) {
-            
             $invitation->delete();
-            return back()->withInput()->withErrors(['email' => 'Failed to send invitation email: ' . $e->getMessage()]);
+            $msg = 'Failed to send invitation email: ' . $e->getMessage();
+            if ($isAjax) {
+                return response()->json(['success' => false, 'message' => $msg], 422);
+            }
+            return back()->withInput()->withErrors(['email' => $msg]);
+        }
+
+        if ($isAjax) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Invitation sent successfully.'
+            ]);
         }
 
         return redirect()->route('vendor.invitations.index')->with('success', 'Invitation sent successfully.');
     }
 
-    
-
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
         $invitation = UserInvitation::where('id', $id)
             ->where('vendor_id', auth()->id())
             ->where('status', 'pending')
             ->firstOrFail();
+
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'success' => true,
+                'invitation' => $invitation
+            ]);
+        }
 
         return view('vendor.invitations.edit', compact('invitation'));
     }
 
-    
-
     public function update(Request $request, $id)
     {
+        $isAjax = $request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest';
+
         $invitation = UserInvitation::where('id', $id)
             ->where('vendor_id', auth()->id())
             ->where('status', 'pending')
             ->firstOrFail();
 
-        $request->validate([
-            'email' => 'required|email|max:255|unique:users,email',
-            'name'  => 'nullable|string|max:255',
-        ], [
-            'email.unique' => 'A registered user already exists with this email address.',
-        ]);
+        try {
+            $request->validate([
+                'email' => 'required|email|max:255|unique:users,email,' . $invitation->id,
+                'name'  => 'nullable|string|max:255',
+            ], [
+                'email.unique' => 'A registered user already exists with this email address.',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            if ($isAjax) {
+                return response()->json([
+                    'success' => false,
+                    'message' => collect($e->errors())->first()[0] ?? 'Validation failed.'
+                ], 422);
+            }
+            throw $e;
+        }
 
         $oldEmail = $invitation->email;
         
@@ -143,14 +210,26 @@ class VendorInvitationController extends Controller
             'name'  => $request->name,
         ]);
 
-        
         if ($oldEmail !== $request->email) {
             VendorSmtpSetting::setMailConfig(auth()->id());
             try {
                 Mail::to($invitation->email)->send(new InviteUserMail($invitation));
             } catch (\Exception $e) {
+                if ($isAjax) {
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Invitation updated, but email resend failed: ' . $e->getMessage()
+                    ]);
+                }
                 return redirect()->route('vendor.invitations.index')->with('warning', 'Invitation updated, but email resend failed: ' . $e->getMessage());
             }
+        }
+
+        if ($isAjax) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Invitation updated successfully.'
+            ]);
         }
 
         return redirect()->route('vendor.invitations.index')->with('success', 'Invitation updated successfully.');
@@ -158,7 +237,7 @@ class VendorInvitationController extends Controller
 
     
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $invitation = UserInvitation::where('id', $id)
             ->where('vendor_id', auth()->id())
@@ -166,12 +245,17 @@ class VendorInvitationController extends Controller
 
         $invitation->delete();
 
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'success' => true,
+                'message' => 'Invitation deleted successfully.'
+            ]);
+        }
+
         return redirect()->route('vendor.invitations.index')->with('success', 'Invitation deleted successfully.');
     }
 
-    
-
-    public function resend($id)
+    public function resend(Request $request, $id)
     {
         $invitation = UserInvitation::where('id', $id)
             ->where('vendor_id', auth()->id())
@@ -183,7 +267,20 @@ class VendorInvitationController extends Controller
         try {
             Mail::to($invitation->email)->send(new InviteUserMail($invitation));
         } catch (\Exception $e) {
+            if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to resend invitation email: ' . $e->getMessage()
+                ], 422);
+            }
             return back()->with('error', 'Failed to resend invitation email: ' . $e->getMessage());
+        }
+
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'success' => true,
+                'message' => 'Invitation email resent successfully.'
+            ]);
         }
 
         return redirect()->route('vendor.invitations.index')->with('success', 'Invitation email resent successfully.');

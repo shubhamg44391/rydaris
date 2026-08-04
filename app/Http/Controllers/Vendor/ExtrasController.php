@@ -31,7 +31,7 @@ class ExtrasController extends Controller
         return $groupsQuery->orderBy('name')->get();
     }
 
-    public function extrasIndex()
+    public function extrasIndex(Request $request)
     {
         $query = VendorExtra::where('vendor_id', $this->vendorId())->where('type', 'extra');
         
@@ -44,6 +44,14 @@ class ExtrasController extends Controller
         }
         
         $extras = $query->get();
+
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'status' => 'success',
+                'html' => view('vendor.extras.extras', compact('extras'))->renderSections()['extras_table_section'] ?? ''
+            ]);
+        }
+
         return view('vendor.extras.extras', compact('extras'));
     }
 
@@ -83,9 +91,17 @@ class ExtrasController extends Controller
         return view('vendor.extras.create', ['type' => 'extra', 'groups' => $groups, 'vendor_features' => $vendor_features, 'insurances' => $insurances]);
     }
 
-    public function editExtra($id)
+    public function editExtra(Request $request, $id)
     {
         $item = VendorExtra::where('vendor_id', $this->vendorId())->findOrFail($id);
+
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'status' => 'success',
+                'item' => $item
+            ]);
+        }
+
         $groups = $this->getGroups();
         $vendor_features = $this->getVendorFeatures();
         $insurances = VendorExtra::where('vendor_id', $this->vendorId())->where('type', 'insurance')->get();
@@ -120,9 +136,17 @@ class ExtrasController extends Controller
         return view('vendor.extras.create', ['type' => 'insurance', 'groups' => $groups, 'vendor_features' => $vendor_features, 'insurances' => $insurances]);
     }
 
-    public function editInsurance($id)
+    public function editInsurance(Request $request, $id)
     {
         $item = VendorExtra::where('vendor_id', $this->vendorId())->findOrFail($id);
+
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'status' => 'success',
+                'item' => $item
+            ]);
+        }
+
         $groups = $this->getGroups();
         $vendor_features = $this->getVendorFeatures();
         $insurances = VendorExtra::where('vendor_id', $this->vendorId())->where('type', 'insurance')->get();
@@ -146,7 +170,7 @@ class ExtrasController extends Controller
         ]);
     }
 
-    public function insuranceIndex()
+    public function insuranceIndex(Request $request)
     {
         $query = VendorExtra::where('vendor_id', $this->vendorId())->where('type', 'insurance');
         
@@ -159,41 +183,76 @@ class ExtrasController extends Controller
         }
         
         $insurances = $query->get();
+
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'status' => 'success',
+                'html' => view('vendor.extras.insurance', compact('insurances'))->renderSections()['insurance_table_section'] ?? ''
+            ]);
+        }
+
         return view('vendor.extras.insurance', compact('insurances'));
     }
 
-    public function rulesIndex()
+    public function rulesIndex(Request $request)
     {
         $rules = VendorRule::where('vendor_id', $this->vendorId())->get();
+
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'status' => 'success',
+                'html' => view('vendor.extras.rules', compact('rules'))->renderSections()['rules_table_section'] ?? ''
+            ]);
+        }
+
         return view('vendor.extras.rules', compact('rules'));
     }
 
-    
     public function storeExtra(Request $request)
     {
-        $type = $request->input('type');
+        $isAjax = $request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest';
+
+        $type = $request->input('type', 'extra');
         if ($type === 'extra' && !Auth::user()->canAddExtra()) {
-            return back()->withInput()->withErrors(['name' => 'You have reached your maximum extra item capacity based on your current plan. Upgrade your plan to add more extras.']);
+            $msg = 'You have reached your maximum extra item capacity based on your current plan. Upgrade your plan to add more extras.';
+            if ($isAjax) {
+                return response()->json(['status' => 'error', 'message' => $msg], 422);
+            }
+            return back()->withInput()->withErrors(['name' => $msg]);
         }
         if ($type === 'insurance' && !Auth::user()->canAddInsurance()) {
-            return back()->withInput()->withErrors(['name' => 'You have reached your maximum insurance item capacity based on your current plan. Upgrade your plan to add more insurances.']);
+            $msg = 'You have reached your maximum insurance item capacity based on your current plan. Upgrade your plan to add more insurances.';
+            if ($isAjax) {
+                return response()->json(['status' => 'error', 'message' => $msg], 422);
+            }
+            return back()->withInput()->withErrors(['name' => $msg]);
         }
 
-        $request->validate([
-            'type' => 'required|in:extra,insurance',
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
-            'arrival_price' => 'nullable|numeric|min:0',
-            'refunded_amount' => 'nullable|numeric|min:0',
-            'excess_amount' => 'nullable|numeric|min:0',
-            'group_ids' => 'nullable|array',
-            'group_ids.*' => 'exists:groups,id',
-            'icon_class' => 'nullable|string|max:255',
-            'status' => 'required|boolean',
-            'description' => 'nullable|string',
-            'features' => 'nullable|array',
-            'features.*' => 'nullable|string'
-        ]);
+        try {
+            $request->validate([
+                'type' => 'required|in:extra,insurance',
+                'name' => 'required|string|max:255',
+                'price' => 'required|numeric|min:0',
+                'arrival_price' => 'nullable|numeric|min:0',
+                'refunded_amount' => 'nullable|numeric|min:0',
+                'excess_amount' => 'nullable|numeric|min:0',
+                'group_ids' => 'nullable|array',
+                'group_ids.*' => 'exists:groups,id',
+                'icon_class' => 'nullable|string|max:255',
+                'status' => 'required|boolean',
+                'description' => 'nullable|string',
+                'features' => 'nullable|array',
+                'features.*' => 'nullable|string'
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            if ($isAjax) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => collect($e->errors())->first()[0] ?? 'Validation failed.'
+                ], 422);
+            }
+            throw $e;
+        }
 
         $extra = VendorExtra::create(array_merge($request->except('features'), [
             'vendor_id' => $this->vendorId(),
@@ -211,33 +270,51 @@ class ExtrasController extends Controller
             }
         }
 
+        if ($isAjax) {
+            return response()->json([
+                'status' => 'success',
+                'message' => ucfirst($request->type) . ' created successfully.'
+            ]);
+        }
+
         $route = $request->type === 'extra' ? 'vendor.extras.index' : 'vendor.insurance.index';
         return redirect()->route($route)->with('success', ucfirst($request->type) . ' created successfully.');
     }
 
     public function updateExtra(Request $request, $id)
     {
+        $isAjax = $request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest';
+
         $extra = VendorExtra::where('vendor_id', $this->vendorId())->findOrFail($id);
         
-        $request->validate([
-            'type' => 'required|in:extra,insurance',
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
-            'arrival_price' => 'nullable|numeric|min:0',
-            'refunded_amount' => 'nullable|numeric|min:0',
-            'excess_amount' => 'nullable|numeric|min:0',
-            'group_ids' => 'nullable|array',
-            'group_ids.*' => 'exists:groups,id',
-            'icon_class' => 'nullable|string|max:255',
-            'status' => 'required|boolean',
-            'description' => 'nullable|string',
-            'features' => 'nullable|array',
-            'features.*' => 'nullable|string'
-        ]);
+        try {
+            $request->validate([
+                'type' => 'required|in:extra,insurance',
+                'name' => 'required|string|max:255',
+                'price' => 'required|numeric|min:0',
+                'arrival_price' => 'nullable|numeric|min:0',
+                'refunded_amount' => 'nullable|numeric|min:0',
+                'excess_amount' => 'nullable|numeric|min:0',
+                'group_ids' => 'nullable|array',
+                'group_ids.*' => 'exists:groups,id',
+                'icon_class' => 'nullable|string|max:255',
+                'status' => 'required|boolean',
+                'description' => 'nullable|string',
+                'features' => 'nullable|array',
+                'features.*' => 'nullable|string'
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            if ($isAjax) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => collect($e->errors())->first()[0] ?? 'Validation failed.'
+                ], 422);
+            }
+            throw $e;
+        }
 
         $extra->update($request->except('features'));
 
-        
         $extra->features()->delete();
         if ($request->has('features')) {
             foreach ($request->features as $idx => $feature_title) {
@@ -250,6 +327,13 @@ class ExtrasController extends Controller
             }
         }
 
+        if ($isAjax) {
+            return response()->json([
+                'status' => 'success',
+                'message' => ucfirst($extra->type) . ' updated successfully.'
+            ]);
+        }
+
         $route = $request->type === 'extra' ? 'vendor.extras.index' : 'vendor.insurance.index';
         return redirect()->route($route)->with('success', ucfirst($extra->type) . ' updated successfully.');
     }
@@ -258,7 +342,7 @@ class ExtrasController extends Controller
     {
         $extra = VendorExtra::where('vendor_id', $this->vendorId())->findOrFail($id);
         $extra->delete();
-        return response()->json(['status' => 'success']);
+        return response()->json(['status' => 'success', 'message' => 'Item deleted successfully.']);
     }
 
     public function toggleExtraStatus($id)
@@ -276,6 +360,7 @@ class ExtrasController extends Controller
 
     public function updateFeatures(Request $request)
     {
+        $isAjax = $request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest';
         $vendor_id = $this->vendorId();
         
         $featuresCount = 0;
@@ -288,7 +373,11 @@ class ExtrasController extends Controller
         }
         
         if (!Auth::user()->canAddFeature($featuresCount)) {
-            return back()->withErrors(['features' => 'You have reached your maximum features capacity based on your current plan. Upgrade your plan to add more features.']);
+            $msg = 'You have reached your maximum features capacity based on your current plan. Upgrade your plan to add more features.';
+            if ($isAjax) {
+                return response()->json(['status' => 'error', 'message' => $msg], 422);
+            }
+            return back()->withErrors(['features' => $msg]);
         }
 
         VendorFeature::where('vendor_id', $vendor_id)->delete();
@@ -314,26 +403,62 @@ class ExtrasController extends Controller
             }
         }
 
+        if ($isAjax) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Features updated successfully.'
+            ]);
+        }
+
         return redirect()->route('vendor.features.index')->with('success', 'Features updated successfully.');
     }
 
-    
     public function storeRule(Request $request)
     {
         if (!Auth::user()->canAddRule()) {
             return response()->json(['status' => 'error', 'message' => 'You have reached your maximum rules capacity based on your current plan.'], 422);
         }
 
-        $request->validate(['min_age' => 'required|integer', 'max_age' => 'required|integer', 'underage_charge' => 'required|numeric']);
+        try {
+            $request->validate([
+                'min_age' => 'required|integer|min:0',
+                'max_age' => 'required|integer|gte:min_age',
+                'underage_charge' => 'required|numeric|min:0'
+            ], [
+                'max_age.gte' => 'Max age must be greater than or equal to Min age.'
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => collect($e->errors())->first()[0] ?? 'Validation failed.'
+            ], 422);
+        }
+
         VendorRule::create(array_merge($request->all(), ['vendor_id' => $this->vendorId()]));
-        return response()->json(['status' => 'success']);
+        return response()->json(['status' => 'success', 'message' => 'Rule created successfully.']);
     }
 
     public function updateRule(Request $request, $id)
     {
         $rule = VendorRule::where('vendor_id', $this->vendorId())->findOrFail($id);
+
+        try {
+            $request->validate([
+                'min_age' => 'required|integer|min:0',
+                'max_age' => 'required|integer|gte:min_age',
+                'underage_charge' => 'required|numeric|min:0'
+            ], [
+                'max_age.gte' => 'Max age must be greater than or equal to Min age.'
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => collect($e->errors())->first()[0] ?? 'Validation failed.'
+            ], 422);
+        }
+
         $rule->update($request->all());
-        return response()->json(['status' => 'success']);
+        return response()->json(['status' => 'success', 'message' => 'Rule updated successfully.']);
     }
 
     public function destroyRule($id)

@@ -14,7 +14,7 @@ class VehicleController extends Controller
 {
     
 
-    public function index()
+    public function index(Request $request)
     {
         $query = Vehicle::where('vendor_id', Auth::id())->with('group');
         
@@ -26,13 +26,25 @@ class VehicleController extends Controller
             });
         }
 
-        $vehicles = $query->orderBy('created_at', 'desc')
-            ->paginate(10);
+        if ($search = $request->query('search')) {
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('code', 'like', "%{$search}%")
+                  ->orWhere('model', 'like', "%{$search}%");
+            });
+        }
+
+        $vehicles = $query->orderBy('created_at', 'desc')->paginate(10);
+
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'success' => true,
+                'html' => view('vendor.vehicles.index', compact('vehicles'))->renderSections()['vehicles_table_section'] ?? '',
+            ]);
+        }
 
         return view('vendor.vehicles.index', compact('vehicles'));
     }
-
-    
 
     public function create()
     {
@@ -51,12 +63,14 @@ class VehicleController extends Controller
         return view('vendor.vehicles.create', compact('groups'));
     }
 
-    
-
     public function store(Request $request)
     {
         if (!auth()->user()->canAddVehicle()) {
-            return redirect()->back()->withInput()->with('error', 'Your package limit for vehicles has been reached. Please upgrade your package.');
+            $msg = 'Your package limit for vehicles has been reached. Please upgrade your package.';
+            if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+                return response()->json(['success' => false, 'message' => $msg], 422);
+            }
+            return redirect()->back()->withInput()->with('error', $msg);
         }
 
         $request->validate([
@@ -88,7 +102,7 @@ class VehicleController extends Controller
             $imagePath = $request->file('image')->store('vehicles', 'public');
         }
 
-        Vehicle::create([
+        $vehicle = Vehicle::create([
             'vendor_id' => Auth::id(),
             'branch_id' => auth()->user()->current_branch_id,
             'group_id' => $request->group_id,
@@ -108,10 +122,16 @@ class VehicleController extends Controller
             'terms' => $request->terms,
         ]);
 
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'success' => true,
+                'message' => 'Vehicle created successfully.',
+                'redirect_url' => route('vendor.vehicles.index')
+            ]);
+        }
+
         return redirect(route('vendor.vehicles.index'))->with('success', 'Vehicle created successfully.');
     }
-
-    
 
     public function edit($id)
     {
@@ -128,8 +148,6 @@ class VehicleController extends Controller
 
         return view('vendor.vehicles.edit', compact('vehicle', 'groups'));
     }
-
-    
 
     public function update(Request $request, $id)
     {
@@ -185,12 +203,18 @@ class VehicleController extends Controller
 
         $vehicle->update($data);
 
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'success' => true,
+                'message' => 'Vehicle updated successfully.',
+                'redirect_url' => route('vendor.vehicles.index')
+            ]);
+        }
+
         return redirect(route('vendor.vehicles.index'))->with('success', 'Vehicle updated successfully.');
     }
 
-    
-
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $vehicle = Vehicle::where('vendor_id', Auth::id())->findOrFail($id);
 
@@ -198,6 +222,13 @@ class VehicleController extends Controller
             Storage::disk('public')->delete($vehicle->image);
         }
         $vehicle->delete();
+
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'success' => true,
+                'message' => 'Vehicle deleted successfully.'
+            ]);
+        }
 
         return redirect(route('vendor.vehicles.index'))->with('success', 'Vehicle deleted successfully.');
     }

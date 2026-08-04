@@ -13,8 +13,6 @@ use App\Models\User;
 
 class VendorProfileController extends Controller
 {
-    
-
     public function index()
     {
         $user = Auth::user();
@@ -24,8 +22,6 @@ class VendorProfileController extends Controller
             ->get();
         return view('vendor.profile.index', compact('user', 'branches'));
     }
-
-    
 
     public function update(Request $request)
     {
@@ -55,6 +51,9 @@ class VendorProfileController extends Controller
                 ->where('status', true)
                 ->exists();
             if (!$branchExists) {
+                if ($request->ajax()) {
+                    return response()->json(['status' => 'error', 'message' => 'Invalid branch selected.'], 422);
+                }
                 return back()->withInput()->withErrors(['current_branch_id' => 'Invalid branch selected.']);
             }
         }
@@ -93,10 +92,17 @@ class VendorProfileController extends Controller
 
         $user->update($data);
 
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Profile updated successfully.',
+                'user' => $user,
+                'logo_url' => isset($logoPath) ? asset('storage/' . $logoPath) : null
+            ]);
+        }
+
         return redirect()->back()->with('success', 'Profile updated successfully.');
     }
-
-    
 
     public function updatePassword(Request $request)
     {
@@ -111,7 +117,13 @@ class VendorProfileController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Password updated successfully.'
+            ]);
+        }
+
         return redirect()->back()->with('success', 'Password updated successfully.');
     }
 }
-

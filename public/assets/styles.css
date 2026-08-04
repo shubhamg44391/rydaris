@@ -1802,7 +1802,7 @@ button[type="submit"].btn-primary,
   justify-content: center !important;
   gap: 8px !important;
   border-radius: 999px !important;
-  font-weight: 400 !important;
+  font-weight: 700 !important;
 }
 
 .admin-action.primary:hover,

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
 class AdminProfileController extends Controller
@@ -27,14 +28,15 @@ class AdminProfileController extends Controller
         $user = Auth::user();
 
         $request->validate([
-            'username' => ['required', 'string', 'max:255', 'unique:users,username,' . $user->id],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'username' => ['required', 'string', 'max:255', Rule::unique('users', 'username')->ignore($user->id)],
+            'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
         ]);
 
         $user->update([
-            'username' => $request->username,
-            'email' => $request->email,
-            'name' => $request->username,
+            'username'   => $request->username,
+            'first_name' => $request->username,
+            'name'       => $request->username,
+            'email'      => $request->email,
         ]);
 
         if ($request->ajax() || $request->wantsJson()) {
@@ -42,8 +44,10 @@ class AdminProfileController extends Controller
                 'success' => true,
                 'message' => 'Admin profile updated successfully.',
                 'user' => [
-                    'username' => $user->username,
-                    'email' => $user->email,
+                    'first_name' => $user->first_name,
+                    'name'       => $user->name,
+                    'username'   => $user->username,
+                    'email'      => $user->email,
                 ]
             ]);
         }

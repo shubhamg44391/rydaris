@@ -27,7 +27,7 @@
             </div>
         </div>
         <div class="panel-body">
-            <form method="POST" action="{{ route('vendor.vehicles.update', $vehicle->id) }}" enctype="multipart/form-data" id="vehicleForm">
+            <form method="POST" action="{{ route('vendor.vehicles.update', $vehicle->id) }}" enctype="multipart/form-data" id="vehicleForm" onsubmit="event.preventDefault(); submitVehicleForm(event); return false;">
                 @csrf
                 @method('PUT')
 
@@ -314,6 +314,60 @@
         if(event.target.files[0]) {
             reader.readAsDataURL(event.target.files[0]);
         }
+    }
+
+    function submitVehicleForm(e) {
+        if (e && e.preventDefault) e.preventDefault();
+        if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances.terms) {
+            CKEDITOR.instances.terms.updateElement();
+        }
+        
+        var formElement = document.getElementById('vehicleForm');
+        var formData = new FormData(formElement);
+        var $btn = $('#vehicleForm').find('button[type="submit"]');
+        $btn.prop('disabled', true).text('Saving...');
+
+        $.ajax({
+            url: formElement.action,
+            type: 'POST',
+            data: formData,
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            success: function(response) {
+                if (response.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: response.message || 'Vehicle updated successfully.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(function() {
+                        window.location.href = response.redirect_url || '{{ route("vendor.vehicles.index") }}';
+                    });
+                } else {
+                    Swal.fire('Error!', response.message || 'Failed to update vehicle.', 'error');
+                }
+            },
+            error: function(xhr) {
+                var errorMsg = 'An error occurred while updating vehicle.';
+                if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON.errors) {
+                    var errs = [];
+                    $.each(xhr.responseJSON.errors, function(key, msgs) {
+                        errs.push(msgs.join(', '));
+                    });
+                    errorMsg = errs.join('<br>');
+                } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMsg = xhr.responseJSON.message;
+                }
+                Swal.fire('Validation Error!', errorMsg, 'error');
+            },
+            complete: function() {
+                $btn.prop('disabled', false).text('Save Changes');
+            }
+        });
+        return false;
     }
 </script>
 

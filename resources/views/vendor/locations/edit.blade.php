@@ -9,7 +9,7 @@
         </div>
 
         <div class="panel-body">
-            <form method="POST" action="{{ route('vendor.locations.update', $location->id) }}" id="locationForm">
+            <form method="POST" action="{{ route('vendor.locations.update', $location->id) }}" id="locationForm" onsubmit="event.preventDefault(); submitLocationForm(event); return false;">
                 @csrf
                 @method('PUT')
 
@@ -152,5 +152,53 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     @endif
 });
+
+function submitLocationForm(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    var formElement = document.getElementById('locationForm');
+    var formData = $(formElement).serialize();
+    var $btn = $('#locationForm').find('button[type="submit"]');
+    $btn.prop('disabled', true).text('Saving...');
+
+    $.ajax({
+        url: formElement.action,
+        type: 'POST',
+        data: formData,
+        dataType: 'json',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        success: function(response) {
+            if (response.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: response.message || 'Location updated successfully.',
+                    timer: 2000,
+                    showConfirmButton: false
+                }).then(function() {
+                    window.location.href = response.redirect_url || '{{ route("vendor.locations.index") }}';
+                });
+            } else {
+                Swal.fire('Error!', response.message || 'Failed to update location.', 'error');
+            }
+        },
+        error: function(xhr) {
+            var errorMsg = 'An error occurred while updating location.';
+            if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON.errors) {
+                var errs = [];
+                $.each(xhr.responseJSON.errors, function(key, msgs) {
+                    errs.push(msgs.join(', '));
+                });
+                errorMsg = errs.join('<br>');
+            } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                errorMsg = xhr.responseJSON.message;
+            }
+            Swal.fire('Validation Error!', errorMsg, 'error');
+        },
+        complete: function() {
+            $btn.prop('disabled', false).text('UPDATE');
+        }
+    });
+    return false;
+}
 </script>
 @endsection

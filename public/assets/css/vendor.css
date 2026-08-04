@@ -632,4 +632,43 @@ body.light-mode .admin-body {
 body.light-mode .card,
 body.light-mode .feature-card,
 body.light-mode .pricing-card,
-body.light-mode .info-card,
+body.light-mode .info-card {
+  /* preserve dark mode card styling */
+}
+
+/* ── Common Bold Buttons Styling Across Vendor Side ── */
+.btn,
+button,
+a.btn,
+.btn-primary,
+.btn-secondary,
+.btn-success,
+.btn-danger,
+.btn-warning,
+.btn-info,
+.admin-action,
+.admin-panel button,
+.admin-panel a.btn {
+    font-weight: 700 !important;
+}
+
+.btn-primary,
+.btn-modal-save,
+.xp-btn-save {
+    background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%) !important;
+    color: #051013 !important;
+    border-radius: 999px !important;
+    font-weight: 800 !important;
+    border: none !important;
+    box-shadow: 0 4px 15px rgba(82, 234, 210, 0.35) !important;
+    transition: all 0.2s ease !important;
+}
+
+.btn-primary:hover,
+.btn-modal-save:hover,
+.xp-btn-save:hover {
+    box-shadow: 0 6px 20px rgba(82, 234, 210, 0.5) !important;
+    transform: translateY(-1px);
+}
+
+

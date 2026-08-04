@@ -88,7 +88,7 @@
             </div>
 
             <div class="mt-5 text-end border-top pt-4" style="border-color: rgba(82, 234, 210, 0.1) !important;">
-                <button type="submit" class="btn btn-primary px-4 py-2">Save Settings</button>
+                <button type="submit" id="paymentSubmitBtn" class="btn btn-primary px-4 py-2">Save Settings</button>
             </div>
         </form>
     </div>
@@ -157,7 +157,10 @@
       border-radius: 50%;
     }
 </style>
+@endsection
 
+@section('js')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const toggles = document.querySelectorAll('.payment-toggle');
@@ -169,7 +172,6 @@
             });
 
             toggles.forEach(t => {
-                // If only one is active and this is the active one, disable it to prevent unchecking
                 if (activeCount === 1 && t.checked) {
                     t.disabled = true;
                 } else {
@@ -189,7 +191,6 @@
             }
         }
 
-        // Run on change for toggles
         toggles.forEach(toggle => {
             toggle.addEventListener('change', function(e) {
                 updateToggleStates();
@@ -199,7 +200,6 @@
             });
         });
 
-        // Run on input for discount
         discountInput.addEventListener('input', function() {
             if (parseFloat(this.value) > 0 && !payFullToggle.checked) {
                 payFullToggle.checked = true;
@@ -208,13 +208,49 @@
             }
         });
 
-        // Run on load
         updateToggleStates();
         updateDiscountRequired();
 
-        // Re-enable before submit so values are sent
-        document.getElementById('paymentSettingsForm').addEventListener('submit', function() {
+        // AJAX Form Submit
+        $('#paymentSettingsForm').on('submit', function(e) {
+            e.preventDefault();
             toggles.forEach(t => { t.disabled = false; });
+            
+            var form = this;
+            var btn = $('#paymentSubmitBtn');
+            btn.prop('disabled', true).css('opacity', '0.7');
+
+            $.ajax({
+                url: $(form).attr('action'),
+                type: 'POST',
+                data: $(form).serialize(),
+                dataType: 'json',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                success: function(response) {
+                    btn.prop('disabled', false).css('opacity', '1');
+                    updateToggleStates();
+                    if (response.status === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Saved!',
+                            text: response.message || 'Payment settings updated successfully.',
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                    } else {
+                        Swal.fire('Error', response.message || 'Failed to save payment settings.', 'error');
+                    }
+                },
+                error: function(xhr) {
+                    btn.prop('disabled', false).css('opacity', '1');
+                    updateToggleStates();
+                    var msg = 'Failed to save payment settings.';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        msg = xhr.responseJSON.message;
+                    }
+                    Swal.fire('Error', msg, 'error');
+                }
+            });
         });
     });
 </script>

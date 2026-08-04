@@ -12,22 +12,46 @@ use App\Models\VendorSmtpSetting;
 
 class BookingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         // Update last checked bookings timestamp to clear notification badge
         auth()->user()->update(['last_checked_bookings_at' => now()]);
 
-        $bookings = Booking::with(['vehicle', 'pickupLocation', 'returnLocation', 'user', 'review', 'driver'])
-            ->where('vendor_id', auth()->id())
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+        $status = $request->query('status');
+        $search = $request->query('search');
+
+        $query = Booking::with(['vehicle', 'pickupLocation', 'returnLocation', 'user', 'review', 'driver'])
+            ->where('vendor_id', auth()->id());
+
+        if ($status && in_array($status, ['pending', 'confirmed', 'completed', 'cancelled', 'confirm_request'])) {
+            $query->where('booking_status', $status);
+        }
+
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('reservation_number', 'like', "%{$search}%")
+                  ->orWhere('customer_fname', 'like', "%{$search}%")
+                  ->orWhere('customer_lname', 'like', "%{$search}%")
+                  ->orWhere('customer_email', 'like', "%{$search}%")
+                  ->orWhere('customer_phone', 'like', "%{$search}%");
+            });
+        }
+
+        $bookings = $query->orderBy('created_at', 'desc')->paginate(10);
 
         $activeDrivers = Driver::where('vendor_id', auth()->id())
             ->where('status', 'active')
             ->orderBy('name', 'asc')
             ->get();
 
-        return view('vendor.bookings.index', compact('bookings', 'activeDrivers'));
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'success' => true,
+                'html' => view('vendor.bookings.index', compact('bookings', 'activeDrivers', 'status', 'search'))->renderSections()['booking_table_section'] ?? '',
+            ]);
+        }
+
+        return view('vendor.bookings.index', compact('bookings', 'activeDrivers', 'status', 'search'));
     }
 
     public function payment()
@@ -270,6 +294,13 @@ class BookingController extends Controller
             'return_date',
             'return_time',
         ]));
+
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'success' => true,
+                'message' => 'Booking details updated successfully.'
+            ]);
+        }
 
         return redirect()->back()->with('success', 'Booking details updated successfully.');
     }

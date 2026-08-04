@@ -11,7 +11,7 @@ class LocationController extends Controller
 {
     
 
-    public function index()
+    public function index(Request $request)
     {
         $query = PickupLocation::where('vendor_id', Auth::id());
         
@@ -23,13 +23,26 @@ class LocationController extends Controller
             });
         }
 
-        $locations = $query->orderBy('created_at', 'desc')
-            ->paginate(15);
+        if ($search = $request->query('search')) {
+            $query->where(function($q) use ($search) {
+                $q->where('location', 'like', "%{$search}%")
+                  ->orWhere('type', 'like', "%{$search}%")
+                  ->orWhere('map_type', 'like', "%{$search}%");
+            });
+        }
 
-        return view('vendor.locations.index', compact('locations'));
+        $locations = $query->orderBy('created_at', 'desc')->paginate(15);
+        $types = PickupLocation::types();
+
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'success' => true,
+                'html' => view('vendor.locations.index', compact('locations', 'types'))->renderSections()['locations_table_section'] ?? '',
+            ]);
+        }
+
+        return view('vendor.locations.index', compact('locations', 'types'));
     }
-
-    
 
     public function create()
     {
@@ -40,12 +53,14 @@ class LocationController extends Controller
         return view('vendor.locations.create', compact('types'));
     }
 
-    
-
     public function store(Request $request)
     {
         if (!Auth::user()->canAddLocation()) {
-            return back()->withInput()->withErrors(['location' => 'You have reached your maximum location capacity based on your current plan. Upgrade your plan to add more locations.']);
+            $msg = 'You have reached your maximum location capacity based on your current plan. Upgrade your plan to add more locations.';
+            if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+                return response()->json(['success' => false, 'message' => $msg], 422);
+            }
+            return back()->withInput()->withErrors(['location' => $msg]);
         }
 
         $request->validate([
@@ -58,7 +73,7 @@ class LocationController extends Controller
             'map_embed' => ['nullable', 'string'],
         ]);
 
-        PickupLocation::create([
+        $loc = PickupLocation::create([
             'vendor_id' => Auth::id(),
             'branch_id' => auth()->user()->current_branch_id,
             'type'      => $request->type,
@@ -70,11 +85,18 @@ class LocationController extends Controller
             'map_embed' => $request->map_type === 'embedded'    ? $request->map_embed  : null,
         ]);
 
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'success' => true,
+                'message' => 'Location added successfully.',
+                'location' => $loc,
+                'redirect_url' => route('vendor.locations.index')
+            ]);
+        }
+
         return redirect(route('vendor.locations.index'))
             ->with('success', 'Location added successfully.');
     }
-
-    
 
     public function edit($id)
     {
@@ -83,8 +105,6 @@ class LocationController extends Controller
 
         return view('vendor.locations.edit', compact('location', 'types'));
     }
-
-    
 
     public function update(Request $request, $id)
     {
@@ -110,16 +130,30 @@ class LocationController extends Controller
             'map_embed' => $request->map_type === 'embedded'    ? $request->map_embed  : null,
         ]);
 
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'success' => true,
+                'message' => 'Location updated successfully.',
+                'location' => $location,
+                'redirect_url' => route('vendor.locations.index')
+            ]);
+        }
+
         return redirect(route('vendor.locations.index'))
             ->with('success', 'Location updated successfully.');
     }
 
-    
-
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $location = PickupLocation::where('vendor_id', Auth::id())->findOrFail($id);
         $location->delete();
+
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'success' => true,
+                'message' => 'Location deleted successfully.'
+            ]);
+        }
 
         return redirect(route('vendor.locations.index'))
             ->with('success', 'Location deleted successfully.');

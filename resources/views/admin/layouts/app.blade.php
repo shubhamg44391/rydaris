@@ -51,7 +51,7 @@
   </script>
 
   <style>
-    /* Complete Global Bold Buttons & Typography Styling Across Admin Site */
+    /* Complete Global Bold Buttons & Typography Styling Across Admin & Vendor Site */
     button, 
     input[type="button"], 
     input[type="submit"], 
@@ -84,9 +84,18 @@
     .status-badge-active,
     .status-badge-inactive,
     .table-actions button,
-    .icon-button {
+    .icon-button,
+    .admin-panel button,
+    .admin-panel a.btn,
+    .admin-panel .btn,
+    .admin-panel button[style*="var(--brand)"],
+    .admin-panel button[style*="#52ead2"],
+    .admin-panel a[style*="var(--brand)"],
+    .admin-panel a[style*="#52ead2"],
+    .vendor-portal button,
+    .vendor-portal a.btn {
         font-family: 'Plus Jakarta Sans', 'Public Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
-        font-weight: 800 !important;
+        font-weight: 700 !important;
         letter-spacing: -0.01em !important;
     }
 
@@ -108,7 +117,7 @@
     .tab-btn:hover,
     .nav-pills .nav-link:hover,
     .nav-tabs .nav-link:hover {
-        font-weight: 800 !important;
+        font-weight: 700 !important;
     }
 
     /* --- GLOBAL PAGINATION STYLING MATCHING BLUE-TEAL CYAN GRADIENT --- */

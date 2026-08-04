@@ -206,6 +206,7 @@
 @endsection
 
 @section('js')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 let nextRowIndex = {{ isset($rowIndex) ? $rowIndex : 1 }};
 
@@ -252,8 +253,58 @@ function addFeatureRow() {
     nextRowIndex++;
     updateRowNumbers();
     
-    // Focus the new input
     tr.querySelector('.feature-input').focus();
 }
+
+$(document).ready(function() {
+    $('#featuresForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        var hasValidFeature = false;
+        $('.feature-input').each(function() {
+            if ($(this).val().trim() !== '') {
+                hasValidFeature = true;
+            }
+        });
+        
+        if (!hasValidFeature) {
+            Swal.fire('Validation Error', 'Please enter at least one feature title.', 'error');
+            return false;
+        }
+
+        var btn = $(this).find('button[type="submit"]');
+        btn.prop('disabled', true).text('Saving...');
+
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: $(this).serialize(),
+            dataType: 'json',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            success: function(response) {
+                btn.prop('disabled', false).text('Save Changes');
+                if (response.status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: response.message || 'Features updated successfully.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                } else {
+                    Swal.fire('Error', response.message || 'Failed to update features.', 'error');
+                }
+            },
+            error: function(xhr) {
+                btn.prop('disabled', false).text('Save Changes');
+                var msg = 'Failed to update features.';
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    msg = xhr.responseJSON.message;
+                }
+                Swal.fire('Error', msg, 'error');
+            }
+        });
+    });
+});
 </script>
 @endsection

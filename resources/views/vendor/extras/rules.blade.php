@@ -33,8 +33,8 @@
 
 .xp-btn-cancel { background:rgba(255, 255, 255, 0.05); border:1px solid rgba(255, 255, 255, 0.15); color:#cbd5e1; padding:10px 20px; border-radius:8px; cursor:pointer; font-size:.88rem; transition: all 0.2s; }
 .xp-btn-cancel:hover { background:rgba(255, 255, 255, 0.1); }
-.xp-btn-save   { background:var(--brand, #52ead2) !important; color:#050711 !important; border:none; padding:10px 20px; border-radius:8px; cursor:pointer; font-size:.88rem; font-weight:700 !important; box-shadow:0 8px 16px rgba(82, 234, 210, 0.2); transition: all 0.2s; }
-.xp-btn-save:hover { background:#2bc2a8 !important; box-shadow:0 8px 20px rgba(82, 234, 210, 0.3); }
+.xp-btn-save   { background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%) !important; color:#051013 !important; border:none; padding:9px 22px; border-radius:999px; cursor:pointer; font-size:.88rem; font-weight:800 !important; box-shadow:0 4px 15px rgba(82, 234, 210, 0.35); transition: all 0.2s; }
+.xp-btn-save:hover { box-shadow:0 6px 20px rgba(82, 234, 210, 0.5) !important; transform: translateY(-1px); }
 </style>
 
 <div class="admin-panel">
@@ -43,61 +43,65 @@
             <h2>Rules Management</h2>
         </div>
         <div>
-            <button class="btn btn-primary" onclick="xpOpen('xpAddModal')" style="display: inline-flex; align-items: center; gap: 4px;">
-                <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <button class="btn btn-primary" onclick="xpOpen('xpAddModal')" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 20px; background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%); color: #051013; border-radius: 999px; font-weight: 800 !important; font-size: 0.85rem; border: none; cursor: pointer; box-shadow: 0 4px 15px rgba(82, 234, 210, 0.35); white-space: nowrap; flex-shrink: 0; transition: all 0.2s;">
+                <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 3;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                 Add New Rule
             </button>
         </div>
     </div>
-    <div class="panel-body admin-table-wrap">
-        <table class="admin-table">
-            <thead>
-                <tr>
-                    <th>S.No</th>
-                    <th>Driver Age</th>
-                    <th>Charges</th>
-                    <th>Status</th>
-                    <th>Last Updated</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($rules as $i => $rule)
-                <tr data-min="{{ $rule->min_age }}" data-max="{{ $rule->max_age }}" data-charge="{{ $rule->underage_charge }}">
-                    <td>{{ $i + 1 }}</td>
-                    <td>{{ $rule->min_age }} – {{ $rule->max_age }} yrs</td>
-                    <td style="color: #dc2626; font-weight: 600;">${{ number_format($rule->underage_charge, 2) }}</td>
-                    <td>
-                        @if($rule->status)
-                            <span class="badge" style="background: #dcfce7; color: #067647; padding: 4px 8px; border-radius: 12px; font-weight: bold; font-size: 0.8rem; cursor: pointer;" onclick="xpToggleRule({{ $rule->id }}, this)">Active</span>
-                        @else
-                            <span class="badge" style="background: #f1f5f9; color: #64748b; padding: 4px 8px; border-radius: 12px; font-weight: bold; font-size: 0.8rem; cursor: pointer;" onclick="xpToggleRule({{ $rule->id }}, this)">Inactive</span>
-                        @endif
-                    </td>
-                    <td>{{ $rule->updated_at->format('d M Y g:i A') }}</td>
-                    <td>
-                        <div class="table-actions" style="display: flex; gap: 8px;">
-                            <button class="icon-button" title="View" onclick="xpView({{ $rule->min_age }}, {{ $rule->max_age }}, '{{ $rule->underage_charge }}')" style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: 1px solid #d7e0e8; border-radius: var(--radius); color: #0ea5e9; background: #ffffff; cursor: pointer; padding: 0;">
-                                <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                            </button>
-                            <button class="icon-button" title="Edit" onclick="xpEdit({{ $rule->id }}, {{ $rule->min_age }}, {{ $rule->max_age }}, '{{ $rule->underage_charge }}', {{ $rule->status ? 1 : 0 }})" style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: 1px solid #d7e0e8; border-radius: var(--radius); color: #0f766e; background: #ffffff; cursor: pointer; padding: 0;">
-                                <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2;"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-                            </button>
-                            <button class="icon-button delete-btn" title="Delete" onclick="xpDelete({{ $rule->id }})" style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: 1px solid #fee2e2; border-radius: var(--radius); color: #ef4444; background: #ffffff; cursor: pointer; padding: 0;">
-                                <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2;"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="6" class="text-center py-4" style="text-align: center; padding: 20px;">
-                        No rules found. Click <strong>Add New Rule</strong> to get started.
-                    </td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
+    <div id="rulesTableContainer">
+        @section('rules_table_section')
+        <div class="panel-body admin-table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Driver Age</th>
+                        <th>Charges</th>
+                        <th>Status</th>
+                        <th>Last Updated</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($rules as $i => $rule)
+                    <tr data-min="{{ $rule->min_age }}" data-max="{{ $rule->max_age }}" data-charge="{{ $rule->underage_charge }}">
+                        <td>{{ $i + 1 }}</td>
+                        <td>{{ $rule->min_age }} – {{ $rule->max_age }} yrs</td>
+                        <td style="color: #dc2626; font-weight: 600;">${{ number_format($rule->underage_charge, 2) }}</td>
+                        <td>
+                            @if($rule->status)
+                                <span class="badge" style="background: #dcfce7; color: #067647; padding: 4px 8px; border-radius: 12px; font-weight: bold; font-size: 0.8rem; cursor: pointer;" onclick="xpToggleRule({{ $rule->id }}, this)">Active</span>
+                            @else
+                                <span class="badge" style="background: #f1f5f9; color: #64748b; padding: 4px 8px; border-radius: 12px; font-weight: bold; font-size: 0.8rem; cursor: pointer;" onclick="xpToggleRule({{ $rule->id }}, this)">Inactive</span>
+                            @endif
+                        </td>
+                        <td>{{ $rule->updated_at->format('d M Y g:i A') }}</td>
+                        <td>
+                            <div class="table-actions" style="display: flex; gap: 8px;">
+                                <button class="icon-button" title="View" onclick="xpView({{ $rule->min_age }}, {{ $rule->max_age }}, '{{ $rule->underage_charge }}')" style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: 1px solid #d7e0e8; border-radius: var(--radius); color: #0ea5e9; background: #ffffff; cursor: pointer; padding: 0;">
+                                    <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                </button>
+                                <button class="icon-button" title="Edit" onclick="xpEdit({{ $rule->id }}, {{ $rule->min_age }}, {{ $rule->max_age }}, '{{ $rule->underage_charge }}', {{ $rule->status ? 1 : 0 }})" style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: 1px solid #d7e0e8; border-radius: var(--radius); color: #0f766e; background: #ffffff; cursor: pointer; padding: 0;">
+                                    <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2;"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                                </button>
+                                <button class="icon-button delete-btn" title="Delete" onclick="xpDelete({{ $rule->id }})" style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: 1px solid #fee2e2; border-radius: var(--radius); color: #ef4444; background: #ffffff; cursor: pointer; padding: 0;">
+                                    <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2;"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="6" class="text-center py-4" style="text-align: center; padding: 20px;">
+                            No rules found. Click <strong>Add New Rule</strong> to get started.
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        @show
     </div>
 </div>
 
@@ -112,16 +116,16 @@
             <div class="xp-modal-body">
                 <div class="xp-row">
                     <div class="xp-fg">
-                        <label>Min Age</label>
+                        <label>Min Age <span style="color:#ef4444">*</span></label>
                         <input type="number" name="min_age" min="0" required placeholder="e.g. 18">
                     </div>
                     <div class="xp-fg">
-                        <label>Max Age</label>
+                        <label>Max Age <span style="color:#ef4444">*</span></label>
                         <input type="number" name="max_age" min="0" required placeholder="e.g. 25">
                     </div>
                 </div>
                 <div class="xp-fg">
-                    <label>Charges</label>
+                    <label>Charges ($) <span style="color:#ef4444">*</span></label>
                     <input type="number" step="0.01" min="0" name="underage_charge" required placeholder="e.g. 10.00">
                 </div>
                 <div class="xp-fg">
@@ -134,7 +138,7 @@
             </div>
             <div class="xp-modal-foot">
                 <button type="button" class="xp-btn-cancel" onclick="xpClose('xpAddModal')">Cancel</button>
-                <button type="submit" class="xp-btn-save" style="background: #22c55e;">Add Rule</button>
+                <button type="submit" id="btnRuleAddSave" class="xp-btn-save">Add Rule</button>
             </div>
         </form>
     </div>
@@ -151,16 +155,16 @@
             <div class="xp-modal-body">
                 <div class="xp-row">
                     <div class="xp-fg">
-                        <label>Min Age</label>
+                        <label>Min Age <span style="color:#ef4444">*</span></label>
                         <input type="number" name="min_age" id="xe_min" min="0" required>
                     </div>
                     <div class="xp-fg">
-                        <label>Max Age</label>
+                        <label>Max Age <span style="color:#ef4444">*</span></label>
                         <input type="number" name="max_age" id="xe_max" min="0" required>
                     </div>
                 </div>
                 <div class="xp-fg">
-                    <label>Charges</label>
+                    <label>Charges ($) <span style="color:#ef4444">*</span></label>
                     <input type="number" step="0.01" min="0" name="underage_charge" id="xe_charge" required>
                 </div>
                 <div class="xp-fg">
@@ -173,7 +177,7 @@
             </div>
             <div class="xp-modal-foot">
                 <button type="button" class="xp-btn-cancel" onclick="xpClose('xpEditModal')">Cancel</button>
-                <button type="submit" class="xp-btn-save" style="background: #22c55e;">Update Rule</button>
+                <button type="submit" id="btnRuleEditSave" class="xp-btn-save">Update Rule</button>
             </div>
         </form>
     </div>
@@ -197,16 +201,70 @@
 @section('js')
 <script>
 let xpEditId = null;
+
+function fetchRules() {
+    $('#rulesTableContainer').css('opacity', '0.5');
+    $.ajax({
+        url: '{{ route("vendor.rules.index") }}',
+        type: 'GET',
+        dataType: 'json',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        success: function(response) {
+            if (response.status === 'success' && response.html) {
+                $('#rulesTableContainer').html(response.html).css('opacity', '1');
+            }
+        },
+        error: function() {
+            $('#rulesTableContainer').css('opacity', '1');
+        }
+    });
+}
+
 function xpOpen(id){ document.getElementById(id).classList.add('open'); }
 function xpClose(id){ document.getElementById(id).classList.remove('open'); }
 
 function xpSave(e) {
-    e.preventDefault();
-    fetch('{{ route("vendor.rules.store") }}', {method:'POST', body:new FormData(e.target), headers:{'X-Requested-With':'XMLHttpRequest'}})
-    .then(r=>r.json()).then(d=>{ 
-        if(d.status==='success') {
-            xpClose('xpAddModal');
-            Swal.fire('Added!','Rule saved.','success').then(()=>location.reload()); 
+    if (e && e.preventDefault) e.preventDefault();
+    var form = $('#xpAddForm');
+    var minAge = parseInt(form.find('[name="min_age"]').val());
+    var maxAge = parseInt(form.find('[name="max_age"]').val());
+    if (maxAge < minAge) {
+        Swal.fire('Validation Error', 'Max age must be greater than or equal to Min age.', 'error');
+        return false;
+    }
+
+    $('#btnRuleAddSave').prop('disabled', true).text('Saving...');
+
+    $.ajax({
+        url: '{{ route("vendor.rules.store") }}',
+        type: 'POST',
+        data: form.serialize(),
+        dataType: 'json',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        success: function(d) {
+            $('#btnRuleAddSave').prop('disabled', false).text('Add Rule');
+            if (d.status === 'success') {
+                xpClose('xpAddModal');
+                form[0].reset();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: d.message || 'Rule saved successfully.',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+                fetchRules();
+            } else {
+                Swal.fire('Error', d.message || 'Failed to save rule.', 'error');
+            }
+        },
+        error: function(xhr) {
+            $('#btnRuleAddSave').prop('disabled', false).text('Add Rule');
+            var msg = 'Failed to save rule.';
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+                msg = xhr.responseJSON.message;
+            }
+            Swal.fire('Validation Error', msg, 'error');
         }
     });
 }
@@ -221,12 +279,46 @@ function xpEdit(id, min, max, charge, status) {
 }
 
 function xpUpdate(e) {
-    e.preventDefault();
-    fetch(`{{ url('vendor/rules') }}/${xpEditId}`, {method:'POST', body:new FormData(e.target), headers:{'X-Requested-With':'XMLHttpRequest'}})
-    .then(r=>r.json()).then(d=>{ 
-        if(d.status==='success') {
-            xpClose('xpEditModal');
-            Swal.fire('Updated!','Rule updated.','success').then(()=>location.reload()); 
+    if (e && e.preventDefault) e.preventDefault();
+    var form = $('#xpEditForm');
+    var minAge = parseInt(document.getElementById('xe_min').value);
+    var maxAge = parseInt(document.getElementById('xe_max').value);
+    if (maxAge < minAge) {
+        Swal.fire('Validation Error', 'Max age must be greater than or equal to Min age.', 'error');
+        return false;
+    }
+
+    $('#btnRuleEditSave').prop('disabled', true).text('Updating...');
+
+    $.ajax({
+        url: `{{ url('vendor/rules') }}/${xpEditId}`,
+        type: 'POST',
+        data: form.serialize(),
+        dataType: 'json',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        success: function(d) {
+            $('#btnRuleEditSave').prop('disabled', false).text('Update Rule');
+            if (d.status === 'success') {
+                xpClose('xpEditModal');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Updated!',
+                    text: d.message || 'Rule updated successfully.',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+                fetchRules();
+            } else {
+                Swal.fire('Error', d.message || 'Failed to update rule.', 'error');
+            }
+        },
+        error: function(xhr) {
+            $('#btnRuleEditSave').prop('disabled', false).text('Update Rule');
+            var msg = 'Failed to update rule.';
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+                msg = xhr.responseJSON.message;
+            }
+            Swal.fire('Validation Error', msg, 'error');
         }
     });
 }
@@ -235,25 +327,73 @@ function xpToggleRule(id, el) {
     const cur = el.innerText === 'Active' ? 1 : 0;
     const nw  = cur === 1 ? 0 : 1;
     const row = el.closest('tr');
-    const fd  = new FormData();
-    fd.append('_token','{{ csrf_token() }}');
-    fd.append('status', nw);
-    fd.append('min_age', row.dataset.min);
-    fd.append('max_age', row.dataset.max);
-    fd.append('underage_charge', row.dataset.charge);
-    fetch(`{{ url('vendor/rules') }}/${id}`, {method:'POST', body:fd, headers:{'X-Requested-With':'XMLHttpRequest'}})
-    .then(r=>r.json()).then(d=>{ 
-        if(d.status==='success'){ 
-            el.style.background = nw ? '#dcfce7' : '#f1f5f9';
-            el.style.color = nw ? '#067647' : '#64748b';
-            el.innerText = nw ? 'Active' : 'Inactive'; 
-        } 
+    
+    $.ajax({
+        url: `{{ url('vendor/rules') }}/${id}`,
+        type: 'POST',
+        data: {
+            _token: '{{ csrf_token() }}',
+            status: nw,
+            min_age: row.dataset.min,
+            max_age: row.dataset.max,
+            underage_charge: row.dataset.charge
+        },
+        dataType: 'json',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        success: function(d) {
+            if (d.status === 'success') {
+                el.style.background = nw ? '#dcfce7' : '#f1f5f9';
+                el.style.color = nw ? '#067647' : '#64748b';
+                el.innerText = nw ? 'Active' : 'Inactive';
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Status Updated',
+                    text: 'Rule status changed to ' + (nw ? 'Active' : 'Inactive'),
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            }
+        }
     });
 }
 
 function xpDelete(id) {
-    Swal.fire({title:'Delete rule?',icon:'warning',showCancelButton:true,confirmButtonColor:'#ef4444',confirmButtonText:'Delete'})
-    .then(r=>{ if(r.isConfirmed){ fetch(`{{ url('vendor/rules') }}/${id}`,{method:'DELETE',headers:{'X-CSRF-TOKEN':'{{ csrf_token() }}'}}).then(r=>r.json()).then(d=>{ if(d.status==='success') Swal.fire('Deleted!','','success').then(()=>location.reload()); }); } });
+    Swal.fire({
+        title: 'Delete rule?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ef4444',
+        cancelButtonColor: '#8592a3',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((r) => {
+        if (r.isConfirmed) {
+            $.ajax({
+                url: `{{ url('vendor/rules') }}/${id}`,
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    _method: 'DELETE'
+                },
+                dataType: 'json',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                success: function(d) {
+                    if (d.status === 'success') {
+                        Swal.fire({
+                            title: 'Deleted!',
+                            text: d.message || 'Rule deleted successfully.',
+                            icon: 'success',
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                        fetchRules();
+                    } else {
+                        Swal.fire('Error', d.message || 'Failed to delete rule.', 'error');
+                    }
+                }
+            });
+        }
+    });
 }
 
 function xpView(min, max, charge) {

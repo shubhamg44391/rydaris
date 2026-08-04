@@ -180,12 +180,18 @@ class DashboardController extends Controller
         return view('vendor.pricing.index', compact('packages'));
     }
 
-    public function subscriptionHistory()
+    public function subscriptionHistory(Request $request)
     {
         $subscriptions = VendorSubscription::where('vendor_id', auth()->id())
             ->with('package')
             ->latest()
             ->get();
+
+        if ($request->ajax() || $request->wantsJson()) {
+            $html = view('vendor.pricing.partials.history_content', compact('subscriptions'))->render();
+            return response()->json(['status' => 'success', 'html' => $html]);
+        }
+
         return view('vendor.pricing.history', compact('subscriptions'));
     }
 

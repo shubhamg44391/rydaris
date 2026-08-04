@@ -160,19 +160,34 @@
             transform: translateY(-1px) !important;
         }
     </style>
-    <div class="panel-head d-flex justify-content-between align-items-center" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+    <div class="panel-head d-flex justify-content-between align-items-center" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
         <div>
-            <h2>Bookings</h2>
+            <h2 style="margin: 0; font-size: 1.35rem; font-weight: 800;">Bookings</h2>
         </div>
-        <div style="display: flex; gap: 10px; align-items: center;">
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: nowrap;">
+            <!-- Search Box -->
+            <div style="position: relative; width: 220px; flex-shrink: 0;">
+                <input type="text" id="bookingSearchInput" value="{{ $search ?? '' }}" placeholder="Search customer, res #..." style="width: 100%; padding: 8px 12px 8px 34px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; color: #ffffff; font-size: 0.85rem; outline: none; transition: all 0.2s;">
+                <svg viewBox="0 0 24 24" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); width: 15px; height: 15px; fill: none; stroke: #64748b; stroke-width: 2.5;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
+
+            <!-- Status Filter Dropdown -->
+            <select id="bookingStatusSelect" class="form-select" style="width: 140px !important; min-width: 130px; display: inline-block !important; flex-shrink: 0; padding: 8px 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; color: #ffffff; font-size: 0.85rem; font-weight: 600; outline: none; cursor: pointer;">
+                <option value="" style="background: #1e293b; color: #ffffff;" {{ !($status ?? null) ? 'selected' : '' }}>All Status</option>
+                <option value="pending" style="background: #1e293b; color: #ffffff;" {{ ($status ?? null) === 'pending' ? 'selected' : '' }}>Pending</option>
+                <option value="confirmed" style="background: #1e293b; color: #ffffff;" {{ ($status ?? null) === 'confirmed' ? 'selected' : '' }}>Confirmed</option>
+                <option value="completed" style="background: #1e293b; color: #ffffff;" {{ ($status ?? null) === 'completed' ? 'selected' : '' }}>Completed</option>
+                <option value="cancelled" style="background: #1e293b; color: #ffffff;" {{ ($status ?? null) === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+            </select>
+
             <a href="{{ route('vendor.bookings.export') }}" id="btn-export-bookings"
-               style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: linear-gradient(135deg, #52ead2, #2bc2a8); color: #051013; border-radius: 8px; font-weight: 700; font-size: 0.875rem; text-decoration: none; box-shadow: 0 2px 12px rgba(82,234,210,0.25);">
-                <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;">
+               style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: linear-gradient(135deg, #52ead2, #2bc2a8); color: #051013; border-radius: 8px; font-weight: 700; font-size: 0.85rem; text-decoration: none; box-shadow: 0 2px 12px rgba(82,234,210,0.25); white-space: nowrap; flex-shrink: 0;">
+                <svg viewBox="0 0 24 24" style="width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                     <polyline points="7 10 12 15 17 10"/>
                     <line x1="12" y1="15" x2="12" y2="3"/>
                 </svg>
-                Export Bookings (CSV)
+                Export CSV
             </a>
         </div>
     </div>
@@ -188,86 +203,88 @@
         </div>
     @endif
 
-    <div class="panel-body admin-table-wrap">
-        <div class="custom-table-scrollbar" style="overflow-x: auto; max-width: 100%;">
-            <table class="admin-table">
-                <thead>
-                    <tr>
-                        <th style="white-space: nowrap;">S.No</th>
-                        <th style="white-space: nowrap;">Date & time of booking</th>
-                        <th style="white-space: nowrap;">Reservation #</th>
-                        <th style="white-space: nowrap;">Customer's name</th>
-                        <th style="white-space: nowrap;">Vehicle type</th>
-                        <th style="white-space: nowrap;">Assigned Driver</th>
-                        <th style="white-space: nowrap;">Pickup location</th>
-                        <th style="white-space: nowrap;">Date & time of pickup</th>
-                        <th style="white-space: nowrap;">Return location</th>
-                        <th style="white-space: nowrap;">Date & time of return</th>
-                        <th style="white-space: nowrap;">Paid amount</th>
-                        <th style="white-space: nowrap;">Pending amount</th>
-                        <th style="white-space: nowrap;">Total amount</th>
-                        <th style="white-space: nowrap;">Payment Reference</th>
-                        <th style="white-space: nowrap;">Booking Status</th>
-                        <th style="white-space: nowrap;">Payment Status</th>
-                        <th style="white-space: nowrap;">Customer Review</th>
-                        <th style="white-space: nowrap;">Terms & Conditions</th>
-                        <th style="white-space: nowrap;">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($bookings as $index => $booking)
+    <div id="bookingsTableContainer">
+        @section('booking_table_section')
+        <div class="panel-body admin-table-wrap" id="bookingsTableWrap">
+            <div class="custom-table-scrollbar" style="overflow-x: auto; max-width: 100%;">
+                <table class="admin-table">
+                    <thead>
                         <tr>
-                            <td>
-                                {{ ($bookings->currentPage() - 1) * $bookings->perPage() + $loop->iteration }}
-                            </td>
-                            <td style="white-space: nowrap;">
-                                {{ $booking->created_at->format('M d, Y h:i A') }}
-                            </td>
-                            <td style="white-space: nowrap;">
-                                {{ $booking->reservation_number }}
-                            </td>
-                            <td style="white-space: nowrap;">
-                                {{ $booking->customer_fname }} {{ $booking->customer_lname }}
-                            </td>
-                            <td style="white-space: nowrap;">
-                                {{ $booking->vehicle->name ?? 'N/A' }}
-                            </td>
-                            <td style="white-space: nowrap;">
-                                @if($booking->driver)
-                                    <span class="badge" style="background: rgba(82, 234, 210, 0.1); color: var(--brand, #52ead2); border: 1px solid rgba(82, 234, 210, 0.2); font-weight: 700; padding: 5px 10px; border-radius: 6px;">
-                                        <i class="fa fa-user me-1"></i>{{ $booking->driver->name }}
-                                    </span>
-                                @else
-                                    <span style="color: #64748b; font-style: italic; font-size: 0.85rem;">Not Assigned</span>
-                                @endif
-                            </td>
-                            <td style="white-space: nowrap;">
-                                {{ $booking->pickupLocation->name ?? 'N/A' }}
-                            </td>
-                            <td style="white-space: nowrap;">
-                                {{ $booking->pickup_date_parsed ? $booking->pickup_date_parsed->format('Y/m/d') : $booking->pickup_date }}
-                                @if($booking->pickup_time)
-                                    <br><span style="font-size: 0.78rem; color: #52ead2;"><i class="fa fa-clock me-1"></i>{{ date('h:i A', strtotime($booking->pickup_time)) }}</span>
-                                @endif
-                            </td>
-                            <td style="white-space: nowrap;">
-                                {{ $booking->returnLocation->name ?? 'N/A' }}
-                            </td>
-                            <td style="white-space: nowrap;">
-                                {{ $booking->return_date_parsed ? $booking->return_date_parsed->format('Y/m/d') : $booking->return_date }}
-                                @if($booking->return_time)
-                                    <br><span style="font-size: 0.78rem; color: #52ead2;"><i class="fa fa-clock me-1"></i>{{ date('h:i A', strtotime($booking->return_time)) }}</span>
-                                @endif
-                            </td>
-                            <td style="white-space: nowrap;">
-                                ₹{{ number_format($booking->paid_amount, 2) }}
-                            </td>
-                            <td style="white-space: nowrap;">
-                                ₹{{ number_format($booking->pending_amount, 2) }}
-                            </td>
-                            <td style="white-space: nowrap; font-weight: bold; color: #52ead2;">
-                                ₹{{ number_format($booking->total_amount, 2) }}
-                            </td>
+                            <th style="white-space: nowrap;">S.No</th>
+                            <th style="white-space: nowrap;">Date & time of booking</th>
+                            <th style="white-space: nowrap;">Reservation #</th>
+                            <th style="white-space: nowrap;">Customer's name</th>
+                            <th style="white-space: nowrap;">Vehicle type</th>
+                            <th style="white-space: nowrap;">Assigned Driver</th>
+                            <th style="white-space: nowrap;">Pickup location</th>
+                            <th style="white-space: nowrap;">Date & time of pickup</th>
+                            <th style="white-space: nowrap;">Return location</th>
+                            <th style="white-space: nowrap;">Date & time of return</th>
+                            <th style="white-space: nowrap;">Paid amount</th>
+                            <th style="white-space: nowrap;">Pending amount</th>
+                            <th style="white-space: nowrap;">Total amount</th>
+                            <th style="white-space: nowrap;">Payment Reference</th>
+                            <th style="white-space: nowrap;">Booking Status</th>
+                            <th style="white-space: nowrap;">Payment Status</th>
+                            <th style="white-space: nowrap;">Customer Review</th>
+                            <th style="white-space: nowrap;">Terms & Conditions</th>
+                            <th style="white-space: nowrap;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($bookings as $index => $booking)
+                            <tr id="booking-row-{{ $booking->id }}">
+                                <td>
+                                    {{ ($bookings->currentPage() - 1) * $bookings->perPage() + $loop->iteration }}
+                                </td>
+                                <td style="white-space: nowrap;">
+                                    {{ $booking->created_at->format('M d, Y h:i A') }}
+                                </td>
+                                <td style="white-space: nowrap;">
+                                    {{ $booking->reservation_number }}
+                                </td>
+                                <td style="white-space: nowrap;">
+                                    {{ $booking->customer_fname }} {{ $booking->customer_lname }}
+                                </td>
+                                <td style="white-space: nowrap;">
+                                    {{ $booking->vehicle->name ?? 'N/A' }}
+                                </td>
+                                <td style="white-space: nowrap;" id="driver-cell-{{ $booking->id }}">
+                                    @if($booking->driver)
+                                        <span class="badge" style="background: rgba(82, 234, 210, 0.1); color: var(--brand, #52ead2); border: 1px solid rgba(82, 234, 210, 0.2); font-weight: 700; padding: 5px 10px; border-radius: 6px;">
+                                            <i class="fa fa-user me-1"></i>{{ $booking->driver->name }}
+                                        </span>
+                                    @else
+                                        <span style="color: #64748b; font-style: italic; font-size: 0.85rem;">Not Assigned</span>
+                                    @endif
+                                </td>
+                                <td style="white-space: nowrap;">
+                                    {{ $booking->pickupLocation->name ?? 'N/A' }}
+                                </td>
+                                <td style="white-space: nowrap;">
+                                    {{ $booking->pickup_date_parsed ? $booking->pickup_date_parsed->format('Y/m/d') : $booking->pickup_date }}
+                                    @if($booking->pickup_time)
+                                        <br><span style="font-size: 0.78rem; color: #52ead2;"><i class="fa fa-clock me-1"></i>{{ date('h:i A', strtotime($booking->pickup_time)) }}</span>
+                                    @endif
+                                </td>
+                                <td style="white-space: nowrap;">
+                                    {{ $booking->returnLocation->name ?? 'N/A' }}
+                                </td>
+                                <td style="white-space: nowrap;">
+                                    {{ $booking->return_date_parsed ? $booking->return_date_parsed->format('Y/m/d') : $booking->return_date }}
+                                    @if($booking->return_time)
+                                        <br><span style="font-size: 0.78rem; color: #52ead2;"><i class="fa fa-clock me-1"></i>{{ date('h:i A', strtotime($booking->return_time)) }}</span>
+                                    @endif
+                                </td>
+                                <td style="white-space: nowrap;">
+                                    ₹{{ number_format($booking->paid_amount, 2) }}
+                                </td>
+                                <td style="white-space: nowrap;">
+                                    ₹{{ number_format($booking->pending_amount, 2) }}
+                                </td>
+                                <td style="white-space: nowrap; font-weight: bold; color: #52ead2;">
+                                    ₹{{ number_format($booking->total_amount, 2) }}
+                                </td>
                                 <td style="padding: 15px 20px; white-space: nowrap;">
                                     {{ $booking->payment_reference ?? 'N/A' }}
                                 </td>
@@ -371,95 +388,135 @@
                 </div>
             @endif
         </div>
+        @endsection
+        @yield('booking_table_section')
     </div>
 </div>
 @endsection
 
 @section('js')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const statusDropdowns = document.querySelectorAll('.status-dropdown');
-        statusDropdowns.forEach(dropdown => {
-            dropdown.addEventListener('change', function() {
-                const bookingId = this.getAttribute('data-id');
-                const newStatus = this.value;
-                const selectElement = this;
+    var currentBookingStatusFilter = '{{ $status ?? "" }}';
+    var currentBookingSearchQuery = '{{ $search ?? "" }}';
+    var searchTimer = null;
 
-                // Ask for confirmation
-                Swal.fire({
-                    title: 'Change Booking Status?',
-                    text: `Are you sure you want to change the status to ${newStatus}?`,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#4ade80',
-                    cancelButtonColor: '#ef4444',
-                    confirmButtonText: 'Yes, change it!',
-                    background: 'rgba(11, 16, 32, 0.95)',
-                    color: '#fff'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Update styling immediately
-                        if(newStatus === 'confirmed') {
-                            selectElement.style.color = '#4ade80';
-                        } else if(newStatus === 'pending') {
-                            selectElement.style.color = '#facc15';
-                        } else if(newStatus === 'cancelled') {
-                            selectElement.style.color = '#ef4444';
-                        } else {
-                            selectElement.style.color = '#fff';
-                        }
+    function fetchBookings(url) {
+        url = url || '{{ route("vendor.bookings.index") }}';
+        $('#bookingsTableContainer').css('opacity', '0.5');
 
-                        // Make AJAX request
-                        fetch('{{ route("vendor.bookings.update_status") }}', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            body: JSON.stringify({
-                                booking_id: bookingId,
-                                status: newStatus
-                            })
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if(data.success) {
+        $.ajax({
+            url: url,
+            type: 'GET',
+            data: {
+                status: currentBookingStatusFilter,
+                search: currentBookingSearchQuery
+            },
+            dataType: 'json',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            success: function(response) {
+                if (response.success && response.html) {
+                    $('#bookingsTableContainer').html(response.html).css('opacity', '1');
+                    bindStatusDropdownEvents();
+                }
+            },
+            error: function() {
+                $('#bookingsTableContainer').css('opacity', '1');
+            }
+        });
+    }
+
+    function bindStatusDropdownEvents() {
+        $('.status-dropdown').off('change').on('change', function() {
+            var bookingId = $(this).data('id');
+            var newStatus = $(this).val();
+            var selectElement = $(this);
+            var prevStatus = selectElement.attr('data-current-status') || 'pending';
+
+            Swal.fire({
+                title: 'Change Booking Status?',
+                text: 'Are you sure you want to change status to ' + newStatus + '?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#4ade80',
+                cancelButtonColor: '#ef4444',
+                confirmButtonText: 'Yes, change it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    if (newStatus === 'confirmed' || newStatus === 'completed') {
+                        selectElement.css('color', '#4ade80');
+                    } else if (newStatus === 'pending') {
+                        selectElement.css('color', '#facc15');
+                    } else if (newStatus === 'cancelled') {
+                        selectElement.css('color', '#ef4444');
+                    }
+
+                    $.ajax({
+                        url: '{{ route("vendor.bookings.update_status") }}',
+                        type: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            booking_id: bookingId,
+                            status: newStatus
+                        },
+                        dataType: 'json',
+                        success: function(data) {
+                            if (data.success) {
+                                selectElement.attr('data-current-status', newStatus);
                                 Swal.fire({
                                     toast: true,
                                     position: 'top-end',
                                     icon: 'success',
                                     title: 'Status updated successfully',
                                     showConfirmButton: false,
-                                    timer: 3000,
-                                    background: 'rgba(11, 16, 32, 0.95)'
+                                    timer: 2500
                                 });
                             } else {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Error',
-                                    text: 'Failed to update status',
-                                    background: 'rgba(11, 16, 32, 0.95)'
-                                });
+                                selectElement.val(prevStatus);
+                                Swal.fire('Error', 'Failed to update status', 'error');
                             }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'An error occurred while updating status',
-                                background: 'rgba(11, 16, 32, 0.95)'
-                            });
-                        });
-                    } else {
-                        // Revert selection
-                        selectElement.value = selectElement.getAttribute('data-current-status') || 'pending';
-                    }
-                });
+                        },
+                        error: function() {
+                            selectElement.val(prevStatus);
+                            Swal.fire('Error', 'An error occurred while updating status', 'error');
+                        }
+                    });
+                } else {
+                    selectElement.val(prevStatus);
+                }
             });
+        });
 
-            // Store original value
-            dropdown.setAttribute('data-current-status', dropdown.value);
+        // Save original status value for rollback
+        $('.status-dropdown').each(function() {
+            $(this).attr('data-current-status', $(this).val());
+        });
+    }
+
+    $(document).ready(function() {
+        bindStatusDropdownEvents();
+
+        // Status Filter Dropdown Change
+        $(document).on('change', '#bookingStatusSelect', function() {
+            currentBookingStatusFilter = $(this).val() || '';
+            fetchBookings();
+        });
+
+        // Search input keyup debounced
+        $(document).on('keyup', '#bookingSearchInput', function() {
+            clearTimeout(searchTimer);
+            currentBookingSearchQuery = $(this).val();
+            searchTimer = setTimeout(function() {
+                fetchBookings();
+            }, 350);
+        });
+
+        // AJAX Pagination click
+        $(document).on('click', '#bookingsTableContainer .pagination a', function(e) {
+            e.preventDefault();
+            var pageUrl = $(this).attr('href');
+            if (pageUrl) {
+                fetchBookings(pageUrl);
+            }
         });
     });
 
@@ -495,15 +552,25 @@
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
             success: function(data) {
                 if (data.success) {
+                    closeTableAssignDriverModal();
                     Swal.fire({
                         icon: 'success',
                         title: 'Success!',
                         text: data.message,
                         timer: 1500,
                         showConfirmButton: false
-                    }).then(function() {
-                        window.location.reload();
                     });
+
+                    // Update driver badge in table without reloading page
+                    if (data.driver && data.driver.name) {
+                        $('#driver-cell-' + bookingId).html(
+                            '<span class="badge" style="background: rgba(82, 234, 210, 0.1); color: var(--brand, #52ead2); border: 1px solid rgba(82, 234, 210, 0.2); font-weight: 700; padding: 5px 10px; border-radius: 6px;">' +
+                                '<i class="fa fa-user me-1"></i>' + data.driver.name +
+                            '</span>'
+                        );
+                    } else {
+                        fetchBookings();
+                    }
                 } else {
                     Swal.fire('Error!', data.message || 'Failed to assign driver.', 'error');
                 }

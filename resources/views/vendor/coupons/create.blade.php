@@ -1,110 +1,99 @@
 @extends('admin.layouts.app')
 
 @section('main-content')
-<div class="container-fluid p-4">
-    
-    <div class="mb-4 text-center">
-        <h3 class="text-white" style="font-weight: 800;">Which type of coupon do you want to create?</h3>
-        <p style="color: #94a3b8; font-size: 0.9rem;">Choose between a percentage-based discount or a fixed amount discount.</p>
+<div class="admin-panel">
+    <div class="panel-head d-flex justify-content-between align-items-center" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+        <div>
+            <h2>Add New Coupon</h2>
+        </div>
+        <div>
+            <a href="{{ route('vendor.coupons.index') }}" class="btn btn-sm btn-outline-secondary" style="border-radius: 999px; color: #cbd5e1; border: 1px solid rgba(255,255,255,0.2); padding: 6px 18px; text-decoration: none; font-size: 0.85rem; font-weight: 600;">Back to Coupons</a>
+        </div>
     </div>
 
-    @if($errors->any())
-        <div class="alert alert-danger" style="background: rgba(239, 68, 68, 0.1); border-left: 4px solid #ef4444; color: #fff;">
-            <ul class="mb-0">
-                @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    <div class="panel-body">
+        <form id="couponCreateForm" action="{{ route('vendor.coupons.store') }}" method="POST" onsubmit="submitCouponForm(event)">
+            @csrf
+            <input type="hidden" name="type" id="coupon_type" value="fixed">
 
-    <form action="{{ route('vendor.coupons.store') }}" method="POST">
-        @csrf
-        <input type="hidden" name="type" id="coupon_type" value="fixed">
-
-        
-        <div class="row mb-5 justify-content-center">
-            <div class="col-md-5">
-                <div class="type-selector" id="type-percentage" onclick="selectType('percentage')" style="cursor: pointer; padding: 20px; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 15px; background: rgba(11, 16, 32, 0.6); transition: all 0.3s;">
-                    <div class="icon-container" style="color: #94a3b8; display: flex; flex-direction: column; align-items: center;">
-                        <span style="font-size: 1.2rem; font-weight: 800;">%</span>
+            {{-- Type Selection Tabs --}}
+            <div style="margin-bottom: 25px;">
+                <label style="display: block; color: #cbd5e1; font-size: 0.88rem; font-weight: 600; margin-bottom: 10px;">Select Coupon Type <span style="color:#ef4444">*</span></label>
+                <div class="row g-3" style="max-width: 600px;">
+                    <div class="col-6">
+                        <div class="type-selector" id="type-percentage" onclick="selectType('percentage')" style="cursor: pointer; padding: 14px 18px; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; display: flex; align-items: center; gap: 12px; background: rgba(255, 255, 255, 0.03); transition: all 0.2s;">
+                            <div class="icon-container" style="color: #94a3b8; font-weight: 800; font-size: 1.1rem; width: 28px; text-align: center;">%</div>
+                            <div>
+                                <h6 class="title-text" style="color: #f8fafc; font-weight: 700; margin: 0; font-size: 0.9rem;">Percentage Based</h6>
+                                <span class="desc-text" style="color: #94a3b8; font-size: 0.78rem;">Discount as %</span>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <h6 class="mb-1 title-text" style="color: #f8fafc; font-weight: 700;">Percentage Based</h6>
-                        <span style="color: #94a3b8; font-size: 0.8rem;">Discount as a percentage</span>
+                    <div class="col-6">
+                        <div class="type-selector active" id="type-fixed" onclick="selectType('fixed')" style="cursor: pointer; padding: 14px 18px; border: 1px solid var(--brand, #52ead2); border-radius: 10px; display: flex; align-items: center; gap: 12px; background: rgba(255, 255, 255, 0.06); transition: all 0.2s;">
+                            <div class="icon-container" style="color: var(--brand, #52ead2); font-weight: 800; font-size: 1.1rem; width: 28px; text-align: center;">$</div>
+                            <div>
+                                <h6 class="title-text" style="color: var(--brand, #52ead2); font-weight: 700; margin: 0; font-size: 0.9rem;">Amount Based</h6>
+                                <span class="desc-text" style="color: var(--brand, #52ead2); font-size: 0.78rem;">Fixed amount ($)</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-5">
-                <div class="type-selector active" id="type-fixed" onclick="selectType('fixed')" style="cursor: pointer; padding: 20px; border: 1px solid #ef4444; border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 15px; background: rgba(239, 68, 68, 0.05); transition: all 0.3s;">
-                    <div class="icon-container" style="color: #ef4444; display: flex; flex-direction: column; align-items: center;">
-                        <span style="font-size: 1.2rem; font-weight: 800;">$</span>
-                    </div>
-                    <div>
-                        <h6 class="mb-1 title-text" style="color: #ef4444; font-weight: 700;">Amount Based</h6>
-                        <span class="desc-text" style="color: #ef4444; font-size: 0.8rem;">Fixed amount discount</span>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        
-        <div class="card mx-auto" style="max-width: 900px; background: rgba(11, 16, 32, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px;">
-            <div class="card-body p-5">
-                <div class="mb-4">
-                    <h4 class="text-white mb-1" id="form-title" style="font-weight: 800; display: flex; align-items: center; gap: 10px;">
-                        <span id="form-icon" style="color: #ef4444;">$</span> 
-                        <span id="form-title-text">Amount-Based Coupon</span>
-                    </h4>
-                    <p style="color: #94a3b8; font-size: 0.85rem;" id="form-subtitle">Create a coupon with fixed amount discount</p>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <label style="display: inline-flex; align-items: center; gap: 4px; color: #f8fafc; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; white-space: nowrap;">
+                        <span>Coupon Code</span>
+                        <span style="color:#ef4444; display: inline;">*</span>
+                    </label>
+                    <input type="text" name="code" class="form-control" placeholder="e.g. SAVE50" value="{{ old('code') }}" required style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 10px 14px; border-radius: 8px; font-weight: 700; text-transform: uppercase; outline: none;">
+                </div>
+                <div class="col-md-6">
+                    <label id="discount-label" style="display: inline-flex; align-items: center; gap: 4px; color: #f8fafc; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; white-space: nowrap;">
+                        <span>Discount Amount ($)</span>
+                        <span style="color:#ef4444; display: inline;">*</span>
+                    </label>
+                    <input type="number" step="0.01" min="0" name="discount" class="form-control" placeholder="e.g. 50.00" value="{{ old('discount') }}" required style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 10px 14px; border-radius: 8px; outline: none;">
                 </div>
                 
-                <hr style="border-color: rgba(255,255,255,0.1); margin-bottom: 25px;">
+                <div class="col-12">
+                    <label style="display: block; color: #f8fafc; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px;">Coupon Description</label>
+                    <textarea name="description" class="form-control" rows="3" placeholder="Describe the coupon conditions, terms, and rules..." style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 10px 14px; border-radius: 8px; outline: none;">{{ old('description') }}</textarea>
+                </div>
 
-                <div class="row g-4">
-                    <div class="col-md-6">
-                        <label style="color: #94a3b8; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px;">Coupon Name *</label>
-                        <input type="text" name="code" class="form-control" placeholder="e.g., SAVE50" value="{{ old('code') }}" required style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 12px 15px;">
-                    </div>
-                    <div class="col-md-6">
-                        <label id="discount-label" style="color: #94a3b8; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px;">Discount Amount ($) *</label>
-                        <input type="number" step="0.01" name="discount" class="form-control" placeholder="e.g., 50.00" value="{{ old('discount') }}" required style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 12px 15px;">
-                    </div>
-                    
-                    <div class="col-12">
-                        <label style="color: #94a3b8; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px;">Coupon Description</label>
-                        <textarea name="description" class="form-control" rows="3" placeholder="Describe the coupon conditions, terms, and rules..." style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 12px 15px;">{{ old('description') }}</textarea>
-                    </div>
+                <div class="col-md-6">
+                    <label style="display: block; color: #f8fafc; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px;">From Date</label>
+                    <input type="date" name="valid_from" min="{{ date('Y-m-d') }}" class="form-control" value="{{ old('valid_from') }}" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 10px 14px; border-radius: 8px; color-scheme: dark; outline: none;">
+                </div>
+                <div class="col-md-6">
+                    <label style="display: block; color: #f8fafc; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px;">To Date</label>
+                    <input type="date" name="valid_to" min="{{ date('Y-m-d') }}" class="form-control" value="{{ old('valid_to') }}" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 10px 14px; border-radius: 8px; color-scheme: dark; outline: none;">
+                </div>
 
-                    <div class="col-md-6">
-                        <label style="color: #94a3b8; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px;">From Date</label>
-                        <input type="date" name="valid_from" min="{{ date('Y-m-d') }}" class="form-control" value="{{ old('valid_from') }}" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; padding: 12px 15px; color-scheme: dark;">
-                    </div>
-                    <div class="col-md-6">
-                        <label style="color: #94a3b8; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px;">To Date</label>
-                        <input type="date" name="valid_to" min="{{ date('Y-m-d') }}" class="form-control" value="{{ old('valid_to') }}" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; padding: 12px 15px; color-scheme: dark;">
-                    </div>
+                <div class="col-md-6">
+                    <label style="display: block; color: #f8fafc; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px;">Minimum Booking Amount ($)</label>
+                    <input type="number" step="0.01" min="0" name="min_booking_amount" class="form-control" placeholder="e.g. 200.00" value="{{ old('min_booking_amount') }}" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 10px 14px; border-radius: 8px; outline: none;">
+                </div>
+                <div class="col-md-6">
+                    <label style="display: block; color: #f8fafc; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px;">Availability Count</label>
+                    <input type="number" min="1" name="availability_count" class="form-control" placeholder="e.g. 25" value="{{ old('availability_count') }}" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 10px 14px; border-radius: 8px; outline: none;">
+                </div>
 
-                    <div class="col-md-6">
-                        <label style="color: #94a3b8; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px;">Minimum Booking Amount ($)</label>
-                        <input type="number" step="0.01" name="min_booking_amount" class="form-control" placeholder="e.g., 200.00" value="{{ old('min_booking_amount') }}" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 12px 15px;">
-                    </div>
-                    <div class="col-md-6">
-                        <label style="color: #94a3b8; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px;">Availability Count</label>
-                        <input type="number" name="availability_count" class="form-control" placeholder="e.g., 25" value="{{ old('availability_count') }}" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 12px 15px;">
-                    </div>
-
-                    <div class="col-12 mt-5">
-                        <button type="submit" id="submit-btn" class="btn btn-primary w-100 py-3" style="font-weight: 800; border-radius: 8px; font-size: 1rem;">
-                            Create Amount-Based Coupon
-                        </button>
-                    </div>
+                <div class="col-12 mt-4" style="display: flex; gap: 12px; align-items: center;">
+                    <button type="submit" id="submit-btn" class="btn btn-primary" style="font-weight: 800; border-radius: 999px; font-size: 0.9rem; padding: 10px 28px; background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%) !important; color: #051013 !important; border: none !important; box-shadow: 0 4px 15px rgba(82, 234, 210, 0.35); cursor: pointer;">
+                        Create Amount-Based Coupon
+                    </button>
+                    <a href="{{ route('vendor.coupons.index') }}" class="btn btn-link" style="color: #94a3b8; text-decoration: none; font-size: 0.88rem;">Cancel</a>
                 </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
+@endsection
 
+@section('js')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 function selectType(type) {
     document.getElementById('coupon_type').value = type;
@@ -112,44 +101,73 @@ function selectType(type) {
     const percentageDiv = document.getElementById('type-percentage');
     const fixedDiv = document.getElementById('type-fixed');
     
-    // Reset both to inactive styles
-    const inactiveStyle = "cursor: pointer; padding: 20px; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 15px; background: rgba(11, 16, 32, 0.6); transition: all 0.3s;";
+    const inactiveStyle = "cursor: pointer; padding: 14px 18px; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; display: flex; align-items: center; gap: 12px; background: rgba(255, 255, 255, 0.03); transition: all 0.2s;";
     percentageDiv.style.cssText = inactiveStyle;
     fixedDiv.style.cssText = inactiveStyle;
     
-    // Reset colors
     percentageDiv.querySelector('.icon-container').style.color = "#94a3b8";
     percentageDiv.querySelector('.title-text').style.color = "#f8fafc";
-    percentageDiv.querySelector('span:last-child').style.color = "#94a3b8";
+    percentageDiv.querySelector('.desc-text').style.color = "#94a3b8";
     
     fixedDiv.querySelector('.icon-container').style.color = "#94a3b8";
     fixedDiv.querySelector('.title-text').style.color = "#f8fafc";
     fixedDiv.querySelector('.desc-text').style.color = "#94a3b8";
     
-    // Apply active styles to selected
-    const activeStyle = "cursor: pointer; padding: 20px; border: 1px solid #ef4444; border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 15px; background: rgba(239, 68, 68, 0.05); transition: all 0.3s;";
+    const activeStyle = "cursor: pointer; padding: 14px 18px; border: 1px solid var(--brand, #52ead2); border-radius: 10px; display: flex; align-items: center; gap: 12px; background: rgba(255, 255, 255, 0.06); transition: all 0.2s;";
     const activeDiv = document.getElementById('type-' + type);
     activeDiv.style.cssText = activeStyle;
     
-    activeDiv.querySelector('.icon-container').style.color = "#ef4444";
-    activeDiv.querySelector('.title-text').style.color = "#ef4444";
-    const descText = activeDiv.querySelector('span:last-child');
-    if(descText) descText.style.color = "#ef4444";
+    activeDiv.querySelector('.icon-container').style.color = "var(--brand, #52ead2)";
+    activeDiv.querySelector('.title-text').style.color = "var(--brand, #52ead2)";
+    activeDiv.querySelector('.desc-text').style.color = "var(--brand, #52ead2)";
     
-    // Update Form Content
     if (type === 'percentage') {
-        document.getElementById('form-icon').innerText = '%';
-        document.getElementById('form-title-text').innerText = 'Percentage-Based Coupon';
-        document.getElementById('form-subtitle').innerText = 'Create a coupon with percentage discount';
-        document.getElementById('discount-label').innerText = 'Discount Percentage (%) *';
+        document.getElementById('discount-label').innerHTML = '<span>Discount Percentage (%)</span> <span style="color:#ef4444; display:inline;">*</span>';
         document.getElementById('submit-btn').innerText = 'Create Percentage-Based Coupon';
     } else {
-        document.getElementById('form-icon').innerText = '$';
-        document.getElementById('form-title-text').innerText = 'Amount-Based Coupon';
-        document.getElementById('form-subtitle').innerText = 'Create a coupon with fixed amount discount';
-        document.getElementById('discount-label').innerText = 'Discount Amount ($) *';
+        document.getElementById('discount-label').innerHTML = '<span>Discount Amount ($)</span> <span style="color:#ef4444; display:inline;">*</span>';
         document.getElementById('submit-btn').innerText = 'Create Amount-Based Coupon';
     }
 }
+
+function submitCouponForm(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    
+    var btn = $('#submit-btn');
+    btn.prop('disabled', true).css('opacity', '0.7');
+    
+    $.ajax({
+        url: $('#couponCreateForm').attr('action'),
+        type: 'POST',
+        data: $('#couponCreateForm').serialize(),
+        dataType: 'json',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        success: function(response) {
+            btn.prop('disabled', false).css('opacity', '1');
+            if (response.status === 'success') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: response.message || 'Coupon created successfully.',
+                    timer: 2000,
+                    showConfirmButton: false
+                }).then(() => {
+                    window.location.href = response.redirect || '{{ route("vendor.coupons.index") }}';
+                });
+            } else {
+                Swal.fire('Error', response.message || 'Failed to create coupon.', 'error');
+            }
+        },
+        error: function(xhr) {
+            btn.prop('disabled', false).css('opacity', '1');
+            var msg = 'Failed to create coupon.';
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+                msg = xhr.responseJSON.message;
+            }
+            Swal.fire('Validation Error', msg, 'error');
+        }
+    });
+}
 </script>
 @endsection
+

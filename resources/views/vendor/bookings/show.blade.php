@@ -23,7 +23,7 @@
         </div>
     @endif
 
-    <form action="{{ route('vendor.bookings.update', $booking->id) }}" method="POST" id="vendorBookingForm">
+    <form action="{{ route('vendor.bookings.update', $booking->id) }}" method="POST" id="vendorBookingForm" onsubmit="event.preventDefault(); submitVendorBookingForm(event); return false;">
         @csrf
         @method('PUT')
         
@@ -776,6 +776,43 @@
         $('#assignDriverModal').css('display', 'none');
     }
 
+    function renderDriverDetailsBlock(driverName, driverPhone, driverAddress) {
+        var html = '<div class="row g-4 align-items-end" id="driverDetailsBlock">' +
+            '<div class="col-md-3">' +
+                '<label class="dark-label">Driver Name</label>' +
+                '<input type="text" class="form-control dark-input assigned-driver-name" value="' + (driverName || '') + '" readonly style="font-weight: 600;">' +
+            '</div>' +
+            '<div class="col-md-3">' +
+                '<label class="dark-label">Contact Number</label>' +
+                '<input type="text" class="form-control dark-input" value="' + (driverPhone || 'N/A') + '" readonly>' +
+            '</div>' +
+            '<div class="col-md-4">' +
+                '<label class="dark-label">Address</label>' +
+                '<input type="text" class="form-control dark-input" value="' + (driverAddress || 'N/A') + '" readonly>' +
+            '</div>' +
+            '<div class="col-md-2 text-end d-flex align-items-center justify-content-end" style="height: 38px;">' +
+                '<div class="d-flex gap-2 justify-content-end w-100">' +
+                    '<button type="button" class="btn btn-sm" onclick="openAssignDriverModal()" style="background: rgba(82, 234, 210, 0.1); color: #52ead2; border: 1px solid rgba(82, 234, 210, 0.3); font-weight: 700; border-radius: 6px; padding: 8px 14px; flex: 1;">Change Driver</button>' +
+                    '<button type="button" class="btn btn-sm" onclick="removeDriverAssignment()" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); font-weight: 700; border-radius: 6px; padding: 8px 14px; flex: 1;">Remove</button>' +
+                '</div>' +
+            '</div>' +
+        '</div>';
+        $('#assignedDriverSection').html(html);
+    }
+
+    function renderNoDriverBlock() {
+        var html = '<div class="row g-4 align-items-end" id="noDriverBlock">' +
+            '<div class="col-md-9 col-lg-10">' +
+                '<label class="dark-label">Driver Status</label>' +
+                '<input type="text" class="form-control dark-input" value="No Driver Assigned" readonly style="font-style: italic;">' +
+            '</div>' +
+            '<div class="col-md-3 col-lg-2 text-end d-flex align-items-center justify-content-end" style="height: 38px;">' +
+                '<button type="button" class="btn" onclick="openAssignDriverModal()" style="background: linear-gradient(135deg, #80a7ff 0%, #52ead2 100%); color: #051013; font-weight: 700; border: none; border-radius: 999px; padding: 8px 24px; white-space: nowrap; width: 100%;">Assign Driver</button>' +
+            '</div>' +
+        '</div>';
+        $('#assignedDriverSection').html(html);
+    }
+
     function removeDriverAssignment() {
         Swal.fire({
             title: 'Remove Driver?',
@@ -797,14 +834,13 @@
                     headers: { 'X-Requested-With': 'XMLHttpRequest' },
                     success: function(data) {
                         if (data.success) {
+                            renderNoDriverBlock();
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Removed!',
-                                text: data.message,
-                                timer: 1500,
+                                text: data.message || 'Driver removed successfully.',
+                                timer: 2000,
                                 showConfirmButton: false
-                            }).then(function() {
-                                window.location.reload();
                             });
                         } else {
                             Swal.fire('Error!', data.message || 'Failed to remove driver.', 'error');
@@ -848,14 +884,16 @@
             },
             success: function(data) {
                 if (data.success) {
+                    closeAssignDriverModal();
+                    if (data.driver) {
+                        renderDriverDetailsBlock(data.driver.name, data.driver.phone, data.driver.address);
+                    }
                     Swal.fire({
                         icon: 'success',
                         title: 'Success!',
                         text: data.message || 'Driver assigned successfully.',
-                        timer: 1500,
+                        timer: 2000,
                         showConfirmButton: false
-                    }).then(function() {
-                        window.location.reload();
                     });
                 } else {
                     Swal.fire('Error!', data.message || 'Failed to assign driver.', 'error');
@@ -875,4 +913,55 @@
         e.preventDefault();
         submitAssignDriverForm();
     });
+
+    // AJAX Handler for main Booking Update Form
+    function submitVendorBookingForm(e) {
+        if (e && e.preventDefault) {
+            e.preventDefault();
+        }
+        var $form = $('#vendorBookingForm');
+        var $btn = $form.find('button[type="submit"]');
+        $btn.prop('disabled', true).text('Updating...');
+
+        $.ajax({
+            url: $form.attr('action'),
+            type: 'POST',
+            data: $form.serialize(),
+            dataType: 'json',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            },
+            success: function(response) {
+                if (response.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Updated!',
+                        text: response.message || 'Booking details updated successfully.',
+                        timer: 2500,
+                        showConfirmButton: false
+                    });
+                } else {
+                    Swal.fire('Error!', response.message || 'Failed to update booking details.', 'error');
+                }
+            },
+            error: function(xhr) {
+                var errorMsg = 'An error occurred while updating.';
+                if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON.errors) {
+                    var errArray = [];
+                    $.each(xhr.responseJSON.errors, function(key, msgs) {
+                        errArray.push(msgs.join(', '));
+                    });
+                    errorMsg = errArray.join('<br>');
+                } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMsg = xhr.responseJSON.message;
+                }
+                Swal.fire('Validation Error!', errorMsg, 'error');
+            },
+            complete: function() {
+                $btn.prop('disabled', false).text('Update');
+            }
+        });
+        return false;
+    }
 </script>

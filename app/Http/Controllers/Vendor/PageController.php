@@ -27,7 +27,7 @@ class PageController extends Controller
             'description.required' => 'Terms content / description is required.',
         ]);
 
-        VendorPage::updateOrCreate(
+        $page = VendorPage::updateOrCreate(
             ['vendor_id' => auth()->id()],
             [
                 'title'                 => $request->title,
@@ -36,6 +36,14 @@ class PageController extends Controller
                 'agreement_description' => $request->agreement_description,
             ]
         );
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Terms & Conditions & Agreement saved successfully!',
+                'last_updated' => $page->updated_at ? $page->updated_at->format('d M Y, h:i A') : now()->format('d M Y, h:i A')
+            ]);
+        }
 
         return redirect()->route('vendor.pages.index')
             ->with('success', 'Terms & Conditions & Agreement saved successfully!');
@@ -51,9 +59,17 @@ class PageController extends Controller
         return $this->store($request);
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         VendorPage::where('vendor_id', auth()->id())->delete();
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Terms & Conditions & Agreement cleared successfully!'
+            ]);
+        }
+
         return redirect()->route('vendor.pages.index')
             ->with('success', 'Terms & Conditions & Agreement cleared successfully!');
     }

@@ -97,62 +97,66 @@
 
     /* Primary Save Button */
     .admin-btn-primary {
-        background: linear-gradient(135deg, #52ead2 0%, #36bda8 100%) !important;
+        background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%) !important;
         color: #051013 !important;
         border: none !important;
         font-weight: 800 !important;
         font-size: 0.9rem !important;
         padding: 12px 24px !important;
-        border-radius: 8px !important;
+        border-radius: 10px !important;
         cursor: pointer !important;
         transition: all 0.25s ease !important;
-        box-shadow: 0 4px 14px rgba(82, 234, 210, 0.3) !important;
+        box-shadow: 0 4px 15px rgba(82, 234, 210, 0.35) !important;
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
     }
     .admin-btn-primary:hover {
-        background: linear-gradient(135deg, #52ead2 0%, #36bda8 100%) !important;
+        background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%) !important;
         color: #051013 !important;
         transform: translateY(-2px) !important;
-        box-shadow: 0 6px 22px rgba(82, 234, 210, 0.45) !important;
+        box-shadow: 0 6px 22px rgba(82, 234, 210, 0.55) !important;
+        filter: brightness(1.08) !important;
     }
 
-    /* Secondary White Button for Password Update */
+    /* Secondary White/Password Button */
     .admin-btn-white {
-        background: rgba(128, 167, 255, 0.15) !important;
-        color: #80a7ff !important;
-        border: 1px solid rgba(128, 167, 255, 0.4) !important;
-        font-weight: 700 !important;
+        background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%) !important;
+        color: #051013 !important;
+        border: none !important;
+        font-weight: 800 !important;
         font-size: 0.9rem !important;
         padding: 12px 24px !important;
-        border-radius: 8px !important;
+        border-radius: 10px !important;
         cursor: pointer !important;
         transition: all 0.25s ease !important;
+        box-shadow: 0 4px 15px rgba(82, 234, 210, 0.35) !important;
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
     }
     .admin-btn-white:hover {
-        background: rgba(128, 167, 255, 0.25) !important;
-        color: #80a7ff !important;
+        background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%) !important;
+        color: #051013 !important;
         transform: translateY(-2px) !important;
+        box-shadow: 0 6px 22px rgba(82, 234, 210, 0.55) !important;
+        filter: brightness(1.08) !important;
     }
 
     body.light-mode .admin-btn-white,
     html.light-mode .admin-btn-white {
-        background: #ffffff !important;
-        color: #2563eb !important;
-        border: 1px solid #cbd5e1 !important;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+        background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%) !important;
+        color: #051013 !important;
+        border: none !important;
+        box-shadow: 0 4px 15px rgba(82, 234, 210, 0.35) !important;
     }
     body.light-mode .admin-btn-white:hover,
     html.light-mode .admin-btn-white:hover {
-        background: #ffffff !important;
-        border-color: #2563eb !important;
-        color: #1d4ed8 !important;
-        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.2) !important;
+        background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%) !important;
+        color: #051013 !important;
+        box-shadow: 0 6px 22px rgba(82, 234, 210, 0.55) !important;
         transform: translateY(-2px) !important;
+        filter: brightness(1.08) !important;
     }
 </style>
 
@@ -177,7 +181,7 @@
                     
                     <div style="margin-bottom: 20px;">
                         <label style="display: block; margin-bottom: 6px; font-size: 0.88rem; font-weight: 600;">Username <span style="color: #f43f5e;">*</span></label>
-                        <input type="text" id="username" name="username" value="{{ old('username', $user->username ?? $user->name) }}" required style="width: 100%; padding: 12px 14px; border-radius: 8px; font-size: 0.9rem; transition: border-color 0.2s;">
+                        <input type="text" id="username" name="username" value="{{ old('username', $user->username ?? $user->first_name ?? $user->name) }}" required style="width: 100%; padding: 12px 14px; border-radius: 8px; font-size: 0.9rem; transition: border-color 0.2s;">
                     </div>
 
                     <div style="margin-bottom: 24px;">
@@ -267,8 +271,8 @@ $(document).ready(function() {
                         text: response.message || 'Admin profile updated successfully.',
                         confirmButtonText: 'OK'
                     });
-                    if (response.user && response.user.username) {
-                        $('.header-user-name').text(response.user.username);
+                    if (response.user) {
+                        $('.header-user-name').text(response.user.first_name || response.user.username);
                     }
                 } else {
                     Swal.fire('Error!', response.message || 'Failed to update profile.', 'error');

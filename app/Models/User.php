@@ -51,7 +51,29 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    
+    public function getFullNameAttribute(): string
+    {
+        $fullName = trim(implode(' ', array_filter([
+            $this->first_name,
+            $this->middle_name,
+            $this->last_name,
+        ])));
+
+        return $fullName !== '' ? $fullName : ($this->attributes['name'] ?? '');
+    }
+
+    public function getNameAttribute($value): string
+    {
+        if (!empty($this->first_name) || !empty($this->last_name)) {
+            return trim(implode(' ', array_filter([
+                $this->first_name,
+                $this->middle_name,
+                $this->last_name,
+            ])));
+        }
+
+        return $value ?? '';
+    }
 
     public function vendor()
     {

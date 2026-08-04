@@ -34,14 +34,23 @@ class PaymentSettingController extends Controller
         $payFull = $request->has('pay_full');
 
         if ($payFull && empty($request->input('full_payment_discount'))) {
+            if ($request->ajax()) {
+                return response()->json(['status' => 'error', 'message' => 'Full Payment Discount (%) is required when Pay Full Amount is enabled.'], 422);
+            }
             return back()->with('error', 'Full Payment Discount (%) is required when Pay Full Amount is enabled.');
         }
 
         if (!$payFull && $request->filled('full_payment_discount') && $request->input('full_payment_discount') > 0) {
+            if ($request->ajax()) {
+                return response()->json(['status' => 'error', 'message' => 'Pay Full Amount must be enabled if a Full Payment Discount is provided.'], 422);
+            }
             return back()->with('error', 'Pay Full Amount must be enabled if a Full Payment Discount is provided.');
         }
 
         if (!$payOnArrival && !$payDeposit && !$payFull) {
+            if ($request->ajax()) {
+                return response()->json(['status' => 'error', 'message' => 'At least one payment method must be enabled.'], 422);
+            }
             return back()->with('error', 'At least one payment method must be enabled.');
         }
 
@@ -59,6 +68,13 @@ class PaymentSettingController extends Controller
             'razorpay_secret' => $request->input('razorpay_secret'),
         ]);
 
-        return back()->with('success', 'Payment gateway settings updated successfully.');
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Payment settings updated successfully!'
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Payment settings updated successfully!');
     }
 }

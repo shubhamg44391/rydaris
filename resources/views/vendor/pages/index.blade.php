@@ -134,11 +134,11 @@
                     {{ $page ? 'Update Terms & Agreement' : 'Save Terms & Agreement' }}
                 </button>
 
-                @if($page && $page->updated_at)
-                    <span style="color: var(--muted, #94a3b8); font-size: 0.82rem;">
+                <span id="last-updated-span" style="color: var(--muted, #94a3b8); font-size: 0.82rem;">
+                    @if($page && $page->updated_at)
                         Last updated: {{ $page->updated_at->format('d M Y, h:i A') }}
-                    </span>
-                @endif
+                    @endif
+                </span>
             </div>
 
         </form>
@@ -149,6 +149,7 @@
 
 @section('js')
 <script src="https://cdn.ckeditor.com/4.22.1/full/ckeditor.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     $(document).ready(function () {
         if (typeof CKEDITOR !== 'undefined') {
@@ -191,8 +192,10 @@
             }
         }
 
-        // Sync CKEditor data before submit
-        $('#vendor-tc-form').on('submit', function () {
+        // Handle AJAX form submit
+        $('#vendor-tc-form').on('submit', function (e) {
+            e.preventDefault();
+
             if (typeof CKEDITOR !== 'undefined') {
                 if (CKEDITOR.instances.vendor_tc_description) {
                     CKEDITOR.instances.vendor_tc_description.updateElement();
@@ -201,6 +204,42 @@
                     CKEDITOR.instances.vendor_agreement_description.updateElement();
                 }
             }
+
+            var btn = $('#vendorSubmitBtn');
+            btn.prop('disabled', true).css('opacity', '0.7');
+
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: $(this).serialize(),
+                dataType: 'json',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                success: function (response) {
+                    btn.prop('disabled', false).css('opacity', '1');
+                    if (response.status === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Saved!',
+                            text: response.message || 'Terms & Conditions & Agreement saved successfully!',
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                        if (response.last_updated) {
+                            $('#last-updated-span').text('Last updated: ' + response.last_updated);
+                        }
+                    } else {
+                        Swal.fire('Error', response.message || 'Failed to save terms.', 'error');
+                    }
+                },
+                error: function (xhr) {
+                    btn.prop('disabled', false).css('opacity', '1');
+                    var msg = 'Failed to save Terms & Conditions & Agreement.';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        msg = xhr.responseJSON.message;
+                    }
+                    Swal.fire('Validation Error', msg, 'error');
+                }
+            });
         });
     });
 </script>

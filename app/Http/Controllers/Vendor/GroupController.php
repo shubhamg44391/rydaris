@@ -12,7 +12,7 @@ class GroupController extends Controller
 {
     
 
-    public function index()
+    public function index(Request $request)
     {
         $query = Group::where('vendor_id', Auth::id());
 
@@ -24,11 +24,24 @@ class GroupController extends Controller
             });
         }
 
+        if ($search = $request->query('search')) {
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
         $groups = $query->orderBy('created_at', 'desc')->paginate(10);
+
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'success' => true,
+                'html' => view('vendor.groups.index', compact('groups'))->renderSections()['groups_table_section'] ?? '',
+            ]);
+        }
+
         return view('vendor.groups.index', compact('groups'));
     }
-
-    
 
     public function create()
     {
@@ -38,12 +51,14 @@ class GroupController extends Controller
         return view('vendor.groups.create');
     }
 
-    
-
     public function store(Request $request)
     {
         if (!auth()->user()->canAddGroup()) {
-            return redirect()->back()->withInput()->with('error', 'Your package limit for vehicle groups has been reached. Please upgrade your package.');
+            $msg = 'Your package limit for vehicle groups has been reached. Please upgrade your package.';
+            if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+                return response()->json(['success' => false, 'message' => $msg], 422);
+            }
+            return redirect()->back()->withInput()->with('error', $msg);
         }
 
         $branchId = auth()->user()->current_branch_id;
@@ -65,25 +80,29 @@ class GroupController extends Controller
             'name.max' => 'Group name must not exceed 255 characters.',
         ]);
 
-        Group::create([
+        $group = Group::create([
             'name' => $request->name,
             'description' => $request->description,
             'vendor_id' => Auth::id(),
             'branch_id' => $branchId,
         ]);
 
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'success' => true,
+                'message' => 'Vehicle Group created successfully.',
+                'group' => $group
+            ]);
+        }
+
         return redirect(route('vendor.groups.index'))->with('success', 'Vehicle Group created successfully.');
     }
-
-    
 
     public function edit($id)
     {
         $group = Group::where('vendor_id', Auth::id())->findOrFail($id);
         return view('vendor.groups.edit', compact('group'));
     }
-
-    
 
     public function update(Request $request, $id)
     {
@@ -112,15 +131,28 @@ class GroupController extends Controller
             'description' => $request->description,
         ]);
 
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'success' => true,
+                'message' => 'Vehicle Group updated successfully.',
+                'group' => $group
+            ]);
+        }
+
         return redirect(route('vendor.groups.index'))->with('success', 'Vehicle Group updated successfully.');
     }
 
-    
-
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $group = Group::where('vendor_id', Auth::id())->findOrFail($id);
         $group->delete();
+
+        if ($request->ajax() || $request->wantsJson() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'success' => true,
+                'message' => 'Vehicle Group deleted successfully.'
+            ]);
+        }
 
         return redirect(route('vendor.groups.index'))->with('success', 'Vehicle Group deleted successfully.');
     }
