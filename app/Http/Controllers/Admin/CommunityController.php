@@ -30,6 +30,9 @@ class CommunityController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string',
+            'keyword' => 'nullable|string',
         ]);
 
         $imagePath = null;
@@ -42,6 +45,9 @@ class CommunityController extends Controller
             'title' => $request->title,
             'content' => $request->content,
             'image' => $imagePath,
+            'meta_title' => $request->meta_title,
+            'meta_description' => $request->meta_description,
+            'keyword' => $request->keyword,
         ]);
 
         if ($request->wantsJson() || $request->ajax()) {

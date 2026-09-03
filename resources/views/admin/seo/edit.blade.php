@@ -6,7 +6,7 @@
     
     <div style="margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
         <div>
-            <h4 style="margin: 0; color: #fff; font-weight: 700; font-size: 1.4rem;">Edit Page SEO Tags</h4>
+            <h4 style="margin: 0; color: var(--heading-color, var(--text-color, #fff)); font-weight: 700; font-size: 1.4rem;">Edit Page SEO Tags</h4>
             <p style="margin: 4px 0 0; color: var(--muted); font-size: 0.85rem;">
                 <a href="{{ route('dashboard') }}" style="color: var(--brand); text-decoration: none;">Dashboard</a> / 
                 <a href="{{ route('admin.seo-settings.index', ['type' => $seoMetadata->portal_type]) }}" style="color: var(--brand); text-decoration: none;">SEO Settings</a> / 
@@ -14,7 +14,7 @@
             </p>
         </div>
         <div>
-            <a href="{{ route('admin.seo-settings.index', ['type' => $seoMetadata->portal_type]) }}" class="admin-action" style="border: 1px solid rgba(255, 255, 255, 0.15); color: #fff; background: transparent; text-decoration: none; border-radius: var(--radius); padding: 8px 16px; font-weight: 600; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;">
+            <a href="{{ route('admin.seo-settings.index', ['type' => $seoMetadata->portal_type]) }}" class="admin-action" style="border: 1px solid var(--line); color: var(--heading-color, var(--text-color, #fff)); background: transparent; text-decoration: none; border-radius: var(--radius); padding: 8px 16px; font-weight: 600; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;">
                 <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2;"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back to List
             </a>
         </div>
@@ -33,28 +33,28 @@
                     <div style="margin-bottom: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                         <div>
                             <label class="form-label" style="font-weight: 600; font-size: 0.9rem; margin-bottom: 8px; display: block; color: var(--muted);">Page Name</label>
-                            <input type="text" class="form-control" value="{{ $seoMetadata->page_name }}" style="background: rgba(255,255,255,0.01) !important; border: 1px solid var(--line); border-radius: 8px; padding: 12px; font-size: 0.95rem; color: #fff; width: 100%; cursor: not-allowed; opacity: 0.8;" readonly>
+                            <input type="text" class="form-control" value="{{ $seoMetadata->page_name }}" style="background: var(--input-bg, rgba(255,255,255,0.01)) !important; border: 1px solid var(--line); border-radius: 8px; padding: 12px; font-size: 0.95rem; color: var(--heading-color, var(--text-color, #fff)); width: 100%; cursor: not-allowed; opacity: 0.8;" readonly>
                         </div>
                         <div>
                             <label class="form-label" style="font-weight: 600; font-size: 0.9rem; margin-bottom: 8px; display: block; color: var(--muted);">URL Path</label>
-                            <input type="text" class="form-control" value="{{ $seoMetadata->url_path }}" style="background: rgba(255,255,255,0.01) !important; border: 1px solid var(--line); border-radius: 8px; padding: 12px; font-size: 0.95rem; color: #fff; width: 100%; cursor: not-allowed; opacity: 0.8;" readonly>
+                            <input type="text" class="form-control" value="{{ $seoMetadata->url_path }}" style="background: var(--input-bg, rgba(255,255,255,0.01)) !important; border: 1px solid var(--line); border-radius: 8px; padding: 12px; font-size: 0.95rem; color: var(--heading-color, var(--text-color, #fff)); width: 100%; cursor: not-allowed; opacity: 0.8;" readonly>
                         </div>
                     </div>
 
                     <div style="margin-bottom: 20px;">
-                        <label class="form-label" for="meta_title" style="font-weight: 600; font-size: 0.9rem; margin-bottom: 8px; display: block; color: #fff;">Meta Title <span style="color: #ef4444;">*</span></label>
-                        <input type="text" name="meta_title" id="meta_title" class="form-control" required value="{{ old('meta_title', $seoMetadata->meta_title) }}" placeholder="e.g. Premium Fleet & Car Rental Solutions | Rydaris" style="background: rgba(255,255,255,0.03) !important; border: 1px solid var(--line); border-radius: 8px; padding: 12px; font-size: 0.95rem; color: #fff; width: 100%;">
+                        <label class="form-label" for="meta_title" style="font-weight: 600; font-size: 0.9rem; margin-bottom: 8px; display: block; color: var(--heading-color, var(--text-color, #fff));">Meta Title <span style="color: #ef4444;">*</span></label>
+                        <input type="text" name="meta_title" id="meta_title" class="form-control" required value="{{ old('meta_title', $seoMetadata->meta_title) }}" placeholder="e.g. Premium Fleet & Car Rental Solutions | Rydaris" style="background: var(--input-bg, rgba(255,255,255,0.03)) !important; border: 1px solid var(--line); border-radius: 8px; padding: 12px; font-size: 0.95rem; color: var(--heading-color, var(--text-color, #fff)); width: 100%;">
                         <div class="error-msg" id="error-meta_title" style="color: #ef4444; font-size: 0.8rem; margin-top: 6px; display: none;"></div>
                     </div>
 
                     <div style="margin-bottom: 20px;">
-                        <label class="form-label" for="meta_description" style="font-weight: 600; font-size: 0.9rem; margin-bottom: 8px; display: block; color: #fff;">Meta Description <span style="color: #ef4444;">*</span></label>
-                        <textarea name="meta_description" id="meta_description" class="form-control" required rows="4" placeholder="Enter SEO page description..." style="background: rgba(255,255,255,0.03) !important; border: 1px solid var(--line); border-radius: 8px; padding: 12px; font-size: 0.95rem; color: #fff; width: 100%; height: 120px; resize: vertical;">{{ old('meta_description', $seoMetadata->meta_description) }}</textarea>
+                        <label class="form-label" for="meta_description" style="font-weight: 600; font-size: 0.9rem; margin-bottom: 8px; display: block; color: var(--heading-color, var(--text-color, #fff));">Meta Description <span style="color: #ef4444;">*</span></label>
+                        <textarea name="meta_description" id="meta_description" class="form-control" required rows="4" placeholder="Enter SEO page description..." style="background: var(--input-bg, rgba(255,255,255,0.03)) !important; border: 1px solid var(--line); border-radius: 8px; padding: 12px; font-size: 0.95rem; color: var(--heading-color, var(--text-color, #fff)); width: 100%; height: 120px; resize: vertical;">{{ old('meta_description', $seoMetadata->meta_description) }}</textarea>
                         <div class="error-msg" id="error-meta_description" style="color: #ef4444; font-size: 0.8rem; margin-top: 6px; display: none;"></div>
                     </div>
                      <div style="margin-bottom: 20px;">
-                        <label class="form-label" for="keyword" style="font-weight: 600; font-size: 0.9rem; margin-bottom: 8px; display: block; color: #fff;">Keywords</label>
-                        <textarea name="keyword" id="keyword" class="form-control" rows="4" placeholder="Enter SEO keywords (comma-separated)..." style="background: rgba(255,255,255,0.03) !important; border: 1px solid var(--line); border-radius: 8px; padding: 12px; font-size: 0.95rem; color: #fff; width: 100%; height: 100px; resize: vertical;">{{ old('keyword', $seoMetadata->keyword) }}</textarea>
+                        <label class="form-label" for="keyword" style="font-weight: 600; font-size: 0.9rem; margin-bottom: 8px; display: block; color: var(--heading-color, var(--text-color, #fff));">Keywords</label>
+                        <textarea name="keyword" id="keyword" class="form-control" rows="4" placeholder="Enter SEO keywords (comma-separated)..." style="background: var(--input-bg, rgba(255,255,255,0.03)) !important; border: 1px solid var(--line); border-radius: 8px; padding: 12px; font-size: 0.95rem; color: var(--heading-color, var(--text-color, #fff)); width: 100%; height: 100px; resize: vertical;">{{ old('keyword', $seoMetadata->keyword) }}</textarea>
                         <div class="error-msg" id="error-keyword" style="color: #ef4444; font-size: 0.8rem; margin-top: 6px; display: none;"></div>
                     </div>
 
@@ -64,16 +64,16 @@
             
             <div style="display: flex; flex-direction: column; gap: 24px;">
                 <div class="admin-panel" style="padding: 24px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel);">
-                    <h3 style="margin-top: 0; margin-bottom: 20px; color: #fff; font-size: 1.1rem; font-weight: 600; border-bottom: 1px solid var(--line); padding-bottom: 12px;">Publish Info</h3>
+                    <h3 style="margin-top: 0; margin-bottom: 20px; color: var(--heading-color, var(--text-color, #fff)); font-size: 1.1rem; font-weight: 600; border-bottom: 1px solid var(--line); padding-bottom: 12px;">Publish Info</h3>
                     
                     <div style="margin-bottom: 15px; display: flex; justify-content: space-between; font-size: 0.85rem;">
                         <span style="color: var(--muted);">Portal:</span>
-                        <span style="color: #fff; font-weight: 600; text-transform: uppercase;">{{ $seoMetadata->portal_type }}</span>
+                        <span style="color: var(--heading-color, var(--text-color, #fff)); font-weight: 600; text-transform: uppercase;">{{ $seoMetadata->portal_type }}</span>
                     </div>
                     
                     <div style="margin-bottom: 20px; display: flex; justify-content: space-between; font-size: 0.85rem;">
                         <span style="color: var(--muted);">Updated At:</span>
-                        <span style="color: #fff;">{{ $seoMetadata->updated_at->diffForHumans() }}</span>
+                        <span style="color: var(--heading-color, var(--text-color, #fff));">{{ $seoMetadata->updated_at->diffForHumans() }}</span>
                     </div>
 
                     <div style="display: flex; flex-direction: column; gap: 12px;">

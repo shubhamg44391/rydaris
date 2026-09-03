@@ -60,6 +60,45 @@
                     @error('image')
                         <div class="invalid-feedback d-block" style="margin-top: 8px;">{{ $message }}</div>
                     @enderror
+                <!-- SEO Metadata Section (Optional) -->
+                <div style="margin-top: 32px; margin-bottom: 24px; padding: 20px; border: 1px solid var(--line, #cbd5e1); border-radius: var(--radius, 10px); background: var(--bg-2, rgba(255,255,255,0.02));">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+                        <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; fill: none; stroke: var(--brand, #52ead2); stroke-width: 2;">
+                            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                            <line x1="7" y1="7" x2="7.01" y2="7"/>
+                        </svg>
+                        <h4 style="margin: 0; font-size: 1rem; font-weight: 700; color: var(--text, #1e293b);">SEO Meta Details (Optional)</h4>
+                    </div>
+
+                    <!-- Meta Title -->
+                    <div class="mb-3">
+                        <label for="meta_title" class="form-label-custom">Meta Title</label>
+                        <input type="text" class="form-control form-input-custom @error('meta_title') is-invalid @enderror" id="meta_title" name="meta_title"
+                            value="{{ old('meta_title') }}" placeholder="Enter SEO Meta Title (e.g. New Announcement | Rydaris Community)" style="border: 1px solid var(--line, #d7e0e8); border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%; color: var(--text, #1e293b);" />
+                        @error('meta_title')
+                            <div class="invalid-feedback d-block" style="margin-top: 6px;">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Meta Description -->
+                    <div class="mb-3">
+                        <label for="meta_description" class="form-label-custom">Meta Description</label>
+                        <textarea class="form-control form-input-custom @error('meta_description') is-invalid @enderror" id="meta_description" name="meta_description"
+                            rows="3" placeholder="Enter concise search engine description for this post..." style="border: 1px solid var(--line, #d7e0e8); border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%; color: var(--text, #1e293b);">{{ old('meta_description') }}</textarea>
+                        @error('meta_description')
+                            <div class="invalid-feedback d-block" style="margin-top: 6px;">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Keywords -->
+                    <div class="mb-0">
+                        <label for="keyword" class="form-label-custom">Keywords</label>
+                        <input type="text" class="form-control form-input-custom @error('keyword') is-invalid @enderror" id="keyword" name="keyword"
+                            value="{{ old('keyword') }}" placeholder="e.g. community, announcements, fleet management, car rental tips" style="border: 1px solid var(--line, #d7e0e8); border-radius: var(--radius); padding: 12px; font-size: 0.95rem; width: 100%; color: var(--text, #1e293b);" />
+                        @error('keyword')
+                            <div class="invalid-feedback d-block" style="margin-top: 6px;">{{ $message }}</div>
+                        @enderror
+                    </div>
                 </div>
 
                 <!-- Action Buttons -->
@@ -96,7 +135,7 @@
 
     $(document).ready(function () {
         // Real-time error clearing on typing
-        $('#title, #content').on('input change', function () {
+        $('#title, #content, #meta_title, #meta_description, #keyword').on('input change', function () {
             if ($.trim($(this).val())) {
                 $(this).removeClass('is-invalid');
                 $(this).siblings('.invalid-feedback').hide();

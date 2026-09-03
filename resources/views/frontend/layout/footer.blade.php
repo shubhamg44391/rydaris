@@ -6,7 +6,7 @@
           </a>
           <p>Rydaris is an all-in-one car rental management platform built for modern fleet operators. Streamline reservations, manage vehicles, automate billing, and grow your rental business — all from one powerful dashboard.</p>
         </div>
-        <div><h3>Product</h3><ul class="footer-links"><li><a href="{{ route('home') }}">Overview</a></li><li><a href="{{ route('pricing') }}">Pricing</a></li><li><a href="{{ route('faq') }}">FAQ</a></li></ul></div>
+        <div><h3>Product</h3><ul class="footer-links"><li><a href="{{ route('home') }}">Overview</a></li><li><a href="{{ route('pricing') }}">Pricing</a></li><li><a href="{{ route('faq') }}">FAQ</a></li><li><a href="{{ route('blog.index') }}">Blog</a></li></ul></div>
         <div><h3>Company</h3><ul class="footer-links"><li><a href="{{ route('about') }}">About us</a></li><li><a href="{{ route('contact') }}">Contact</a></li><li><a href="{{ route('contact') }}">Partners</a></li><li><a href="{{ route('contact') }}">Careers</a></li></ul></div>
         @php
             $helpCenterPage = \App\Models\Page::where('slug', 'help-center')->first();
@@ -28,6 +28,7 @@
   </div>
 
 @include('partials.demo-inquiry-modal')
+@include('partials.consultation-modal')
 @include('partials.phone-input')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>

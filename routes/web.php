@@ -71,6 +71,10 @@ Route::get('/faq', [HomeController::class, 'faq'])->name('faq');
 Route::get('/terms-of-service', [HomeController::class, 'terms'])->name('terms');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 
+// Blog Routes
+Route::get('/blog', [\App\Http\Controllers\BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{slug}', [\App\Http\Controllers\BlogController::class, 'show'])->name('blog.show');
+
 // Public Community Routes
 Route::get('/community', [\App\Http\Controllers\CommunityController::class, 'index'])->name('community.index');
 Route::get('/community/{id}', [\App\Http\Controllers\CommunityController::class, 'show'])->name('community.show');
@@ -318,6 +322,16 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
         'destroy' => 'admin.custom-package-requests.destroy',
     ]);
     Route::post('custom-package-requests/{id}/toggle-status', [\App\Http\Controllers\Admin\AdminCustomPackageRequestController::class, 'toggleStatus'])->name('admin.custom-package-requests.toggle-status');
+
+    // Admin Blog
+    Route::resource('blog', \App\Http\Controllers\Admin\BlogPostController::class)->except(['show'])->names([
+        'index' => 'admin.blog.index',
+        'create' => 'admin.blog.create',
+        'store' => 'admin.blog.store',
+        'edit' => 'admin.blog.edit',
+        'update' => 'admin.blog.update',
+        'destroy' => 'admin.blog.destroy',
+    ]);
 
     // Site Settings
     Route::get('/settings/general', [\App\Http\Controllers\Admin\AdminSettingController::class, 'generalSettings'])->name('admin.settings.general');

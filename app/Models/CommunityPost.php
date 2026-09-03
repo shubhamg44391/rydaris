@@ -15,6 +15,9 @@ class CommunityPost extends Model
         'slug',
         'content',
         'image',
+        'meta_title',
+        'meta_description',
+        'keyword',
         'is_published',
         'likes_count',
     ];

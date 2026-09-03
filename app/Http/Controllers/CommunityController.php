@@ -30,7 +30,11 @@ class CommunityController extends Controller
             })
             ->firstOrFail();
 
-        return view('frontend.community.show', compact('post'));
+        $seo_title = $post->meta_title ?: ($post->title . ' | Rydaris Community');
+        $seo_description = $post->meta_description ?: \Illuminate\Support\Str::limit(strip_tags($post->content), 160);
+        $seo_keyword = $post->keyword;
+
+        return view('frontend.community.show', compact('post', 'seo_title', 'seo_description', 'seo_keyword'));
     }
 
     public function storeComment(Request $request, $id)

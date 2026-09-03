@@ -25,6 +25,7 @@
   @else
     @yield('meta_keywords')
   @endif
+  <link rel="canonical" href="{{ env('APP_URL') }}" />
   <link rel="shortcut icon" type="image/png" href="{{ !empty($site_setting->favicon) ? asset('storage/' . $site_setting->favicon) : asset('assets/logo/favicon.png') }}">
   <link rel="stylesheet" href="{{ asset('assets/styles.css') }}?v={{ time() }}">
 </head>
@@ -70,6 +71,7 @@
           <a class="{{ request()->is('about') ? 'active' : '' }}" href="{{ route('about') }}">About Us</a>
           <a class="{{ request()->is('pricing') ? 'active' : '' }}" href="{{ route('pricing') }}">Pricing</a>
           <a class="{{ request()->is('faq') ? 'active' : '' }}" href="{{ route('faq') }}">FAQ</a>
+          <a class="{{ request()->is('blog*') ? 'active' : '' }}" href="{{ route('blog.index') }}">Blog</a>
           <a class="{{ request()->is('community*') ? 'active' : '' }}" href="{{ route('community.index') }}">Community</a>
           <a class="{{ request()->is('contact') ? 'active' : '' }}" href="{{ route('contact') }}">Contact Us</a>
         </div>
@@ -156,6 +158,7 @@
           <a class="{{ request()->is('about') ? 'active' : '' }}" href="{{ route('about') }}">About Us</a>
           <a class="{{ request()->is('pricing') ? 'active' : '' }}" href="{{ route('pricing') }}">Pricing</a>
           <a class="{{ request()->is('faq') ? 'active' : '' }}" href="{{ route('faq') }}">FAQ</a>
+          <a class="{{ request()->is('blog*') ? 'active' : '' }}" href="{{ route('blog.index') }}">Blog</a>
           <a class="{{ request()->is('community*') ? 'active' : '' }}" href="{{ route('community.index') }}">Community</a>
           <a class="{{ request()->is('contact') ? 'active' : '' }}" href="{{ route('contact') }}">Contact Us</a>
         </div>

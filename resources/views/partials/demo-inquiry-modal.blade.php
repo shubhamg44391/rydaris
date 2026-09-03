@@ -236,6 +236,48 @@
             min-width: 0;
         }
     }
+
+    /* Light Mode Overrides */
+    .light-mode .demo-inquiry-modal-backdrop {
+        background: rgba(255, 255, 255, 0.85);
+    }
+    
+    .light-mode .demo-inquiry-modal-content {
+        background: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.15);
+    }
+    
+    .light-mode .demo-inquiry-modal-header {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    .light-mode .demo-inquiry-modal-header h3 {
+        color: #1e293b;
+    }
+    
+    .light-mode .demo-inquiry-close-btn {
+        color: #64748b;
+    }
+    
+    .light-mode .demo-inquiry-close-btn:hover {
+        color: #1e293b;
+    }
+    
+    .light-mode .demo-form-group label {
+        color: #475569;
+    }
+    
+    .light-mode .demo-modal-input {
+        background: #f8fafc;
+        border: 1px solid #cbd5e1;
+        color: #0f172a;
+    }
+    
+    .light-mode .demo-modal-input:focus {
+        background: #ffffff;
+        border-color: var(--brand, #0e766f); /* using a darker brand color for light mode if applicable, else fallback */
+    }
 </style>
 
 <script>
