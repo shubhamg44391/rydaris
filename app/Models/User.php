@@ -23,6 +23,7 @@ class User extends Authenticatable
         'contact_number',
         'country_code',
         'role',
+        'role_id',
         'status',
         'username',
         'company_name',
@@ -38,7 +39,25 @@ class User extends Authenticatable
         'current_branch_id',
     ];
 
-    
+    public function roleData()
+    {
+        return $this->belongsTo(Role::class, 'role_id');
+    }
+
+    public function hasAdminPermission($module, $action = 'list')
+    {
+        // For super admin (if you have one, or just the main admin without role restrictions)
+        // Adjust this condition based on your exact logic. Assuming role=admin without role_id is superadmin.
+        if ($this->role === 'admin' && is_null($this->role_id)) {
+            return true;
+        }
+
+        if ($this->roleData && is_array($this->roleData->permissions)) {
+            return isset($this->roleData->permissions[$module][$action]) && $this->roleData->permissions[$module][$action] == 1;
+        }
+
+        return false;
+    }
 
     protected $hidden = [
         'password',

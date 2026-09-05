@@ -1,12 +1,41 @@
 <nav class="admin-nav">
+    @if(auth()->user()->hasAdminPermission('dashboard'))
     <a class="{{ Request::is('admin/dashboard*') || Request::is('dashboard*') ? 'active' : '' }}" href="{{ route('dashboard') }}">
         <svg viewBox="0 0 24 24"><path d="M3 3h7v7H3Z"/><path d="M14 3h7v7h-7Z"/><path d="M14 14h7v7h-7Z"/><path d="M3 14h7v7H3Z"/></svg>Dashboard
     </a>
+    @endif
 
+    @if(auth()->user()->hasAdminPermission('vendors'))
     <a class="{{ Request::is('admin/vendor*') ? 'active' : '' }}" href="{{ route('admin.vendors.index') }}">
         <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Vendors
     </a>
+    @endif
 
+    @if(auth()->user()->hasAdminPermission('role_management'))
+    <!-- Role Management -->
+    <div class="admin-nav-group">
+        <a href="javascript:void(0);" class="nav-toggle {{ Request::is('admin/roles*') || Request::is('admin/admin-users*') ? 'active' : '' }}" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ Request::is('admin/roles*') || Request::is('admin/admin-users*') ? 'color: #f8fafc; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb;' }} font-size: 0.92rem; font-weight: 780; transition: background 0.2s; text-decoration: none;">
+            <span style="display: flex; align-items: center; gap: 10px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>Role Management
+            </span>
+            <svg class="chevron" viewBox="0 0 24 24" style="width: 14px; height: 14px; transition: transform 0.2s ease; {{ Request::is('admin/roles*') || Request::is('admin/admin-users*') ? 'transform: rotate(180deg);' : '' }}"><path d="m6 9 6 6 6-6"/></svg>
+        </a>
+        <div class="admin-submenu" style="{{ Request::is('admin/roles*') || Request::is('admin/admin-users*') ? 'display: flex;' : 'display: none;' }} padding-left: 20px; margin-top: 4px; flex-direction: column; gap: 4px;">
+            <a href="{{ route('admin.roles.index') }}" class="submenu-item {{ Request::is('admin/roles*') ? 'active' : '' }}" style="text-decoration: none;">
+                <span class="dot"></span>
+                Roles
+            </a>
+            <a href="{{ route('admin.admin-users.index') }}" class="submenu-item {{ Request::is('admin/admin-users*') ? 'active' : '' }}" style="text-decoration: none;">
+                <span class="dot"></span>
+                Admin Users
+            </a>
+        </div>
+    </div>
+    @endif
+
+    @if(auth()->user()->hasAdminPermission('community'))
     <a class="{{ Request::is('admin/community*') ? 'active' : '' }}" href="{{ route('admin.community.index') }}" style="text-decoration: none;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
@@ -15,23 +44,27 @@
             <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
         </svg>Community
     </a>
-
+    @endif
     
+    @if(auth()->user()->hasAdminPermission('subscriptions'))
     <a class="{{ Request::is('admin/subscriptions*') ? 'active' : '' }}" href="{{ route('admin.subscriptions.index') }}" style="text-decoration: none;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="2" y="5" width="20" height="14" rx="2" ry="2"/>
             <line x1="2" y1="10" x2="22" y2="10"/>
         </svg>Subscriptions
     </a>
+    @endif
 
+    @if(auth()->user()->hasAdminPermission('reviews'))
     {{-- CUSTOMER REVIEWS --}}
     <a class="{{ Request::is('admin/reviews*') ? 'active' : '' }}" href="{{ route('admin.reviews.index') }}" style="text-decoration: none;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
         </svg>Customer Reviews
     </a>
-
+    @endif
     
+    @if(auth()->user()->hasAdminPermission('faqs'))
     <div class="admin-nav-group">
         <a href="javascript:void(0);" class="nav-toggle" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); {{ Request::is('admin/faqs*') ? 'color: #f8fafc; background: rgba(255, 255, 255, 0.04);' : 'color: #aab7cb;' }} font-size: 0.92rem; font-weight: 780; transition: background 0.2s; text-decoration: none;">
             <span style="display: flex; align-items: center; gap: 10px;">
@@ -58,22 +91,27 @@
             </a>
         </div>
     </div>
+    @endif
 
+    @if(auth()->user()->hasAdminPermission('blog'))
     <a class="{{ Request::is('admin/blog*') ? 'active' : '' }}" href="{{ route('admin.blog.index') }}" style="text-decoration: none;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
             <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
         </svg>Blog
     </a>
+    @endif
 
+    @if(auth()->user()->hasAdminPermission('packages'))
     <a class="{{ Request::is('admin/packages*') ? 'active' : '' }}" href="{{ route('admin.packages.index') }}" style="text-decoration: none;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="12" y1="1" x2="12" y2="23"/>
             <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
         </svg>Packages
     </a>
-
+    @endif
     
+    @if(auth()->user()->hasAdminPermission('terms'))
     <a class="{{ Request::is('admin/terms-conditions*') ? 'active' : '' }}" href="{{ route('admin.terms.index') }}" style="text-decoration: none;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -82,8 +120,9 @@
             <line x1="16" y1="17" x2="8" y2="17"/>
         </svg>Terms & Conditions
     </a>
-
+    @endif
     
+    @if(auth()->user()->hasAdminPermission('inquiries'))
     <div class="admin-nav-group">
         <a href="javascript:void(0);" class="nav-toggle {{ Request::is('admin/contact-inquiries*') || Request::is('admin/demo-inquiries*') ? 'active' : '' }}" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); font-size: 0.92rem; font-weight: 780; transition: background 0.2s; text-decoration: none;">
             <span style="display: flex; align-items: center; gap: 10px;">
@@ -105,15 +144,17 @@
             </a>
         </div>
     </div>
-
+    @endif
     
+    @if(auth()->user()->hasAdminPermission('custom_packages'))
     <a class="{{ Request::is('admin/custom-package-requests*') ? 'active' : '' }}" href="{{ route('admin.custom-package-requests.index') }}" style="text-decoration: none;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
         </svg>Custom Packages
     </a>
-
+    @endif
     
+    @if(auth()->user()->hasAdminPermission('pages'))
     <div class="admin-nav-group">
         <a href="javascript:void(0);" class="nav-toggle {{ Request::is('admin/pages*') ? 'active' : '' }}" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); font-size: 0.92rem; font-weight: 780; transition: background 0.2s; text-decoration: none;">
             <span style="display: flex; align-items: center; gap: 10px;">
@@ -144,8 +185,9 @@
             @endforeach
         </div>
     </div>
-
+    @endif
     
+    @if(auth()->user()->hasAdminPermission('seo'))
     <div class="admin-nav-group">
         <a href="javascript:void(0);" class="nav-toggle {{ Request::is('admin/seo-settings*') ? 'active' : '' }}" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); font-size: 0.92rem; font-weight: 780; transition: background 0.2s; text-decoration: none;">
             <span style="display: flex; align-items: center; gap: 10px;">
@@ -176,8 +218,9 @@
             </a>
         </div>
     </div>
-
+    @endif
     
+    @if(auth()->user()->hasAdminPermission('settings'))
     <div class="admin-nav-group">
         <a href="javascript:void(0);" class="nav-toggle {{ Request::is('admin/settings*') || Request::is('admin/profile*') ? 'active' : '' }}" onclick="toggleSubmenu(this)" style="justify-content: space-between; display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 10px 12px; border-radius: var(--radius); font-size: 0.92rem; font-weight: 780; transition: background 0.2s; text-decoration: none;">
             <span style="display: flex; align-items: center; gap: 10px;">
@@ -207,7 +250,7 @@
             </a>
         </div>
     </div>
-
+    @endif
    
 </nav>
 

@@ -345,10 +345,12 @@
                 <h2 class="community-panel-title">Vendor Community Posts</h2>
             </div>
             <div>
+                @if(auth()->user()->hasAdminPermission('community', 'add'))
                 <a href="{{ route('admin.community.create') }}" class="btn btn-community-create">
                     <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.5;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                     Create Post
                 </a>
+                @endif
             </div>
         </div>
 
@@ -383,6 +385,7 @@
                                         </div>
                                     </div>
 
+                                    @if(auth()->user()->hasAdminPermission('community', 'delete'))
                                     <form action="{{ route('admin.community.destroy', $post->id) }}" method="POST" class="d-inline delete-community-post-form">
                                         @csrf
                                         @method('DELETE')
@@ -390,6 +393,7 @@
                                             <i class="bx bx-trash" style="font-size: 1.1rem; vertical-align: middle;"></i>
                                         </button>
                                     </form>
+                                    @endif
                                 </div>
 
                                 <!-- Post Title -->
@@ -414,7 +418,7 @@
                                         <!-- Toggle Switch for Public / Private -->
                                         <form action="{{ route('admin.community.toggle-status', $post->id) }}" method="POST" class="d-inline-flex align-items-center toggle-community-status-form">
                                             @csrf
-                                            <button type="submit" class="btn-toggle-status" title="Click to toggle Public / Private">
+                                            <button type="submit" class="btn-toggle-status" title="Click to toggle Public / Private" @if(!auth()->user()->hasAdminPermission('community', 'edit')) disabled @endif>
                                                 <div class="toggle-switch-track" style="background: {{ $post->is_published ? '#22c55e' : '#64748b' }}; justify-content: {{ $post->is_published ? 'flex-end' : 'flex-start' }};">
                                                     <div class="toggle-switch-dot"></div>
                                                 </div>

@@ -333,6 +333,26 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
         'destroy' => 'admin.blog.destroy',
     ]);
 
+    // Admin Roles
+    Route::resource('roles', \App\Http\Controllers\Admin\RoleController::class)->except(['show'])->names([
+        'index' => 'admin.roles.index',
+        'create' => 'admin.roles.create',
+        'store' => 'admin.roles.store',
+        'edit' => 'admin.roles.edit',
+        'update' => 'admin.roles.update',
+        'destroy' => 'admin.roles.destroy',
+    ]);
+
+    // Admin Users (Sub-Admins)
+    Route::resource('admin-users', \App\Http\Controllers\Admin\AdminUserController::class)->except(['show'])->names([
+        'index' => 'admin.admin-users.index',
+        'create' => 'admin.admin-users.create',
+        'store' => 'admin.admin-users.store',
+        'edit' => 'admin.admin-users.edit',
+        'update' => 'admin.admin-users.update',
+        'destroy' => 'admin.admin-users.destroy',
+    ]);
+
     // Site Settings
     Route::get('/settings/general', [\App\Http\Controllers\Admin\AdminSettingController::class, 'generalSettings'])->name('admin.settings.general');
     Route::post('/settings/general', [\App\Http\Controllers\Admin\AdminSettingController::class, 'updateGeneralSettings'])->name('admin.settings.general.update');

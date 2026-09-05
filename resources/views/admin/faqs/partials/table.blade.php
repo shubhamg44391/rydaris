@@ -39,6 +39,7 @@
                     </td>
                     <td style="text-align: right;">
                         <div class="table-actions" style="display: inline-flex; gap: 8px;">
+                            @if(auth()->user()->hasAdminPermission('faqs', 'edit'))
                             <button type="button" class="icon-button edit-faq-btn" title="Edit FAQ"
                                 data-id="{{ $faq->id }}"
                                 data-category="{{ $faq->category }}"
@@ -46,6 +47,8 @@
                                 data-description="{{ e($faq->description) }}">
                                 <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2;"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
                             </button>
+                            @endif
+                            @if(auth()->user()->hasAdminPermission('faqs', 'delete'))
                             <form action="{{ route('admin.faqs.destroy', $faq->id) }}" method="POST" style="display: inline;">
                                 @csrf
                                 @method('DELETE')
@@ -53,6 +56,7 @@
                                     <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2;"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
                                 </button>
                             </form>
+                            @endif
                         </div>
                     </td>
                 </tr>

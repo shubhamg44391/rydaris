@@ -7,9 +7,11 @@
                 <h2>Packages Management</h2>
             </div>
             <div>
+                @if(auth()->user()->hasAdminPermission('packages', 'add'))
                 <a href="{{ route('admin.packages.create') }}" class="btn btn-primary rounded-pill px-4" style="font-weight: 800 !important;">
                     <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.5;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add Package
                 </a>
+                @endif
             </div>
         </div>
 
@@ -51,9 +53,12 @@
                             </td>
                             <td>
                                 <div class="table-actions" style="display: flex; gap: 8px;">
+                                    @if(auth()->user()->hasAdminPermission('packages', 'edit'))
                                     <a href="{{ route('admin.packages.edit', $pkg->id) }}" class="icon-button" title="Edit">
                                         <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2;"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
                                     </a>
+                                    @endif
+                                    @if(auth()->user()->hasAdminPermission('packages', 'delete'))
                                     <form action="{{ route('admin.packages.destroy', $pkg->id) }}" method="POST" style="display: inline;">
                                         @csrf
                                         @method('DELETE')
@@ -61,6 +66,7 @@
                                             <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2;"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
                                         </button>
                                     </form>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

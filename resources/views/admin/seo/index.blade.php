@@ -68,6 +68,7 @@
                                         </td>
                                         <td>
                                             <div style="display: flex; justify-content: center;">
+                                                @if(auth()->user()->hasAdminPermission('seo', 'edit'))
                                                 <a href="{{ route('admin.seo-settings.edit', $data->id) }}"
                                                    class="icon-button" title="Edit Meta Tags"
                                                    style="color: var(--brand); display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: 1px solid var(--line); border-radius: 6px; background: var(--input-bg, rgba(255,255,255,0.03)); transition: all 0.2s; text-decoration: none;">
@@ -75,6 +76,7 @@
                                                         <path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>
                                                     </svg>
                                                 </a>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>
@@ -113,6 +115,7 @@
                                 <td><span style="color: var(--muted, #94a3b8); font-size: 0.82rem;">{{ Str::limit($data->keyword, 35) ?: '-' }}</span></td>
                                 <td>
                                     <div style="display: flex; justify-content: center;">
+                                        @if(auth()->user()->hasAdminPermission('seo', 'edit'))
                                         <a href="{{ route('admin.seo-settings.edit', $data->id) }}"
                                            class="icon-button" title="Edit Meta Tags"
                                            style="color: var(--brand); display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: 1px solid var(--line); border-radius: 6px; background: var(--input-bg, rgba(255,255,255,0.03)); transition: all 0.2s; text-decoration: none;">
@@ -120,6 +123,7 @@
                                                 <path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>
                                             </svg>
                                         </a>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>

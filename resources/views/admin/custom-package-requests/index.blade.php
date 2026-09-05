@@ -71,7 +71,8 @@
                                     data-id="{{ $request->id }}"
                                     data-url="{{ route('admin.custom-package-requests.toggle-status', $request->id) }}"
                                     data-status="{{ $request->status }}"
-                                    title="{{ $request->status === 'unread' ? 'Mark as Read' : 'Mark as Unread' }}">
+                                    title="{{ $request->status === 'unread' ? 'Mark as Read' : 'Mark as Unread' }}"
+                                    @if(!auth()->user()->hasAdminPermission('custom_packages', 'edit')) disabled @endif>
                                     {{ ucfirst($request->status) }}
                                 </button>
                             </td>
@@ -86,6 +87,7 @@
                                         <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;"><polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>
                                     </a>
                                     
+                                    @if(auth()->user()->hasAdminPermission('custom_packages', 'delete'))
                                     <form action="{{ route('admin.custom-package-requests.destroy', $request->id) }}" method="POST" style="display: inline;">
                                         @csrf
                                         @method('DELETE')
@@ -93,6 +95,7 @@
                                             <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2;"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
                                         </button>
                                     </form>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

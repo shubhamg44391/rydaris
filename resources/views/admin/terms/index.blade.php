@@ -120,6 +120,7 @@
             </div>
 
             <div style="display: flex; align-items: center; gap: 12px; padding-top: 15px;">
+                @if(auth()->user()->hasAdminPermission('terms', 'edit') || auth()->user()->hasAdminPermission('terms', 'add'))
                 <button type="submit" id="tcSubmitBtn" class="btn btn-primary rounded-pill px-4" style="font-weight: 800 !important; background: linear-gradient(135deg, #52ead2 0%, #80a7ff 100%) !important; color: #051013 !important; border: none !important;">
                     <svg viewBox="0 0 24 24" style="width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2.5;">
                         <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
@@ -128,6 +129,7 @@
                     </svg>
                     {{ $page ? 'Update Terms & Conditions' : 'Save Terms & Conditions' }}
                 </button>
+                @endif
 
                 @if($page && $page->updated_at)
                     <span style="color: var(--muted); font-size: 0.82rem;">

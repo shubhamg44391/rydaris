@@ -96,9 +96,11 @@
                 </div>
 
                 <div style="display: flex; gap: 12px;">
+                    @if(auth()->user()->hasAdminPermission('settings', 'edit'))
                     <button type="submit" class="admin-action primary" style="border: none; padding: 12px 28px; cursor: pointer; font-size: 0.95rem; font-weight: 600; display: inline-flex; align-items: center; justify-content: center;">
                         Save Settings
                     </button>
+                    @endif
                 </div>
             </form>
         </div>

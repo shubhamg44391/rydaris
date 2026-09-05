@@ -39,11 +39,11 @@
                         <form action="{{ route('admin.vendors.toggle-status', $vendor->id) }}" method="POST" style="display: inline;">
                             @csrf
                             @if($vendor->status === 'active')
-                                <button type="button" class="btn btn-xs border-0 bg-transparent p-0 status-toggle-btn" title="Click to Deactivate" style="border: none; background: transparent; padding: 0;">
+                                <button type="button" class="btn btn-xs border-0 bg-transparent p-0 status-toggle-btn" title="Click to Deactivate" style="border: none; background: transparent; padding: 0;" @if(!auth()->user()->hasAdminPermission('vendors', 'edit')) disabled @endif>
                                     <span class="status-badge-active">Active</span>
                                 </button>
                             @else
-                                <button type="button" class="btn btn-xs border-0 bg-transparent p-0 status-toggle-btn" title="Click to Activate" style="border: none; background: transparent; padding: 0;">
+                                <button type="button" class="btn btn-xs border-0 bg-transparent p-0 status-toggle-btn" title="Click to Activate" style="border: none; background: transparent; padding: 0;" @if(!auth()->user()->hasAdminPermission('vendors', 'edit')) disabled @endif>
                                     <span class="status-badge-inactive">Inactive</span>
                                 </button>
                             @endif
@@ -94,10 +94,13 @@
                                 <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                             </button>
                             
+                            @if(auth()->user()->hasAdminPermission('vendors', 'edit'))
                             <a href="{{ route('admin.vendors.edit', $vendor->id) }}" class="icon-button" title="Edit">
                                 <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2;"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
                             </a>
+                            @endif
                             
+                            @if(auth()->user()->hasAdminPermission('vendors', 'delete'))
                             <form action="{{ route('admin.vendors.destroy', $vendor->id) }}" method="POST" style="display: inline;">
                                 @csrf
                                 @method('DELETE')
@@ -105,6 +108,7 @@
                                     <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2;"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
                                 </button>
                             </form>
+                            @endif
                         </div>
                     </td>
                 </tr>

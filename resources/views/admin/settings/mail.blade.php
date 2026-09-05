@@ -164,9 +164,11 @@
 
                 
                 <div style="display: flex; gap: 12px; margin-bottom: 30px;">
+                    @if(auth()->user()->hasAdminPermission('settings', 'edit'))
                     <button type="submit" class="admin-action primary" style="border: none; padding: 12px 28px; cursor: pointer; font-size: 0.95rem; font-weight: 800 !important; display: inline-flex; align-items: center; justify-content: center; border-radius: var(--radius);">
                         Save Configuration
                     </button>
+                    @endif
                 </div>
             </form>
 

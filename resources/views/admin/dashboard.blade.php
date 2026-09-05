@@ -114,9 +114,11 @@
                     <td>{{ $vendor->created_at->format('M d, Y H:i') }}</td>
                     <td>
                       <div class="table-actions">
+                          @if(auth()->user()->hasAdminPermission('vendors', 'edit'))
                           <a href="{{ route('admin.vendors.edit', $vendor->id) }}" class="admin-action-edit" title="Edit">
                               <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2;"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
                           </a>
+                          @endif
                       </div>
                     </td>
                   </tr>
